@@ -1,0 +1,138 @@
+body{
+    -webkit-print-color-adjust: exact; 
+    /*margin: 25mm 25mm 25mm 25mm;
+    
+    /*-webkit-print-spacing-adjust: exact;*/
+}
+h2 { width:100%; text-align:center; border-bottom: 1px solid #000; line-height:0.4em; margin:10px 0 20px; } 
+h2 span { background:#fff; padding:0 10px; }
+in{
+    text-indent: 0%;
+}
+.right {
+float: right;
+}
+.left{
+    position: absolute;
+    font-size: 18px;
+}
+.col-sm-2{
+    margin-top: 5px;
+}
+textarea { text-transform: uppercase; }
+input { text-transform: uppercase; }
+.gagmay{
+    margin-top: -2px;
+    margin-right: 20px;   
+    word-spacing: 140px; 
+    font-size: 12px;  
+}
+.header{
+    background-color: black !important;
+    color: white;
+    -webkit-print-color-adjust: exact; 
+    font-size: 14px;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th{
+    text-align: center;
+    font-weight: normal;
+}
+.no-border {
+    border: 0;
+    box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+}
+input[type=checkbox] {
+    transform: scale(2);
+    border: #000000;
+}
+.name{border-bottom: 1px solid black;
+    padding-bottom: 5px;}
+    
+.justify{
+    font-family: Arial, 'Times New Roman', Times, serif;
+    text-align: justify;
+}
+textarea {
+    margin-top: 10px;
+    margin:0px 0px;
+    padding:5px;
+    height:16px;
+    line-height:30px;
+    width:96%;
+    display:block;
+    margin:0px auto;    
+}
+form .row input{
+    border: 1px solid #000000;
+}
+form .row select {
+    border: 1px solid #000000;
+}
+form .row textarea {
+    border: 1px solid #000000;
+}
+input[class="ubos"]{
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #000000;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-radius: 0;
+    text-align: center;
+}
+
+#GL{
+    font-family: Arial, 'Times New Roman', Times, serif;
+}
+.cn{
+    font-size: 17px;
+}
+
+input[class="coe_input"]{
+    border: none;
+    border-bottom: 1px solid #000000;
+    -webkit-box-shadow: none;
+}
+
+@media print{
+    body {
+        -webkit-print-color-adjust: exact;
+    }
+    @page {
+        size: 8.5in 13in;
+        margin: 1in 1in 1in 1in;
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+	::-webkit-scrollbar {
+    display: none;
+	}
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+    
+    table, figure {
+        page-break-inside: avoid;
+    }
+    .printable * {
+        display: block;
+    }
+	textarea{
+        height:60px;width: 100%;
+        font-size: 12px;
+    }
+    td{
+        text-transform: uppercase;
+    }
+}

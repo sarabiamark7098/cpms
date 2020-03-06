@@ -1,0 +1,152 @@
+<?php
+include('../../php/class.user.php');
+$user = new User();
+
+	$clientid = $user->getClientId($_GET['id']);
+	$_SESSION['myid'] = $clientid;
+
+	$img = $user->getClientImage($clientid);
+	$img = "../" . $img;
+
+	$client= $user->clientData($_GET['id']);
+	if(!$_SESSION['login']){
+		header('Location:../../index.php');
+		}
+?>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="icon" type="image/png" href="../../images/icons/ciu.ico"/>
+<link rel="stylesheet" type="text/css" href="../../css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/font-awesome.min.css">	
+<link rel="stylesheet" type="text/css" href="../../css/table.responsive.css">
+<link rel="stylesheet" type="text/css" href="../../style5.css">	
+<link rel="stylesheet" type="text/css" href="../../css/all.css">
+
+<script defer src="../../js/solid.js"></script>
+<script defer src="../../js/fontawesome.js"></script>
+<script src="../../js/jquery.slim.min.js"></script>
+<script src="../../js/popper.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/jquery-3.2.1.slim.min.js"></script>
+<script type="text/javascript" src="../../js/main.js"></script>
+<script type="text/javascript" src="../../js/PSGC.js"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+
+<!-- added -->
+
+<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap-3.3.7.min.js"></script>
+	<script type="text/javascript" src="../../js/PSGC.js"></script>
+	<div class="body">
+	  <form class="form-group" action="gis.php?id=<?php echo $_GET['id']?>" method="POST">
+			<div class="modal-body">
+				<div class="row form-group" >
+					<div class="col text-center">
+						<img class="responsive-img" src="<?php echo $img?>" style="width: 40%; border-radius: 50%;margin:auto">
+						<p>Client Picture</p>
+					</div>
+						<div class="form-group col align-self-end">
+							<input value="<?php echo $clientid;?>" name="client_id" class="form-control" readonly style="border: 1px solid #b1acac;">
+							<label for="client_id">Client ID</label>
+						</div>
+					</div>
+				<div>
+				<div class="row" style="margin-top: 2%; height:10%;">
+						<div class="form-group col-lg-6">
+							<input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['lastname']?>" required>
+							<label>Lastname</label>
+						</div>
+						<div class="form-group col-lg-6">
+							<input name="fname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['firstname']?>" required>
+							<label>Firstname</label>
+						</div>
+				</div>
+				<div class="row" style="margin-top: 2%; height:10%;">
+						<div class="form-group col-lg-6">
+							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['middlename']?>" required>
+							<label>Middlename</label>
+						</div>
+						<div class="form-group col-lg-6">
+							<input name="exname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['extraname']?>">
+							<label>Extension Name</label>
+						</div>
+				</div>
+				<div class="row" style="margin-top: 2%; height:10%;">
+						<div class="form-group col-lg-6">
+							<input  name="bday" type="date"  class="form-control" style="border: 1px solid #b1acac;" max= "<?php echo date('Y-m-d'); ?>" value="<?php echo $client['date_birth']?>" required>
+							<label>Birth Date</label>
+						</div>
+						<div class="form-group col-lg-6">
+							<input name="sex" type="text"  class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['sex']?>" required>
+							<label>Sex</label>
+						</div>
+				</div>
+				<h5><small><b>Address</b></small></h5>
+				<div class="row" style="margin-top: 2%; height:10%;">
+						<div class="form-group col-lg-6">
+							<input list="regionClist" name="region" type="text" id="creg" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_region']?>"  onChange="get_c_Region(this)" required>
+							<label>Region</label>
+							<datalist id="regionClist">
+								<?php
+									$getregions = $user->optionregion();
+										//Loop through results
+									foreach($getregions as $index => $value){
+									//Display info
+										unset($_SESSION['regionname']);
+										echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
+										echo $value['psgc_code'];
+										echo '</option>';
+									}
+								?>
+							</datalist>
+						</div>
+						<div class="form-group col-lg-6">
+							<input list="provinceClist" name="province" type="text" id="cprov" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_province']?>" onChange="get_c_Province(this)" required>
+							<label>Province</label>
+							<datalist id="provinceClist">
+				        	</datalist>
+						</div>
+				</div>
+				<div class="row" style="margin-top: 2%; height:10%;">
+						<div class="form-group col-lg-6">
+							<input list="municipalityClist" name="municipality" type="text" id="cmuni" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_municipality']?>" onChange="get_c_Municipality(this)" required>
+							<label>Municipality</label>
+							<datalist id="municipalityClist">
+							</datalist>
+						</div>
+						<div class="form-group col-lg-6">
+							<input list="barangayClist" name="barangay" type="text" id="cbrgy" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_barangay']?>" onChange="get_c_Barangay(this)" required>
+							<label>Barangay</label>
+							<datalist id="barangayClist">
+							</datalist>
+						</div>
+				</div>
+				<div class="row" style="margin-top: 2%; height:10%;">
+						<div class="form-group col-lg-6">
+							<input  name="street" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_street']?>">
+							<label>Street/Purok</label>
+						</div>
+						<div class="form-group col-lg-6">
+							<input name="district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_district']?>">
+							<label>District</label>
+						</div>
+				</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type='submit' class='btn btn-primary' name='c_update'>UPDATE</button>
+			</div>
+    </form> 		
+	
+<script type="text/javascript">
+	$(function () {
+		reg = document.getElementById('creg').value;
+		prov = document.getElementById('cprov').value;
+		muni = document.getElementById('cmuni').value;
+		brgy = document.getElementById('cbrgy').value;
+		get_c_Region_sw(reg);
+		get_c_Province_sw(prov);
+		get_c_Municipality_sw(muni);
+		get_c_Barangay_sw(brgy);
+	});
+</script>

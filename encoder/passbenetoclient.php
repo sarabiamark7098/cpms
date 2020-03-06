@@ -1,0 +1,618 @@
+<?php
+include('../php/class.user.php');
+$user = new User();
+	
+	$clientid = $_GET['id'];
+	$_SESSION['clientid'] = $clientid;
+		
+		if(!isset($_POST['beneficiary'])){
+			if(isset($_POST['pass'])){
+				$trans = $_GET['id'];
+				//client the one that process the transaction
+				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
+				$mname = mysqli_real_escape_string($user->db,strtoupper($_POST['middlename']));
+				$lname = mysqli_real_escape_string($user->db,strtoupper($_POST['lastname']));
+				$exname = mysqli_real_escape_string($user->db,strtoupper($_POST['extraname']));
+				$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
+				$bday = $_POST['birthday'];
+				//$age = $user->getAge($bday);
+				$occupation = mysqli_real_escape_string($user->db,$_POST['occupation']);
+				if($_POST['salary'] != ''){
+					$salary= $_POST['salary'];
+				}else{
+					$salary = '0';
+				}
+				$category = mysqli_real_escape_string($user->db,$_POST['category']);
+				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
+				$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
+				$contact = $_POST['contact'];
+				$region = mysqli_real_escape_string($user->db,$_POST['Cregion']);
+				$province = mysqli_real_escape_string($user->db,$_POST['Cprovince']);
+				$city_mun = mysqli_real_escape_string($user->db,$_POST['Ccity']);
+				$barangay = mysqli_real_escape_string($user->db,$_POST['Cbarangay']);
+				$district = mysqli_real_escape_string($user->db,$_POST['Cdistrict']);
+				$street= mysqli_real_escape_string($user->db,$_POST['Cstreet']);
+				$note = mysqli_real_escape_string($user->db,$_POST['note']);
+				
+				$execute = $user->insertBeneAsClient($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $note);
+				
+				if($execute){
+					echo "<script>alert('Client Successfully Added!');</script>";
+					echo "<script>window.location='picture.php?id=".$execute."';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}
+				else{
+					echo "<script>alert('Sorry Error uploading!');</script>";
+					echo "<script>window.location='home.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}
+				
+			}
+		}
+		else{
+			if(isset($_POST['pass'])){
+				$trans = $_GET['id'];
+				//client the one that process the transaction
+				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
+				$mname = mysqli_real_escape_string($user->db,strtoupper($_POST['middlename']));
+				$lname = mysqli_real_escape_string($user->db,strtoupper($_POST['lastname']));
+				$exname = mysqli_real_escape_string($user->db,strtoupper($_POST['extraname']));
+				$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
+				$bday = $_POST['birthday'];
+				//$age = $user->getAge($bday);
+				$occupation = mysqli_real_escape_string($user->db,$_POST['occupation']);
+				if($_POST['salary'] != ''){
+					$salary= $_POST['salary'];
+				}else{
+					$salary = '0';
+				}
+				$category = mysqli_real_escape_string($user->db,$_POST['category']);
+				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
+				$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
+				$contact = $_POST['contact'];
+				$region = mysqli_real_escape_string($user->db,$_POST['Cregion']);
+				$province = mysqli_real_escape_string($user->db,$_POST['Cprovince']);
+				$city_mun = mysqli_real_escape_string($user->db,$_POST['Ccity']);
+				$barangay = mysqli_real_escape_string($user->db,$_POST['Cbarangay']);
+				$district = mysqli_real_escape_string($user->db,$_POST['Cdistrict']);
+				$street= mysqli_real_escape_string($user->db,$_POST['Cstreet']);
+				$note = mysqli_real_escape_string($user->db,$_POST['note']);
+				// beneficiary
+				$relationship = mysqli_real_escape_string($user->db,$_POST['relation']);
+				$b_fname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_fname']));
+				$b_mname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_mname']));
+				$b_lname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_lname']));
+				$b_exname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_exname']));
+				$b_bday = $_POST['b_bday'];
+				//$b_age = $user->getAge($b_bday);
+				$b_sex = mysqli_real_escape_string($user->db,$_POST['b_sex']);
+				$b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
+				$b_contact = $_POST['b_contact'];
+				$b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
+				$b_subCat = mysqli_real_escape_string($user->db,$_POST['b_subcat']);
+				$b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
+				$b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
+				$b_city_mun = mysqli_real_escape_string($user->db,$_POST['b_city']);
+				$b_district = mysqli_real_escape_string($user->db,$_POST['b_district']);
+				$b_barangay = mysqli_real_escape_string($user->db,$_POST['b_barangay']);
+				$b_street = mysqli_real_escape_string($user->db,$_POST['b_street']);
+				
+				
+
+				$execute = $user->insertBeneAsClientWB($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, $b_category, $b_subCat, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street, $note);
+			
+				if($execute){
+					echo "<script>alert('Client Successfully Passed!');</script>";
+					echo "<script>window.location='picture.php?id=".$execute."';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}
+				else{
+					echo "<script>alert('Sorry Error Passing Client!');</script>";
+					echo "<script>window.location='home.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}
+			}
+			
+		}
+	$getClient = $user->show_client_data($clientid);
+?>
+<?php
+	if(!$_SESSION['login']){
+		header('Location:../index.php');
+		}
+
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">	
+		<link rel="stylesheet" type="text/css" href="../css/table.responsive.css">
+		<link rel="stylesheet" type="text/css" href="../style5.css">
+        
+		<script defer src="../js/solid.js"></script>
+		<script defer src="../js/fontawesome.js"></script>
+		<script src="../js/jquery.slim.min.js"></script>
+		<script src="../js/popper.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
+		<script type="text/javascript" src="../js/main.js"></script>
+		<script type="text/javascript" src="../js/PSGC.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		
+		<!-- added -->
+		
+		<link rel="stylesheet" type="text/css" href="../datatables/datatables.css">
+		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
+		<script>
+		$(document).ready(function(){
+             $('#client_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
+                var txt = $('#client_city').val(); //Assigning search box value to javascript variable.
+				if(txt != ''){ //Validating, if "name" is empty.
+                    $.ajax({
+                        type: "post", //method to use
+                        url: "district.php", //ginapasa  sa diri nga file and data
+                        data: {search:txt}, //mao ni nga data
+                        success: function(html){  //If result found, this funtion will be call
+							var json = JSON.parse(html);
+                            $('#client_district').val( json["Client_district"]);
+                        }
+                    });
+                }else{
+                $('#search_result').html(""); 
+                }
+            });
+        });
+		$(document).ready(function(){
+             $('#beneficiary_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
+                var txt = $('#beneficiary_city').val(); //Assigning search box value to javascript variable.
+				if(txt != ''){ //Validating, if "name" is empty.
+                    $.ajax({
+                        type: "post", //method to use
+                        url: "district.php", //ginapasa  sa diri nga file and data
+                        data: {search:txt}, //mao ni nga data
+                        success: function(html){  //If result found, this funtion will be call
+							var json = JSON.parse(html);
+                            $('#beneficiary_district').val( json["Client_district"]);
+                        }
+                    });
+                }else{
+                $('#search_result').html(""); 
+                }
+            });
+        });
+		</script>
+	</head>
+	<body>
+	<div class="body">
+	  <form class="form-group" action="passbenetoclient.php?id=<?php echo $clientid?>" method="POST">
+	 	<div class="modal-body">
+			<h4 class="text-center">Client Info</h4>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<label>Note</label>
+				<textarea type="text" class="form-control mr-sm-2 b" name="note" placeholder="Write Note for socialwork Referrence if needed"></textarea>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<input id="foo" value="<?php echo $getClient['b_fname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required >
+					<label>First Name</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<input type="text" value="<?php echo $getClient['b_mname'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" required >    
+					<label>Middle Name</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input type="text" value="<?php echo $getClient['b_lname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required >
+					<label>Last Name</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<!-- <input type="text" value="<?php //echo $getClient['b_exname'] ?>" class="form-control mr-sm-2 b" name="extraname" style="text-transform:uppercase" placeholder="Extension Name" > -->
+					<select name="extraname" class="form-control mr-sm-2 b">
+						<option value=""  <?php echo empty($getClient['b_exname'])?"selected":"" ?>> Extension Name</option>
+						<option value="JR" <?php echo ($getClient['b_exname']=="JR")?"selected":"" ?>>JR</option>
+						<option value="SR" <?php echo ($getClient['b_exname']=="SR")?"selected":"" ?>>SR</option>
+						<option value="I" <?php echo ($getClient['b_exname']=="I")?"selected":"" ?>>I</option>
+						<option value="II" <?php echo ($getClient['b_exname']=="II")?"selected":"" ?>>II</option>
+						<option value="III" <?php echo ($getClient['b_exname']=="III")?"selected":"" ?>>III</option>
+						<option value="IV" <?php echo ($getClient['b_exname']=="IV")?"selected":"" ?>>IV</option>
+					</select>
+					<label>Extra Name</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 label" style="font-size: 20px">Birth Date: </label>
+				<div class="col-sm-10">
+					<input type="date" value="<?php echo $getClient['b_bday'] ?>" class="form-control mr-sm-2" name="birthday" placeholder="Birth Date" required >  
+					<label>Birthday</label>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+			<div class="col-sm-6">
+					<input list="sexs" name="sex" value="<?php echo $getClient['sex'] ?>" class="form-control mr-sm-2 b" placeholder="Sex" required >
+						<datalist id="sexs">
+							<option value="Male">
+							<option value="Female">
+							
+						</datalist> 
+						<label>Sex</label> 
+					</div> 
+				<div class="col-sm-6">
+				<select name="civilstatus" class="form-control mr-sm-2 b" required  >
+					<?php
+					if($getClient['b_civilStatus'] == ''){
+						echo '<option value="" disabled selected>Civil Status</option>';
+						echo '<option value="Single">Single</option>';
+						echo '<option value="Married">Married</option>';
+						echo '<option value="Separated">Separated</option>';
+						echo '<option value="Widow/Widower">Widow/Widower</option>';
+						echo '<option value="Common-Law">Common-Law</option>';
+					}elseif($getClient['b_civilStatus'] == 'Single'){
+						echo '<option value="" disabled>Civil Status</option>';
+						echo '<option value="Single" selected>Single</option>';
+						echo '<option value="Married">Married</option>';
+						echo '<option value="Separated">Separated</option>';
+						echo '<option value="Widow/Widower">Widow/Widower</option>';
+						echo '<option value="Common-Law">Common-Law</option>';
+					}elseif($getClient['b_civilStatus'] == 'Married'){
+						echo '<option value="" disabled>Civil Status</option>';
+						echo '<option value="Single">Single</option>';
+						echo '<option value="Married" selected>Married</option>';
+						echo '<option value="Separated">Separated</option>';
+						echo '<option value="Widow/Widower">Widow/Widower</option>';
+						echo '<option value="Common-Law">Common-Law</option>';
+					}elseif($getClient['b_civilStatus'] == 'Separated'){
+						echo '<option value="" disabled>Civil Status</option>';
+						echo '<option value="Single">Single</option>';
+						echo '<option value="Married">Married</option>';
+						echo '<option value="Separated" selected>Separated</option>';
+						echo '<option value="Widow/Widower">Widow/Widower</option>';
+						echo '<option value="Common-Law">Common-Law</option>';
+					}elseif($getClient['b_civilStatus'] == 'Widow/Widower'){
+						echo '<option value="" disabled>Civil Status</option>';
+						echo '<option value="Single">Single</option>';
+						echo '<option value="Married">Married</option>';
+						echo '<option value="Separated">Separated</option>';
+						echo '<option value="Widow/Widower" selected>Widow/Widower</option>';
+						echo '<option value="Common-Law">Common-Law</option>';
+					}elseif($getClient['b_civilStatus'] == 'Common-Law'){
+						echo '<option value="" disabled>Civil Status</option>';
+						echo '<option value="Single">Single</option>';
+						echo '<option value="Married">Married</option>';
+						echo '<option value="Separated">Separated</option>';
+						echo '<option value="Widow/Widower">Widow/Widower</option>';
+						echo '<option value="Common-Law" selected>Common-Law</option>';
+					}
+					?>
+				</select>
+				<label>Civil Status</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input type="text" class="form-control mr-sm-2 b" name="occupation" placeholder="Occupation" required >
+				<label>Occupation</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input type="number" class="form-control mr-sm-2 b" name="salary" placeholder="Salary" >
+				<label>Salary</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input type="number" value="<?php echo $getClient['b_contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+				<label>Contact</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<input list="categories" type="text" value="<?php echo $getClient['b_category'] ?>" class="form-control mr-sm-2 b" name="category" placeholder="Category" required >
+						<datalist id="categories">
+							<option>Children in Need of Special Protection</option>
+							<option>Persons Living with HIV/AIDS</option>
+							<option>Youth</option>
+							<option>Men/Women in Specially Difficult Circumstances</option>
+							<option>Persons with Disabilities</option>
+							<option>Senior Citizens (no subcategories)</option>
+							<option>Family Heads and Other Needy Adult</option>
+							<option>None of the Above</option>
+						</datalist>
+					<label>Category</label>
+				</div>				
+				<div class="col-sm-6">
+					<input type="text" value="<?php echo $getClient['b_subCategory'] ?>" class="form-control mr-sm-2 b" name="subcategory" placeholder="Sub-Category" >
+					<label>SubCategory</label>
+				</div>
+			</div>
+				<!--Address-->
+			<h4 class="text-center">Address</h4>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input list="regionClist" id="reg" value="<?php echo $getClient['b_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required >
+					<datalist id="regionClist">
+					<?php
+						$getregions = $user->optionregion();
+							//Loop through results
+						foreach($getregions as $index => $value){
+						  //Display info
+							echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
+							echo $value['psgc_code'];
+							echo '</option>';
+						}
+					?>
+					</datalist>
+					<label>Region</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input list="provinceClist" id="prov" value="<?php echo $getClient['b_province'] ?>" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required >
+				<datalist id="provinceClist">
+				</datalist>
+				<label>Province</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input list="municipalityClist" id="muni" value="<?php echo $getClient['b_municipality'] ?>" type="text" id="client_city" class="form-control mr-sm-2 b" name="Ccity" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required >
+				<datalist id="municipalityClist">
+				</datalist>
+				<label>Municipality</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input list="barangayClist" id="brgy" value="<?php echo $getClient['b_barangay'] ?>" type="text" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" required >
+				<datalist id="barangayClist">
+				</datalist>
+				<label>Barangay</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+					<select id="client_district" class="form-control mr-sm-2 b" name="Cdistrict" placeholder="District">
+						<option value="" <?php echo ($getClient['b_district']==''?'selected':'')?>>Select District</option>
+						<option value="District 1" <?php echo ($getClient['b_district']=='District 1'?'selected':'')?>>District 1</option>
+						<option value="District 2" <?php echo ($getClient['b_district']=='District 2'?'selected':'')?>>District 2</option>
+						<option value="District 3" <?php echo ($getClient['b_district']=='District 3'?'selected':'')?>>District 3</option>
+						<option value="District 4" <?php echo ($getClient['b_district']=='District 4'?'selected ':'')?>>District 4</option>
+						<option value="District 5" <?php echo ($getClient['b_district']=='District 5'?'selected':'')?>>District 5</option>
+						<option value="District 6" <?php echo ($getClient['b_district']=='District 6'?'selected':'')?>>District 6</option>
+						<option value="District 7" <?php echo ($getClient['b_district']=='District 7'?'selected':'')?>>District 7</option>
+						<option value="District 8" <?php echo ($getClient['b_district']=='District 8'?'selected':'')?>>District 8</option>
+						<option value="District 9" <?php echo ($getClient['b_district']=='District 9'?'selected':'')?>>District 9</option>
+						<option value="District 10" <?php echo ($getClient['b_district']=='District 10'?'selected':'')?>>District 10</option>
+					</select>
+					<label>District</label>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12">
+				<input type="text" value="<?php echo $getClient['b_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok" >
+				<label>Street</label>
+				</div>
+			</div>
+			
+			<!--Check Box, Beneficiary info sheet-->
+			<div class="checkbox">
+				<label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					<input type="checkbox" id="radiobutton" name="beneficiary" style="height:20px;width:20px;margin: 10px;"> With BENEFICIARY
+				</label>
+			</div>
+			<div id="collapseOne" aria-expanded="false" class="collapse">
+				<h4 class="text-center">Beneficiary Info</h4>
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<input id="foo" type="text" name="relation" class="form-control mr-sm-2 b benerequire" placeholder="Relationship with Beneficiary" >
+						<label>Client Beneficiary Relation<label>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<input id="foo" type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" >
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" >    
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+					<input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" >
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<!-- <input type="text" class="form-control mr-sm-2 b" name="b_exname" style="text-transform:uppercase" placeholder="Beneficiary Extension Name" > -->
+						<select name="b_exname" class="form-control mr-sm-2 b">
+						<option value=""  selected> Beneficiary Extension Name</option>
+						<option value="JR" >JR</option>
+						<option value="SR" >SR</option>
+						<option value="I" >I</option>
+						<option value="II" >II</option>
+						<option value="III" >III</option>
+						<option value="IV" >IV</option>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 label" style="font-size: 20px">Birth Date: </label>
+					<div class="col-sm-10">
+						<input type="date" class="form-control mr-sm-2 benerequire" name="b_bday" placeholder="Beneficiary Birth Date" >  
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-6">
+						<select name="b_sex" class="form-control mr-sm-2 b benerequire" >
+							<option value="" disabled selected>Sex</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>  
+					</div>
+					<div class="col-sm-6">
+						<select id="foo" name="b_cstatus" class="form-control mr-sm-2 b benerequire" >
+							<option value="" disabled selected>Civil Status</option>
+							<option value="Single">Single</option>
+							<option value="Married">Married</option>
+							<option value="Separated">Separated</option>
+							<option value="Widow/Widower">Widow/Widower</option>
+							<option value="Common-Law">Common-law</option>
+						</select>  
+					</div>
+				</div>
+					<div class="form-group row">
+					<div class="col-sm-12">
+					<input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-6">
+						<input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
+							<datalist id="b_categories">
+								<option>Children in Need of Special Protection</option>
+								<option>Persons Living with HIV/AIDS</option>
+								<option>Youth</option>
+								<option>Men/Women in Specially Difficult Circumstances</option>
+								<option>Persons with Disabilities</option>
+								<option>Senior Citizens (no subcategories)</option>
+								<option>Family Heads and Other Needy Adult</option>
+								<option>None of the Above</option>
+							</datalist>
+					</div>
+					<div class="col-sm-6">
+						<input type="text" class="form-control mr-sm-2 b" name="b_subcat" placeholder="Beneficiary Sub-Category" >
+					</div>
+				</div>
+				
+
+
+				<!--Address-->
+				<h4 class="text-center">Beneficiary Address</h4>
+				<div class="form-group row">
+					<div class="col-sm-12">
+					<input list="regionBlist" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)" >
+					<datalist id="regionBlist">
+					<?php
+						
+						$getregions = $user->optionregion();
+							//Loop through results
+						foreach($getregions as $index => $value){
+						  //Display info
+							echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
+							echo $value['psgc_code'];
+							echo '</option>';
+						}
+					?>
+					</datalist>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+					<input list="provinceBlist" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)"  >
+					<datalist id="provinceBlist">
+					</datalist>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+					<input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)" >
+					<datalist id="municipalityBlist">
+					</datalist>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+					<input list="barangayBlist" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay"onChange="get_b_Barangay(this)" >
+					<datalist id="barangayBlist">
+					</datalist>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+						<select id="beneficiary_district" class="form-control mr-sm-2 b" name="b_district" placeholder="Beneficiary District">
+							<option value="">Select Beneficiary District</option>
+							<option value="District 1">District 1</option>
+							<option value="District 2">District 2</option>
+							<option value="District 3">District 3</option>
+							<option value="District 4">District 4</option>
+							<option value="District 5">District 5</option>
+							<option value="District 6">District 6</option>
+							<option value="District 7">District 7</option>
+							<option value="District 8">District 8</option>
+							<option value="District 9">District 9</option>
+							<option value="District 10">District 10</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-12">
+					<input type="text" class="form-control mr-sm-2 b" name="b_street" placeholder="Beneficiary No./Street/Purok" >
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+			<button type="submit" class="btn btn-primary" name="pass" onclick="msg()">Next Step</button>
+		</div>
+		<script>
+			function msg(){
+				alert("Adding Client!");
+			}
+		</script>
+        </form> 	
+</body>
+<script>
+$(function () {
+	$("#radiobutton").click(function () {
+		if ($(this).is(":checked")) {
+			$("#collapseOne").show();
+		} else {
+			$("#collapseOne").hide();
+		}
+	});
+});
+
+$(function () {
+	$("#radiobutton").click(function () {
+		if ($(this).is(":checked")) {
+			//console.log("require");
+			$(".benerequire").attr('required', '');
+		} else {
+			//console.log("wla na require");
+			$(".benerequire").removeAttr('required');
+		}
+	});
+});
+
+$(function () {
+	reg = document.getElementById('reg').value;
+	prov = document.getElementById('prov').value;
+	muni = document.getElementById('muni').value;
+	brgy = document.getElementById('brgy').value;
+	//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
+	get_c_Region_sw(reg);
+	get_c_Province_sw(prov);
+	get_c_Municipality_sw(muni);
+	get_c_Barangay_sw(brgy);
+});
+</script>
+</html>
