@@ -1,5 +1,4 @@
 <?php 
-fuck
     include('../php/class.user.php');
     $user = new User();
     if(isset($_GET['confirmdone'])){
