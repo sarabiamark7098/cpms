@@ -296,7 +296,7 @@ if (!$_SESSION['login']) {
                                             $data = $user->signatoryGIS();
                                             foreach ($data as $index => $value) {
                                                 $signatoryname = $value['first_name'] . " " . $value['middle_I'] . ". " . $value['last_name'];
-                                                echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "'>" . $signatoryname . "</option>";
+                                                echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] ."'></option>";
                                             }
                                         ?>
                                     </datalist>
