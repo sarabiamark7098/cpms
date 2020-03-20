@@ -789,13 +789,8 @@
 			}
 		}
 		
-		public function updatesignatory($id, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position,  $signatory_options, $signatory_id, $range_start, $range_end){	// UPDATE certain Signatory Details
-			if($signatory_options === "GL"){
-				$query = "UPDATE signatory SET signatory_id='{$id}', first_name='{$signatory_firstname}', last_name='{$signatory_lastname}', middle_I='{$signatory_middleI}', initials='{$signatory_initials}', position='{$signatory_position}', options='{$signatory_options}', range_start={$range_start}, range_end={$range_end} WHERE signatory_id = '{$signatory_id}';";
-			}
-			if($signatory_options === "GIS / CE"){
-				$query = "UPDATE signatory SET signatory_id='{$id}', first_name='{$signatory_firstname}', last_name='{$signatory_lastname}', middle_I='{$signatory_middleI}', initials='{$signatory_initials}', position='{$signatory_position}', options='{$signatory_options}' WHERE signatory_id = '{$signatory_id}';";
-			}
+		public function updatesignatory($signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_id, $range_start, $range_end){	// UPDATE certain Signatory Details
+			$query = "UPDATE signatory SET first_name='{$signatory_firstname}', last_name='{$signatory_lastname}', middle_I='{$signatory_middleI}', initials='{$signatory_initials}', position='{$signatory_position}', option_GIS='{$signatory_options_GIS}', option_GL='{$signatory_options_GL}', range_start={$range_start}, range_end={$range_end} WHERE signatory_id = '{$signatory_id}';";
 			$result = mysqli_query($this->db,$query);
 			if($result){
 				return true;
@@ -805,16 +800,10 @@
 			}
 		}
 		
-		public function addsignatory($id, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options, $range_start, $range_end){	// Add Signatory
-			if($signatory_options === "GL"){
-			$query = "INSERT INTO signatory (signatory_id, first_name, last_name, middle_I, initials, position, options, range_start, range_end) VALUES ('{$id}','{$signatory_firstname}',"; 
-			$query .= "'{$signatory_lastname}', '{$signatory_middleI}', '{$signatory_initials}', '{$signatory_position}', '{$signatory_options}',";
+		public function addsignatory($signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $range_start, $range_end){	// Add Signatory
+			$query = "INSERT INTO signatory (first_name, last_name, middle_I, initials, position, option_GIS, option_GL, range_start, range_end) VALUES ('{$signatory_firstname}',"; 
+			$query .= "'{$signatory_lastname}', '{$signatory_middleI}', '{$signatory_initials}', '{$signatory_position}', '{$signatory_options_GIS}', '{$signatory_options_GL}', ";
 			$query .= "'{$range_start}', '{$range_end}');";
-			}
-			if($signatory_options === "GIS / CE"){
-			$query = "INSERT INTO signatory (first_name, last_name, middle_I, initials, position, options) VALUES ('{$signatory_firstname}',"; 
-			$query .= "'{$signatory_lastname}', '{$signatory_middleI}', '{$signatory_initials}', '{$signatory_position}', '{$signatory_options}')";
-			}
 			$result = mysqli_query($this->db,$query);
 
 			if($result){
@@ -2043,7 +2032,7 @@
 		}
 		
 		public function signatoryGIS(){
-			$query = "SELECT * FROM signatory WHERE options = 'GL';";
+			$query = "SELECT * FROM signatory WHERE option_GL = 'yes';";
 			$result = mysqli_query($this->db,$query);
 			if($result){
 				return $result;
@@ -2054,7 +2043,7 @@
 		}
 		
 		public function signatoryGL(){
-			$query = "SELECT * FROM signatory WHERE options = 'GL';";
+			$query = "SELECT * FROM signatory WHERE option_GL = 'yes';";
 			$result = mysqli_query($this->db,$query);
 				$data = "<datalist id='gls'>";
 			while($row = mysqli_fetch_assoc($result)){

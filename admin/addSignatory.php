@@ -28,16 +28,31 @@
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 		
+        <style>
+            input[type=checkbox]
+            {
+                /* Double-sized Checkboxes */
+                -ms-transform: scale(2); /* IE */
+                -moz-transform: scale(2); /* FF */
+                -webkit-transform: scale(2); /* Safari and Chrome */
+                -o-transform: scale(2); /* Opera */
+                padding: 10px;
+                margin: 10px;
+                font-size: 20px;
+                text-align:center;
+            }
+        </style>
+
 	</head>
 	<body>
 	<div class="body">
         <form class="form-group" action="SignatoryPage.php" method="POST">
             <div class="modal-body">
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
-                    <div class="form-group col-lg-12">
+                    <!-- <div class="form-group col-lg-12">
                         <input placeholder="Signatory ID" id="empid" name="empid" type="text" class="form-control" required>
                         <label class="active" for="empid">Signatory ID</label>
-                    </div>
+                    </div> -->
                     <div class="form-group col-lg-12">
                         <input placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required>
                         <label class="active" for="fname">First Name</label>
@@ -59,12 +74,20 @@
                         <label class="active" for="position">Position</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <Select placeholder="Options" id="option" name="option" type="text" class="form-control " required>
+                        <div class="row">
+                            <div class="col-6">
+                            <input type="checkbox" name="gis_ce_check" id="gis_ce_check"><label for="gis_ce_check">GIS/CE</label>
+                            </div>
+                            <div class="col-6">
+                            <input type="checkbox" name="gl_check" id="gl_check"><label for="gl_check">GL</label>
+                            </div>
+                        </div>
+                        <!-- <Select placeholder="Options" id="option" name="option" type="text" class="form-control " required>
                             <option value="" disabled selected>Options</option>
                             <option value="GL">Guarantee Letter</option>
                             <option value="GIS / CE">GIS / CE</option>
                         </select>
-                            <label class="active" for="position">Options</label>
+                            <label class="active" for="position">Options</label> -->
                     </div>
                     <div class="form-group col-lg-6 srange">
                         <input placeholder="&#8369; Range Start" id="rangestart" name="rangestart" type="number" class="form-control">
@@ -74,6 +97,7 @@
                         <input  placeholder="&#8369; Range End" id="rangeend" name="rangeend" type="number" class="form-control">
                         <label class="active" for="rangeend">Range End</label>
                     </div>
+                    
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -82,5 +106,17 @@
         </form>
 	</div>
 
-</body>
+</body>    
+    <script>
+        $(function () {
+                    $(".srange").hide();
+            $("#gl_check").click(function () {
+                if ($(this).is(":checked")) {
+                    $(".srange").show();
+                } else {
+                    $(".srange").hide();
+                }
+            });
+        });
+    </script>
 </html>

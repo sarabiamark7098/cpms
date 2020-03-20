@@ -41,6 +41,22 @@ $user = new User();
 		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
+		
+		<style>
+            input[type=checkbox]
+            {
+                /* Double-sized Checkboxes */
+                -ms-transform: scale(2); /* IE */
+                -moz-transform: scale(2); /* FF */
+                -webkit-transform: scale(2); /* Safari and Chrome */
+                -o-transform: scale(2); /* Opera */
+                padding: 10px;
+                margin: 10px;
+                font-size: 20px;
+                text-align:center;
+            }
+        </style>
+		
 	</head>
 	<body>
 	  <form class="form-group" action="ShowSignatory.php" method="POST">
@@ -75,14 +91,20 @@ $user = new User();
 				  <label class="active" for="position">Position</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['options']; ?>" placeholder="Options" id="option" name="option" type="text" class="form-control " readonly>
-				  <label class="active" for="option">Options</label>
+					<div class="row">
+						<div class="col-6">
+						<input type="checkbox" name="gis_ce_check" id="gis_ce_check" <?php echo ($getsignatory['option_GIS'] == "yes"?"checked":"") ?> disabled><label for="gis_ce_check">GIS/CE</label>
+						</div>
+						<div class="col-6">
+						<input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == "yes"?"checked":"") ?> disabled><label for="gl_check">GL</label>
+						</div>
+					</div>
 				</div>
-				<div class="form-group col-lg-6" <?php echo ($getsignatory['options']=='GL')?'':'hidden'?> >
+				<div class="form-group col-lg-6 srange">
 				  <input value="<?php echo $getsignatory['range_start']; ?>" placeholder="&#8369; Range Start" id="rangestart" name="rangestart" type="number" class="form-control" readonly>
 				  <label class="active" for="rangestart">Range Start</label>
 				</div>
-				<div class="form-group col-lg-6" <?php echo ($getsignatory['options']=='GL')?'':'hidden'?> >
+				<div class="form-group col-lg-6 srange">
 				  <input value="<?php echo $getsignatory['range_end']; ?>" placeholder="&#8369; Range End" id="rangeend" name="rangeend" type="number" class="form-control" readonly>
 				  <label class="active" for="rangeend">Range End</label>
 				</div>
@@ -93,4 +115,20 @@ $user = new User();
 				</div>
         </form>
 </body>
+    <script>
+        $(function () {
+			if ($("#gl_check").is(":checked")) {
+				$(".srange").show();
+			} else {
+				$(".srange").hide();
+			}
+            $("#gl_check").click(function () {
+                if ($(this).is(":checked")) {
+                    $(".srange").show();
+                } else {
+                    $(".srange").hide();
+                }
+            });
+        });
+    </script>
 </html>

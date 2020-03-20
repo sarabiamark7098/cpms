@@ -19,17 +19,24 @@
 	}
 	
 	if(isset($_POST['Add'])) {
-		$setid = $_POST['empid'];
+		// $setid = $_POST['empid'];
 		$setfirstname = ucwords($_POST['fname']);
 		$setlastname = ucwords($_POST['lname']);
 		$setmiddleI = strtoupper($_POST['mi']);
 		$setinitials = strtoupper($_POST['initials']);
 		$setposition = strtoupper($_POST['position']);
-		$setoptions = $_POST['option'];
+		$checkgisce = "no";
+		$checkgl = "no";
+		if(isset($_POST['gis_ce_check'])){
+			$checkgisce = "yes";
+		}
+		if(isset($_POST['gl_check'])){
+			$checkgl = "yes";
+		}
 		$setrange_start = $_POST['rangestart'];
 		$setrange_end = $_POST['rangeend'];
 		
-		$result = $user->addsignatory($setid, $setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition,  $setoptions, $setrange_start, $setrange_end);
+		$result = $user->addsignatory($setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $checkgisce, $checkgl, $setrange_start, $setrange_end);
 		
 		if($result){
 			echo "<script>alert('Successfully Adding Signatory!');</script>";
