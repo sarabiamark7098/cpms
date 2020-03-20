@@ -93,10 +93,10 @@ $user = new User();
 				<div class="form-group col-lg-6">
 					<div class="row">
 						<div class="col-6">
-						<input type="checkbox" name="gis_ce_check" id="gis_ce_check" <?php echo ($getsignatory['option_GIS'] == "yes"?"checked":"") ?> disabled><label for="gis_ce_check">GIS/CE</label>
+						<input type="checkbox" name="gis_ce_check" id="gis_ce_check" <?php echo ($getsignatory['option_GIS'] == 1?"checked":"") ?> disabled><label for="gis_ce_check">GIS/CE</label>
 						</div>
 						<div class="col-6">
-						<input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == "yes"?"checked":"") ?> disabled><label for="gl_check">GL</label>
+						<input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == 1?"checked":"") ?> disabled><label for="gl_check">GL</label>
 						</div>
 					</div>
 				</div>

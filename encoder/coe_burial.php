@@ -123,10 +123,7 @@
 			<div class="col">
 				<p style="heigth: 60%;"></p>
 				<input class="text-center" style="heigth: 80%; width: 50%;;border:none;border-bottom: 1px solid #000000;border:none;border-bottom: 1px solid #000000;" value="<?php echo $user->getChargableagainst($_GET["id"]);?>"></input><br>
-				<input class="text-center" style="heigth: 80%; width: 50%;;border:none;border-bottom: 1px solid #000000;font-size:12.5px;border:none;border-bottom: 1px solid #000000;" value="<?php echo $client["category"];
-				if(!empty($client["subCategory"])){
-					echo ", ". $client["subCategory"]; 
-				}?>"></input><br>
+				<input class="text-center" style="heigth: 80%; width: 50%;;border:none;border-bottom: 1px solid #000000;font-size:12.5px;border:none;border-bottom: 1px solid #000000;" value="<?php echo $client["category"];?>"></input><br>
 				<input class="text-center" style="heigth: 80%; width: 50%;;border:none;border-bottom: 1px solid #000000;border:none;border-bottom: 1px solid #000000;" value="<?php echo strtoupper($client["mode_admission"])?>"></input>
 			</div>
 		</div>
@@ -162,7 +159,7 @@
 		</div>
 		<div class="row">
 			<div class="col-5" style="padding-left: 50px; padding-top: 20px;">
-				<div <?php echo $user->casestudy('social case', $coe['document'])?> >
+				<div <?php echo $user->casestudy('social case', $coe['document'], $am)?> >
 					<h4>
 					NOTE:
 					<br>

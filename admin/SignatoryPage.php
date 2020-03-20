@@ -25,13 +25,13 @@
 		$setmiddleI = strtoupper($_POST['mi']);
 		$setinitials = strtoupper($_POST['initials']);
 		$setposition = strtoupper($_POST['position']);
-		$checkgisce = "no";
-		$checkgl = "no";
+		$checkgisce = 0;
+		$checkgl = 0;
 		if(isset($_POST['gis_ce_check'])){
-			$checkgisce = "yes";
+			$checkgisce = 1;
 		}
 		if(isset($_POST['gl_check'])){
-			$checkgl = "yes";
+			$checkgl = 1;
 		}
 		$setrange_start = $_POST['rangestart'];
 		$setrange_end = $_POST['rangeend'];

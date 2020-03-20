@@ -86,7 +86,7 @@
 				<input class="text-center" value="<?php echo $client_assistance[2]['type']?>" style="heigth: 100%; width: 20%; border: none;"></input> 
 				&nbsp&nbsp for purpose of &nbsp 
 				<b class="text-center" style="heigth: 100%; padding:5px 5px; border-bottom:1px solid black;"><?php echo $client_assistance[2]['purpose']?></b> 
-				&nbsp&nbsp in the amount of 
+				&nbsp&nbsp in the amount of <br>
 				<b class="text-center" style="heigth: 100%; padding:5px 5px; border-bottom:1px solid black;"><?php echo $amountToWord?></b>
 				&nbsp&nbsp PHP 
 				<input class="text-center" style="heigth: 100%; width: 10%;" value="<?php echo  $client_assistance[2]['amount']?>"></input></p>

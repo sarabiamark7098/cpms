@@ -11,20 +11,27 @@ $user = new User();
 		$setmiddleI = $_POST['mi'];
 		$setinitials = $_POST['initials'];
 		$setposition = $_POST['position'];
-		$setoptionsgis = $_POST['optiongis'];
-		$setoptionsgl = $_POST['optiongl'];
+		$setoptionsgis = 0;
+		$setoptionsgl = 0;
+		if(isset($_POST['gis_ce_check'])){
+			$setoptionsgis = 1;
+		
+		}
+		if(isset($_POST['gl_check'])){
+			$setoptionsgl = 1;
+		}
 		$setid = $_GET['id'];
 		$setrange_start = $_POST['rangestart'];
 		$setrange_end = $_POST['rangeend'];
-		$result = $user->updatesignatory($setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $setoptions, $setid, $setrange_start, $setrange_end);
+		$result = $user->updatesignatory($setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $setoptionsgis, $setoptionsgl, $setid, $setrange_start, $setrange_end);
 	
 		if($result){
-			echo "<script>alert('Successfully Adding Signatory!');</script>";
+			echo "<script>alert('Successfully Updating Signatory!');</script>";
 			echo "<script>window.location='SignatoryPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 		}
 		else{
-			echo "<script>alert('Error Adding Signatory!');</script>";
+			echo "<script>alert('Error Updating Signatory!');</script>";
 			echo "<script>window.location='SignatoryPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 		}
@@ -119,10 +126,10 @@ $user = new User();
 				<div class="form-group col-lg-6">
 						<div class="row">
                             <div class="col-6">
-                            <input type="checkbox" name="gis_ce_check" id="gis_ce_check" <?php echo ($getsignatory['option_GIS'] == "yes"?"checked":"") ?>><label for="gis_ce_check">GIS/CE</label>
+                            <input type="checkbox" name="gis_ce_check" id="gis_ce_check" <?php echo ($getsignatory['option_GIS'] == 1?"checked":"") ?>><label for="gis_ce_check">GIS/CE</label>
                             </div>
                             <div class="col-6">
-                            <input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == "yes"?"checked":"") ?>><label for="gl_check">GL</label>
+                            <input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == 1?"checked":"") ?>><label for="gl_check">GL</label>
                             </div>
                         </div>
 					<!-- <select placeholder="Options" id="option" name="option" type="text" class="form-control " required>

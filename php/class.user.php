@@ -2032,7 +2032,7 @@
 		}
 		
 		public function signatoryGIS(){
-			$query = "SELECT * FROM signatory WHERE option_GL = 'yes';";
+			$query = "SELECT * FROM signatory WHERE option_GL = '1';";
 			$result = mysqli_query($this->db,$query);
 			if($result){
 				return $result;
@@ -2043,7 +2043,7 @@
 		}
 		
 		public function signatoryGL(){
-			$query = "SELECT * FROM signatory WHERE option_GL = 'yes';";
+			$query = "SELECT * FROM signatory WHERE option_GL = '1';";
 			$result = mysqli_query($this->db,$query);
 				$data = "<datalist id='gls'>";
 			while($row = mysqli_fetch_assoc($result)){
