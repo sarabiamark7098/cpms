@@ -2797,10 +2797,10 @@
 			}
 		}
 
-		public function casestudy($sub, $str){
+		public function casestudy($sub, $str, $amount){
 			$sub = strtolower($sub);
 			$str = strtolower($str);
-			if(substr_count(strval($str), $sub) > 0){
+			if(substr_count(strval($str), $sub) > 0 || $amount > 5000){
 				return "";
 			}else{
 				return "hidden";

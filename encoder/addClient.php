@@ -189,12 +189,11 @@
                                     echo '</option>';
                                 }
                             ?>
-                            <option value="others">Others</option>
                         </select>
                     </div>
-                    <div class="col-sm-12" style="margin-top:10px;">
+                    <!-- <div id="district_hidden_client" class="col-sm-12" style="margin-top:10px;">
                         <input class="form-control mr-sm-2 b" type="text" name="selected_district" id="district_ni_client" placeholder="Other District">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
@@ -221,8 +220,8 @@
                     <div class="form-group row">
                         <div class="col-sm-12">
                             <!-- <input id="foo" type="text" name="relation" class="form-control mr-sm-2 b benerequire" placeholder="Relationship with Beneficiary"> -->
-                        <select id="foo" name="relation" class="form-control mr-sm-2 b benerequire">
-                        <option value="" selected>Select District</option>
+                        <select name="relation" class="form-control mr-sm-2 b benerequire">
+                            <option value="" disabled selected>Relation With Beneficiary</option>
                             <?php
                                 $getrelation = $user->getrelationshiplist();
                                 //Loop through results
@@ -238,17 +237,17 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input id="foo" type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name">
+                            <input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input id="foo" type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
+                            <input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input id="foo" type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name">
+                        <input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -268,19 +267,19 @@
                     <div class="form-group row">
                         <label class="col-sm-2 label" style="font-size: 20px">Birth Date: </label>
                         <div class="col-sm-10">
-                            <input id="foo" type="date" class="form-control mr-sm-2 benerequire" name="b_bday" placeholder="Beneficiary Birth Date"  max='<?php echo date("Y-m-d") ?>'>  
+                            <input type="date" class="form-control mr-sm-2 benerequire" name="b_bday" placeholder="Beneficiary Birth Date"  max='<?php echo date("Y-m-d") ?>'>  
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-6">
-                        <select id="foo" name="b_sex" class="form-control mr-sm-2 b benerequire">
+                        <select name="b_sex" class="form-control mr-sm-2 b benerequire">
                             <option value="" disabled selected>Sex</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
                         </div>
                         <div class="col-sm-6">
-                        <select id="foo" name="b_cstatus" class="form-control mr-sm-2 b benerequire">
+                        <select name="b_cstatus" class="form-control mr-sm-2 b benerequire">
                             <option value="" disabled selected>Civil Status</option>
                             <option value="Single">Single</option>
                             <option value="Married">Married</option>
@@ -297,7 +296,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-6">
-                            <input id="foo" list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
+                            <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
                             <datalist id="b_categories">
                                 <option>Children in Need of Special Protection</option>
                                 <option>Persons Living with HIV/AIDS</option>
@@ -366,16 +365,16 @@
                         <div class="col-sm-12">
                             <select class="form-control mr-sm-2 b" name="b_district" id="beneficiary_district">
                                 <option value="" selected>Select District</option>
-                                <option value="District 1">District 1</option>
-                                <option value="District 2">District 2</option>
-                                <option value="District 3">District 3</option>
-                                <option value="District 4">District 4</option>
-                                <option value="District 5">District 5</option>
-                                <option value="District 6">District 6</option>
-                                <option value="District 7">District 7</option>
-                                <option value="District 8">District 8</option>
-                                <option value="District 9">District 9</option>
-                                <option value="District 10">District 10</option>
+                                <?php
+                                    $getdistrict = $user->getdistrictlist();
+                                    //Loop through results
+                                    foreach($getdistrict as $index => $value){
+                                        //Display info
+                                        echo '<option value="'. $value['district_name'] .'"> ';
+                                        echo $value['district_name'];
+                                        echo '</option>';
+                                    }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -387,8 +386,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary btn-sm submitload" name="addClient" value="Submit" onclick="msg()">      
+                <button type="button" class="btn btn-secondary btn-md" data-dismiss="modal">Close</button>
+                <input type="submit" class="btn btn-primary btn-md submitload" name="addClient" value="Submit" onclick="msg()">      
             </div>
             <script>
                 function msg(){
@@ -399,6 +398,13 @@
         </form> 
             
         <script type="text/javascript">
+        
+        // $(function () {
+        //     $("#district_hidden_client").hide();
+        //     did = document.getElementById('client_district').value;
+        //     console.log(did); 
+             
+        // });
         // $(function () { data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing"
         //     $('.submitload').on('click', function() {
         //             var $this = $(this);
@@ -439,10 +445,11 @@
                 if ($(this).is(":checked")) {
                     $("#radiobutton").not($(this)).each(function () {
                         $(this).removeAttr("checked");
-                    })
+                    });
                 }
-            })
-        })
+            });
+        });
+
         $(function () {
             $("#radiobutton").change(function () {
                 if ($(this).is(":checked")) {
@@ -450,25 +457,25 @@
                         $(this).removeAttr("checked");
                     })
                 }
-            })
-        })
+            });
+        });
 
         $(function () {
             $("#radiobutton").change(function () {
                 if ($(this).is(":checked")) {
                     $("#radiobutton2").not($(this)).each(function () {
                         $(this).removeAttr("required");
-                    })
+                    });
                 }
-            })
+            });
             $("#radiobutton2").change(function () {
                 if ($(this).is(":checked")) {
                     $("#radiobutton").not($(this)).each(function () {
                         $(this).removeAttr("required");
-                    })
+                    });
                 }
-            })
-        })
+            });
+        });
 
         $(function () {
             $("#radiobutton").click(function () {

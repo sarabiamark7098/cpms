@@ -18,14 +18,18 @@ $user = new User();
                     <div class="form-group col-lg-6">
                         <!-- <input  name="relation" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" value="<?php //echo $bene['relation']?>" required> -->
 						<select name="relation" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
-                            <option value="" disabled <?php echo (empty($bene['relation'])?'selected':'') ?>> Relation to Client</option>
-                            <option value="FATHER/MOTHER" <?php echo (($bene['relation'] == 'FATHER/MOTHER')?'selected':'') ?>>FATHER/MOTHER</option>
-                            <option value="SON/DAUGHTER" <?php echo (($bene['relation'] == 'SON/DAUGHTER')?'selected':'') ?>>SON/DAUGHTER</option>
-                            <option value="UNCLE/AUNT" <?php echo (($bene['relation'] == 'UNCLE/AUNT')?'selected':'') ?>>UNCLE/AUNT</option>
-                            <option value="NEPHEW/NIECE" <?php echo (($bene['relation'] == 'NEPHEW/NIECE')?'selected':'') ?>>NEPHEW/NIECE</option>
-                            <option value="GRANDFATHER/GRANDMOTHER" <?php echo (($bene['relation'] == 'GRANDFATHER/GRANDMOTHER')?'selected':'') ?>>GRANDFATHER/GRANDMOTHER</option>
-                            <option value="GRANDSON/GRANDDAUGHTER" <?php echo (($bene['relation'] == 'GRANDSON/GRANDDAUGHTER')?'selected':'') ?>>GRANDSON/GRANDDAUGHTER</option>
-                        </select>
+							<option value="" <?php echo (empty($bene['relation'])?'selected':'') ?>>Relation With Beneficiary</option>
+                            <?php
+                                $getrelation = $user->getrelationshiplist();
+                                //Loop through results
+                                foreach($getrelation as $index => $value){
+                                    //Display info
+                                    echo '<option value="'. $value['relation'] .'" '. (($bene['relation'] == $value['relation'])?'selected':'') .' > ';
+                                    echo $value['relation'];
+                                    echo '</option>';
+                                }
+                            ?>
+						</select>
                         <label>Relationship with the client</label>
                     </div>
                 </div>
@@ -204,17 +208,17 @@ $user = new User();
                     </div>
 						<div class="form-group col-lg-6">
 							<select name="district" type="text" id="newdist" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
-								<option value="" disabled <?php echo ($bene['b_district']==""?"selected":"")?>>Select District</option>
-								<option value="District 1" <?php echo ($bene['b_district']=="District 1"?"selected":"")?>>District 1</option>
-								<option value="District 2" <?php echo ($bene['b_district']=="District 2"?"selected":"")?>>District 2</option>
-								<option value="District 3" <?php echo ($bene['b_district']=="District 3"?"selected":"")?>>District 3</option>
-								<option value="District 4" <?php echo ($bene['b_district']=="District 4"?"selected":"")?>>District 4</option>
-								<option value="District 5" <?php echo ($bene['b_district']=="District 5"?"selected":"")?>>District 5</option>
-								<option value="District 6" <?php echo ($bene['b_district']=="District 6"?"selected":"")?>>District 6</option>
-								<option value="District 7" <?php echo ($bene['b_district']=="District 7"?"selected":"")?>>District 7</option>
-								<option value="District 8" <?php echo ($bene['b_district']=="District 8"?"selected":"")?>>District 8</option>
-								<option value="District 9" <?php echo ($bene['b_district']=="District 9"?"selected":"")?>>District 9</option>
-								<option value="District 10" <?php echo ($bene['b_district']=="District 10"?"selected":"")?>>District 10</option>
+								<option value="" selected>Select District</option>
+								<?php
+									$getdistrict = $user->getdistrictlist();
+									//Loop through results
+									foreach($getdistrict as $index => $value){
+										//Display info
+										echo '<option value="'. $value['district_name'] .'"> ';
+										echo $value['district_name'];
+										echo '</option>';
+									}
+								?>
 							</select>
 							<label>New District</label>
 						</div>

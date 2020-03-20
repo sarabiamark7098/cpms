@@ -58,7 +58,7 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="bday" type="date"  class="form-control" style="border: 1px solid #b1acac;" max= "<?php echo date('Y-m-d'); ?>" value="<?php echo $client['date_birth']?>" required>
+							<input  name="bday" type="date" class="form-control" style="border: 1px solid #b1acac;" max= "<?php echo date('Y-m-d'); ?>" value="<?php echo $client['date_birth']?>" required>
 							<label>Birth Date</label>
 						</div>
 						<div class="form-group col-lg-6">
@@ -114,17 +114,17 @@ $user = new User();
 						<div class="form-group col-lg-6">
 							<!-- <input name="district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php //echo $client['client_district']?>"> -->
 							<select name="district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
-								<option value="" selected>Select District</option>
-								<option value="District 1" <?php echo (($client['client_district'] == "District 1")?'selected':'') ?>>District 1</option>
-								<option value="District 2" <?php echo (($client['client_district'] == "District 2")?'selected':'') ?>>District 2</option>
-								<option value="District 3" <?php echo (($client['client_district'] == "District 3")?'selected':'') ?>>District 3</option>
-								<option value="District 4" <?php echo (($client['client_district'] == "District 4")?'selected':'') ?>>District 4</option>
-								<option value="District 5" <?php echo (($client['client_district'] == "District 5")?'selected':'') ?>>District 5</option>
-								<option value="District 6" <?php echo (($client['client_district'] == "District 6")?'selected':'') ?>>District 6</option>
-								<option value="District 7" <?php echo (($client['client_district'] == "District 7")?'selected':'') ?>>District 7</option>
-								<option value="District 8" <?php echo (($client['client_district'] == "District 8")?'selected':'') ?>>District 8</option>
-								<option value="District 9" <?php echo (($client['client_district'] == "District 9")?'selected':'') ?>>District 9</option>
-								<option value="District 10" <?php echo (($client['client_district'] == "District 10")?'selected':'') ?>>District 10</option>
+								<option value=""  <?php (($client['client_district']=="")?"selected":"") ?>>Select District</option>
+								<?php
+									$getdistrict = $user->getdistrictlist();
+									//Loop through results
+									foreach($getdistrict as $index => $value){
+										//Display info
+										echo '<option value="'. $value['district_name'] .'" '. (($client['client_district']==$value['district_name'])?"selected":"") .'> ';
+										echo $value['district_name'];
+										echo '</option>';
+									}
+								?>
 							</select>
 							<label>District</label>
 						</div>

@@ -16,13 +16,17 @@ $user = new User();
                     <div class="form-group col-lg-6">
                         <!-- <input  name="relation" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Relation to Client" required> -->
 						<select name="relation" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
-                            <option value="" disabled selected> Relation to Client</option>
-                            <option value="FATHER/MOTHER">FATHER/MOTHER</option>
-                            <option value="SON/DAUGHTER">SON/DAUGHTER</option>
-                            <option value="UNCLE/AUNT">UNCLE/AUNT</option>
-                            <option value="NEPHEW/NIECE">NEPHEW/NIECE</option>
-                            <option value="GRANDFATHER/GRANDMOTHER">GRANDFATHER/GRANDMOTHER</option>
-                            <option value="GRANDSON/GRANDDAUGHTER">GRANDSON/GRANDDAUGHTER</option>
+							<option value="" disabled selected>Relation With Beneficiary</option>
+                            <?php
+                                $getrelation = $user->getrelationshiplist();
+                                //Loop through results
+                                foreach($getrelation as $index => $value){
+                                    //Display info
+                                    echo '<option value="'. $value['relation'] .'"> ';
+                                    echo $value['relation'];
+                                    echo '</option>';
+                                }
+                            ?>
                         </select>
                         <label>Relationship with the client</label>
                     </div>

@@ -166,7 +166,7 @@
 		</div>
 		<div class="row">
 			<div class="col-5" style="padding-left: 50px; padding-top: 20px;">
-				<div <?php echo $user->casestudy('social case', $record['document'])?> >
+				<div <?php echo $user->casestudy('social case', $record['document'], $am)?> >
 					<h4>
 					NOTE:
 					<br>
