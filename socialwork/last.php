@@ -13,6 +13,15 @@
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
         
+        $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
+
+        if($client_assistance[1]['amount'] > 5000){
+            if($record){
+                $COEsignatory= $user->getsignatory($record['sign_Id']); //kwaun ang data sa signatory using sign_id 
+                $COEsignatoryini = strtoupper($COEsignatory['first_name'][0] ." ". $COEsignatory['middle_I'][0] .". ". $COEsignatory['last_name'][0]);
+            }
+        }
+
         $name =  $client["firstname"]." ". strtoupper($client["middlename"][0]) .". ". $client["lastname"];
 		if(!empty($client['extraname'])){
 			$name .= " ". $client['extraname'];

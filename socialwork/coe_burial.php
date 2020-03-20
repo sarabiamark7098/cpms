@@ -123,10 +123,7 @@
 				<div class="col">
 					<p style="heigth: 60%;"></p>
 					<input class="text-center" style="heigth: 90%; width: 50%;" value="<?php echo $user->getChargableagainst($_GET["id"]);?>"></input><br>
-					<input class="text-center" style="heigth: 80%; width: 50%; font-size: 16px;" value="<?php echo $client["category"];
-				if(!empty($client["subCategory"])){
-				echo ", ". $client["subCategory"]; 
-				}?>"></input><br>
+					<input class="text-center" style="heigth: 80%; width: 50%; font-size: 16px;" value="<?php echo $client["category"]; ?>"></input><br>
 					<input class="text-center" style="heigth: 80%; width: 50%;" value="<?php echo strtoupper($gis["mode_admission"])?>"></input>
 				</div>
 			</div>

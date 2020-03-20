@@ -54,7 +54,7 @@
         if(!empty($client_assistance[2]['fund'])){
             $fund2 = explode("/",$client_assistance[2]['fund']);
         }
-        
+        $type = strval($client_assistance[1]['type']);
     }
 
     if(isset($_GET['option'])){
@@ -217,7 +217,6 @@
                             </div>
                         </div>
                     </div>
-                    <?php $type = strval($client_assistance[1]['type']);?>
                     <div class="col-6">
                         <div class="card border-secondary">
                             <div class="card-header border-secondary bg-secondary text-white">
@@ -416,7 +415,7 @@
     </body>
     <?php 
     if(isset($_POST["save"])){
-		$docu = "";
+        $docu = "";
         $id_pres = "";
         $others_input = "";
         $signName = "";
@@ -444,7 +443,7 @@
         if(isset($_POST['amountf11'])){
             $amount2 = $_POST['amountf11'];
         }
-        $docu=mysqli_real_escape_string($user->db,$docu);
+        echo $docu=mysqli_real_escape_string($user->db,$docu);
         //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
         $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2);
     }

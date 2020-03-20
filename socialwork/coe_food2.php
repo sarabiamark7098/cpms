@@ -99,10 +99,7 @@
 			<div class="col">
 				<p style="heigth: 60%;"></p>
 				<input class="text-center" style="heigth: 90%; width: 50%;" value="<?php echo strtoupper($client_assistance[2]['fund']);?>"></input><br>
-				<input class="text-center" style="heigth: 80%; width: 50%; font-size: 16px;" value="<?php echo $client["category"];
-			if(!empty($client["subCategory"])){
-			echo ", ". $client["subCategory"]; 
-			}?>"></input><br>
+				<input class="text-center" style="heigth: 80%; width: 50%; font-size: 16px;" value="<?php echo $client["category"]; ?>"></input><br>
 				<input class="text-center" style="heigth: 80%; width: 50%;" value="<?php echo strtoupper($gis["mode_admission"])?>"></input>
 			</div>
 		</div>
@@ -141,7 +138,7 @@
 		</div>
 		<div class="row">
 			<div class="col-5" style="padding-left: 50px; padding-top: 20px;">
-				<div <?php echo $user->casestudy('social case', $record['document'])?> >
+				<div <?php echo $user->casestudy('social case', $record['document'], $am2)?> >
 					<h4>
 					NOTE:
 					<br>

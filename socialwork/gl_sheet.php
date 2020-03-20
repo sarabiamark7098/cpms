@@ -63,7 +63,7 @@
 				$signatory = explode('-', $signatoryGLNamePos)[2];
 				$soc_worker = $user->getencoderINI($client['encoded_socialWork']);
 				$encoder = $user->getencoderINI($client['encoded_encoder']);
-				 echo '<small>'. strtoupper($signatory) ."/". strtolower($soc_worker) ."/". strtolower($encoder) .'</small>';
+				 echo '<small>'. strtoupper($signatory) ."/". (!empty($COEsignatoryini)?strtoupper($COEsignatoryini) ."/":"") ."". strtolower($soc_worker) ."/". strtolower($encoder) .'</small>';
             ?>
         </p> 
     </div>
