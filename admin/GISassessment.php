@@ -99,10 +99,10 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">Provider's List<i style="float: right;font-size:25px" class="fa fa-handshake"></i> </a> 
+                    <a href="home.php">Providers<i style="float: right;font-size:25px" class="fa fa-handshake"></i> </a> 
                 </li>
                 <li>
-                    <a href="Employee.php">Employee's <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
+                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
                     <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
@@ -111,8 +111,14 @@
                     <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                 </li>
                 <li>
-                    <a href="OfficePage.php">Offices List<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
+                    <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
+                <li>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <!-- <li>
+                    <a href="Relation_District_Page.php">Additional <i style="float: right;font-size:25px" class="fa fa-expand"></i></a>
+                </li>     -->
             </ul>
         </nav>
 
@@ -125,17 +131,17 @@
                         <span></span>
                         <span></span>
                     </button>
-                    <a class="nav-link toggle" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
 						</a>
-					<a class="nav-link toggle" data-target="#AddAss" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Assessment Option<a>
+					<a class="nav-link toggle tohover" data-target="#AddAss" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Assessment Option<a>
 						
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" data-toggle="modal" data-target="#logoutmodal">Logout</a>
+                                <a class="nav-link tohover" data-toggle="modal" data-target="#logoutmodal">Logout</a>
                             </li>
                         </ul>
                     </div>

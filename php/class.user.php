@@ -547,6 +547,32 @@
 			}
 		}
 
+		// List of information
+
+			public function getdistrictlist(){
+				$query = "SELECT * FROM tbl_district;";
+				$result = mysqli_query($this->db, $query);
+				$rows = mysqli_fetch_assoc($result);
+				
+				if($rows){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+
+			public function getrelationshiplist(){
+				$query = "SELECT * FROM tbl_relationship";
+				$result = mysqli_query($this->db, $query);
+				$rows = mysqli_fetch_assoc($result);
+	
+				if($rows){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+		
 		//Logout
 		
 		public function user_logout() {

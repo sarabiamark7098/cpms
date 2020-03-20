@@ -6,6 +6,35 @@ $user = new User();
  
 	$getuser = $user->show_user_data($userid);
 	$fullname = strtoupper($getuser['empfname'] ." ". $getuser['empmname'][0] ." ". $getuser['emplname']);
+	$initials = "";
+	if(!empty($getuser['empfname'])){
+		$firstname = explode(" ",$getuser['empfname']);
+		if(!empty($firstname[2])){
+			$initials = strtoupper($firstname[0][0]."".$firstname[1][0]."".$firstname[2][0]);
+		}elseif(!empty($firstname[1])){
+			$initials = strtoupper($firstname[0][0]."".$firstname[1][0]);
+		}else{
+			$initials = strtoupper($firstname[0][0]);
+		}
+	}
+	
+	if(!empty($getuser['empmname'])){
+		$middlename = explode(" ",$getuser['empmname']);
+		if(!empty($middlename[0])){
+			$initials .= strtoupper($middlename[0][0]);
+		}
+	}
+
+	if(!empty($getuser['emplname'])){
+		$lastname = explode(" ",$getuser['emplname']);
+		if(!empty($lastname[2])){
+			$initials .= strtoupper($lastname[0][0]."".$lastname[1][0]."".$lastname[2][0]);
+		}elseif(!empty($lastname[1])){
+			$initials .= strtoupper($lastname[0][0]."".$lastname[1][0]);
+		}else{
+			$initials .= strtoupper($lastname[0][0]);
+		}
+	}
 
 ?>
 <?php
@@ -35,7 +64,7 @@ $user = new User();
 					<label class="active" for="name">Fullname</label>
 				</div>
 				<div class="form-group col-lg-6">
-					<input value="<?php echo $getuser['initials']?>" id="initial" name="initial" type="text" class="form-control " readonly>
+					<input value="<?php echo $initials?>" id="initial" name="initial" type="text" class="form-control " readonly>
 					<label class="active" for="initial">Name initial</label>
 				</div>
 			</div>

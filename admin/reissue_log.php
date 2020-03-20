@@ -90,9 +90,9 @@
                     <li>
                         <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
                     </li>
-                    <!-- <li>
+                    <li>
                         <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                    </li> -->
+                    </li>
                     <li>
                         <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                     </li>

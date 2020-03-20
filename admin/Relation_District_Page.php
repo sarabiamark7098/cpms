@@ -1,7 +1,7 @@
 <?php
 	include("../php/class.user.php");
 	$user = new User();
-	
+	///////////////
 	if(!$_SESSION['login']){
 		header('location:../index.php');
 		}
@@ -14,33 +14,13 @@
 			case 'Admin': header("Location: ../admin/home.php");
 							break;
 			default:
-				echo "<script>window.location='../index.php';</script>";
+				echo "<script>window.location='index.php';</script>";
 		}
 	}
-
+	
 	if(!$_SESSION['login']){
 		header('Location:../index.php');
-        }
-        
-    if(isset($_POST['Add'])) {
-    
-        $officename = $_POST['officename'];
-        $descrip = $_POST['description'];
-        $m = $_POST['city'];
-        
-        $result = $user->addOffice($officename, $descrip, $m);
-        
-        if($result){
-            echo "<script>alert('Successfully Adding Office!');</script>";
-            echo "<script>window.location='OfficePage.php';</script>";
-            echo "<meta http-equiv='refresh' content='0'>";
-        }
-        else{
-            echo "<script>alert('Error Adding Office!');</script>";
-            echo "<script>window.location='OfficePage.php';</script>";
-            echo "<meta http-equiv='refresh' content='0'>";
-        }
-    }
+		}
 
 ?>
 
@@ -84,6 +64,9 @@
 		  $(function(){
 			$("#admintable").dataTable();
 		  })
+          $(function(){
+			$("#admintable2").dataTable();
+		  })
 		</script>
         
     </head>
@@ -116,6 +99,9 @@
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                 </li>
+                <li>
+                    <a href="Relation_District_Page.php">Additional <i style="float: right;font-size:25px" class="fa fa-expand"></i></a>
+                </li>    
             </ul>
         </nav>
 
@@ -128,13 +114,12 @@
                         <span></span>
                         <span></span>
                     </button>
-                    <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" style="margin-left: 10px;" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
 					</a>
-
-                    <a class="nav-link toggle tohover" data-target="#AddOffice" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Office<a>
-					<button class="btn btn-dark d-inline-block d-lg-none ml-auto tohover" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
+                    <a class="nav-link toggle tohover" data-target="#Adddistrict" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add District<a>
+					<a class="nav-link toggle tohover" data-target="#Addrelation" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Relation<a>
+						
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -147,39 +132,66 @@
                 </div>
             </nav>
             <div class="container-fluid"  style="padding-left: 5%">
-                <div class="table-responsive-lg">
-					<h5>Office's</h5>
+                <div class="table-responsive-lg" style="float:right; width: 48%;">
+					<h5>Relation List</h5>
 					<table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
 						<thead>
 							<tr>
-							<th scope="col" style='width: 15%'>Office id</th>
-							<th scope="col">Office Name</th>
-							<th scope="col" style="width: 25%">Action</th>
+							<th scope="col">Relation</th>
+							<th scope="col" style="width: 30%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
-                        <?php
-                        if(!isset($_REQUEST['buttonSearch'])){
-                            $getoffices = $user->get_offices_to_admin_table();
-                            if($getoffices){
-                                foreach($getoffices as $index => $value){
-                                echo "<tr>
-                                            <td scope='row' style='width: 15%'>" . $value["office_id"] . "</td> 
-                                            <td>" . $value["office_name"] ." </td>
-                                            <td style='width: 25%'>
-                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["office_id"] . "' style='margin-right: 10px;' data-target='#OfficeInfo'> View </button>
-                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["office_id"]. "' style='margin-right: 10px;' data-target='#UpdateOffice'> Update </button>
-                                            </td>
-                                            </tr>
-                                        ";		
-                                }
-                            } else {
-                                echo "NO DATA";
-                            }
-                        } 
-                        ?>
+							<?php
+								$getuser = $user->getrelationshiplist();
+                                if($getuser){
+									foreach($getuser as $index => $value){
+                                        
+									    echo "<tr>
+												<td scope='row'>" . $value["relation"] . "</td> 
+												<td style='width: 30%'>
+												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["r_id"]. "' style='margin-right: 10px;' data-target='#Updateass'> Update </button>
+												</td>
+												</tr>
+											";		
+									}
+								} else {
+									echo "NO DATA";
+								}
+							?>
 						</tbody>
 					</table>
+                </div>
+                
+                <div class="table-responsive-lg" style="width: 48%; float: left">
+                    <h5>District List</h5>
+                    <table id="admintable2" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
+                        <thead>
+                            <tr>
+                            <th scope="col">District Name</th>
+                            <th scope="col" style="width: 30%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $getdist = $user->getdistrictlist();
+                                if($getdist){
+                                    foreach($getdist as $index => $value){
+                                    echo "<tr>
+                                                <td scope='row'>" . $value["district_name"] ." </td>
+                                                <td scope='row' style='width: 30%'>
+                                                <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["d_id"]. "' style='margin-right: 10px;' data-target='#UpdateEmployee'> Update </button>
+                                                </td>
+                                                </tr>
+                                            ";		
+                                    }
+                                } else {
+                                    echo "NO DATA";
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                    
                 </div>
             </div>
     <script type="text/javascript">
@@ -196,21 +208,21 @@
         });
     </script>
 <div class="module">
-    <div class="modal fade in" id="userAccount" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">User Account</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+	<div class="modal fade in" id="userAccount" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ModalLabel">User Account</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
 				<div class="useraccount">
 				
 				</div>
-			</div>	
-		</div>
-    </div>
+			</div>
+		</div>	
+	</div>
 </div>
 </body>
     <script>
@@ -258,7 +270,7 @@
 		  //console.log(dataString);
             $.ajax({
                 type: "GET",
-                url: "OfficePage.php",
+                url: "GISassessment.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
@@ -272,119 +284,56 @@
         })
     </script>
 
-    <div class="modal hide fade" id="AddOffice" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
+    <!-- Modal for Adding Relation -->
+
+    <div class="modal hide fade" id="Addrelation" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Office Information</h5>
+                    <h5 class="modal-title" id="ModalLabel">Add Relation</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 				<div class="Addbody">
-				  
+                    <form action="Relation_District_Page.php" method="post">
+                        <div class="modal-body">
+                            <div class="row form-group" style="margin-top: 2%; height:10%;">
+                                <div class="form-group col-lg-12">
+                                    <input placeholder="Relationship" id="relation" name="relation" style="text-transform: uppercase" type="text" class="form-control">
+                                    <label class="active" for="relation">Relationship</label>
+                                </div>
+                            </div>
+                                    
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="Add">Save</button>
+                        </div>
+                    </form>
 				</div>
 			</div>	
 		</div>
 	</div>
-	<script>
-	$('#AddOffice').appendTo("body").on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget) // Button that triggered the modal
-          var modal = $(this);
-          var dataString = 'New Data';
- 
+    <script>
+        $('#Addrelation').appendTo("body").on('show.bs.modal', function (event) {
+		  var button = $(event.relatedTarget) // Button that triggered the modal
+		  var modal = $(this);
+          var dataString = 'id=relation';
+		  //console.log(dataString);
             $.ajax({
                 type: "GET",
-                url: "addOffice.php",
+                url: "Relation_District_Page.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    // console.log(data);
-                    modal.find('.Addbody').html(data);
+                    //console.log(data);
+                    modal.find('.Addbody');
                 },
                 error: function(err) {
-                    // console.log(err);
+                    //console.log(err);
                 }
-				
             });  
-	})
-	</script>
-	
-    <div class="modal hide fade" id="OfficeInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-            			<h5 class="modal-title" id="exampleModalLabel">Show Office Information</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="Viewbody">
-					</div>
-				</div>	
-			</div>
-		</div>
-
-		<div class="modal hide fade" id="UpdateOffice" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalLabel">Update Office Information</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-					</div>
-					<div class="Updatebody">
-					</div>
-				</div>	
-			</div>
-		</div>
-
-	<script type="text/javascript">
-	$('#OfficeInfo').appendTo("body").on('show.bs.modal', function (event) {
-						var button = $(event.relatedTarget) // Button that triggered the modal
-						var empid = button.data('id') // Extract info from data-* attributes
-						var modal = $(this);
-						var dataString = 'id=' + empid;
-	
-							$.ajax({
-									type: "GET",
-									url: "ShowOffice.php",
-									data: dataString,
-									cache: false,
-									success: function (data) {
-											// console.log(data);
-											modal.find('.Viewbody').html(data);
-									},
-									error: function(err) {
-											// console.log(err);
-									}
-					
-							});  
-				
-			})
-
-	$('#UpdateOffice').appendTo("body").on('show.bs.modal', function (event) {
-						var button = $(event.relatedTarget) // Button that triggered the modal
-						var empid = button.data('id') // Extract info from data-* attributes
-						var modal = $(this);
-						var dataString = 'id=' + empid;
-	
-							$.ajax({
-									type: "GET",
-									url: "UpdateOffice.php",
-									data: dataString,
-									cache: false,
-									success: function (data) {
-											// console.log(data);
-											modal.find('.Updatebody').html(data);
-									},
-									error: function(err) {
-											// console.log(err);
-									}
-					
-							});  
-			})
-	</script>
-
+        })
+    </script>
 </html>

@@ -129,7 +129,6 @@
                             <option>Family Heads and Other Needy Adult</option>
                             <option>None of the Above</option>
                         </datalist>
-                        
                     </div>
                     <div class="col-sm-6">
                         <input type="text" class="form-control mr-sm-2 b" name="subcategory" placeholder="Sub-Category">
@@ -180,17 +179,21 @@
                     <div class="col-sm-12">
                         <select class="form-control mr-sm-2 b" name="district" id="client_district">
                             <option value="" selected>Select District</option>
-                            <option value="District 1">District 1</option>
-                            <option value="District 2">District 2</option>
-                            <option value="District 3">District 3</option>
-                            <option value="District 4">District 4</option>
-                            <option value="District 5">District 5</option>
-                            <option value="District 6">District 6</option>
-                            <option value="District 7">District 7</option>
-                            <option value="District 8">District 8</option>
-                            <option value="District 9">District 9</option>
-                            <option value="District 10">District 10</option>
+                            <?php
+                                $getdistrict = $user->getdistrictlist();
+                                //Loop through results
+                                foreach($getdistrict as $index => $value){
+                                    //Display info
+                                    echo '<option value="'. $value['district_name'] .'"> ';
+                                    echo $value['district_name'];
+                                    echo '</option>';
+                                }
+                            ?>
+                            <option value="others">Others</option>
                         </select>
+                    </div>
+                    <div class="col-sm-12" style="margin-top:10px;">
+                        <input class="form-control mr-sm-2 b" type="text" name="selected_district" id="district_ni_client" placeholder="Other District">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -219,13 +222,17 @@
                         <div class="col-sm-12">
                             <!-- <input id="foo" type="text" name="relation" class="form-control mr-sm-2 b benerequire" placeholder="Relationship with Beneficiary"> -->
                         <select id="foo" name="relation" class="form-control mr-sm-2 b benerequire">
-                            <option value="" disabled selected> Relation to Client</option>
-                            <option value="FATHER/MOTHER">FATHER/MOTHER</option>
-                            <option value="SON/DAUGHTER">SON/DAUGHTER</option>
-                            <option value="UNCLE/AUNT">UNCLE/AUNT</option>
-                            <option value="NEPHEW/NIECE">NEPHEW/NIECE</option>
-                            <option value="GRANDFATHER/GRANDMOTHER">GRANDFATHER/GRANDMOTHER</option>
-                            <option value="GRANDSON/GRANDDAUGHTER">GRANDSON/GRANDDAUGHTER</option>
+                        <option value="" selected>Select District</option>
+                            <?php
+                                $getrelation = $user->getrelationshiplist();
+                                //Loop through results
+                                foreach($getrelation as $index => $value){
+                                    //Display info
+                                    echo '<option value="'. $value['relation'] .'"> ';
+                                    echo $value['relation'];
+                                    echo '</option>';
+                                }
+                            ?>  
                         </select>
                         </div>
                     </div>
