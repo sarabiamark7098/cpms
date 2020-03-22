@@ -60,10 +60,9 @@
             Valid within 30 days upon issuance and is not convertible to cash.
             <br><?php 
                 //Mga initial ni diri buset
-				$signatory = explode('-', $signatoryGLNamePos)[2];
-				$soc_worker = $user->getencoderINI($client['encoded_socialWork']);
-				$encoder = $user->getencoderINI($client['encoded_encoder']);
-				 echo '<small>'. strtoupper($signatory) ."/". strtolower($soc_worker) ."/". strtolower($encoder) .'</p></small>';
+                 $soc_worker = $user->getinitials($client['encoded_socialWork']);
+                 $encoder = $user->getinitials($client['encoded_encoder']);
+                  echo '<small>'. strtoupper($GLsignatoryini) ."/". (!empty($COEsignatoryini)?strtoupper($COEsignatoryini) ."/":"") ."". strtolower($soc_worker) ."/". strtolower($encoder) .'</small>';
             ?>
         </p> 
     </div>

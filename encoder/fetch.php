@@ -105,7 +105,7 @@
                 FROM `client_data` 
                 LEFT JOIN tbl_transaction using (client_id) 
                 LEFT JOIN beneficiary_data using(bene_id) 
-                where status_client = 'Done' ORDER BY `tbl_transaction`.`date_accomplished` DESC limit {$datas}, 10";
+                where status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' ORDER BY `tbl_transaction`.`date_accomplished` DESC limit {$datas}, 10";
     
         $output = '
             <table class="table">

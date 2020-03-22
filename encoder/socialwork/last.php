@@ -13,6 +13,17 @@
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
         
+        $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
+
+        $am = str_replace(",","",$client_assistance[1]['amount']);
+
+        if($am > 5000){
+            if($record){
+                $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
+            }
+        }
+        $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
+
         $name =  $client["firstname"]." ". strtoupper($client["middlename"][0]) .". ". $client["lastname"];
 		if(!empty($client['extraname'])){
 			$name .= " ". $client['extraname'];
@@ -163,7 +174,7 @@
                                                 <span id="gl_error" style="color:red"></span>
                                             </div>
                                         </div>
-                                        <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" required> '. $user->signatoryGL() .' <br></div>
+                                        <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                     </div><br>
                                     <h3>Providers Info</h3>
                                     <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
@@ -215,7 +226,7 @@
                                                 <span id="gl_error" style="color:red"></span>
                                             </div>
                                         </div>
-                                        <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" required> '. $user->signatoryGL() .' <br></div>
+                                        <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                     </div><br>
                                     <h3>Providers Info</h3>
                                     <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
@@ -411,10 +422,11 @@
             
             if(!empty($client_assistance[2])){
                 $mode2 = $client_assistance[2]['mode'];
-            $if1 = (strtolower($mode1) == "gl" && strtolower($mode2) == "cav");
-            $if2 = (strtolower($mode1) == "cav" && strtolower($mode2) == "gl");
             }
 
+            $if1 = (strtolower($mode1) == "gl" && strtolower($mode2) == "cav");
+            $if2 = (strtolower($mode1) == "cav" && strtolower($mode2) == "gl");
+            
             if( $if1 || $if2 ){
                 //GL 
                 $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
@@ -455,9 +467,6 @@
                     }
                 }
                 
-            
-        
-
             }     
         }
 

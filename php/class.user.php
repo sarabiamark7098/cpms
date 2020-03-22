@@ -1966,35 +1966,37 @@
 			//insert sa service 
 			$query .= " UPDATE service SET service1={$s1}, service2={$s2}, service3={$s3}, service4={$s4}, ref_name='{$ref_name}', remark_service_update='{$encoder}' WHERE trans_id = '{$trans_id}';";
 			
-			$assistance = $this-> getAssistanceData($trans_id);
+			$assistance = $this->getAssistanceData($trans_id);
 			
 			//UPDATE assessment need by client/ 1 or 2 lng iyang ma cater na assistance 
 			$query .= " UPDATE assessment SET problem = '{$prob}', gis_option = '{$gis_opt}', soc_ass='{$ass}', mode_admission='{$mode_ad}', client_num='{$num}', remark_onupdate='{$encoder}'
 						WHERE trans_id='{$trans_id}';";
 		
 			//UPDATE assissstance
-			$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '{$f1}', purpose = '{$pur1}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1';";
+			$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '{$f1}', purpose = '{$pur1}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1'";
 			if($type2 !="" && !empty($assistance[2]['mode']) != ""){
-				$query .= "UPDATE assistance SET type = '{$type2}', amount = '{$a2}', mode ='{$m2}', fund = '{$f2}', purpose = '{$pur2}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
-			}elseif($type2 =="" && $assistance[2]['mode'] != ""){
-				$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
+				$query .= "UPDATE assistance SET type = '{$type2}', amount = '{$a2}', mode ='{$m2}', fund = '{$f2}', purpose = '{$pur2}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2'";
+			}elseif($type2 =="" && !empty($assistance[2]['mode']) != ""){
+				$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type2'";
 			}elseif($type2 !="" && !empty($assistance[2]['mode']) == ""){
 				$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) VALUES
-					('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2');";
+					('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 			}
 			$query .= ";";
 
 			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}'/";
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}'";
 			if($m1 == "GL"){ 
 				$amountcon = str_replace(",","", $a1);
 				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon > 5000){ $query .= ", signatory_GL = ''"; }
 			}
 			if($m2 == "GL"){ 
 				$amountcon2 = str_replace(",","", $a2);
 				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
-			} 
-			$query .= " WHERE trans_id = '{$trans_id}';";
+				elseif($amountcon2 > 5000){ $query .= ", signatory_GL = ''"; }
+			}
+			echo $query .= " WHERE trans_id = '{$trans_id}';";
 			
 			
 			$result = mysqli_multi_query($this->db, $query);
