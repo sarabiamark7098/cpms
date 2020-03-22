@@ -86,7 +86,6 @@
         $count++;
     }
     if($count > 0){
-        echo $count;
         header("Content-type: application/octet-stream");
         header("Content-Disposition: attachment; filename=".$user->getMonthWord($month)."-".strval($year).".xls");
         header("Pragma: no-cache");

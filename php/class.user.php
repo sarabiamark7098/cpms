@@ -1834,7 +1834,16 @@
 
 			//update the tbl_transaction table
 			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}' WHERE trans_id = '{$trans_id}';";
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}'";
+			if($m1 == "GL"){ 
+				$amountcon = str_replace(",","", $a1);
+				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+			}
+			if($m2 == "GL"){ 
+				$amountcon2 = str_replace(",","", $a2);
+				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+			} 
+			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);
 		
 			if($result){
@@ -1912,7 +1921,18 @@
 			}*/
 
 			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', encoded_socialWork='{$empid}' WHERE trans_id = '{$trans_id}';";
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', encoded_socialWork='{$empid}'";
+			if($m1 == "GL"){ 
+				$amountcon = str_replace(",","", $a1);
+				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon > 5000){ $query .= ", signatory_GL = ''"; }
+			}
+			if($m2 == "GL"){ 
+				$amountcon2 = str_replace(",","", $a2);
+				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon2 > 5000){ $query .= ", signatory_GL = ''"; }
+			} 
+			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);
 			
 			if($result){
@@ -1965,7 +1985,16 @@
 			$query .= ";";
 
 			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
-			echo $query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}' WHERE trans_id = '{$trans_id}';";
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}'/";
+			if($m1 == "GL"){ 
+				$amountcon = str_replace(",","", $a1);
+				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+			}
+			if($m2 == "GL"){ 
+				$amountcon2 = str_replace(",","", $a2);
+				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+			} 
+			$query .= " WHERE trans_id = '{$trans_id}';";
 			
 			
 			$result = mysqli_multi_query($this->db, $query);
@@ -2042,13 +2071,72 @@
 			}
 		}
 		
+		public function getinitials($id){
+			
+			$getuser = $this->show_user_data($id);
+			// $initials = "";
+			if(!empty($getuser['empfname'])){
+				$firstname = explode(" ",$getuser['empfname']);
+				if(!empty($firstname[0])){
+					$initials = strtoupper($firstname[0][0]);
+				}
+			}
+			
+			if(!empty($getuser['empmname'])){
+				$middlename = explode(" ",$getuser['empmname']);
+				if(!empty($middlename[0])){
+					$initials .= strtoupper($middlename[0][0]);
+				}
+			}
+		
+			if(!empty($getuser['emplname'])){
+				$lastname = explode(" ",$getuser['emplname']);
+				if(!empty($lastname[1])){
+					$initials .= strtoupper($lastname[0][0]."".$lastname[1][0]);
+				}else{
+					$initials .= strtoupper($lastname[0][0]);
+				}
+			}
+
+			return $initials;
+		}
+		public function getinitialsSignatory($id){
+			
+			$getsignatory = $this->getsignatory($id);
+			$initials = "";
+			if(!empty($getsignatory['first_name'])){
+				$firstname = explode(" ",$getsignatory['first_name']);
+				if(!empty($firstname[0])){
+					$initials = strtoupper($firstname[0][0]);
+				}
+			}
+			
+			if(!empty($getsignatory['middle_I'])){
+				$middlename = explode(" ",$getsignatory['middle_I']);
+				if(!empty($middlename[0])){
+					$initials .= strtoupper($middlename[0][0]);
+				}
+			}
+		
+			if(!empty($getsignatory['last_name'])){
+				$lastname = explode(" ",$getsignatory['last_name']);
+				if(!empty($lastname[1])){
+					$initials .= strtoupper($lastname[0][0]."".$lastname[1][0]);
+				}else{
+					$initials .= strtoupper($lastname[0][0]);
+				}
+			}
+
+			return $initials;
+		}
+
 		public function signatoryGL(){
 			$query = "SELECT * FROM signatory WHERE option_GL = '1';";
 			$result = mysqli_query($this->db,$query);
 				$data = "<datalist id='gls'>";
 			while($row = mysqli_fetch_assoc($result)){
 				$name = strtoupper($row['first_name'] ." ". $row['middle_I'] .". ". $row['last_name']);
-				$data .= "<option>{$name}-{$row['position']}-{$row['initials']}</option>";
+				$data .= "<option>{$name}-{$row['position']}</option>";
 			}
 				$data .= "</datalist>";
 			return $data;
@@ -2101,7 +2189,7 @@
 			$query = "SELECT first_name, middle_I, last_name, position, initials FROM signatory WHERE signatory_id = '{$id}';";
 			$result = mysqli_query($this->db,$query);
 			$row = mysqli_fetch_assoc($result);
-			$data = $row['first_name'] ." ". (empty($row['middle_I'])?"":$row['middle_I'].". "). $row['last_name'] ."-". $row['position'] ."-". $row['initials'];
+			$data = $row['first_name'] ." ". (empty($row['middle_I'])?"":$row['middle_I'].". "). $row['last_name'] ."-". $row['position'];
 			if($data){
 				return $data;
 			}
@@ -2129,7 +2217,7 @@
 			}
 		}
 		
-		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $amount1, $amount2){
+		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $mode){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			
@@ -2137,10 +2225,13 @@
 				$signid = $this->getsignatureid($signName);
 			}
 		
-			$query = "INSERT INTO coe (trans_id, document, id_presented, sign_id, others_input, fund1_amount, fund2_amount) 
+			$query = "INSERT INTO coe (trans_id, document, id_presented, others_input, fund1_amount, fund2_amount) 
 						VALUES 
-						('{$id}','{$docu}','{$id_pres}','{$signid}','{$others_input}','{$amount1}','{$amount2}');";
-			$result = mysqli_query($this->db, $query);
+						('{$id}','{$docu}','{$id_pres}','{$others_input}','{$amount1}','{$amount2}');";
+			if($am > 5000 && $mode == "GL"){
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}'";
+			}
+			$result = mysqli_multi_query($this->db, $query);
 			
 			$query;
 			if($result){
@@ -2151,7 +2242,7 @@
 			}
 		}
 
-		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $amount1, $amount2){
+		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $mode){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			
@@ -2159,8 +2250,11 @@
 				$signid = $this->getsignatureid($signName);
 			}
 			
-			$query = "UPDATE coe SET document='{$docu}', id_presented='{$id_pres}', sign_id={$signid}, others_input='{$others_input}', fund1_amount='{$amount1}', fund2_amount='{$amount2}' where trans_id = '{$id}';";
-			$result = mysqli_query($this->db, $query);
+			$query = "UPDATE coe SET document='{$docu}', id_presented='{$id_pres}', others_input='{$others_input}', fund1_amount='{$amount1}', fund2_amount='{$amount2}' where trans_id = '{$id}';";
+			if($am > 5000 && $mode == "GL"){
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}'";
+			}
+			$result = mysqli_multi_query($this->db, $query);
 			
 			if($result){
 				echo "<script>alert('Successfully Updated!');</script>";

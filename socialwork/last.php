@@ -15,12 +15,14 @@
         
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
 
-        if($client_assistance[1]['amount'] > 5000){
+        $am = str_replace(",","",$client_assistance[1]['amount']);
+
+        if($am > 5000){
             if($record){
-                $COEsignatory= $user->getsignatory($record['sign_Id']); //kwaun ang data sa signatory using sign_id 
-                $COEsignatoryini = strtoupper($COEsignatory['first_name'][0] ." ". $COEsignatory['middle_I'][0] .". ". $COEsignatory['last_name'][0]);
+                $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
             }
         }
+        $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
 
         $name =  $client["firstname"]." ". strtoupper($client["middlename"][0]) .". ". $client["lastname"];
 		if(!empty($client['extraname'])){
@@ -29,7 +31,7 @@
 		$bname =  $client["b_fname"]." ". strtoupper($client["b_mname"][0]) .". ". $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname']: "");
         $signatoryGLNamePos = "";
         if(!empty($signatoryGL)){
-            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". $signatoryGL['middle_I'] .". ". $signatoryGL['last_name'] ."-". $signatoryGL['position'] ."-". $signatoryGL['initials']);
+            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". $signatoryGL['middle_I'] .". ". $signatoryGL['last_name'] ."-". $signatoryGL['position']);
         }
         //ADDRESS
         $c_add = '';
@@ -65,7 +67,7 @@
 
         $mode1 = "";
         $mode2 = "";
-
+        		
         $mode1 = $client_assistance[1]['mode'];
         
         if(!empty($client_assistance[2]['mode'])){
@@ -172,7 +174,7 @@
                                                         <span id="gl_error" style="color:red"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" required> '. $user->signatoryGL() .' <br></div>
+                                                <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
                                             <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
@@ -224,7 +226,7 @@
                                                         <span id="gl_error" style="color:red"></span>
                                                     </div>
                                                 </div>
-                                                <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" required> '. $user->signatoryGL() .' <br></div>
+                                                <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
                                             <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>

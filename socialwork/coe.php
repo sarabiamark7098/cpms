@@ -30,20 +30,17 @@
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
   
         if($record){
-            $COEsignatory= $user->getsignatory($record['sign_Id']); //kwaun ang data sa signatory using sign_id 
+            $COEsignatory= $user->getsignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
             $COEsignatoryName = strtoupper($COEsignatory['first_name'] ." ". $COEsignatory['middle_I'] .". ". $COEsignatory['last_name']);
         }
 
         $soc_worker = $user->getuserInfo($_SESSION['userId']); //get soc-worker data from database
     
-        $toif = explode(".",$client_assistance[1]['amount']);
-        $am = (str_replace(",","",$toif[0]));
+        $am = (str_replace(",","",$client_assistance[1]['amount']));
         $am2 = "";
-        $am3 = (str_replace(",","",$client_assistance[1]['amount']));
         
         if(!empty($client_assistance[2]['amount'])){
-			$toif2 = explode(".", $client_assistance[2]['amount']);
-			$am2 = (str_replace(",","",$toif2[0]));
+			$am2 = (str_replace(",","",$client_assistance[2]['amount']));
         }
         //print_r($record);
 		$fund1 = "";
@@ -152,7 +149,7 @@
                                 Amount is more than Five Thousand (5000).
                                 <div>
                                 <label> Approved By : </label>&nbsp&nbsp&nbsp
-                                    <input style="text-transform: uppercase; width:50%" list="coesign" name="coesignName" value="<?php echo empty($record['sign_Id'])?"":$user->getSignatoryFullname($record['sign_Id']) ?>" required>
+                                    <input style="text-transform: uppercase; width:50%" list="coesign" name="coesignName" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullname($client['signatory_GL']) ?>" required>
                                     <datalist id="coesign">
                                         <?php 
                                             $data = $user->signatoryGIS();
@@ -443,9 +440,10 @@
         if(isset($_POST['amountf11'])){
             $amount2 = $_POST['amountf11'];
         }
-        echo $docu=mysqli_real_escape_string($user->db,$docu);
+        $docu=mysqli_real_escape_string($user->db,$docu);
+        $modecon = $client_assistance[1]['mode'];
         //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
-        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2);
+        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $modecon);
     }
 
 
@@ -480,13 +478,14 @@
             $amount2 = $_POST['amountf11'];
         }
         $docu=mysqli_real_escape_string($user->db,$docu);
+        $modecon = $client_assistance[1]['mode'];
         // echo $signName;
-        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2);
+        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $modecon);
     }
 ?>
     <script>
         $(document).ready(function() {
-            var totaldist = parseFloat("<?php echo $am3?>");
+            var totaldist = parseFloat("<?php echo $am?>");
             var amount1 = parseFloat(0.00);
             var amount2 = parseFloat(0.00);
             if(document.getElementById("amountf1").value.length > 0){

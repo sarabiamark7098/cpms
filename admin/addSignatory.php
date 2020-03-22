@@ -62,7 +62,7 @@
                         <label class="active" for="lname">Last Name</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input placeholder="Middle Initial" maxlength="1" id="mi" name="mi" type="text" class="form-control" required>
+                        <input placeholder="Middle Initial" maxlength="1" id="mini" name="mi" type="text" class="form-control" required>
                         <label class="active" for="mi">Middle Initial</label>
                     </div>
                     <div class="form-group col-lg-6">
@@ -82,12 +82,6 @@
                             <input type="checkbox" name="gl_check" id="gl_check"><label for="gl_check">GL</label>
                             </div>
                         </div>
-                        <!-- <Select placeholder="Options" id="option" name="option" type="text" class="form-control " required>
-                            <option value="" disabled selected>Options</option>
-                            <option value="GL">Guarantee Letter</option>
-                            <option value="GIS / CE">GIS / CE</option>
-                        </select>
-                            <label class="active" for="position">Options</label> -->
                     </div>
                     <div class="form-group col-lg-6 srange">
                         <input placeholder="&#8369; Range Start" id="rangestart" name="rangestart" type="number" class="form-control">
@@ -109,7 +103,7 @@
 </body>    
     <script>
         $(function () {
-                    $(".srange").hide();
+            $(".srange").hide();
             $("#gl_check").click(function () {
                 if ($(this).is(":checked")) {
                     $(".srange").show();
@@ -118,5 +112,36 @@
                 }
             });
         });
+        // $(function() {
+        //     $('#fname').keyup(function() {
+        //         var ini = $('#initials').val();
+        //         var fn = $('#fname').val().substr(0, 1);
+        //         var mi = $('#mini').val().substr(0, 1);
+        //         var ln = $('#lname').val().substr(0, 1);
+        //         ini = fn+mi+ln;
+        //         document.getElementById("initials").value = ini;
+        //     });
+        // });
+        // $(function() {
+        //     $('#lname').keyup(function() {
+        //         var ini = $('#initials').val();
+        //         var fn = $('#fname').val().substr(0, 1);
+        //         var mi = $('#mini').val().substr(0, 1);
+        //         var ln = $('#lname').val().substr(0, 1);
+        //         ini = fn+mi+ln;
+        //         document.getElementById("initials").value = ini;
+        //     });
+        // });
+        // $(function() {
+        //     ('#mini').keyup(function() {
+        //         var ini = $('#initials').val();
+        //         var fn = $('#fname').val().substr(0, 1);
+        //         var mi = $('#mini').val().substr(0, 1);
+        //         var ln = $('#lname').val().substr(0, 1);
+        //         ini = fn+mi+ln;
+        //         document.getElementById("initials").value = ini;
+        //     });
+           
+        // });
     </script>
 </html>

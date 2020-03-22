@@ -289,7 +289,7 @@ if (!$_SESSION['login']) {
                             </div>
                             <div class="row" style="margin-top: 15px">
                                 <label class="col-sm-2 label" style="font-size: 20px">Approved by:</label>
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     <input list="signatory" type="text" class="form-control mr-sm-2" id="approved" name="approved" required value="<?php echo (empty($gis['signatory_id']) ? '' : $user->getSignatoryFullname($gis['signatory_id'])); ?>" required>
                                     <datalist id="signatory">
                                         <?php
