@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 22, 2019 at 11:16 AM
+-- Generation Time: Mar 23, 2020 at 10:51 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -39,14 +39,6 @@ CREATE TABLE `assessment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `assessment`
---
-
-INSERT INTO `assessment` (`trans_id`, `gis_option`, `problem`, `soc_ass`, `mode_admission`, `client_num`, `remark_onupdate`) VALUES
-('DVOCity-20190718032329088803', 'Dialysis', 'THE CLIENT IS HAVING DIFFICULTY IN PAYING THE DIALYSIS BILL FOR HIS/HER HUSBAND.', 'CLIENT SOUGHT MEDICAL ASSISTANCE FOR HIS/HER HUSBAND WHO IS DIAGNOSED WITH END STAGE RENAL DISEASE SEC TO DIABETIC NEPHROPATHY AND HAS BEEN UNDERGOING DIALYSIS  SINCE DECEMBER 2016. ACCDG TO THE CLIENT, HE/ SHE COULD NO LONGER SUSTAIN THE DEMANDS OF HER/HIS CONDITION GIVEN THEIR ECONOMIC STATURE. CLIENT STRESSED THAT THEIR MEAGER HOUSEHOLD INCOME IS ONLY ENOUGH TO SUSTAIN THEIR DAILY NEEDS. THIS PROMPTED HIM/HER TO RESORT TO GOVT INTERVENTION. THUS, THIS REQUEST.', 'Walk-In', 2, NULL),
-('DVOCity-20190718031802911452', 'Dialysis', 'THE CLIENT IS HAVING DIFFICULTY IN PAYING THE DIALYSIS BILL FOR HIS/HER HUSBAND.', 'CLIENT SOUGHT MEDICAL ASSISTANCE FOR HIS/HER HUSBAND WHO IS DIAGNOSED WITH END STAGE RENAL DISEASE SEC TO DIABETIC NEPHROPATHY AND HAS BEEN UNDERGOING DIALYSIS  SINCE DECEMBER 2016. ACCDG TO THE CLIENT, HE/ SHE COULD NO LONGER SUSTAIN THE DEMANDS OF HER/HIS CONDITION GIVEN THEIR ECONOMIC STATURE. CLIENT STRESSED THAT THEIR MEAGER HOUSEHOLD INCOME IS ONLY ENOUGH TO SUSTAIN THEIR DAILY NEEDS. THIS PROMPTED HIM/HER TO RESORT TO GOVT INTERVENTION. THUS, THIS REQUEST.', 'Walk-In', 1, '11-8760');
-
---
 -- Triggers `assessment`
 --
 DELIMITER $$
@@ -79,15 +71,6 @@ CREATE TABLE `assistance` (
   `type_description` varchar(50) NOT NULL,
   `remark_assist_update` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `assistance`
---
-
-INSERT INTO `assistance` (`trans_id`, `type`, `amount`, `mode`, `fund`, `purpose`, `type_description`, `remark_assist_update`) VALUES
-('DVOCity-20190718032329088803', 'Medical Assistance', '20,672.23', 'GL', 'DC1/R1', 'DIALYSIS', 'Type1', NULL),
-('DVOCity-20190718031802911452', 'Medical Assistance', '20,672.23', 'GL', 'R1/DC1', 'DIALYSIS', 'Type1', '11-8760'),
-('DVOCity-20190718031802911452', 'Food Subsidy Assistance', '1,228.37', 'CAV', 'DC1', 'WALAY KAON', 'Type2', '11-8760');
 
 --
 -- Triggers `assistance`
@@ -42255,13 +42238,6 @@ CREATE TABLE `beneficiary_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `beneficiary_data`
---
-
-INSERT INTO `beneficiary_data` (`bene_id`, `auto_increment_id_bene`, `b_fname`, `b_mname`, `b_lname`, `b_exname`, `b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_category`, `b_subCategory`, `b_region`, `b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, `b_date_inserted`) VALUES
-('B-1', 1, 'HUSBAND FNAME', 'HMNAME', 'LAST NAME', '', 'Married', '09182736781', '1989-01-01', 'Male', 'Men/Women in Specially Difficult Circumstances', '', 'REGION XI (DAVAO REGION) /110000000', 'DAVAO DEL SUR /112400000', 'CITY OF DAVAO /112402000', 'Acacia /112402001', 'District 1', 'basta sa acacia', '2019-07-18 11:23:29');
-
---
 -- Triggers `beneficiary_data`
 --
 DELIMITER $$
@@ -42361,13 +42337,6 @@ CREATE TABLE `cash` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `cash`
---
-
-INSERT INTO `cash` (`trans_id`, `sd_officer`, `remark_cash_update`) VALUES
-('DVOCity-20190718031802911452', 'VILLA REAL', NULL);
-
---
 -- Triggers `cash`
 --
 DELIMITER $$
@@ -42409,21 +42378,6 @@ CREATE TABLE `client_data` (
   `client_district` varchar(100) NOT NULL,
   `date_inserted` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `client_data`
---
-
-INSERT INTO `client_data` (`client_id`, `auto_increment_4_id`, `lastname`, `firstname`, `middlename`, `extraname`, `sex`, `civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, `subCategory`, `client_region`, `client_province`, `client_municipality`, `client_barangay`, `client_street`, `client_district`, `date_inserted`) VALUES
-('C-1', 1, 'LAST', 'FIRST', 'MIDDLE', '', 'Male', 'Single', '1994-01-01', 'Driver', '1000', '09128737816', 'Men/Women in Specially Difficult Circumstances', '', 'REGION XI (DAVAO REGION) /110000000', 'DAVAO DEL SUR /112400000', 'CITY OF DAVAO /112402000', 'Agdao /112402002', 'ambot lang', 'District 1', '2019-07-18 11:18:02'),
-('C-2', 2, 'LAST NAME', 'FIRST NAME', 'MIDINIT', '', 'Female', 'Married', '1991-01-01', 'HOUSE WIFE', '0', '09128376718', 'Men/Women in Specially Difficult Circumstances', '', 'REGION XI (DAVAO REGION) /110000000', 'DAVAO DEL SUR /112400000', 'CITY OF DAVAO /112402000', 'Acacia /112402001', 'basta sa acacia', 'District 1', '2019-07-18 11:23:29'),
-('C-3', 3, 'SARABIA', 'MARZEN RENE', 'TICO', '', 'Male', 'Single', '2010-01-01', 'Student', '20', '09127635751', 'Children in Need of Special Protection', '', 'REGION XI (DAVAO REGION) /110000000', 'DAVAO DEL SUR /112400000', 'CITY OF DAVAO /112402000', 'Catalunan PequeÃ±o /112402031', '123 village', 'District 1', '2019-08-15 15:24:00'),
-('C-4', 4, 'ASD', 'ASD', 'ASD', '', 'Male', 'Single', '1999-01-01', 'asd', '10', '09192837812', 'Youth', '', 'REGION III (CENTRAL LUZON) /030000000', 'BULACAN /031400000', 'BULACAN /031405000', 'Maysantol /031405005', 'asd', 'District 1', '2019-08-15 15:40:57'),
-('C-5', 5, 'QWE', 'QWE', 'QWE', '', 'Male', 'Single', '1999-12-09', 'ajsghd', '1892', '89126378651', 'Persons Living with HIV/AIDS', '', 'REGION IV-A (CALABARZON) /040000000', 'BATANGAS /041000000', 'BATANGAS CITY (Capital) /041005000', 'Banaba Ibaba /041005009', 'qwe', 'District 1', '2019-08-15 15:44:30'),
-('C-6', 6, '123', '213', '123', '', 'Male', 'Single', '1999-02-01', 'asd', '1', '09128376126', 'Persons with Disabilities', '', 'CORDILLERA ADMINISTRATIVE REGION (CAR) /140000000', 'ABRA /140100000', 'BANGUED (Capital) /140101000', 'Agtangao /140101001', '1739', 'District 1', '2019-08-15 15:53:02'),
-('C-7', 7, 'MAY', 'MAY', 'MAY', '', 'Female', 'Single', '2000-02-02', 'student', '100', '019238761', 'Youth', '', 'AUTONOMOUS REGION IN MUSLIM MINDANAO (ARMM) /150000000', 'BASILAN /150700000', 'AKBAR /150708000', 'Caddayan /150708001', 'May Street', 'District 1', '2019-08-15 15:55:23'),
-('C-8', 8, 'DERULO', 'JAY', 'SON', '', 'Male', 'Single', '2010-08-09', 'jahsgsfd', '2', '01927381793', 'Children in Need of Special Protection', '', 'REGION IV-A (CALABARZON) /040000000', 'BATANGAS /041000000', 'BATANGAS CITY (Capital) /041005000', 'Banaba Ibaba /041005009', 'highway', 'District 1', '2019-08-15 15:56:23'),
-('C-9', 9, 'QWER', 'QWERTY', 'QWERT', '', 'Female', 'Single', '1995-09-01', 'driver', '76132', '01283717293', 'Men/Women in Specially Difficult Circumstances', '', 'AUTONOMOUS REGION IN MUSLIM MINDANAO (ARMM) /150000000', 'BASILAN /150700000', 'AKBAR /150708000', 'Caddayan /150708001', 'cabuyaw street', 'District 1', '2019-08-15 15:57:54');
 
 --
 -- Triggers `client_data`
@@ -42528,16 +42482,9 @@ CREATE TABLE `coe` (
   `id_presented` varchar(100) NOT NULL,
   `sign_Id` varchar(30) NOT NULL,
   `others_input` varchar(100) NOT NULL,
-  `fund1_amount` varchar(100) DEFAULT NULL,
-  `fund2_amount` varchar(100) DEFAULT NULL
+  `fund1_amount` varchar(100) NOT NULL,
+  `fund2_amount` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `coe`
---
-
-INSERT INTO `coe` (`trans_id`, `document`, `id_presented`, `sign_Id`, `others_input`, `fund1_amount`, `fund2_amount`) VALUES
-('DVOCity-20190718031802911452', 'Referral Letter-Valid ID:-PhilHealth ID-Barangay- -DEATH SUMMARY-QUOTATION-20,000.00-672.23-GEMMA D. DELA CRUZ-SWO IV/CIU HEAD-Save-', 'PHILHEALTH ID', '2', '', '20,000.00', '672.23');
 
 -- --------------------------------------------------------
 
@@ -42553,13 +42500,33 @@ CREATE TABLE `family` (
   `salary` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `family`
+-- Table structure for table `field_office`
 --
 
-INSERT INTO `family` (`trans_id`, `name`, `age`, `occupation`, `salary`) VALUES
-('DVOCity-20190718032329088803', 'P1', 1, 'T1', '100'),
-('DVOCity-20190718031802911452', 'P1', 1, 'T1', '1000');
+CREATE TABLE `field_office` (
+  `uniq` int(20) NOT NULL,
+  `office_id` varchar(30) DEFAULT NULL,
+  `office_name` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `field_office`
+--
+
+INSERT INTO `field_office` (`uniq`, `office_id`, `office_name`, `description`) VALUES
+(2, '118602-01', 'Davao Occidental POO', 'Davao Occidental'),
+(3, '112319-01', 'Davao del Norte POO', 'Tagum City'),
+(4, '112402-01', 'Davao City (Region)', 'District 1 Office of CIU'),
+(5, '112402-02', 'Davao City (District 3)', 'District 2 Office 2 Davao'),
+(6, '118201-01', 'Davao de Oro POO', 'District 1 Office in Tagum City'),
+(7, '112509-01', 'Davao Oriental POO', 'Davao Oriental'),
+(8, '112403-01', 'Davao del Sur POO', 'Province of Davao del Sur'),
+(9, '112402-03', 'SPMC - CIU', 'CIU in Southern Philippines Medical Center'),
+(10, '112319-02', 'RMC - CIU', 'CIU in Regional Medical Center');
 
 -- --------------------------------------------------------
 
@@ -42607,42 +42574,6 @@ CREATE TABLE `gis_log` (
   `gis_changed_by` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `gis_log`
---
-
-INSERT INTO `gis_log` (`trans_id`, `gis_entity`, `gis_previous`, `gis_current`, `gis_changedon`, `gis_table`, `gis_changed_by`) VALUES
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 11:49:45', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 11:49:52', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 11:50:02', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 11:50:09', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 11:50:26', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 12:24:17', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 12:38:48', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 12:38:56', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 12:51:00', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 13:01:15', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-07-18 13:01:15', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-18 16:36:20', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-07-18 16:36:20', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-07-20 03:31:27', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-07-20 03:31:27', 'Removed from Assistance', ''),
-('DVOCity-20190718032329088803', 'Type 1', 'Burial Assistance', '', '2019-08-19 14:58:10', 'Removed from Assistance', ''),
-('DVOCity-20190718032329088803', 'Type 1', 'Medical Assistance', '', '2019-08-19 15:02:59', 'Removed from Assistance', ''),
-('DVOCity-20190718032329088803', 'Type 1', 'Burial Assistance', '', '2019-08-19 15:03:46', 'Removed from Assistance', ''),
-('DVOCity-20190718032329088803', 'Type 1', 'Medical Assistance', '', '2019-08-19 15:04:49', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-08-21 14:34:29', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-08-21 14:34:29', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-08-21 16:35:13', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-08-21 16:35:13', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-08-21 17:17:10', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-08-21 17:18:25', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-08-21 17:18:25', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-08-21 17:18:58', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-08-21 17:18:58', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 1', 'Medical Assistance', '', '2019-08-21 17:20:24', 'Removed from Assistance', ''),
-('DVOCity-20190718031802911452', 'Type 2', 'Food Subsidy Assistance', '', '2019-08-21 17:20:24', 'Removed from Assistance', '');
-
 -- --------------------------------------------------------
 
 --
@@ -42658,13 +42589,6 @@ CREATE TABLE `gl` (
   `caddress` varchar(300) NOT NULL,
   `remark_gl_update` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `gl`
---
-
-INSERT INTO `gl` (`trans_id`, `control_no`, `addressee`, `position`, `cname`, `caddress`, `remark_gl_update`) VALUES
-('DVOCity-20190718031802911452', '20', 'MR. GIOVANNI D. RIVERA', 'OWNER/PROPRIETOR', 'GIOVANNI D. RIVERA FUNERAL HOMES', 'PUROK 1-B, STO. NIÃ‘O CARMEN, DAVAO DEL NORTE', NULL);
 
 --
 -- Triggers `gl`
@@ -44514,7 +44438,8 @@ INSERT INTO `provider` (`company_id`, `addressee_name`, `addressee_position`, `c
 (116, ' The Administrator ', ' ', 'GONZALES MARANAN MEDICAL CENTER,INC.', 'Quezon Ave., Digos City, Davao Del Sur', ' '),
 (117, '', 'THE ADMINISTRATOR', '  ST. BENEDICT HOSPITAL OF DAVAO DEL SUR, INC.', 'NATIONAL HIGHWAY, SINARAGAN, MATANAO, DAVAO DEL SUR', 'PRISCILLA N. RAZON'),
 (118, '', 'THE ADMINISTRATOR', ' ST. BENEDICT HOSPITAL OF DAVAO DEL SUR, INC.', 'NATIONAL HIGHWAY, SINARAGAN, MATANAO, DAVAO DEL SUR', 'PRISCILLA N. RAZON'),
-(119, '', 'THE ADMINISTRATOR', '    ST. BENEDICT HOSPITAL OF DAVAO DEL SUR, INC.', 'NATIONAL HIGHWAY, SINARAGAN, MATANAO, DAVAO DEL SUR', 'PRISCILLA N. RAZON');
+(119, '', 'THE ADMINISTRATOR', '    ST. BENEDICT HOSPITAL OF DAVAO DEL SUR, INC.', 'NATIONAL HIGHWAY, SINARAGAN, MATANAO, DAVAO DEL SUR', 'PRISCILLA N. RAZON'),
+(120, 'LORD ANTHONY', 'MANAGER', 'LORD ANTHONNY', 'MONTEVISTA', 'JAN OLIVER V. ESTOQUIA');
 
 --
 -- Triggers `provider`
@@ -44640,6 +44565,7 @@ INSERT INTO `province` (`psgc_code`, `p_name`) VALUES
 ('126300000', 'SOUTH COTABATO'),
 ('126500000', 'SULTAN KUDARAT'),
 ('128000000', 'SARANGANI'),
+('129800000', 'COTABATO CITY (Not a Province)'),
 ('133900000', 'MANILA CITY (NCR 1st DISTRICT)'),
 ('137400000', 'NCR, SECOND DISTRICT'),
 ('137500000', 'NCR, THIRD DISTRICT'),
@@ -44703,6 +44629,20 @@ INSERT INTO `region` (`psgc_code`, `r_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reissuelog`
+--
+
+CREATE TABLE `reissuelog` (
+  `reissue_id` int(20) NOT NULL,
+  `trans_id` varchar(50) DEFAULT NULL,
+  `date_reissued` datetime DEFAULT NULL,
+  `empid` varchar(50) DEFAULT NULL,
+  `office_id` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `service`
 --
 
@@ -44716,14 +44656,6 @@ CREATE TABLE `service` (
   `remark_service_update` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `service`
---
-
-INSERT INTO `service` (`trans_id`, `service1`, `service2`, `service3`, `service4`, `ref_name`, `remark_service_update`) VALUES
-('DVOCity-20190718031802911452', 1, 0, 0, 1, '', '11-8760'),
-('DVOCity-20190718032329088803', 1, 0, 0, 1, '', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -44736,30 +44668,87 @@ CREATE TABLE `signatory` (
   `middle_I` varchar(1) NOT NULL,
   `initials` varchar(10) NOT NULL,
   `position` varchar(30) NOT NULL,
-  `options` varchar(10) NOT NULL,
+  `option_GIS` varchar(10) DEFAULT NULL,
+  `option_GL` varchar(10) DEFAULT NULL,
   `range_start` int(20) DEFAULT NULL,
   `range_end` int(20) DEFAULT NULL,
-  `signatory_id` varchar(30) NOT NULL
+  `signatory_id` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `signatory`
 --
 
-INSERT INTO `signatory` (`first_name`, `last_name`, `middle_I`, `initials`, `position`, `options`, `range_start`, `range_end`, `signatory_id`) VALUES
-('Estrella', 'Lozada', 'S', 'ESL', 'SWO II', 'GL', 1000, 5000, '1'),
-('MA. ELENA', 'LABRADOR', 'S', 'MSL', 'SWO V/PSD CHIEF', 'GL', 5001, 10000, '10'),
-('Herbert', 'Duron', 'P', 'hpd', 'ADMIN. DN. CHIEF', 'GL', 5001, 10000, '11'),
-('Dahlia', 'Padillo', 'S', 'DSP', 'SWO IV', 'GIS / CE', NULL, NULL, '12'),
-('Dahlia', 'Padillo', 'S', 'DSP', 'SWO IV', 'GL', 1, 10000, '13'),
-('Gemma', 'Dela Cruz', 'D', 'GDD', 'SWO IV/CIU HEAD', 'GL', 5001, 10000, '2'),
-('RAQUEL', 'NUÃ‘EZ', 'E', 'REN', 'ARD for Administration ', 'GL', 10001, 25000, '3'),
-('Rebecca', 'Santamania', 'A', 'RAS', 'ARDO', 'GL', 10001, 25000, '4'),
-('MERCEDITA', 'JABAGAT', 'P', 'MPJ', 'Regional Director', 'GL', 25001, 100000, '5'),
-('Mona Liza', 'Viduya', 'C', 'mvc', 'Social Welfare Officer II', 'GIS / CE', NULL, NULL, '6'),
-('Jerald', 'Jaron', 'A', 'jj', 'Social Welfare Officer II', 'GIS / CE', NULL, NULL, '7'),
-('Hyacinth', 'Montalla', 'I', 'him', 'Social Welfare Officer II', 'GIS / CE', NULL, NULL, '8'),
-('Grace', 'Olano', 'J', 'gjo', 'Social Welfare Officer II', 'GIS / CE', NULL, NULL, '9');
+INSERT INTO `signatory` (`first_name`, `last_name`, `middle_I`, `initials`, `position`, `option_GIS`, `option_GL`, `range_start`, `range_end`, `signatory_id`) VALUES
+('Estrella', 'Lozada', 'S', 'ESL', 'SWO II', '0', '1', 1000, 5000, 1),
+('Gemma', 'Dela Cruz', 'D', 'GDDC', 'SWO IV/CIU HEAD', '0', '1', 5001, 10000, 2),
+('RAQUEL', 'NUÃ‘EZ', 'E', 'REN', 'ARD for Administration ', '0', '1', 10001, 25000, 3),
+('Rebecca', 'Santamania', 'A', 'RAS', 'ARDO', '0', '1', 10001, 25000, 4),
+('MERCEDITA', 'JABAGAT', 'P', 'MPJ', 'Regional Director', '0', '1', 25001, 100000, 5),
+('Mona Liza', 'Viduya', 'C', 'MVC', 'Social Welfare Officer II', '1', '0', NULL, NULL, 6),
+('Jerald', 'Jaron', 'A', 'JAJ', 'Social Welfare Officer II', '1', '0', NULL, NULL, 7),
+('Hyacinth', 'Montalla', 'I', 'HIM', 'Social Welfare Officer II', '1', '0', NULL, NULL, 8),
+('Grace', 'Olano', 'J', 'GJO', 'Social Welfare Officer II', '1', '0', NULL, NULL, 9),
+('MA. ELENA', 'LABRADOR', 'S', 'MSL', 'SWO V/PSD CHIEF', '0', '1', 5001, 10000, 10),
+('Herbert', 'Duron', 'P', 'HOD', 'ADMIN. DN. CHIEF', '0', '1', 5001, 10000, 11),
+('Dahlia', 'Padillo', 'S', 'DSP', 'SWO IV', '1', '1', 1, 10000, 12);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_district`
+--
+
+CREATE TABLE `tbl_district` (
+  `d_id` int(15) NOT NULL,
+  `district_name` varchar(100) CHARACTER SET dec8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_district`
+--
+
+INSERT INTO `tbl_district` (`d_id`, `district_name`) VALUES
+(1, 'ROR'),
+(2, 'Davao City 1st'),
+(3, 'Davao City 2nd'),
+(4, 'Davao City 3rd'),
+(5, 'Davao de Oro 1st'),
+(6, 'Davao de Oro 2nd'),
+(7, 'Davao del Norte 1st'),
+(8, 'Davao del Norte 2nd'),
+(9, 'Davao Oriental 1st'),
+(10, 'Davao Oriental 2nd');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_relationship`
+--
+
+CREATE TABLE `tbl_relationship` (
+  `r_id` int(15) NOT NULL,
+  `relation` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_relationship`
+--
+
+INSERT INTO `tbl_relationship` (`r_id`, `relation`) VALUES
+(1, 'FATHER/MOTHER'),
+(2, 'HUSBAND/WIFE'),
+(3, 'SPOUSE'),
+(4, 'SON/DAUGHTER'),
+(5, 'BROTHER/SISTER'),
+(6, 'UNCLE/AUNT'),
+(7, 'NEPHEW/NIECE'),
+(8, 'COUSIN'),
+(9, 'BROTHER-IN-LAW/SISTER-IN-LAW'),
+(10, 'GRANDFATHER/GRANDMOTHER'),
+(11, 'GRANDSON/GRANDDAUGHTER'),
+(12, 'COMMON-LAW'),
+(13, 'OTHER RELATIVE');
 
 -- --------------------------------------------------------
 
@@ -44774,8 +44763,6 @@ CREATE TABLE `tbl_transaction` (
   `relation` varchar(50) NOT NULL,
   `date_entered` datetime NOT NULL,
   `date_accomplished` datetime NOT NULL,
-  `enc_soc` varchar(10) NOT NULL,
-  `catered` varchar(10) NOT NULL,
   `note` text NOT NULL,
   `status_client` varchar(50) NOT NULL,
   `encoded_encoder` varchar(100) NOT NULL,
@@ -44788,20 +44775,34 @@ CREATE TABLE `tbl_transaction` (
   `benetoclient` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `tbl_transaction`
+-- Table structure for table `user_log`
 --
 
-INSERT INTO `tbl_transaction` (`trans_id`, `client_id`, `bene_id`, `relation`, `date_entered`, `date_accomplished`, `enc_soc`, `catered`, `note`, `status_client`, `encoded_encoder`, `encoded_socialWork`, `signatory_id`, `signatory_GL`, `remarks`, `clientonly`, `clientsamebene`, `benetoclient`) VALUES
-('DVOCity-20190718031802911452', 'C-1', '', 'Self', '2019-07-18 11:18:02', '2019-08-21 17:20:39', 'pass', 'yes', 'yes', 'Done', '11-8760', '11-8656', '2', '1', '', 1, 0, 0),
-('DVOCity-20190718032329088803', 'C-2', 'B-1', 'Husband', '2019-07-18 11:23:29', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Serving', '11-8760', '11-8656', '1', '', '', 1, 1, 1),
-('DVOCity-20190815072401719218', 'C-3', '', 'Self', '2019-08-15 15:24:00', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0),
-('DVOCity-20190815074057971597', 'C-4', '', 'Self', '2019-08-15 15:40:57', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0),
-('DVOCity-20190815074430394079', 'C-5', '', 'Self', '2019-08-15 15:44:30', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0),
-('DVOCity-20190815075302689515', 'C-6', '', 'Self', '2019-08-15 15:53:02', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0),
-('DVOCity-20190815075523198332', 'C-7', '', 'Self', '2019-08-15 15:55:23', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0),
-('DVOCity-20190815075623078504', 'C-8', '', 'Self', '2019-08-15 15:56:23', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0),
-('DVOCity-20190815075754994247', 'C-9', '', 'Self', '2019-08-15 15:57:54', '0000-00-00 00:00:00', 'passed', 'no', 'yes', 'Pending', '11-8760', '', '', '', '', 1, 0, 0);
+CREATE TABLE `user_log` (
+  `empid` varchar(30) DEFAULT NULL,
+  `office_id` varchar(30) DEFAULT NULL,
+  `login_datetime` datetime DEFAULT NULL,
+  `logout_datetime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_request`
+--
+
+CREATE TABLE `user_request` (
+  `request_id` int(11) NOT NULL,
+  `emp_num` int(11) DEFAULT NULL,
+  `request_position` varchar(50) DEFAULT NULL,
+  `request_office` varchar(50) DEFAULT NULL,
+  `date_request` datetime DEFAULT NULL,
+  `date_granted` datetime DEFAULT NULL,
+  `date_cancel` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -44810,22 +44811,9 @@ INSERT INTO `tbl_transaction` (`trans_id`, `client_id`, `bene_id`, `relation`, `
 --
 
 CREATE TABLE `webcam` (
-  `client_id` varchar(30) NOT NULL,
+  `trans_id` varchar(40) NOT NULL,
   `image` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `webcam`
---
-
-INSERT INTO `webcam` (`client_id`, `image`) VALUES
-('C-1', '../clientImages/20190718-C-1.jpg'),
-('C-2', '../clientImages/20190718-C-2.jpg'),
-('C-3', '../clientImages/20190815-C-3.jpg'),
-('C-4', '../clientImages/20190815-C-4.jpg'),
-('C-6', '../clientImages/20190815-C-6.jpg'),
-('C-8', '../clientImages/20190815-C-8.jpg'),
-('C-10', '../clientImages/20190815-C-10.jpg');
 
 --
 -- Indexes for dumped tables
@@ -44848,6 +44836,12 @@ ALTER TABLE `beneficiary_data`
 --
 ALTER TABLE `client_data`
   ADD PRIMARY KEY (`auto_increment_4_id`) USING BTREE;
+
+--
+-- Indexes for table `field_office`
+--
+ALTER TABLE `field_office`
+  ADD PRIMARY KEY (`uniq`);
 
 --
 -- Indexes for table `municipality`
@@ -44874,6 +44868,12 @@ ALTER TABLE `region`
   ADD PRIMARY KEY (`psgc_code`);
 
 --
+-- Indexes for table `reissuelog`
+--
+ALTER TABLE `reissuelog`
+  ADD PRIMARY KEY (`reissue_id`);
+
+--
 -- Indexes for table `service`
 --
 ALTER TABLE `service`
@@ -44886,10 +44886,28 @@ ALTER TABLE `signatory`
   ADD PRIMARY KEY (`signatory_id`);
 
 --
+-- Indexes for table `tbl_district`
+--
+ALTER TABLE `tbl_district`
+  ADD PRIMARY KEY (`d_id`);
+
+--
+-- Indexes for table `tbl_relationship`
+--
+ALTER TABLE `tbl_relationship`
+  ADD PRIMARY KEY (`r_id`);
+
+--
 -- Indexes for table `tbl_transaction`
 --
 ALTER TABLE `tbl_transaction`
   ADD PRIMARY KEY (`trans_id`);
+
+--
+-- Indexes for table `user_request`
+--
+ALTER TABLE `user_request`
+  ADD KEY `request_id` (`request_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -44899,19 +44917,55 @@ ALTER TABLE `tbl_transaction`
 -- AUTO_INCREMENT for table `beneficiary_data`
 --
 ALTER TABLE `beneficiary_data`
-  MODIFY `auto_increment_id_bene` int(40) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `auto_increment_id_bene` int(40) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `client_data`
 --
 ALTER TABLE `client_data`
-  MODIFY `auto_increment_4_id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `auto_increment_4_id` int(50) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `field_office`
+--
+ALTER TABLE `field_office`
+  MODIFY `uniq` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `provider`
 --
 ALTER TABLE `provider`
-  MODIFY `company_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `company_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+
+--
+-- AUTO_INCREMENT for table `reissuelog`
+--
+ALTER TABLE `reissuelog`
+  MODIFY `reissue_id` int(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `signatory`
+--
+ALTER TABLE `signatory`
+  MODIFY `signatory_id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `tbl_district`
+--
+ALTER TABLE `tbl_district`
+  MODIFY `d_id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `tbl_relationship`
+--
+ALTER TABLE `tbl_relationship`
+  MODIFY `r_id` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `user_request`
+--
+ALTER TABLE `user_request`
+  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
