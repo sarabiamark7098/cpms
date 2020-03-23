@@ -77,11 +77,9 @@
         <p class="cn" style="font-size:18Opx">
             Valid within 30 days upon issuance and is not convertible to cash.
             <br><?php 
-				$SignatureINI = $user->getsignatoryINI($glsignatory['signatory_id']);
-				$socialWorkINI = $user->getencoderINI($client['encoded_socialWork']);
-				$EncoderINI = $user->getencoderINI($client['encoded_encoder']);
-                // echo '<small>'.($CEINIAprroved!=""?strtoupper($CEINIAprroved).'/':""). strtolower($socialWorkINI) .'/'. strtolower($EncoderINI) .'</small>';
-                echo '<small>'.($SignatureINI!=""?strtoupper($SignatureINI).'/':""). strtolower($socialWorkINI) .'/'. strtolower($EncoderINI) .'</small>';
+				$soc_worker = $user->getinitials($client['encoded_socialWork']);
+				$encoder = $user->getinitials($client['encoded_encoder']);
+				 echo '<small>'. strtoupper($GLsignatoryini) ."/". (!empty($COEsignatoryini)?strtoupper($COEsignatoryini) ."/":"") ."". strtolower($soc_worker) ."/". strtolower($encoder) .'</small>';
             ?>
         </p> 
     </div>

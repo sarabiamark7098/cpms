@@ -2,17 +2,18 @@
     include('../php/class.user.php');
     $user = new User();
     
-    
     if(isset($_GET['id'])){
         $transid = $_GET['id'];
     }
+
     $clientid = $user->getClient_id($_GET['id']);
     $client = $user->showallClientdata($transid);
+    
     $name = $client["lastname"].", ". $client["firstname"]." ". $client["middlename"];
+    
     if(!empty($client['extraname'])){
 		$name .= " ". $client['extraname'];
     }
-    
     $coename = $client['firstname']." ";
     if(!empty($client['middlename'])){
         $coename .= $client['middlename'][0].". ";
@@ -70,22 +71,24 @@
     $cash_add = $Cbrgy[0] .', '. $Ccity[0]; 
     $gl = $user->getGL($transid);
     $coe = $user->getCOEData($transid);
-	$reconsignatory = $user->show_signatory_data($coe['sign_Id']);
+	$reconsignatory = $user->show_signatory_data($client['signatory_GL']);
 	$reconsignatoryName = strtoupper($reconsignatory['first_name'] ." ". $reconsignatory['middle_I'] .". ". $reconsignatory['last_name']);
-	if($coe){
-		$CEsignatory= $user->getsignatory($coe['sign_Id']);
-		$CEINIAprroved = strtoupper($CEsignatory['first_name'][0] ."". $CEsignatory['middle_I'][0] ."". $CEsignatory['last_name'][0]);
-	}
-	$toif = explode(".",$client_assistance[1]['amount']);
-    $am = (str_replace(",","",$toif[0]));
+	
+    $am = (str_replace(",","",$client_assistance[1]['amount']));
     if(!empty($client_assistance[2]['amount'])){
         if($client_assistance[2]['amount'] != ""){
-            $toif2 = explode(".",$client_assistance[2]['amount']);
-            $am2 = (str_replace(",","",$toif2[0]));
+            $am2 = (str_replace(",","",$client_assistance[2]['amount']));
         }
     }
     
-	if(!$_SESSION['login']){
+    if($am > 5000){
+        if($coe){
+            $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
+        }
+    }
+    $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
+
+    if(!$_SESSION['login']){
 		header('Location:../index.php');
 		}
 
@@ -96,6 +99,7 @@
     if(!empty($client_assistance[2]["mode"])){
         $mode2 = $client_assistance[2]["mode"];
     }
+
 ?>
 <!DOCTYPE>
 <html>
@@ -238,7 +242,7 @@
                     include("coe_non_food.php");
                 }
 
-                if(substr_count(strval($client_assistance[2]['type']), "Food Sub") > 0){
+                if(substr_count(strval(!empty($client_assistance[2]['type'])), "Food Sub") > 0){
                     include("coe_food.php");
                 }
         ?>

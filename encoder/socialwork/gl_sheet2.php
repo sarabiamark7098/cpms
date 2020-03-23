@@ -47,10 +47,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-4 ml-auto text-center">
-                <div style="border-bottom:1px solid #000000; height: 25px;width:100%; margin-bottom: 15px">
-                    <p id="signatory" style="font-weight: bold;text-transform:uppercase"><?php echo explode('-', $signatoryGLNamePos)[0]?></p>
-                    <p id="s_position" style="margin-top:-20px;margin-left:12%;padding-top:-15px" ><?php echo $signatoryGL['position']?></p>
+            <div class="col-5 ml-auto">
+                <div style="height: 25px;width:100%; margin-bottom: 15px">
+                    <input class="text-center" id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border-bottom:1px solid #000000; " value="<?php echo strtoupper($signatoryGL['first_name']." ".$signatoryGL['middle_I'].". ".$signatoryGL['last_name']) ?>"><br>
+                    <input class="text-center" id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position']?>">
                 </div>
             </div>
         </div>
@@ -60,10 +60,9 @@
             Valid within 30 days upon issuance and is not convertible to cash.
             <br><?php 
                 //Mga initial ni diri buset
-				$signatory = explode('-', $signatoryGLNamePos)[2];
-				$soc_worker = $user->getencoderINI($client['encoded_socialWork']);
-				$encoder = $user->getencoderINI($client['encoded_encoder']);
-				 echo '<small>'. strtoupper($signatory) ."/". strtolower($soc_worker) ."/". strtolower($encoder) .'</small>';
+                 $soc_worker = $user->getinitials($client['encoded_socialWork']);
+                 $encoder = $user->getinitials($client['encoded_encoder']);
+                  echo '<small>'. strtoupper($GLsignatoryini) ."/". (!empty($COEsignatoryini)?strtoupper($COEsignatoryini) ."/":"") ."". strtolower($soc_worker) ."/". strtolower($encoder) .'</small>';
             ?>
         </p> 
     </div>

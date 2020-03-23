@@ -31,7 +31,7 @@
 		$bname =  $client["b_fname"]." ". strtoupper($client["b_mname"][0]) .". ". $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname']: "");
         $signatoryGLNamePos = "";
         if(!empty($signatoryGL)){
-            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". $signatoryGL['middle_I'] .". ". $signatoryGL['last_name'] ."-". $signatoryGL['position'] ."-". $signatoryGL['initials']);
+            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". $signatoryGL['middle_I'] .". ". $signatoryGL['last_name'] ."-". $signatoryGL['position']);
         }
         //ADDRESS
         $c_add = '';

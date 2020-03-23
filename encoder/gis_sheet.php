@@ -225,16 +225,16 @@
     <hr style="margin-top: 4px">
     <!--Client Category-->
     <div class="row" style="margin-top: -10px; font-size: 12px">
-        <div class="col-sm-3">CLIENT'S CATEGORY</div>
-        <div class="col-sm-3"><input type="text" style="font-size:10px;" class="form-control input-lg border-dark" value="<?php echo $client["category"] ?>"></div>
-        <div class="col-sm-3"><p class="text-right">Sub-Category</p></div>
-        <div class="col-sm-3"><input type="text" class="form-control input-lg border-dark" value="<?php echo $client["subCategory"] ?>"></div>
+        <div class="col-sm-2">CLIENT'S CATEGORY</div>
+        <div class="col-sm-4"><input type="text" class="form-control input-lg border-dark text-center" style="font-size: 10px;" value="<?php echo $client["category"] ?>"></div>
+        <div class="col-sm-2"><p class="text-right">Sub-Category</p></div>
+        <div class="col-sm-4"><input type="text" class="form-control input-lg border-dark text-center" style="font-size: 10px;" value="<?php echo $client["subCategory"] ?>"></div>
     </div>
     <div class="row" style="font-size: 12px">
-        <div class="col-sm-3">BENEFICIARY'S CATEGORY</div>
-        <div class="col-sm-3"><input type="text" style="font-size:10px;" class="form-control input-lg border-dark" value="<?php echo ($client["relation"] == 'Self'? '' : $client['b_category']);?>"></div>
-        <div class="col-sm-3"><p class="text-right">Sub-Category</p></div>
-        <div class="col-sm-3"><input type="text" class="form-control input-lg border-dark" value="<?php echo ($client["relation"] == 'Self'? '' : $client['b_subCategory']);?>"></div>
+        <div class="col-sm-2">BENEFICIARY'S CATEGORY</div>
+        <div class="col-sm-4"><input type="text" class="form-control input-lg border-dark text-center" style="font-size: 10px;" value="<?php echo ($client["relation"] == 'Self'? '' : $client['b_category']);?>"></div>
+        <div class="col-sm-2"><p class="text-right">Sub-Category</p></div>
+        <div class="col-sm-4"><input type="text" class="form-control input-lg border-dark text-center" style="font-size: 10px;" value="<?php echo ($client["relation"] == 'Self'? '' : $client['b_subCategory']);?>"></div>
     </div>
     <!--ASSESSMENT-->
     <br><p style="margin:-1px;font-size: 14px;margin-top: -15px">ASSESSMENT (Use addtional sheets as neccessary)</p>

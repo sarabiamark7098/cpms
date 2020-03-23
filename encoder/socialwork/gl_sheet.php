@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-5 ml-auto">
                 <div style="height: 25px;width:100%; margin-bottom: 15px">
-                    <input class="text-center" id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border-bottom:1px solid #000000; " value="<?php echo explode('-', $signatoryGLNamePos)[0]?>"><br>
+                    <input class="text-center" id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border-bottom:1px solid #000000; " value="<?php echo strtoupper($signatoryGL['first_name']." ".$signatoryGL['middle_I'].". ".$signatoryGL['last_name']) ?>"><br>
                     <input class="text-center" id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position']?>">
                 </div>
             </div>
