@@ -73,6 +73,12 @@
                             <option value="II">II</option>
                             <option value="III">III</option>
                             <option value="IV">IV</option>
+							<option value="V">V</option>
+							<option value="VI">VI</option>
+							<option value="VII">VII</option>
+							<option value="VIII">VIII</option>
+							<option value="IX">IX</option>
+							<option value="X">X</option>
                         </select>
                     </div>
                 </div>
@@ -220,19 +226,19 @@
                     <div class="form-group row">
                         <div class="col-sm-12">
                             <!-- <input id="foo" type="text" name="relation" class="form-control mr-sm-2 b benerequire" placeholder="Relationship with Beneficiary"> -->
-                        <select name="relation" class="form-control mr-sm-2 b benerequire">
-                            <option value="" disabled selected>Relation With Beneficiary</option>
-                            <?php
-                                $getrelation = $user->getrelationshiplist();
-                                //Loop through results
-                                foreach($getrelation as $index => $value){
-                                    //Display info
-                                    echo '<option value="'. $value['relation'] .'"> ';
-                                    echo $value['relation'];
-                                    echo '</option>';
-                                }
-                            ?>  
-                        </select>
+                            <select name="relation" class="form-control mr-sm-2 b benerequire">
+                                <option value="" disabled selected>Relation With Beneficiary</option>
+                                <?php
+                                    $getrelation = $user->getrelationshiplist();
+                                    //Loop through results
+                                    foreach($getrelation as $index => $value){
+                                        //Display info
+                                        echo '<option value="'. $value['relation'] .'"> ';
+                                        echo $value['relation'];
+                                        echo '</option>';
+                                    }
+                                ?>  
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -261,6 +267,12 @@
                             <option value="II">II</option>
                             <option value="III">III</option>
                             <option value="IV">IV</option>
+							<option value="V">V</option>
+							<option value="VI">VI</option>
+							<option value="VII">VII</option>
+							<option value="VIII">VIII</option>
+							<option value="IX">IX</option>
+							<option value="X">X</option>
                         </select>
                         </div>
                     </div>
