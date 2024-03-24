@@ -101,7 +101,10 @@
                 </li>
                 <li>
                     <a href="Relation_District_Page.php">Additional <i style="float: right;font-size:25px" class="fa fa-expand"></i></a>
-                </li>    
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
             </ul>
         </nav>
 
@@ -315,6 +318,35 @@
 			</div>	
 		</div>
 	</div>
+    <div class="modal hide fade" id="Adddistrict" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Add District</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+				<div class="Addbody">
+                    <form action="Relation_District_Page.php" method="post">
+                        <div class="modal-body">
+                            <div class="row form-group" style="margin-top: 2%; height:10%;">
+                                <div class="form-group col-lg-12">
+                                    <input placeholder="District" id="district" name="district" style="text-transform: uppercase" type="text" class="form-control">
+                                    <label class="active" for="relation">District</label>
+                                </div>
+                            </div>
+                                    
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="Add">Save</button>
+                        </div>
+                    </form>
+				</div>
+			</div>	
+		</div>
+	</div>
     <script>
         $('#Addrelation').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
@@ -335,5 +367,25 @@
                 }
             });  
         })
+        $('#Adddistrict').appendTo("body").on('show.bs.modal', function (event) {
+		  var button = $(event.relatedTarget) // Button that triggered the modal
+		  var modal = $(this);
+          var dataString = 'id=district';
+		  //console.log(dataString);
+            $.ajax({
+                type: "GET",
+                url: "Relation_District_Page.php",
+                data: dataString,
+                cache: false,
+                success: function (data) {
+                    //console.log(data);
+                    modal.find('.Addbody');
+                },
+                error: function(err) {
+                    //console.log(err);
+                }
+            });  
+        })
     </script>
+    
 </html>

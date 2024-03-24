@@ -3,103 +3,128 @@
     $user = new User();
     
     if(isset($_GET['id'])){
-        $transid = $_GET['id'];
-    }
-
-    $clientid = $user->getClient_id($_GET['id']);
-    $client = $user->showallClientdata($transid);
+        $id = $user->getClientId($_GET['id']);
+        $client = $user->clientData($_GET['id']); ; //kuha sa mga data sa bene/client data
+        $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
+        $signatoryGL = $user->getsignatory($client['signatory_GL']); 
+        
+        $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
+		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
+		$client_fam = $user->getclientFam($_GET['id']);
+		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
     
-    $name = $client["lastname"].", ". $client["firstname"]." ". $client["middlename"];
-    
-    if(!empty($client['extraname'])){
-		$name .= " ". $client['extraname'];
-    }
-    $coename = $client['firstname']." ";
-    if(!empty($client['middlename'])){
-        $coename .= $client['middlename'][0].". ";
-    }
-    $coename .= $client['lastname']." ";
-    if(!empty($client['extraname'])){
-		$coename .= " ". $client['extraname'];
-    }
-    $clientAge = $user->getAge($client['date_birth']);
-	
-    $bname = $client["b_lname"].", ". $client["b_fname"]." ". $client["b_mname"];
-	if(!empty($client['b_exname'])){
-		$bname .= $client['b_exname'];
-    }
-    
-    $coebname = $client['b_fname']." ";
-    if(!empty($client['b_mname'])){
-        $coebname .= $client['b_mname'][0].". ";
-    }
-    $coebname .= $client['b_lname']." ";
-    if(!empty($client['b_exname'])){
-		$coebname .= " ". $client['b_exname'];
-    }
-    $beneAge = $user->getAge($client['b_bday']);
-
-    // $_SESSION["client_id_assess"] = $_GET["id"];
-    $timeentry = $user->theTime($client['date_entered']);
-    $gis = $user->getGISData($transid);
-    $client_assistance = $user->getGISAssistance($transid);
-    // print_r($client_assistance);
-    $soc_worker = $user->getuserInfo($client['encoded_socialWork']);
-    $soc_workerFullname = $soc_worker['empfname'].' '.$soc_worker['empmname'][0].'. '.$soc_worker['emplname'].' '.$soc_worker['empext'];
-    $encoder = $user->getuserInfo($client['encoded_encoder']);
-    $signatory = $user->show_signatory_data($client['signatory_id']);
-    $glsignatory = $user->show_signatory_data($client['signatory_GL']);
-    $Ccity = explode("/", $client['client_municipality']);
-	$Cbrgy = explode("/", $client['client_barangay']);
-	$Cprovince = explode("/", $client['client_province']);
-    $address['client'] = '';
-	if(!empty($client['client_street'])){
-		$address['client'] .= $client['client_street'] .", ";
-	}
-	$address['client'] .=  $Cbrgy[0] .", ". $Ccity[0] .", ". $Cprovince[0];
-    $Bcity = explode("/", $client['b_municipality']);$Bbrgy = explode("/", $client['b_barangay']);$Bprovince = explode("/", $client['b_province']);
-    $address['beneficiary'] = '';
-	if(!empty($client['b_street'])){
-		$address['beneficiary'] .= $client['b_street'] .", ";
-	}
-	$address['beneficiary'] .= $Bbrgy[0] .", ". $Bcity[0].", ". $Bprovince[0];
-    
-    $client_fam = $user->getclientFam($transid);
-    $signatoryName = strtoupper($signatory['first_name'] ." ". $signatory['middle_I'] .". ". $signatory['last_name']);
-    $glsignatoryname = strtoupper($glsignatory['first_name'] ." ". $glsignatory['middle_I'] .". ". $glsignatory['last_name']);
-    $cash = $user->getCash($transid);
-    $cash_add = $Cbrgy[0] .', '. $Ccity[0]; 
-    $gl = $user->getGL($transid);
-    $coe = $user->getCOEData($transid);
-	$reconsignatory = $user->show_signatory_data($client['signatory_GL']);
-	$reconsignatoryName = strtoupper($reconsignatory['first_name'] ." ". $reconsignatory['middle_I'] .". ". $reconsignatory['last_name']);
-	
-    $am = (str_replace(",","",$client_assistance[1]['amount']));
-    if(!empty($client_assistance[2]['amount'])){
-        if($client_assistance[2]['amount'] != ""){
-            $am2 = (str_replace(",","",$client_assistance[2]['amount']));
+        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
+			
+        $am = str_replace(",","",$client_assistance[1]['amount']);
+		
+        if($am > 50000){
+            if($record){
+                $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
+            }
         }
-    }
-    
-    if($am > 5000){
-        if($coe){
-            $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
-        }
-    }
-    $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
+        $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
 
-    if(!$_SESSION['login']){
-		header('Location:../index.php');
+        $name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"];
+		if(!empty($client['extraname'])){
+			$name .= " ". strtoupper($client['extraname']) .".";
 		}
+		$bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname'].".": "");
+        $signatoryGLNamePos = "";
+        if(!empty($signatoryGL)){
+            $signatoryGLNamePos = (!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position']);
+        }
+		
+		if(!empty($client["b_lname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['b_bday']), date_create($today));
+			$age_bene = $diff->format('%y');
+		}else{
+			$age_bene = "";
+		}
+		if(!empty($client["lastname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['date_birth']), date_create($today));
+			$age_client = $diff->format('%y');
+		}
+        
+		//ADDRESS
+        $c_add = '';
+        $b_add = '';
+        $cash_add=""; //set as the payee address for CAV
+        
+        $sex = $client['sex'] == 'Male'? "her" : "his"; //magamit ni sa g_sheet for grammar
+       //gipangkwaan og '-'
+        $city = explode("/", $client['client_municipality']);
+        $brgy = explode("/", $client['client_barangay']);
+        $province = explode("/", $client['client_province']);
+        $bcity = explode("/", $client['b_municipality']); 
+        $bbrgy = explode("/", $client['b_barangay']);
+        $bprovince = explode("/", $client['b_province']);
 
-    $mode1 = "";
-    $mode2 = "";
-    
-    $mode1 = $client_assistance[1]["mode"];
-    if(!empty($client_assistance[2]["mode"])){
-        $mode2 = $client_assistance[2]["mode"];
+        //if street kay way sulod ma blank lg sta
+		if(!empty($client['b_street'])){
+			$b_add .= $client['b_street'].", ";
+		}
+	
+		if(!empty($client['client_street'])){
+            $c_add .= $client['client_street'] .", ";
+            $cash_add .= $client['client_street'] .", ";
+		}
+        
+        $b_add .= $bbrgy[0] .", ". $bcity[0].", ". $bprovince[0]; //client final address
+        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
+        $cash_add .= $brgy[0] .", ". $city[0]; //address for CAV
+        
+        //magkuhag data if ever naa na s database
+        $gl = $user->getGL($_GET['id']); //gl table
+        $cash = $user->getCash($_GET['id']); //cash table
+        $ft_signatoryini = "";
+        $forthepositiongl = "";
+        $signatoryforthe = "";
+        if(!empty($gl['for_the_id'])){
+            $signatoryforthe = $user->getsignatory($gl['for_the_id']);
+            $z = explode('/', $signatoryGL['position']);
+            if(!empty($z[1])){ 
+                $forthepositiongl = $z[1];
+            }else{
+                $forthepositiongl = $z[0];
+            }
+            $ft_signatoryini = $user->getinitialsSignatory($gl['for_the_id']);
+        }
+        $GLid = "";
+        if (empty($gl['control_no'])) {
+            $GLid = $user->controlNumberForGL();
+        }else{
+            $GLid = $gl['control_no'];
+        }
+        $mode1 = "";
+        $mode2 = "";
+        		
+        $mode1 = $client_assistance[1]['mode'];
+        
+        if(!empty($client_assistance[2]['mode'])){
+            $mode2 = $client_assistance[2]['mode'];
+        }
+		
+        $amountToWord = $user->toWord($client_assistance[1]['amount']);
+  
+		$soc_worker = $user->getuserInfo($_SESSION['userId']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+        
+		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
+        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+        $GISsignatoryPosition = $GISsignatory['position'];
+        
+		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
+        $GLsignatoryPosition = $GLsignatory['position'];
+		
+		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+        
     }
-
 ?>
 <!DOCTYPE>
 <html>
@@ -213,8 +238,8 @@
                     <div class="row text-center">
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printGIS()">GIS</button></div>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printCOE()">COE</button></div>
-                        <div class="col"> <button class="btn btn-<?php echo empty($gl)?"dark":"success" ?> btn-block no-print" onclick="printGL()" <?php echo empty($gl)?"disabled":"" ?>>GL</button></div>
-                        <div class="col"> <button class="btn btn-<?php echo empty($cash)?"dark":"success" ?> btn-block no-print" onclick="printCAV()" <?php echo empty($cash)?"disabled":"" ?>>CASH</button></div>
+                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"success":"dark" ?> btn-block no-print" onclick="printGL()" <?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"":"disabled" ?>>GL</button></div>
+                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav" || strtolower($client_assistance[2]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav" || strtolower($client_assistance[2]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div>
                     </div>  
                 </div>
             </div>
@@ -222,30 +247,41 @@
     </div>
     <div id="gis" hidden>
         
-        <?php include('gis_sheet.php');?>
+        <?php // include('gis_sheet.php');
+            include('gisv2_print.php');
+        ?>
+
     </div>
     <div id="coe" hidden>
         
-        <?php if(substr_count(strval($client_assistance[1]['type']), "Medic") > 0){
-                    include("coe_med.php"); 
-                }elseif(substr_count(strval($client_assistance[1]['type']), "Trans") > 0){
-                    include("coe_trans.php");
-                }elseif(substr_count(strval($client_assistance[1]['type']), "Food Sub") > 0){
-                    include("coe_food.php");
-                }elseif(substr_count(strval($client_assistance[1]['type']), "Burial") > 0){
-                    include("coe_burial.php");
-                }elseif(substr_count(strval($client_assistance[1]['type']), "Educ") > 0){
-                    include("coe_educ.php");
-                }elseif(substr_count(strval($client_assistance[1]['type']), "Cash") > 0){
-                    include("coe_cash.php");
-                }elseif(substr_count(strval($client_assistance[1]['type']), "Non") > 0){
-                    include("coe_non_food.php");
-                }
+        <?php 
+        // if(substr_count(strval($client_assistance[1]['type']), "Medic") > 0){
+        //             include("coe_med.php"); 
+        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Trans") > 0){
+        //             include("coe_trans.php");
+        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Food Sub") > 0){
+        //             include("coe_food.php");
+        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Burial") > 0){
+        //             include("coe_burial.php");
+        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Educ") > 0){
+        //             include("coe_educ.php");
+        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Cash") > 0){
+        //             include("coe_cash.php");
+        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Non") > 0){
+        //             include("coe_non_food.php");
+        //         }
 
-                if(substr_count(strval(!empty($client_assistance[2]['type'])), "Food Sub") > 0){
-                    include("coe_food.php");
-                }
-        ?>
+        //         if(!empty(substr_count(strval($client_assistance[2]['type']), "Food Sub") > 0)){
+		// 			include("coe_food.php");
+        //         }
+            if($mode1 == "CAV" || $mode2 == "CAV"){
+				include('coev2_print_cav.php');
+			} else if($mode1 == "GL" || $mode2 == "GL"){
+				include('coev2_print_gl.php');
+			} else {
+				include('coev2_print.php');
+			}
+		?>
     </div>
     <div>
         <div id="CAV" hidden>

@@ -1,22 +1,25 @@
 <?php
 include('../php/class.user.php');
 $user = new User();
+    
 
 if (isset($_GET['id'])) {
-    $user->setsw($_SESSION['userId'], $_GET['id']);
+	$user->setsw($_SESSION['userId'], $_GET['id']);
+	
     $id = $user->getClient_id($_GET['id']); //id sa client
     $user->servingstatus($_GET['id']); //update data as serving
     $client = $user->clientData($_GET['id']); //kuha sa mga data sa bene/client data
-    $name = $client["lastname"] . ", " . $client["firstname"] . " " . $client["middlename"] . " " . $client['extraname'];
-    $bname = $client["b_lname"] . ", " . $client["b_fname"] . " " . $client["b_mname"] . " " . $client['b_exname'];
+    $name = $client["lastname"] .", ". $client["firstname"] . " " . (!empty($client["middlename"])? $client["middlename"] . " ":"").(!empty($client['extraname'])?$client['extraname'] . ".":"");
+    $bname = $client["b_lname"] . ", ". $client["b_fname"] . " " . (!empty($client["b_mname"])? $client["b_mname"] . " ":"").(!empty($client['b_exname'])?$client['b_exname'] . ".":"");
        
     $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
-    $client_assisstance = $user->getGISAssistance($_GET['id']);
+    $client_assistance = $user->getGISAssistance($_GET['id']);
     $client_fam = $user->getclientFam($_GET['id']);
     $gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+    $fundsourcedata = $user->getfundsourcedata($_GET['id']);
     $soc_worker = $user->getuserInfo($_SESSION['userId']);
     //fullname of social worker
-    $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] : '');
+    $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
     
     //Address
     $city = explode("/", $client['client_municipality']);
@@ -128,7 +131,7 @@ if (!$_SESSION['login']) {
                 </div>
                 <div class="row">
                 <div class="col">
-                <button class="btn btn-<?php echo (empty($gis) ? "success" : "secondary") ?> btn-block" <?php echo (empty($gis)?'onclick="back()"':'') ?>>
+                <button class="btn btn-success btn-block" onclick="back()">
                     <span class='fa fa-arrow-left'></span> Cancel
                 </button>
                 </div>
@@ -140,132 +143,389 @@ if (!$_SESSION['login']) {
             </div><br>
             <!--Fucking inputs-->
             <form id="up" action="gis.php?id=<?php echo $_GET['id'] ?>" method="post" >
+            
+                <!-- Beneficiary Additional Information -->
                 <small>(Please Save/Update before printing)</small>
-                <div class="form-group row">
-                    <div class="card border-info mb3" style="width:100%;">
-                        <h5 class="card-header text-success">FAMILY COMPOSITION</h5>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col"></div>
-                                <div class="col">Pangalan</div>
-                                <div class="col">Edad</div>
-                                <div class="col">Trabaho</div>
-                                <div class="col">Buwanang Sahod</div> 
-                            </div><br>
-                            <div class="row">
-                                <div class="col">Person 1:</div>
-                                <div class="col"><input class="form-control" id="p1" name="p1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['name'] ?>"></div>
-                                <div class="col"><input type= "number" class="form-control" id="e1" name="e1" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[1])||$client_fam[1]['age']==0? "" : $client_fam[1]['age'] ?>"></div>
-                                <div class="col"><input class="form-control" id="t1" name="t1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['occupation'] ?>"></div>
-                                <div class="col"><input class="form-control" onkeypress="return rangeKey(event)" id="b1" name="b1" value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['salary'] ?>"></div>  
-                            </div><br>
-                            <div class="row">
-                                <div class="col">Person 2:</div>
-                                <div class="col"><input class="form-control" id="p2" name="p2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['name'] ?>"></div>
-                                <div class="col"><input type= "number" class="form-control" id="e2" name="e2" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[2])||$client_fam[2]['age']==0? "" : $client_fam[2]['age'] ?>"></div>
-                                <div class="col"><input class="form-control" id="t2" name="t2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['occupation'] ?>"></div>
-                                <div class="col"><input class="form-control" onkeypress="return rangeKey(event)" id="b2" name="b2" value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['salary'] ?>"></div>  
-                            </div><br>
-                            <div class="row">
-                                <div class="col">Person 3:</div>
-                                <div class="col"><input class="form-control" id="p3" name="p3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['name'] ?>"></div>
-                                <div class="col"><input type= "number" class="form-control" id="e3" name="e3" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[3])||$client_fam[3]['age']==0? "" : $client_fam[3]['age'] ?>"></div>
-                                <div class="col"><input class="form-control" id="t3" name="t3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['occupation'] ?>"></div>
-                                <div class="col"><input class="form-control" onkeypress="return rangeKey(event)" id="b3" name="b3" value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['salary'] ?>"></div>  
+                <div class="row">
+                    <div class=col-6>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">TARGET SECTOR</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fhona" id="fhona" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                            <div class="col-11"> FAMILY HEADS, AND OTHER NEEDY ADULTS (FHONA)</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="wedc" id="wedc" value="2" <?php echo $gis['target_sector']==2? "checked": ""; ?>></div>
+                                            <div class="col-11"> WOMEN IN ESPECIALLY DIFFICULT CIRCUMSTRANCES (WEDC)</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="pwd" id="pwd" value="3" <?php echo $gis['target_sector']==3? "checked": ""; ?>></div>
+                                            <div class="col-11"> PERSON WITH DISABILITIES (PWD)</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="youth" id="youth" value="4" <?php echo $gis['target_sector']==4? "checked": ""; ?>></div>
+                                            <div class="col-11"> YOUTH IN NEED OF SPECIAL PROTECTION (YNSP)</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="sc" id="sc" value="5" <?php echo $gis['target_sector']==5? "checked": ""; ?>></div>
+                                            <div class="col-11"> SENIOR CITIZEN (SC)</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plwhiv" id="plwhiv" value="6" <?php echo $gis['target_sector']==6? "checked": ""; ?>></div>
+                                            <div class="col-11"> PERSON LIVING WITH HIV(PLWHIV)</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo $gis['target_sector']==7? "checked": ""; ?>></div>
+                                            <div class="col-11"> CHILDREN IN NEED OF SPECIAL PROTECTION (CNSP)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class=col-6>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">SPECIFY SUB-CATEGORY</h5>
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="solo" id="solo" value="1" <?php echo $gis['subcat_ass']==1? "checked": ""; ?>></div>
+                                            <div class="col-11"> SOLO PARENTS</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="ip" id="ip" value="2" <?php echo $gis['subcat_ass']==2? "checked": ""; ?>></div>
+                                            <div class="col-11"> INDIGENOUS PEOPLE</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="drug" id="drug" value="3" <?php echo $gis['subcat_ass']==3? "checked": ""; ?>></div>
+                                            <div class="col-11"> RECOVERING PERSON WHO USED DRUGS</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="4ps" id="4ps" value="4" <?php echo $gis['subcat_ass']==4? "checked": ""; ?>></div>
+                                            <div class="col-11"> 4PS DSWD BENEFICIARY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg"  name="dwell" id="dwell" value="5" <?php echo $gis['subcat_ass']==5? "checked": ""; ?>></div>
+                                            <div class="col-11"> STREET DWELLERS</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="mental" id="mental" value="6" <?php echo $gis['subcat_ass']==6? "checked": ""; ?>></div>
+                                            <div class="col-11"> PSYCHOSOCIAL/MENTAL/LEARNING DISABILITY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="asylum" id="asylum" value="7" <?php echo $gis['subcat_ass']==7? "checked": ""; ?>></div>
+                                            <div class="col-11"> STATELESS PERSONS/ASYLUM SEEKERS/REFUGEES</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" style="padding" class="lg" name="osc" id="osc" value="8" <?php echo $gis['subcat_ass']==8? "checked": ""; ?>></div>
+                                            <div class="col-11"> OTHERS: <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div><br>
+
+
+                <!-- Family Composition -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">FAMILY COMPOSITION</h5>
+                                <div class="card-body">
+                                    <div class="row text-center" style="margin-bottom: 5px;">
+                                        <div class="col-1"></div>
+                                        <div class="col-3">Pangalan</div>
+                                        <div class="col-2">Relasyon</div>
+                                        <div class="col-1">Edad</div>
+                                        <div class="col-3">Trabaho</div>
+                                        <div class="col-2">Buwanang Sahod</div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-1 text-center">1:</div>
+                                        <div class="col-3"><input class="form-control" id="p1" name="p1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['name'] ?>"></div>
+                                        <div class="col-2"><input class="form-control" id="rb1" name="rb1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['relation_bene'] ?>"></div>
+                                        <div class="col-1"><input type= "number" class="form-control" id="e1" name="e1" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[1])||$client_fam[1]['age']==0? "" : $client_fam[1]['age'] ?>"></div>
+                                        <div class="col-3"><input class="form-control" id="t1" name="t1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['occupation'] ?>"></div>
+                                        <div class="col-2"><input class="form-control" onkeypress="return rangeKey(event)" id="b1" name="b1" value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['salary'] ?>"></div>  
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-1 text-center">2:</div>
+                                        <div class="col-3"><input class="form-control" id="p2" name="p2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['name'] ?>"></div>
+                                        <div class="col-2"><input class="form-control" id="rb2" name="rb2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['relation_bene'] ?>"></div>
+                                        <div class="col-1"><input type= "number" class="form-control" id="e2" name="e2" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[2])||$client_fam[2]['age']==0? "" : $client_fam[2]['age'] ?>"></div>
+                                        <div class="col-3"><input class="form-control" id="t2" name="t2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['occupation'] ?>"></div>
+                                        <div class="col-2"><input class="form-control" onkeypress="return rangeKey(event)" id="b2" name="b2" value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['salary'] ?>"></div>  
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-1 text-center">3:</div>
+                                        <div class="col-3"><input class="form-control" id="p3" name="p3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['name'] ?>"></div>
+                                        <div class="col-2"><input class="form-control" id="rb3" name="rb3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['relation_bene'] ?>"></div>
+                                        <div class="col-1"><input type= "number" class="form-control" id="e3" name="e3" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[3])||$client_fam[3]['age']==0? "" : $client_fam[3]['age'] ?>"></div>
+                                        <div class="col-3"><input class="form-control" id="t3" name="t3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['occupation'] ?>"></div>
+                                        <div class="col-2"><input class="form-control" onkeypress="return rangeKey(event)" id="b3" name="b3" value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['salary'] ?>"></div>  
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div> 
+                </div><br>
+
+                <!-- Type Assistance -->
+                <div class="row">
+                    <div class="col-12" >
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">TYPE OF ASSISTANCE</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row">
+                                            <label class="col-sm-3 label" style="font-size: 18px">TYPE OF ASSISTANCE:</label>
+                                            <div class="col">
+                                                <select type="text" id="type1" class="form-control" name="type1" <?php echo empty($client_assistance[1]) ? "" : "onkeyup='verifyfirst()'" ?> required>
+                                                    <option value="" <?php echo (empty($client_assistance[1])) ? "selected" : "" ?>>Select Type of Assistance </option>
+                                                    <option value="Food Subsidy Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "food subsidy assistance") ? "selected" : "" ?>>Food Subsidy Assistance</option>
+                                                    <option value="Medical Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "medical assistance") ? "selected" : "" ?>>Medical Assistance</option>
+                                                    <option value="Funeral Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "funeral assistance") ? "selected" : "" ?>>Funeral Assistance</option>
+                                                    <option value="Transportation Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "transportation assistance") ? "selected" : "" ?>>Transportation Assistance</option>
+                                                    <option value="Educational Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "educational assistance") ? "selected" : "" ?>>Educational Assistance</option>
+                                                    <option value="Other Cash Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "other cash assistance") ? "selected" : "" ?>>Other Cash Assistance</option>
+                                                    <option value="Material Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "material assistance") ? "selected" : "" ?>>Material Assistance</option>
+                                                </select>
+												
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group row">
+
+                <!-- Assistance If Burial or Medical --> <!-- for Improvements need Calibration -->
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6" id="medical_show"><br>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">IF MEDICAL</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="hb" id="hb" value="1" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==1 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Hospital Bill</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="medicine" id="medicine" value="2" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==2 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Medicines</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="chemo" id="chemo" value="3" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==3 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Chemotheraphy</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="dia" id="dia" value="4" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==4 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Dialysis</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="procedure" id="procedure" value="5" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==5 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Procedures</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="laboratory" id="laboratory" value="6" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==6 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Laboratory</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="implant" id="implant" value="7" <?php echo (strtolower($client_assistance[1]['type'])=="medical assistance"?($client_assistance[1]['if_medical']==7 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Implant</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-6" id="burial_show"><br>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">IF FUNERAL</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fb" id="fb" value="1" <?php echo (strtolower($client_assistance[1]['type'])=="funeral assistance"?($client_assistance[1]['if_burial']==1 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Funeral Bill</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="toc" id="toc" value="2" <?php echo (strtolower($client_assistance[1]['type'])=="funeral assistance"?($client_assistance[1]['if_burial']==2 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Transfer of Cadever</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="interment" id="interment" value="3" <?php echo (strtolower($client_assistance[1]['type'])=="funeral assistance"?($client_assistance[1]['if_burial']==3 ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Interment</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-3"></div>
+                </div><br>
+
+                <!-- Assistance Financial and Material -->
+                <div class="row">
+                    <div class=col-6>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">FINANCIAL ASSISTANCE</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="medical" id="medical" value="1" <?php echo ($client_assistance[1]['financial']==1 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Medical Assistance</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="transportation" id="transportation" value="2" <?php echo ($client_assistance[1]['financial']==2 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Transportation Assistance</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="food" id="food" value="3" <?php echo ($client_assistance[1]['financial']==3 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Food Assistance</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fassist" id="fassist" value="4" <?php echo ($client_assistance[1]['financial']==4 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Funeral Assistance</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="educational" id="educational" value="5" <?php echo ($client_assistance[1]['financial']==5 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Educational Assistance</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="casha" id="casha" value="6" <?php echo ($client_assistance[1]['financial']==6 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Cash Assistance or Other Support Technologies</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class=col-6>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">MATERIAL ASSISTANCE</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="packs" id="packs" value="1" <?php echo ($client_assistance[1]['material']==1 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Family Food Packs</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="items" id="items" value="2" <?php echo ($client_assistance[1]['material']==2 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Other Food Items</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="kits" id="kits" value="3" <?php echo ($client_assistance[1]['material']==3 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Hygiene or Sleeping Kits</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="devices" id="devices" value="4" <?php echo ($client_assistance[1]['material']==4 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Assistive Devices and Technologies</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div><br>
+
+                <!-- ASSESSMENT OF SOCIAL WORKER -->
+                <div class="card">
                     <div class="card border-info mb3" style="width:100%;">
                         <h5 class="card-header text-success" style="background:#f0edff">ASSESSMENT INFORMATION</h5>
                         <div class="card-body text-dark">
                             <div class="row">
-                                <label class="col-sm-2 label" style="font-size: 18px">Client Number</label>
-                                <div class="col-sm-3">
+                                <label class="col-sm-3 label" style="font-size: 18px">Client Number</label>
+                                <div class="col-sm-2">
                                     <input type="number" class="form-control mr-sm-2" id="client_num" name="num" value="<?php echo empty($gis['client_num']) ? "" : $gis['client_num'] ?>" required>  
                                 </div>&nbsp;
                                 <label class="col-sm-3 label text-right" style="font-size: 20px">Mode of Admission</label>
-                                <div class="col-sm-3">
-                                <select type="text" class="form-control mr-sm-2" id="mode_ad" name="mode_ad" required>
+                                <div class="col-sm-2">
+									<select type="text" class="form-control mr-sm-2" id="mode_ad" name="mode_ad" required>
                                         <option selected="selected"><?php echo empty($gis['mode_admission']) ? "" : $gis['mode_admission'] ?></option>
                                         <option>Walk-In</option>
                                         <option>Referral</option>
                                     </select>
-                                </div>&nbsp;
+                                </div>
                             </div><br>
                             <div class="row">
-                                <div class="col">SERVICE:</div>
-                                <div class="col"><input type="checkbox" id="group" class="col-lg-1" name="psy" value="Psychosocial" <?php echo $gis['service1']==0? "": "checked"; ?> required> Psychosocial</div>
-                                <div class="col"><input type="checkbox" id="group" class="col-lg-1" name="leg" value="Legal Assisstance" <?php echo $gis['service2']==0? "": "checked"; ?> required> Legal Assistance</div>
-                                <div class="col"><input type="checkbox" id="group" class="col-lg-1" name="ref" value="Referral" <?php echo $gis['service3']==0? "": "checked";; ?> required> Referral 
-                                    <input type="text" style="border: none;border-bottom: 1px solid #000000;" id="ref_name" name="ref_name" placeholder="Type Refferal Office" value="<?php echo $gis['ref_name'] ?>">
-                                </div>
-                                <div class="col"><input type="checkbox" id="group" class="col-lg-1" name="fin" value="Financial Assistance" <?php echo $gis['service4']==0? "": "checked";; ?> required > Financial</div> 
-                            </div><br><h5 class="text-dark">Assistance: </h5>
+								<label class="col-sm-3 label text-left" style="font-size: 17px">PSYCHOSOCIAL SUPPORT:</label>
+                                <div class="col-3">
+									<input type="checkbox" id="group" class="col-lg-1" name="pfa" value="pfa" <?php echo $gis['service5']==0? "": "checked"; ?> required> &nbsp; Psychological First Aid (PFA)
+								</div>&nbsp;
+                                <div class="col-1"></div>
+                                <div class="col-3">
+									<input type="checkbox" id="group" class="col-lg-1" name="counseling" value="Counseling" <?php echo $gis['service6']==0? "": "checked";; ?> required> &nbsp; Social Work Counseling
+								</div>
+                            </div><br>
+							<div class="row">
+								<label class="col-sm-2 label text-left" style="font-size: 17px">REFERRAL:</label>
+                                <div class="col-3">
+									<input type="text" id="refer1" class="col-lg-12 form-control" style="width: 100%;" name="rl1" placeholder="Refer Office" value="<?php echo empty($gis['refer1']) ? "" : $gis['refer1'] ?>">
+								</div>
+                                <div class="col-3">
+									<input type="text" id="refer2" class="col-lg-12 form-control" style="width: 100%;" name="rl2" placeholder="Refer Office" value="<?php echo empty($gis['refer2']) ? "" : $gis['refer2'] ?>">
+								</div>
+                                <div class="col-3">
+									<input type="text" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Refer Office" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
+								</div>
+                                
+                            </div><br>
+                            <h5 class="text-dark">Assistance: </h5>
                             <div class="row"> 
-                                <div class="col text-center">TYPE</div>
                                 <div class="col text-center">PURPOSE</div>
-                                <div class="col text-center">AMOUNT</div>
-                                <div class="col text-center">MODE OF ASSISTANCE</div>
-                                <div class="col text-center">FUND SOURCE</div> 
+                                <div class="col-2 text-center">AMOUNT</div>
+                                <div class="col-2 text-center">MODE ASSISTANCE</div>
+                                <div class="col-2 text-center">FUND SOURCE</div> 
+                                <div class="col-1 text-center"> </div> 
                             </div>
                             <div class="row"> 
-                                <div class="col">
-                                    <input list="types" type="text" id="type1" class="form-control" name="type1" <?php echo empty($client_assisstance[1]) ? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assisstance[1]) ? "" : $client_assisstance[1]['type'] ?>">
-                                    <datalist id="types">
-                                        <option value="Food Subsidy Assistance"></option>
-                                        <option value="Medical Assistance"></option>
-                                        <option value="Burial Assistance"></option>
-                                        <option value="Transportation Assistance"></option>
-                                        <option value="Educational Assistance"></option>
-                                        <option value="Cash Assistance"></option>
-                                    </datalist>
-                                </div>
-                                <div class="col"><input class="form-control" id="pur1" name="pur1" type="text" <?php echo empty($client_assisstance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assisstance[1])? "" : $client_assisstance[1]['purpose']; ?>"></div>
-                                <div class="col"><input class="form-control money" id="a1" name="a1" <?php echo empty($client_assisstance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assisstance[1])? "" : $client_assisstance[1]['amount']; ?>"></div>
-                                <div class="col">
-                                    <select class="form-control" id="m1" name="m1" type="text" <?php echo empty($client_assisstance[1])? "" : "onkeyup='verifyfirst()'" ?> required>
-                                        <option selected="selected"><?php echo empty($client_assisstance[1])? "" : $client_assisstance[1]['mode']; ?></option>
+                                <div class="col"><input class="form-control" id="pur1" name="pur1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['purpose']; ?>"></div>
+                                <div class="col-2"><input class="form-control money" id="a1" name="a1" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['amount']; ?>"></div>
+                                <div class="col-2">
+                                    <select class="form-control" id="m1" name="m1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required>
+                                        <option selected="selected"><?php echo empty($client_assistance[1])? "" : $client_assistance[1]['mode']; ?></option>
                                         <option>GL</option>
                                         <option>CAV</option>
                                         <option>DS</option>
                                     </select>
                                 </div>
-                                <div class="col"> <!--Source of Fund-->
-                                    <input list="chargings" class="form-control" id="f1" name="f1" type="text" <?php echo empty($client_assisstance[1]) ? "" : "onkeyup='verifyfirst()'" ?> value="<?php echo empty($client_assisstance[1])? "" : $client_assisstance[1]['fund'] ?>" required/>
+                                <div class="col-2"> <!--Source of Fund-->
+                                    <input type="text" id="f1" value="CURRENT FUND" hidden>
+                                    <input list="chargings" class="form-control" id = "fundf1" name="f1" type="text" <?php echo empty($client_assistance[1]) ? "" : "onkeyup='verifyfirst()'" ?> value="<?php echo empty($client_assistance[1])? "" : (empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[1]['fundsource']:$fundsourcedata[1]['fundsource'].'/'.$fundsourcedata[2]['fundsource'].''.(!empty($fundsourcedata[3]['fundsource'])?'/'.$fundsourcedata[3]['fundsource']:"").''.(!empty($fundsourcedata[4]['fundsource'])?'/'.$fundsourcedata[4]['fundsource']:"").''.(!empty($fundsourcedata[5]['fundsource'])?'/'.$fundsourcedata[5]['fundsource']:"")) ?>" required/>
+                                    <input list="chargings" class="form-control fs1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fsof1" name="fsof1" type="text" hidden />
+                                    <input list="chargings" class="form-control fs2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fsof2" name="fsof2" type="text" hidden />
+                                    <input list="chargings" class="form-control fs3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fsof3" name="fsof3" type="text" hidden />
+                                    <input list="chargings" class="form-control fs4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fsof4" name="fsof4" type="text" hidden />
+                                    <input list="chargings" class="form-control fs5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fsof5" name="fsof5" type="text" hidden />
                                     <?php echo $user->chargings(); ?>
+
                                 </div> 
-                            </div><br>
-                            <div class="row">
-                                <div class="col">
-                                    <input list="types2" type="text" id="type2" class="form-control" name="type2" <?php echo empty($client_assisstance[2]) ? "" : "onkeyup='verifysecond()'" ?> value="<?php echo empty($client_assisstance[2]) ? "" : $client_assisstance[2]['type']; ?>" onkeyup="typerequire()">
-                                    <datalist id="types2">
-                                        <option value="Food Subsidy Assistance"></option>
-                                    </datalist>
+                                <div class="col-1"> <!--Source of Fund-->
+                                    <input class="form-group btn btn-outline-primary" type="button" value="+" id="addfundsource" name="fsadditional" data-target="#additionalFundSource" data-toggle="modal" >
                                 </div>
-                                <div class="col"><input class="form-control" id="pur2" name="pur2" <?php echo empty($client_assisstance[2]) ? "" : "onkeyup='verifysecond()'" ?> type="text" value="<?php echo empty($client_assisstance[2]) ? "" : $client_assisstance[2]['purpose']; ?>"></div>
-                                <div class="col"><input class="form-control money" id="a2" name="a2" <?php echo empty($client_assisstance[2])? "" : "onkeyup='verifysecond()'" ?> value="<?php echo empty($client_assisstance[2]) ? "" : $client_assisstance[2]['amount']; ?>"></div>
-                                <div class="col">
-                                    <select class="form-control" id="m2" name="m2" <?php echo empty($client_assisstance[2]) ? "" : "onkeyup='verifysecond()'" ?> type="text">
-                                        <option selected="selected"><?php echo empty($client_assisstance[2]['mode']) ? "" : $client_assisstance[2]['mode']; ?></option>
-                                        <option>GL</option>
-                                        <option>CAV</option>
-                                        <option>DS</option>
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <input list="chargings" class="form-control" id="f2" name="f2" <?php echo empty($client_assisstance[2]) ? "" : "onkeyup='verifysecond()'" ?> type="text" value="<?php echo empty($client_assisstance[2]) ? "" : $client_assisstance[2]['fund'] ?>"/>
-                                </div> 
                             </div>
-                            <br>
                             <div class="row"> 
                                 <div class="col-lg-12">
                                     <br>
                                     <input type="hidden" name="selection" id="selection" />
                                     <select id="assess" name="swatype" class="form-control col-sm-4"  onchange="getSelectedValue();">
-                                        <option value="<?php //echo empty($gis['gis_option'])?'':$gis['gis_option'] ?>" <?php //echo empty($gis['gis_option'])?'disabled':'' ?> selected><?php //echo empty($gis['gis_option'])?'Select your option':$gis['gis_option'] ?></option>;
+                                        <!-- <option value="<?php //echo empty($gis['gis_option'])?'':$gis['gis_option'] ?>" <?php //echo empty($gis['gis_option'])?'disabled':'' ?> selected><?php //echo empty($gis['gis_option'])?'Select your option':$gis['gis_option'] ?></option>; -->
                                             <?php 
+                                                echo "<option value='' selected>" . "Assessment Option" . "</option>";
                                             $data = $user->assessment_by_socialwork();
                                             foreach ($data as $index => $value) {
                                                 $swa_label = $value['ass_opt'];
@@ -276,39 +536,34 @@ if (!$_SESSION['login']) {
                                 </div>
                             </div>
                             <div class="row"> 
-                                <div class="col-lg-12">
-                                    <label>Problem Presented</label>
-                                    <textarea class="form-control" type="text" id="prob" name="prob" style="height:70px;font-size:12px" required><?php echo empty($gis['problem'])? "" : $gis['problem']; ?></textarea>
-                                </div>
-                            </div>
-                            <div class="row"> 
-                                <div class="col-lg-12">
+                                <div class="col-lg-12"><br>
                                     <label>Social Work Assessment</label>
-                                    <textarea class="form-control"  style="height:80px;font-size:12px;margin-top:-8px" type="text" id="ass" name="ass" id="type" required><?php echo empty($gis['soc_ass'])? "" : $gis['soc_ass']; ?></textarea>
+                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="ass" name="ass" id="type" required><?php echo empty($gis['soc_ass'])? "" : $gis['soc_ass']; ?></textarea>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 15px">
                                 <label class="col-sm-2 label" style="font-size: 20px">Approved by:</label>
                                 <div class="col-sm-4">
-                                    <input list="signatory" type="text" class="form-control mr-sm-2" id="approved" name="approved" required value="<?php echo (empty($gis['signatory_id']) ? '' : $user->getSignatoryFullname($gis['signatory_id'])); ?>" required>
+                                    <input list="signatory" type="text" class="form-control mr-sm-2" id="approved1" name="approved1" required value="<?php echo (empty($gis['signatory_id']) ? '' : $user->getSignatoryFullname($gis['signatory_id'])); ?>" required>
                                     <datalist id="signatory">
                                         <?php
                                             $data = $user->signatoryGIS();
                                             foreach ($data as $index => $value) {
-                                                $signatoryname = $value['first_name'] . " " . $value['middle_I'] . ". " . $value['last_name'];
-                                                echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] ."'></option>";
+                                                $signatoryname = (!empty($value['name_title'])?$value['name_title'] . " ":""). $value['first_name'] . " " . $value['middle_I'] . ". " . $value['last_name'];
+                                                echo "<option data-value='". $value['signatory_id'] ."'>" . strtoupper($signatoryname) . "-" . $value['position'] ."</option>";
                                             }
                                         ?>
                                     </datalist>
+                                    <input type="hidden" class="form-control mr-sm-2" id="approved" name="approved" required value="<?php echo (empty($gis['signatory_id']) ? '' : $gis['signatory_id']); ?>">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div><br>
                 <!--Mga buttons-->
                 <div class="form-group row" >
                     <div class="col"></div>
-                    <div class="col" ><input type="button" class="btn btn-<?php echo (empty($gis) ? "secondary" : "primary") ?> btn-block"  value="Print" name="print" id="print" onclick="printGIS()" <?php echo (empty($gis) ? "disabled" : "") ?> ></div>
+                    <!-- <div class="col" ><input type="button" class="btn btn-<?php echo (empty($gis) ? "secondary" : "primary") ?> btn-block"  value="Print" name="print" id="printgis" onclick="printGIS()" <?php echo (empty($gis) ? "disabled" : "") ?> ></div> -->
                     <div class="col" >
                         <?php if (empty($gis)) { ?>
                         <input type="submit" class="btn btn-primary btn-block"  value="Save" id="save" name="save" <?php echo empty($gis['signature']) ? "" : "disabled"; ?>>
@@ -390,7 +645,24 @@ if (!$_SESSION['login']) {
         <script type="text/javascript" src="../js/gis.js"></script>
         <script type="text/javascript">
 
-        
+             document.getElementById("approved1").addEventListener('input', function(e) {
+                var input = e.target,
+                    list = input.getAttribute('list'),
+                    options = document.querySelectorAll('#' + list + ' option'),
+                    hiddenInput = document.getElementById('approved'),
+                    inputValue = input.value;
+                hiddenInput.value = inputValue;
+
+                for(var i = 0; i < options.length; i++) {
+                    var option = options[i];
+
+                    if(option.innerText === inputValue) {
+                        hiddenInput.value = option.getAttribute('data-value');
+                        break;
+                    }
+                }
+            });
+
             function getSelectedValue() {  
                 var maoni= document.getElementById('assess').value;
                 document.getElementById('selection').value = maoni;  
@@ -536,12 +808,12 @@ if (!$_SESSION['login']) {
                         $("#a2").attr('required', '');
                         $("#pur2").attr('required', '');
                         $("#m2").attr('required', '');
-                        $("#f2").attr('required', '');
+                        $("#fundf2").attr('required', '');
                     } else {
                         $("#a2").removeAttr('required');
                         $("#pur2").removeAttr('required');
                         $("#m2").removeAttr('required');
-                        $("#f2").removeAttr('required');
+                        $("#fundf2").removeAttr('required');
                     }
             }
             
@@ -557,6 +829,7 @@ if (!$_SESSION['login']) {
 
             if(isset($_POST['p1'])){
                 $p1 = mysqli_real_escape_string($user->db, strtoupper($_POST['p1']));
+                $rb1 = mysqli_real_escape_string($user->db, strtoupper($_POST['rb1']));
                 $e1 = $_POST['e1'];
                 $t1 = mysqli_real_escape_string($user->db, strtoupper($_POST['t1']));
                 $b1 = mysqli_real_escape_string($user->db, $_POST['b1']);
@@ -564,6 +837,7 @@ if (!$_SESSION['login']) {
 
             if(isset($_POST['p2'])){
                 $p2 = mysqli_real_escape_string($user->db, strtoupper($_POST['p2']));
+                $rb2 = mysqli_real_escape_string($user->db, strtoupper($_POST['rb2']));
                 $e2 = $_POST['e2'];
                 $t2 = mysqli_real_escape_string($user->db, strtoupper($_POST['t2']));
                 $b2 = mysqli_real_escape_string($user->db, $_POST['b2']);
@@ -571,6 +845,7 @@ if (!$_SESSION['login']) {
 
             if(isset($_POST['p3'])){
                 $p3 = mysqli_real_escape_string($user->db, strtoupper($_POST['p3']));
+                $rb3 = mysqli_real_escape_string($user->db, strtoupper($_POST['rb3']));
                 $e3 = $_POST['e3'];
                 $t3 = mysqli_real_escape_string($user->db, strtoupper($_POST['t3']));
                 $b3 = mysqli_real_escape_string($user->db, $_POST['b3']);
@@ -578,25 +853,32 @@ if (!$_SESSION['login']) {
             
             //SERVICE TABLE DATA's
             $ref_name = "";
-            $s1 = (isset($_POST['psy'])? 1: 0 );
-            $s2 = (isset($_POST['leg'])? 1: 0 );
-            if (isset($_POST["ref"])) {
-                $s3 = 1;
-                $ref_name = mysqli_real_escape_string($user->db, strtoupper($_POST['ref_name']));
-            }else{
-                $s3 = 0;
-            }
-            $s4 = (isset($_POST['fin'])? 1: 0 );
-            
-            //Assisstance TAble Data's
+            $s1 = 0;
+            $s2 = 0;
+            $s3 = 0;
+            $s4 = 0;
+            $s5 = (isset($_POST['pfa'])? 1: 0 );
+            $s6 = (isset($_POST["counseling"])? 1: 0 );
+            $rl1 = "";
+            $rl2 = "";
+            $rl3 = "";
+			if(strtolower($_POST['mode_ad']) != "walk-in") {
+				$rl1 = mysqli_real_escape_string($user->db, $_POST['rl1']);
+				$rl2 = mysqli_real_escape_string($user->db, $_POST['rl2']);
+				$rl3 = mysqli_real_escape_string($user->db, $_POST['rl3']);
+			}
+			
+            //Assistance TAble Data's
             $num = $_POST['num']; //client number sa GIS lng
             $mode_ad = $_POST['mode_ad'];    
             $type1 = $_POST["type1"];
             $pur1 = mysqli_real_escape_string($user->db, strtoupper($_POST["pur1"]));
             $a1 = mysqli_real_escape_string($user->db, $_POST['a1']);
             $m1 = $_POST["m1"];
-            $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
-
+            $f1 = "";
+            if (empty($_POST['fsof1'])) {
+                $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
+            }
             if ($_POST['type2'] == "") {
                 $type2 = "";
                 $pur2 = "";
@@ -620,10 +902,86 @@ if (!$_SESSION['login']) {
             $ass = mysqli_real_escape_string($user->db, strtoupper($_POST["ass"]));
             
             $signatoryGIS = $_POST["approved"]; //signatory approved
+            $fund1 = "";
+            $fund2 = "";
+            $fund3 = "";
+            $fund4 = "";
+            $fund5 = "";
+            if(!empty($_POST['fsof1'])){
+                $fund1 = strtoupper($_POST['fsof1']);
+            }
+            if(!empty($_POST['fsof2'])) {
+                $fund2 = strtoupper($_POST['fsof2']);
+            }
+            if(!empty($_POST['fsof3'])) {
+                $fund3 = strtoupper($_POST['fsof3']);
+            }
+            if(!empty($_POST['fsof4'])) {
+                $fund4 = strtoupper($_POST['fsof4']);
+            }
+            if(!empty($_POST['fsof5'])) {
+                $fund5 = strtoupper($_POST['fsof5']);
+            }
+
+            // new data
+            if(isset($_POST['fhona'])){$targets = 1;}
+            if(isset($_POST['wedc'])){$targets = 2;}
+            if(isset($_POST['pwd'])){$targets = 3;}
+            if(isset($_POST['youth'])){$targets = 4;}
+            if(isset($_POST['sc'])){$targets = 5;}
+            if(isset($_POST['plwhiv'])){$targets = 6;}
+            if(isset($_POST['cnsp'])){$targets = 7;}
             
-            //once save the data of new -> client
-            $user->insertGIS($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
-                                    $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS);
+            if(isset($_POST['solo'])){$subcat = 1;}
+            if(isset($_POST['ip'])){$subcat = 2;}
+            if(isset($_POST['drug'])){$subcat = 3;}
+            if(isset($_POST['4ps'])){$subcat = 4;}
+            if(isset($_POST['dwell'])){$subcat = 5;}
+            if(isset($_POST['mental'])){$subcat = 6;}
+            if(isset($_POST['asylum'])){$subcat = 7;}
+            if(isset($_POST['osc'])){$subcat = 8;}
+            
+            $others_subcat = "";
+            if (!empty($_POST['osc_val'])){$others_subcat = trim($_POST['osc_val']);}
+
+            
+			if(strtolower($type1) == "medical assistance"){
+				if(isset($_POST['hb'])){$if_medical = 1;}
+				if(isset($_POST['medicine'])){$if_medical = 2;}
+				if(isset($_POST['chemo'])){$if_medical = 3;}
+				if(isset($_POST['dia'])){$if_medical = 4;}
+				if(isset($_POST['procedure'])){$if_medical = 5;}
+				if(isset($_POST['laboratory'])){$if_medical = 6;}
+				if(isset($_POST['implant'])){$if_medical = 7;}
+			} else {
+				$if_medical = "";
+			}
+			
+            if(strtolower($type1) == "funeral assistance"){
+				if(isset($_POST['fb'])){$if_burial = 1;}
+				if(isset($_POST['toc'])){$if_burial = 2;}
+				if(isset($_POST['interment'])){$if_burial = 3;}
+			} else {
+				$if_burial = "";
+			}
+
+            if(isset($_POST['medical'])){$financial = 1;}
+            if(isset($_POST['transportation'])){$financial = 2;}
+            if(isset($_POST['food'])){$financial = 3;}
+            if(isset($_POST['fassist'])){$financial = 4;}
+            if(isset($_POST['educational'])){$financial = 5;}
+            if(isset($_POST['casha'])){$financial = 6;}
+            
+            if(isset($_POST['packs'])){$material = 1;}
+            if(isset($_POST['items'])){$material = 2;}
+            if(isset($_POST['kits'])){$material = 3;}
+            if(isset($_POST['devices'])){$material = 4;}
+
+            // print_r($_POST);
+            // once save the data of new -> client
+            $user->insertGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+                                $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
+                                $fund1, $fund2, $fund3, $fund4, $fund5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
 
         if (isset($_POST['update'])) {
@@ -633,23 +991,26 @@ if (!$_SESSION['login']) {
             $p1="";$p2="";$p3="";$e1="";$e2="";$e3="";$t1="";$t2="";$t3="";$b1="";$b2="";$b3=""; //blank sa una 
 
             if(isset($_POST['p1'])){
-                $p1 = mysqli_real_escape_string($user->db, strtoupper($_POST['p1']));
+                $p1 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['p1'])));
+                $rb1 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['rb1'])));
                 $e1 = $_POST['e1'];
-                $t1 = mysqli_real_escape_string($user->db, strtoupper($_POST['t1']));
+                $t1 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['t1'])));
                 $b1 = mysqli_real_escape_string($user->db, $_POST['b1']);
             }
 
             if(isset($_POST['p2'])){
-                $p2 = mysqli_real_escape_string($user->db, strtoupper($_POST['p2']));
+                $p2 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['p2'])));
+                $rb2 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['rb2'])));
                 $e2 = $_POST['e2'];
-                $t2 = mysqli_real_escape_string($user->db, strtoupper($_POST['t2']));
+                $t2 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['t2'])));
                 $b2 = mysqli_real_escape_string($user->db, $_POST['b2']);
             }
 
             if(isset($_POST['p3'])){
-                $p3 = mysqli_real_escape_string($user->db, strtoupper($_POST['p3']));
+                $p3 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['p3'])));
+                $rb3 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['rb3'])));
                 $e3 = $_POST['e3'];
-                $t3 = mysqli_real_escape_string($user->db, strtoupper($_POST['t3']));
+                $t3 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['t3'])));
                 $b3 = mysqli_real_escape_string($user->db, $_POST['b3']);
             }
             //SERVICE TABLE DATA's
@@ -663,7 +1024,17 @@ if (!$_SESSION['login']) {
                 $s3 = 0;
             }
             $s4 = (isset($_POST['fin'])? 1: 0 );
-            
+            $s5 = (isset($_POST['pfa'])? 1: 0 );
+            $s6 = (isset($_POST["counseling"])? 1: 0 );
+            $rl1 = "";
+            $rl2 = "";
+            $rl3 = "";
+			if(strtolower($_POST['mode_ad']) != "walk-in") {
+				$rl1 = mysqli_real_escape_string($user->db, $_POST['rl1']);
+				$rl2 = mysqli_real_escape_string($user->db, $_POST['rl2']);
+				$rl3 = mysqli_real_escape_string($user->db, $_POST['rl3']);
+			}
+			
             //Assisstance TAble Data's
             $num = $_POST['num']; //client number sa GIS lng
             $mode_ad = $_POST['mode_ad'];    
@@ -671,8 +1042,10 @@ if (!$_SESSION['login']) {
             $pur1 = mysqli_real_escape_string($user->db, strtoupper($_POST["pur1"]));
             $a1 = mysqli_real_escape_string($user->db, $_POST['a1']);
             $m1 = $_POST["m1"];
-            $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
-
+            $f1 = "";
+            if (empty($_POST['fsof1'])) {
+                echo $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
+            }
             if ($_POST['type2'] == "") {
                 $type2 = "";
                 $pur2 = "";
@@ -696,19 +1069,93 @@ if (!$_SESSION['login']) {
             $ass = mysqli_real_escape_string($user->db, strtoupper($_POST["ass"]));
             
             $signatoryGIS = $_POST["approved"]; //signatory approved
+            $fund1 = "";
+            $fund2 = "";
+            $fund3 = "";
+            $fund4 = "";
+            $fund5 = "";
+            if(!empty($_POST['fsof1'])){
+                $fund1 = strtoupper($_POST['fsof1']);
+            }
+            if(!empty($_POST['fsof2'])) {
+                $fund2 = strtoupper($_POST['fsof2']);
+            }
+            if(!empty($_POST['fsof3'])) {
+                $fund3 = strtoupper($_POST['fsof3']);
+            }
+            if(!empty($_POST['fsof4'])) {
+                $fund4 = strtoupper($_POST['fsof4']);
+            }
+            if(!empty($_POST['fsof5'])) {
+                $fund5 = strtoupper($_POST['fsof5']);
+            }
             
+            // new data
+            if(isset($_POST['fhona'])){$targets = 1;}
+            if(isset($_POST['wedc'])){$targets = 2;}
+            if(isset($_POST['pwd'])){$targets = 3;}
+            if(isset($_POST['youth'])){$targets = 4;}
+            if(isset($_POST['sc'])){$targets = 5;}
+            if(isset($_POST['plwhiv'])){$targets = 6;}
+            if(isset($_POST['cnsp'])){$targets = 7;}
+            
+            if(isset($_POST['solo'])){$subcat = 1;}
+            if(isset($_POST['ip'])){$subcat = 2;}
+            if(isset($_POST['drug'])){$subcat = 3;}
+            if(isset($_POST['4ps'])){$subcat = 4;}
+            if(isset($_POST['dwell'])){$subcat = 5;}
+            if(isset($_POST['mental'])){$subcat = 6;}
+            if(isset($_POST['asylum'])){$subcat = 7;}
+            if(isset($_POST['osc'])){$subcat = 8;}
+            
+            $others_subcat = "";
+            if (!empty($_POST['osc_val'])){$others_subcat = trim($_POST['osc_val']);}
+
+			if(strtolower($type1) == "medical assistance"){
+				if(isset($_POST['hb'])){$if_medical = 1;}
+				if(isset($_POST['medicine'])){$if_medical = 2;}
+				if(isset($_POST['chemo'])){$if_medical = 3;}
+				if(isset($_POST['dia'])){$if_medical = 4;}
+				if(isset($_POST['procedure'])){$if_medical = 5;}
+				if(isset($_POST['laboratory'])){$if_medical = 6;}
+				if(isset($_POST['implant'])){$if_medical = 7;}
+			} else {
+				$if_medical = "";
+			}
+			
+            if(strtolower($type1) == "funeral assistance"){
+				if(isset($_POST['fb'])){$if_burial = 1;}
+				if(isset($_POST['toc'])){$if_burial = 2;}
+				if(isset($_POST['interment'])){$if_burial = 3;}
+			} else {
+				$if_burial = "";
+			}
+
+            if(isset($_POST['medical'])){$financial = 1;}
+            if(isset($_POST['transportation'])){$financial = 2;}
+            if(isset($_POST['food'])){$financial = 3;}
+            if(isset($_POST['fassist'])){$financial = 4;}
+            if(isset($_POST['educational'])){$financial = 5;}
+            if(isset($_POST['casha'])){$financial = 6;}
+            
+            if(isset($_POST['packs'])){$material = 1;}
+            if(isset($_POST['items'])){$material = 2;}
+            if(isset($_POST['kits'])){$material = 3;}
+            if(isset($_POST['devices'])){$material = 4;}
+
             //once save the data of new -> client
-            $user->updateGIS($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
-            $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS);
+            $user->updateGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+            $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
+            $fund1, $fund2, $fund3, $fund4, $fund5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
 
             //UPDATE CLIENT
         if (isset($_POST['c_update'])) {
                 //Client name
-            echo $lname = mysqli_real_escape_string($user->db, strtoupper($_POST['lname']));
-            echo $mname = mysqli_real_escape_string($user->db, strtoupper($_POST['mname']));
-            echo $fname = mysqli_real_escape_string($user->db, strtoupper($_POST['fname']));
-            echo $exname = mysqli_real_escape_string($user->db, strtoupper($_POST['exname']));
+            echo $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
+            echo $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
+            echo $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
+            echo $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
             echo $bday = $_POST['bday'];
             
             echo $region = mysqli_real_escape_string($user->db, ($_POST['region']));
@@ -729,11 +1176,11 @@ if (!$_SESSION['login']) {
 
             $trans_id = $_GET['id'];
             $b_id = $user->getBene_id($trans_id);
-            $relation = mysqli_real_escape_string($user->db, ucwords($_POST['relation']));
-            $lname = mysqli_real_escape_string($user->db, strtoupper($_POST['lname']));
-            $mname = mysqli_real_escape_string($user->db, strtoupper($_POST['mname']));
-            $fname = mysqli_real_escape_string($user->db, strtoupper($_POST['fname']));
-            $exname = mysqli_real_escape_string($user->db, strtoupper($_POST['exname']));
+            $relation = mysqli_real_escape_string($user->db, trim(ucwords($_POST['relation'])));
+            $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
+            $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
+            $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
+            $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
             $bday = $_POST['bday'];
             $category = mysqli_real_escape_string($user->db, ($_POST['category']));
             $s_category = mysqli_real_escape_string($user->db, ($_POST['s_category']));
@@ -755,11 +1202,11 @@ if (!$_SESSION['login']) {
 
         if(isset($_POST['add_bene'])){
             $trans_id = $_GET['id'];
-            $relation = mysqli_real_escape_string($user->db, ucwords($_POST['relation']));
-            $lname = mysqli_real_escape_string($user->db, strtoupper($_POST['lname']));
-            $mname = mysqli_real_escape_string($user->db, strtoupper($_POST['mname']));
-            $fname = mysqli_real_escape_string($user->db, strtoupper($_POST['fname']));
-            $exname = mysqli_real_escape_string($user->db, strtoupper($_POST['exname']));
+            $relation = mysqli_real_escape_string($user->db, trim(ucwords($_POST['relation'])));
+            $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
+            $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
+            $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
+            $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
             $bday = $_POST['bday'];
             $category = mysqli_real_escape_string($user->db, ($_POST['category']));
             $s_category = mysqli_real_escape_string($user->db, ($_POST['s_category']));
@@ -784,16 +1231,16 @@ if (!$_SESSION['login']) {
     </body>
     <script type="text/javascript">
         function verifyfirst(){
-            t1 = '<?php echo $client_assisstance[1]['type'] ?>';
-            p1 = '<?php echo $client_assisstance[1]['purpose'] ?>';
-            a1 = '<?php echo $client_assisstance[1]['amount'] ?>';
-            m1 = '<?php echo $client_assisstance[1]['mode'] ?>';
-            f1 = '<?php echo $client_assisstance[1]['fund'] ?>';
+            t1 = '<?php echo $client_assistance[1]['type'] ?>';
+            p1 = '<?php echo $client_assistance[1]['purpose'] ?>';
+            a1 = '<?php echo $client_assistance[1]['amount'] ?>';
+            m1 = '<?php echo $client_assistance[1]['mode'] ?>';
+            f1 = '<?php echo $client_assistance[1]['fund'] ?>';
             t2 = $('#type1').val();
             p2 = $('#pur1').val();
             a2 = $('#a1').val();
             m2 = $('#m1').val();
-            f2 = $('#f1').val();
+            f2 = $('#fundf1').val();
             
             if(t1 != t2){
                 $('#toCOE').attr('disabled','disabled');
@@ -837,16 +1284,16 @@ if (!$_SESSION['login']) {
             }
         }
         function verifysecond(){
-            t1 = '<?php echo $client_assisstance[2]['type'] ?>';
-            p1 = '<?php echo $client_assisstance[2]['purpose'] ?>';
-            a1 = '<?php echo $client_assisstance[2]['amount'] ?>';
-            m1 = '<?php echo $client_assisstance[2]['mode'] ?>';
-            f1 = '<?php echo $client_assisstance[2]['fund'] ?>';
+            t1 = '<?php echo $client_assistance[2]['type'] ?>';
+            p1 = '<?php echo $client_assistance[2]['purpose'] ?>';
+            a1 = '<?php echo $client_assistance[2]['amount'] ?>';
+            m1 = '<?php echo $client_assistance[2]['mode'] ?>';
+            f1 = '<?php echo $client_assistance[2]['fund'] ?>';
             t2 = $('#type2').val();
             p2 = $('#pur2').val();
             a2 = $('#a2').val();
             m2 = $('#m2').val();
-            f2 = $('#f2').val();
+            f2 = $('#fundf2').val();
             
             if(t1 != t2){
                 $('#toCOE').attr('disabled','disabled');
@@ -889,5 +1336,703 @@ if (!$_SESSION['login']) {
                 $(this).addClass('btn-success').removeClass('btn-success ');
             }
         }
+
+    </script>
+
+    <div class="modal hide fade" id="additionalFundSource" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Fund Source</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+				<div class="fundsourcebody">
+				    <div class="modal-body">
+                        <div class="row form-group" style="margin-top: 2%; height:10%;">
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fs1" name="fs1" type="text" class="form-control" required>
+                                <label class="active" for="fs1">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fs2" name="fs2" type="text" class="form-control" required disabled>
+                                <label class="active" for="fs2">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fs3" name="fs3" type="text" class="form-control" required disabled>
+                                <label class="active" for="fs3">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fs4" name="fs4" type="text" class="form-control" required disabled>
+                                <label class="active" for="fs4">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-3">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fs5" name="fs5" type text class="form-control " required disabled>
+                                <label class="active" for="fs5">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-3">
+                            </div>
+                        </div>
+                                
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>    
+                    </div>
+                </div>
+			</div>	
+		</div>
+	</div>
+    <script type="text/javascript">
+        
+    	$(document).ready(function(){
+			$('#printgis').on('click', function() {
+				window.location='gis.php?id="'+$_GET["id"]+'"'; 
+			}); 
+		});
+		$(document).ready(function(){
+            if(document.getElementById("fundf1").value == ''){
+                $('#toCOE').attr('disabled','disabled');
+                $('#print').attr('disabled','disabled');
+                $('#print').removeClass('btn-primary').addClass('btn-dark ');
+                $(this).addClass('btn-success').removeClass('btn-primary ');
+                $('#toCOE').removeClass('btn-success').addClass('btn-dark ');
+                $(this).addClass('btn-success').removeClass('btn-success ');
+            }
+            $("#fundf1").keyup(function(){
+                if(document.getElementById("fundf1").value == ''){
+                $('#toCOE').attr('disabled','disabled');
+                $('#print').attr('disabled','disabled');
+                $('#print').removeClass('btn-primary').addClass('btn-dark ');
+                $(this).addClass('btn-success').removeClass('btn-primary ');
+                $('#toCOE').removeClass('btn-success').addClass('btn-dark ');
+                $(this).addClass('btn-success').removeClass('btn-success ');
+            }
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs1").value != ''){
+                if(document.getElementById("fs2").value == ''){
+                    $("#fundf1").attr('disabled', false);
+                }else{
+                    $("#fundf1").attr('disabled', true);
+                }
+                f1 = document.getElementById("fs1").value;
+                document.getElementById('fsof1').value = f1;
+                $("#fs2").attr('disabled', false);
+            }
+            $("#fs1").keyup(function(){
+                f1 = document.getElementById("fs1").value;
+                // console.log(f1);
+			    document.getElementById('fsof1').value = f1;
+                $("#fs2").attr('disabled', false);
+                $("#fundf1").attr('disabled', true);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs2").value != ''){
+                f2 = document.getElementById("fs2").value;
+                document.getElementById('fsof2').value = f2;
+                $("#fs3").attr('disabled', false);
+            }
+            $("#fs2").keyup(function(){
+                f2 = document.getElementById("fs2").value;
+                // console.log(f2);
+			    document.getElementById('fsof2').value = f2;
+                $("#fs3").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs3").value != ''){
+                f3 = document.getElementById("fs3").value;
+                document.getElementById('fsof3').value = f3;
+                $("#fs4").attr('disabled', false);
+            }
+            $("#fs3").keyup(function(){
+                f3 = document.getElementById("fs3").value;
+                // console.log(f3);
+			    document.getElementById('fsof3').value = f3;
+                $("#fs4").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs4").value != ''){
+                f4 = document.getElementById("fs4").value;
+                document.getElementById('fsof4').value = f4;
+                $("#fs5").attr('disabled', false);
+            }
+            $("#fs4").keyup(function(){
+                f4 = document.getElementById("fs4").value;
+                // console.log(f4);
+			    document.getElementById('fsof4').value = f4;
+                $("#fs5").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs5").value != ''){
+                f5 = document.getElementById("fs5").value;
+                document.getElementById('fsof5').value = f5;
+            }
+            $("#fs5").keyup(function(){
+                f5 = document.getElementById("fs5").value;
+                // console.log(f5);
+			    document.getElementById('fsof5').value = f5;
+            });
+        });
+
+
+        $(document).ready(function () {
+            var afterPrint = function () {
+                window.location='gis.php?id=<?php echo $_GET['id'] ?>';
+            };
+            window.onafterprint = afterPrint;
+        });
+
+	    $(function () {
+            var type = $("#type1").val();
+            if(type.toLowerCase()=="medical assistance") {
+                $("#medical_show").show();
+                $("#burial_show").hide();
+            } else if (type.toLowerCase()=="funeral assistance") {
+                $("#medical_show").hide();
+                $("#burial_show").show();
+            } else {
+                $("#medical_show").hide();
+                $("#burial_show").hide();
+            }
+				
+			if(type.toLowerCase()=="medical assistance") {
+				$('#medical').prop('checked', true);
+				$("#transportation").prop('checked', false);
+				$("#food").prop('checked', false);
+				$("#fassist").prop('checked', false);
+				$("#educational").prop('checked', false);
+				$("#casha").prop('checked', false);
+			} else if (type.toLowerCase()=="funeral assistance") {
+				$('#medical').prop('checked', false);
+				$("#transportation").prop('checked', false);
+				$("#food").prop('checked', false);
+				$("#fassist").prop('checked', true);
+				$("#educational").prop('checked', false);
+				$("#casha").prop('checked', false);
+			} else if (type.toLowerCase()=="food subsidy assistance") {
+				$('#medical').prop('checked', false);
+				$("#transportation").prop('checked', false);
+				$("#food").prop('checked', true);
+				$("#fassist").prop('checked', false);
+				$("#educational").prop('checked', false);
+				$("#casha").prop('checked', false);
+			} else if (type.toLowerCase()=="transportation assistance") {
+				$('#medical').prop('checked', false);
+				$("#transportation").prop('checked', true);
+				$("#food").prop('checked', false);
+				$("#fassist").prop('checked', false);
+				$("#educational").prop('checked', false);
+				$("#casha").prop('checked', false);
+			} else if (type.toLowerCase()=="educational assistance") {
+				$('#medical').prop('checked', false);
+				$("#transportation").prop('checked', false);
+				$("#food").prop('checked', false);
+				$("#fassist").prop('checked', false);
+				$("#educational").prop('checked', true);
+				$("#casha").prop('checked', false);
+			} else if (type.toLowerCase()=="other cash assistance") {
+				$('#medical').prop('checked', false);
+				$("#transportation").prop('checked', false);
+				$("#food").prop('checked', false);
+				$("#fassist").prop('checked', false);
+				$("#educational").prop('checked', false);
+				$("#casha").prop('checked', true);
+			} else if (type.toLowerCase()=="material assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', false);
+				}
+			
+            $("#type1").on("change", function () {
+                var type = $("#type1").val();
+                if(type.toLowerCase()=="medical assistance") {
+                    $("#medical_show").show();
+                    $("#burial_show").hide();
+                } else if (type.toLowerCase()=="funeral assistance") {
+                    $("#medical_show").hide();
+                    $("#burial_show").show();
+                } else {
+                    $("#medical_show").hide();
+                    $("#burial_show").hide();
+                }
+				
+				if(type.toLowerCase()=="medical assistance") {
+					$('#medical').prop('checked', true);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', false);
+				} else if (type.toLowerCase()=="funeral assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', true);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', false);
+				} else if (type.toLowerCase()=="food subsidy assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', true);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', false);
+				} else if (type.toLowerCase()=="transportation assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', true);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', false);
+				} else if (type.toLowerCase()=="educational assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', true);
+					$("#casha").prop('checked', false);
+				} else if (type.toLowerCase()=="other cash assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', true);
+				} else if (type.toLowerCase()=="material assistance") {
+					$('#medical').prop('checked', false);
+					$("#transportation").prop('checked', false);
+					$("#food").prop('checked', false);
+					$("#fassist").prop('checked', false);
+					$("#educational").prop('checked', false);
+					$("#casha").prop('checked', false);
+				}
+            }); 
+        });
+		
+		//referral JS
+		
+		$(document).ready(function(){
+			var mode = $("#mode_ad").val();
+			$("#refer1").keyup(function(){
+                if(document.getElementById("refer1").value != ''){
+					$("#refer2").attr('disabled', false);
+					$("#refer3").attr('disabled', true);
+				} else if(document.getElementById("refer2").value != '') {
+					$("#refer2").attr('disabled', false);
+					$("#refer3").attr('disabled', false);
+				}
+            });
+			
+            if(mode.toLowerCase()=="walk-in") {
+				$("#refer1").prop('disabled', true);
+				$("#refer2").prop('disabled', true);
+				$("#refer3").prop('disabled', true);
+			} else if (mode.toLowerCase()=="referral") {
+				$("#refer1").prop('disabled', false);
+				$("#refer2").prop('disabled', true);
+				$("#refer3").prop('disabled', true);
+			}
+			$("#mode_ad").on("change", function () {
+                var mode = $("#mode_ad").val();
+                
+				if(mode.toLowerCase()=="walk-in") {
+					$("#refer1").prop('disabled', true);
+					$("#refer2").prop('disabled', true);
+					$("#refer3").prop('disabled', true);
+				} else if (mode.toLowerCase()=="referral") {
+					$("#refer1").prop('disabled', false);
+					$("#refer2").prop('disabled', true);
+					$("#refer3").prop('disabled', true);
+				}
+            }); 
+			
+            if(document.getElementById("refer1").value != ''){
+				$("#refer2").attr('disabled', false);
+			}else{
+				$("#refer2").attr('disabled', true);
+            }
+            $("#refer1").keyup(function(){
+                if(document.getElementById("refer1").value != ''){
+					$("#refer2").attr('disabled', false);
+					$("#refer3").attr('disabled', true);
+				} else {
+					$("#refer2").attr('disabled', true);
+					$("#refer3").attr('disabled', true);
+				}
+            });
+        });
+		
+        $(document).ready(function(){
+            if(document.getElementById("refer2").value != ''){
+                $("#refer3").attr('disabled', false);
+            }
+            $("#refer2").keyup(function(){
+				if(document.getElementById("refer2").value != ''){
+					$("#refer3").attr('disabled', false);
+				} else {
+					$("#refer3").attr('disabled', true);
+				}
+            });
+        });
+		
+		// ----------
+
+        $(function () {
+            $("#fhona").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#wedc").removeAttr("checked");
+                    $("#pwd").removeAttr("checked");
+                    $("#youth").removeAttr("checked");
+                    $("#sc").removeAttr("checked");
+                    $("#plwhiv").removeAttr("checked");
+                    $("#cnsp").removeAttr("checked");
+                }
+            });
+            $("#wedc").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#fhona").removeAttr("checked");
+                    $("#pwd").removeAttr("checked");
+                    $("#youth").removeAttr("checked");
+                    $("#sc").removeAttr("checked");
+                    $("#plwhiv").removeAttr("checked");
+                    $("#cnsp").removeAttr("checked");
+                }
+            });
+            $("#pwd").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#wedc").removeAttr("checked");
+                    $("#fhona").removeAttr("checked");
+                    $("#youth").removeAttr("checked");
+                    $("#sc").removeAttr("checked");
+                    $("#plwhiv").removeAttr("checked");
+                    $("#cnsp").removeAttr("checked");
+                }
+            });
+            $("#youth").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#wedc").removeAttr("checked");
+                    $("#pwd").removeAttr("checked");
+                    $("#fhona").removeAttr("checked");
+                    $("#sc").removeAttr("checked");
+                    $("#plwhiv").removeAttr("checked");
+                    $("#cnsp").removeAttr("checked");
+                }
+            });
+            $("#sc").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#wedc").removeAttr("checked");
+                    $("#pwd").removeAttr("checked");
+                    $("#youth").removeAttr("checked");
+                    $("#fhona").removeAttr("checked");
+                    $("#plwhiv").removeAttr("checked");
+                    $("#cnsp").removeAttr("checked");
+                }
+            });
+            $("#plwhiv").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#wedc").removeAttr("checked");
+                    $("#pwd").removeAttr("checked");
+                    $("#youth").removeAttr("checked");
+                    $("#sc").removeAttr("checked");
+                    $("#fhona").removeAttr("checked");
+                    $("#cnsp").removeAttr("checked");
+                }
+            });
+            $("#cnsp").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#wedc").removeAttr("checked");
+                    $("#pwd").removeAttr("checked");
+                    $("#youth").removeAttr("checked");
+                    $("#sc").removeAttr("checked");
+                    $("#fhona").removeAttr("checked");
+                    $("#plwhiv").removeAttr("checked");
+                }
+            });
+        });
+        
+        $(function () {
+            $("#solo").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#ip").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#solo").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#drug").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#solo").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#4ps").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#solo").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#dwell").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#solo").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#mental").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#solo").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#asylum").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#solo").removeAttr("checked");
+                    $("#osc").removeAttr("checked");
+                }
+            });
+            $("#osc").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#ip").removeAttr("checked");
+                    $("#drug").removeAttr("checked");
+                    $("#4ps").removeAttr("checked");
+                    $("#dwell").removeAttr("checked");
+                    $("#mental").removeAttr("checked");
+                    $("#asylum").removeAttr("checked");
+                    $("#solo").removeAttr("checked");
+                }
+            });
+        });
+
+        $(function () {
+            $("#hb").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicine").removeAttr("checked");
+                    $("#chemo").removeAttr("checked");
+                    $("#dia").removeAttr("checked");
+                    $("#procedure").removeAttr("checked");
+                    $("#laboratory").removeAttr("checked");
+                    $("#implant").removeAttr("checked");
+                }
+            });
+            $("#medicine").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#hb").removeAttr("checked");
+                    $("#chemo").removeAttr("checked");
+                    $("#dia").removeAttr("checked");
+                    $("#procedure").removeAttr("checked");
+                    $("#laboratory").removeAttr("checked");
+                    $("#implant").removeAttr("checked");
+                }
+            });
+            $("#chemo").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicine").removeAttr("checked");
+                    $("#hb").removeAttr("checked");
+                    $("#dia").removeAttr("checked");
+                    $("#procedure").removeAttr("checked");
+                    $("#laboratory").removeAttr("checked");
+                    $("#implant").removeAttr("checked");
+                }
+            });
+            $("#dia").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicine").removeAttr("checked");
+                    $("#chemo").removeAttr("checked");
+                    $("#hb").removeAttr("checked");
+                    $("#procedure").removeAttr("checked");
+                    $("#laboratory").removeAttr("checked");
+                    $("#implant").removeAttr("checked");
+                }
+            });
+            $("#procedure").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicine").removeAttr("checked");
+                    $("#chemo").removeAttr("checked");
+                    $("#dia").removeAttr("checked");
+                    $("#hb").removeAttr("checked");
+                    $("#laboratory").removeAttr("checked");
+                    $("#implant").removeAttr("checked");
+                }
+            });
+            $("#laboratory").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicine").removeAttr("checked");
+                    $("#chemo").removeAttr("checked");
+                    $("#dia").removeAttr("checked");
+                    $("#procedure").removeAttr("checked");
+                    $("#hb").removeAttr("checked");
+                    $("#implant").removeAttr("checked");
+                }
+            });
+            $("#implant").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medicine").removeAttr("checked");
+                    $("#chemo").removeAttr("checked");
+                    $("#dia").removeAttr("checked");
+                    $("#procedure").removeAttr("checked");
+                    $("#laboratory").removeAttr("checked");
+                    $("#hb").removeAttr("checked");
+                }
+            });
+        });
+
+        $(function () {
+            $("#fb").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#toc").removeAttr("checked");
+                    $("#interment").removeAttr("checked");
+                }
+            });
+            $("#toc").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#fb").removeAttr("checked");
+                    $("#interment").removeAttr("checked");
+					
+                }
+            });
+            $("#interment").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#fb").removeAttr("checked");
+                    $("#toc").removeAttr("checked");
+                }
+            });
+        });
+
+        $(function () {
+            $("#medical").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#transportation").removeAttr("checked");
+                    $("#food").removeAttr("checked");
+                    $("#fassist").removeAttr("checked");
+                    $("#educational").removeAttr("checked");
+                    $("#casha").removeAttr("checked");
+                }
+            });
+            $("#transportation").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#medical").removeAttr("checked");
+                    $("#food").removeAttr("checked");
+                    $("#fassist").removeAttr("checked");
+                    $("#educational").removeAttr("checked");
+                    $("#casha").removeAttr("checked");
+                }
+            });
+            $("#food").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#transportation").removeAttr("checked");
+                    $("#medical").removeAttr("checked");
+                    $("#fassist").removeAttr("checked");
+                    $("#educational").removeAttr("checked");
+                    $("#casha").removeAttr("checked");
+                }
+            });
+            $("#fassist").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#transportation").removeAttr("checked");
+                    $("#food").removeAttr("checked");
+                    $("#medical").removeAttr("checked");
+                    $("#educational").removeAttr("checked");
+                    $("#casha").removeAttr("checked");
+                }
+            });
+            $("#educational").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#transportation").removeAttr("checked");
+                    $("#food").removeAttr("checked");
+                    $("#fassist").removeAttr("checked");
+                    $("#medical").removeAttr("checked");
+                    $("#casha").removeAttr("checked");
+                }
+            });
+            $("#casha").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#transportation").removeAttr("checked");
+                    $("#food").removeAttr("checked");
+                    $("#fassist").removeAttr("checked");
+                    $("#educational").removeAttr("checked");
+                    $("#medical").removeAttr("checked");
+                }
+            });
+        });
+		
+        $(function () {
+            $("#packs").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#items").removeAttr("checked");
+                    $("#kits").removeAttr("checked");
+                    $("#devices").removeAttr("checked");
+                }
+            });
+            $("#items").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#packs").removeAttr("checked");
+                    $("#kits").removeAttr("checked");
+                    $("#devices").removeAttr("checked");
+                }
+            });
+            $("#kits").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#items").removeAttr("checked");
+                    $("#packs").removeAttr("checked");
+                    $("#devices").removeAttr("checked");
+                }
+            });
+            $("#devices").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#items").removeAttr("checked");
+                    $("#kits").removeAttr("checked");
+                    $("#packs").removeAttr("checked");
+                }
+            });
+        });
     </script>
 </html>

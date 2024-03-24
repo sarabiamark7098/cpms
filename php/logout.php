@@ -3,8 +3,8 @@
 	require("class.user.php");
 	
 	$user = new User;
-	
-	$result = $user->logout_log();
+
+	$result = $user->user_logout();
 	if($result){
 		$user->user_logout();
 		header('Location: ../index.php');

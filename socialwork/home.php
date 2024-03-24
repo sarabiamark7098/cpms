@@ -278,5 +278,24 @@
                 }
             });  
         })
+               			$(document).ready(function () {
+                            const debouncedSearch = debounce(function () {
+                                var txt = $('#search_client').val();
+                                if (txt !== '') {
+                                    $.ajax({
+                                        type: "post",
+                                        url: "fetch.php",
+                                        data: { search: txt },
+                                        success: function (html) {
+                                            $('#search_result').html(html).show();
+                                        }
+                                    });
+                                } else {
+                                    $('#search_result').html("");
+                                }
+                            }, 500); 
+
+                            $('#search_client').keyup(debouncedSearch);
+                        });
 	</script>
 </html>

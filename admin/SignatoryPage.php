@@ -20,11 +20,14 @@
 	
 	if(isset($_POST['Add'])) {
 		// $setid = $_POST['empid'];
+		$settitle = ucwords($_POST['title']);
 		$setfirstname = ucwords($_POST['fname']);
 		$setlastname = ucwords($_POST['lname']);
 		$setmiddleI = strtoupper($_POST['mi']);
 		$setinitials = strtoupper($_POST['initials']);
-		$setposition = strtoupper($_POST['position']);
+		$setposition = $_POST['position'];
+		$set_s_tree = strtoupper($_POST['s_tree']);
+		$set_s_signatory = strtoupper($_POST['s_signatory']);
 		$checkgisce = 0;
 		$checkgl = 0;
 		if(isset($_POST['gis_ce_check'])){
@@ -33,10 +36,8 @@
 		if(isset($_POST['gl_check'])){
 			$checkgl = 1;
 		}
-		$setrange_start = $_POST['rangestart'];
-		$setrange_end = $_POST['rangeend'];
 		
-		$result = $user->addsignatory($setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $checkgisce, $checkgl, $setrange_start, $setrange_end);
+		$result = $user->addsignatory($settitle, $setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $checkgisce, $checkgl, $set_s_tree, $set_s_signatory);
 		
 		if($result){
 			echo "<script>alert('Successfully Adding Signatory!');</script>";
@@ -123,6 +124,18 @@
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                 </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
             </ul>
         </nav>
 
@@ -171,7 +184,7 @@
 												foreach($getuser as $index => $value){
 												echo "<tr>
 															<td scope='row' style='width: 15%'>" . $value["signatory_id"] . "</td> 
-															<td>" . $value["last_name"] . ", ". $value["first_name"] ." ". $value["middle_I"] .". </td>
+															<td>" . $value["name_title"] . " ". $value["first_name"] ." ". $value["middle_I"] . ". " . $value["last_name"] ." </td>
 															<td scope='row'>" . $value["position"] . "</td>
 															<td style='width: 25%'>
 															<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["signatory_id"] . "' style='margin-right: 10px;' data-target='#SignatoryInfo'> View </button>
@@ -190,7 +203,7 @@
 												foreach($getuser as $index => $value){
 												echo "<tr>
 															<td scope='row' style='width: 15%'>" . $value["signatory_id"] . "</td> 
-															<td>" . $value["last_name"] . ", ". $value["first_name"] ." ". $value["middle_I"] .". </td>
+															<td>" . $value["name_title"] . " ". $value["first_name"] ." ". $value["middle_I"] . " " . $value["last_name"] ." </td>
 															<td scope='row'>" . $value["position"] . "</td>
 															<td style='width: 25%'>
 															<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["signatory_id"] . "' style='margin-right: 10px;' data-target='#SignatoryInfo'> View </button>

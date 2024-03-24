@@ -132,7 +132,7 @@
                             <input class="form-control border border-black" type="text" name="search_text" id="search_text" placeholder="Search"></input>
                         </div>
                     </div>
-                    <?php $getclient = $user->showdataServed();
+                    <?php $getclient = $user->showdataServedforReissue();
                     if(mysqli_num_rows($getclient) > 0){
                         echo "<tr><h5 class='text-success text-center'>Search to Show data</h5></tr>";
                     } else {
@@ -156,26 +156,60 @@
                         <tbody id="search_result">
                         </tbody>
                     </table>
-                
                 <script>
-                    $(document).ready(function(){
-                        $('#search_text').keyup(function(){  //On pressing a key on "Search box". This function will be called
-                            var txt = $('#search_text').val(); //Assigning search box value to javascript variable.
-                            // console.log(txt);
-                            if(txt != ''){ //Validating, if "name" is empty.
-                                $.ajax({
-                                    type: "post", //method to use
-                                    url: "fetch.php", //ginapasa  sa diri nga file and data
-                                    data: {search_client:txt}, //mao ni nga data
-                                    success: function(html){  //If result found, this funtion will be called.
-                                        $('#search_result').html(html).show();  //Assigning result to "#result" div.
-                                    }
-                                });
-                            }else{
-                            $('#search_result').html(""); //Assigning no result to "result" div.
-                            }
+                        // Custom debounce function
+                        function debounce(func, wait) {
+                            let timeout;
+                            return function () {
+                                const context = this;
+                                const args = arguments;
+                                clearTimeout(timeout);
+                                timeout = setTimeout(function () {
+                                    func.apply(context, args);
+                                }, wait);
+                            };
+                        }
+
+                        $(document).ready(function () {
+                            const debouncedSearch = debounce(function () {
+                                var txt = $('#search_text').val();
+                                if (txt !== '') {
+                                    $.ajax({
+                                        type: "post",
+                                        url: "fetch.php",
+                                        data: { search_client: txt },
+                                        success: function (html) {
+                                            $('#search_result').html(html).show();
+                                        }
+                                    });
+                                } else {
+                                    $('#search_result').html("");
+                                }
+                            }, 1000); 
+
+                            $('#search_text').keyup(debouncedSearch);
                         });
-                    });
+                    </script>
+                <script>
+                    // $(document).ready(function(){
+                    //     $('#search_text').keyup(function(){  //On pressing a key on "Search box". This function will be called
+                    //         var txt = $('#search_text').val(); //Assigning search box value to javascript variable.
+                    //         // console.log(txt);
+                    //         if(txt != ''){ //Validating, if "name" is empty.
+                    //             $.ajax({
+                    //                 type: "post", //method to use
+                    //                 url: "fetch.php", //ginapasa  sa diri nga file and data
+                    //                 data: {search_client:txt}, //mao ni nga data
+                    //                 success: function(html){  //If result found, this funtion will be called.
+                    //                     $('#search_result').html(html).show();  //Assigning result to "#result" div.
+                    //                 }
+                    //             });
+                    //         }else{
+                    //         $('#search_result').html(""); //Assigning no result to "result" div.
+                    //         }
+                    //     });
+                    // });
+                    
                 </script>
             </div>
             </div>
@@ -198,6 +232,12 @@
         //file that process the re-issue
         function re_issue(id){
             window.location.href = "re_issue.php?id=" + id;
+        }
+        function re_issue_for_the(id){
+            window.location.href = "re_issue_for_the.php?id=" + id;
+        }
+		function update_document(id){
+            window.location.href = "socialworkupdate/gis.php?id=" + id;
         }
     </script>
     

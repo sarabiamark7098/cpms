@@ -16,14 +16,18 @@
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
         
-        $name =  $client["firstname"]." ". strtoupper($client["middlename"][0]) .". ". $client["lastname"];
+        $name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"];
 		if(!empty($client['extraname'])){
-			$name .= " ". $client['extraname'];
+			$name .= " ". $client['extraname'].".";
 		}
-		$bname =  $client["b_fname"]." ". strtoupper($client["b_mname"][0]) .". ". $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname']: "");
+		$bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname'].".": "");
         $signatoryGLNamePos = "";
         if(!empty($signatoryGL)){
-            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". $signatoryGL['middle_I'] .". ". $signatoryGL['last_name'] ."-". $signatoryGL['position'] ."-". $signatoryGL['initials']);
+            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position'] ."-". $signatoryGL['initials']);
+        }
+        $am = str_replace(",","",$client_assistance[1]['amount']);
+        if($am > 50000){
+            $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
         }
         //ADDRESS
         $c_add = '';
@@ -56,7 +60,20 @@
         //magkuhag data if ever naa na s database
         $gl = $user->getGL($_GET['id']); //gl table
         $cash = $user->getCash($_GET['id']); //cash table
+        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 
+		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
+        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+        $GISsignatoryPosition = $GISsignatory['position'];
+        
+		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
+        $GLsignatoryPosition = $GLsignatory['position'];
+		
+		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+        
         $mode1 = "";
         $mode2 = "";
 
@@ -115,17 +132,6 @@
                 font-size: 17pt;
                 font-family: 'Times New Roman', Times, serif;
                 text-align: justify;
-            }
-            @page {
-                size: 8.5in 13in;
-                margin: .10in /* change the margins as you want them to be. */
-            }
-
-            @media print{
-                html, body {
-                    width: 210mm;
-                    height: 297mm;
-                }
             }
 		</style>
     </head>
@@ -195,12 +201,30 @@
                                         <input type="email" class="form-control text-dark" value="<?php echo $name ?>" readonly>
                                         </div>
                                     </div><br>
+                                    <?php if(!empty($bname)){ if($bname != " "){ ?>
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <label for="email"> <b>Beneficiary Name</b></label>
+                                        </div>
+                                        <div class="col-10">
+                                        <input type="email" class="form-control text-dark" value="<?php echo $bname ?>" readonly>
+                                        </div>
+                                    </div><br>
+                                    <?php }} ?>
                                     <div class="row">
                                         <div class="col-2">
                                             <label for="email"> <b>Service</b></label>
                                         </div>
                                         <div class="col-10">
                                             <input type="email" class="form-control text-dark" value="<?php echo $client_assistance[1]['type'] ?>" readonly>
+                                        </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <label for="email"> <b>Amount</b></label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input type="email" class="form-control text-dark" value="<?php echo $client_assistance[1]['amount'] ?>" readonly>
                                         </div>
                                     </div><br>
                                     <?php if(isset($client_assistance[2])){ ?>
@@ -211,7 +235,15 @@
                                         <div class="col-10">
                                             <input type="email" class="form-control text-dark" value="<?php echo $client_assistance[2]['type'] ?>" readonly>
                                         </div>
-                                    </div><br>  
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <label for="email"> <b>Second Amount</b></label>
+                                        </div>
+                                        <div class="col-10">
+                                            <input type="email" class="form-control text-dark" value="<?php echo $client_assistance[2]['amount'] ?>" readonly>
+                                        </div>
+                                    </div><br>
                                 <?php }?>
                                     <div class="row">
                                         <div class="col-2">
@@ -245,7 +277,7 @@
                                                         <label for="email"> <b>GL NUMBER (mode-number)</b></label>
                                                     </div>
                                                     <div class="col-10">
-                                                    <input type="email" class="form-control text-dark" value="<?php echo $client_assistance[1]['fund'] ."-". $gl['control_no'] ?>" readonly>
+                                                    <input type="email" class="form-control text-dark" <?php echo empty($client_assistance[1]) ? "" : "onkeyup='verifyfirst()'" ?> value="<?php echo $gl['control_no'] ?>" readonly>
                                                     </div>
                                                 </div>
                                                 <br>

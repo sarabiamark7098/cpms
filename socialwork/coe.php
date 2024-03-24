@@ -8,12 +8,30 @@
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
 
         $gis = $user->getGISData($client['trans_id']);
+        $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
+        $client_fam = $user->getclientFam($_GET['id']);
+        // print_r($client_fam);
         $GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
-        $GISsignatoryName = strtoupper($GISsignatory['first_name'] ." ". $GISsignatory['middle_I'] .". ". $GISsignatory['last_name']);
+        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+        $GISsignatoryPosition = $GISsignatory['position'];
         
-        $name =  $client["firstname"]." ". (!empty($client["middlename"][0])?strtoupper($client["middlename"][0]) .". ":""). $client["lastname"]." ". (!empty($client['extraname'])?$client['extraname']:"");
-        $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?strtoupper($client["b_mname"][0]) .". ":""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname']:""); 
-        
+		$name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"]." ". (!empty($client['extraname'])?$client['extraname'].".":"");
+        $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname'].".":""); 
+        if(!empty($client["b_lname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['b_bday']), date_create($today));
+			$age_bene = $diff->format('%y');
+		}elseif(!empty($client["lastname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['date_birth']), date_create($today));
+			$age_client = $diff->format('%y');
+		}else{
+			$age_bene = "";
+		}
+		
+		$soc_worker = $user->getuserInfo($_SESSION['userId']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
         
         $clientbarangay = explode(" /", $client["client_barangay"]);
 		$clientmunicipality = explode(" /", $client["client_municipality"]);
@@ -28,30 +46,38 @@
         $amountToWord = $user->toWord($client_assistance[1]['amount']);
   
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
+        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
   
         if($record){
             $COEsignatory= $user->getsignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
-            $COEsignatoryName = strtoupper($COEsignatory['first_name'] ." ". $COEsignatory['middle_I'] .". ". $COEsignatory['last_name']);
+            $COEsignatoryName = (!empty($COEsignatory['name_title'])?$COEsignatory['name_title'] ." ":""). strtoupper($COEsignatory['first_name'] ." ". (!empty($COEsignatory['middle_I'])?$COEsignatory['middle_I'] .". ":""). $COEsignatory['last_name']);
         }
-
+        
         $soc_worker = $user->getuserInfo($_SESSION['userId']); //get soc-worker data from database
     
         $am = (str_replace(",","",$client_assistance[1]['amount']));
         $am2 = "";
         
         if(!empty($client_assistance[2]['amount'])){
+			$amountToWord2 = $user->toWord($client_assistance[2]['amount']);
 			$am2 = (str_replace(",","",$client_assistance[2]['amount']));
         }
         //print_r($record);
-		$fund1 = "";
         $fund2 = "";
-
-        $fund1 = explode("/",$client_assistance[1]['fund']);
         
         if(!empty($client_assistance[2]['fund'])){
             $fund2 = explode("/",$client_assistance[2]['fund']);
         }
         $type = strval($client_assistance[1]['type']);
+        $rec_amount = 50001;
+		
+		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
+        $GLsignatoryPosition = $GLsignatory['position'];
+		
+        $mode1 = $client_assistance[1]['mode'];
+        $cash = $user->getCash($_GET['id']); //cash table
+        
     }
 
     if(isset($_GET['option'])){
@@ -63,6 +89,8 @@
             }
         }
     }
+		
+		
 
 ?>
 <?php
@@ -74,7 +102,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"> 
-        <script type="text/javascript" src="../js/main.js"></script>
+        <script type="text/javascript" src="../js/maince.js"></script>
         <link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
         <script type="text/javascript" src="../js/bootstrap.min.js"></script>
@@ -138,7 +166,7 @@
         <br> 
         <form action="coe.php?id=<?php echo $_GET['id']?>" method="post">
             <div class="container">
-                <?php if($am > 5000 || $am2 > 5000){ ?>
+                <?php if($am >= $rec_amount || $am2 >= $rec_amount){?>
                     <div class="row">
                         <div class="container">
                         <div class="card">
@@ -146,19 +174,39 @@
                                 <b>Signatory</b>
                             </div>
                             <div class="card-body">
-                                Amount is more than Five Thousand (5000).
+                                Amount is more than Twenty Thousand Pesos (Php 50,000).
                                 <div>
+                                    
                                 <label> Approved By : </label>&nbsp&nbsp&nbsp
-                                    <input style="text-transform: uppercase; width:50%" list="coesign" name="coesignName" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullname($client['signatory_GL']) ?>" required>
+                                    <input style="text-transform: uppercase; width:50%" id="coesignatoryid1" list="coesign" name="coesignName1" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullname($client['signatory_GL']) ?>" required>
                                     <datalist id="coesign">
                                         <?php 
                                             $data = $user->signatoryGIS();
                                             foreach($data as $index => $value){
-                                                $signatoryname = $value['first_name'] ." ". $value['middle_I'] .". ". $value['last_name'];
-                                                echo "<option value='".strtoupper($signatoryname)."-".$value['position']."'>". $signatoryname ."</option>";
+                                                $signatoryname = (empty($value['name_title'])?"":$value['name_title'] ." "). $value['first_name'] ." ". $value['middle_I'] .". ". $value['last_name'];
+                                                echo "<option data-value='". $value['signatory_id'] ."'>".strtoupper($signatoryname)."-".$value['position']."</option>";
                                             } 
                                         ?>
                                     </datalist>
+                                    <input type="hidden" id="coesignatoryid" name="coesignName" value="<?php echo empty($client['signatory_GL'])?"":$client['signatory_GL'] ?>">
+                                </div>
+                            </div>
+                        </div> 
+                        <br> 
+                        </div>
+                    </div>
+                <?php }?>
+				<?php if(strtolower($mode1) == "cav"){?>
+                    <div class="row">
+                        <div class="container">
+                        <div class="card">
+                            <div class="card-header bg-success border-success text-white">
+                                <b>Cash Assistance Voucher SDO</b>
+                            </div>
+                            <div class="card-body">
+                                <div>
+									<label> Special Disbursing Officer : </label>&nbsp&nbsp&nbsp
+									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo $cash['sd_officer'] ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
                                 </div>
                             </div>
                         </div> 
@@ -175,10 +223,10 @@
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck($record['document'], "", "Referral") ?>> Referral</div>
+                                        <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck($record['document'], "", "Referral") ?>> Referral Letter</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="soc" value="Social Case Study" <?php echo $user->checkCheck($record['document'], "", "Social") ?>> Social Case Study</div>
+                                        <div><input type="checkbox" class="lg" name="soc" value="Social Case Study" <?php echo $user->checkCheck($record['document'], "", "Social") ?>> Social Case Study Report</div>
                                     </div>
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" name="just" value="Justification" <?php echo $user->checkCheck($record['document'], "", "Justification") ?>> Justification</div>
@@ -203,7 +251,7 @@
                                         </div> 
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="brgy" value="Barangay"  <?php echo $user->checkCheck($record['document'], "", "Barangay") ?>> BRGY Certificate/Indigency</div>
+                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
                                     </div>
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck($record['document'], "", "Others") ?>> Others: 
@@ -228,19 +276,16 @@
                                             <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH").'> Death Summary</div>
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row">   
                                             <div><input type="checkbox" class="lg" name="dis_sum" id="dis_sum" value="DISCHARGE SUMMARY" '.$user->checkCheck($record['document'], "", "DISCHARGE").'> Discharge Summary</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="tr_pro" id="tr_pro" value="TREATMENT PROTOCOL" '.$user->checkCheck($record['document'], "", "TREATMENT").'> Treatment Protocol</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg"  name="vacc" id="vacc" value="VACCINATION" '.$user->checkCheck($record['document'], "", "VACCINATION").'> Vaccination</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck($record['document'], "", "LAB REQUEST").'> Lab Request</div>
+                                            <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck($record['document'], "", "LAB REQUEST").'> Laboratory Request</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="charge" id="charge" value="CHARGE SLIP" '.$user->checkCheck($record['document'], "", "CHARGE SLIP").'> Charge Slip</div>
@@ -256,41 +301,16 @@
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Trans") > 0){
-                                        echo 'None';    
+                                        echo 'None';   
                                     }elseif(substr_count(strval($type), "Educ") > 0){
+                                        echo 'None'; 
+                                    }elseif(substr_count(strval($type), "Funeral") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="regForm" id="regForm" value="Registration Form" '. $user->checkCheck($record['document'], "", "registration form") .'> Registration Form</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="assForm" id="assForm" value="Assessment Form" '. $user->checkCheck($record['document'], "", "assessment form") .'> Assessment Form</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="enrolForm" id="enrolForm" value="Certificate of Enrollment Form" '. $user->checkCheck($record['document'], "", "enrollment form") .'> Certificate of Enrollment Form</div>
-                                        </div>  
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="stAcc" id="stAcc" value="Statement of Account" '. $user->checkCheck($record['document'], "", "statement of account") .'> Statement of Account</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="sID" id="sID" value="School ID" '. $user->checkCheck($record['document'], "", "school id") .'> School ID</div>
-                                        </div>
-                                        ';
-                                    }elseif(substr_count(strval($type), "Burial") > 0){
-                                        echo '
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck($record['document'], "", "DEATH").'> Registered Death Certificate</div>
+                                            <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck($record['document'], "", "DEATH CERTIFICATE").'> Death Certificate</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="perT" id="perT" value="PERMIT TO TRANSFER" '.$user->checkCheck($record['document'], "", "TRANSFER").'> Permit to Transfer</div>
-                                        </div>  
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="quaP" id="quaP" value="QUARANTINE PERMIT" '.$user->checkCheck($record['document'], "", "QUARANTINE").'> Quarantine Permit</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="prom" id="proN" value="PROMISSORY NOTE" '.$user->checkCheck($record['document'], "", "PROMISSORY").'> Promissory Note</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Food") > 0){
@@ -306,7 +326,7 @@
                 </div><br>
 
                 <?php   
-                    if(!empty($fund1[1]) || !empty($fund2[1])){ ?>
+                    if(!empty($fundsourcedata[1]['fundsource']) && !empty($fundsourcedata[2]['fundsource'])){ ?>
                     <div class=row>
                         <div class="col-2"></div>
                         <div class="col-8">
@@ -317,7 +337,7 @@
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="row">
-                                            <?php if(!empty($fund1[1]) && !empty($fund1[0])){ ?>
+                                            <?php if(!empty($fundsourcedata[2]['fundsource']) && !empty($fundsourcedata[1]['fundsource'])){ ?>
                                             <div class="col-12" >
                                             <h5 style="text-indent: 100px"></h5>
                                                 <div class="row">
@@ -331,26 +351,60 @@
                                                 <div class="row">
                                                     <div class="input-group input-group-md">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fund1[0]." = " ?></i></span>
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[1]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf1" name="amountf1" value="<?php echo !empty($record['fund1_amount'])?$record['fund1_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf1" name="amountf1" value="<?php echo !empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
                                                 <div class="row">
                                                     <div class="input-group input-group-md">
                                                         <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fund1[1]." = " ?></i></span>
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[2]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11" name="amountf11" value="<?php echo !empty($record['fund2_amount'])?$record['fund2_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
+                                                <?php if(!empty($fundsourcedata[3]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[3]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf111" name="amountf111" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php }
+                                                
+                                                if(!empty($fundsourcedata[4]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[4]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf1111" name="amountf1111" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                if(!empty($fundsourcedata[5]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[5]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11111" name="amountf11111" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } ?>
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <h6 class="text-center">Amount Distributed: </h6>
                                                         <h6 class="text-center">Php 
-                                                        <input type="text" class="text-center money" id="dtotalamount" readonly /></h6></h6>
+                                                        <input type="text" class="text-center money" id="dtotalamount" readonly/></h6></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -370,8 +424,11 @@
                 <div class="container">
                     <div class="form-group row" >
                         <div class="col"><a href="gis.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> GIS</a></div>
-                        <div class="col"><input type="button" class="btn btn-<?php echo (empty($record))?"secondary":"primary" ?> btn-block" value="Print" name="print" onclick="printCOE()"<?php echo (empty($record))?"disabled":"" ?> ></div>
-                        <?php 
+                        <!--
+						<div class="col"><input type="button" class="btn btn-<?php //echo (empty($record))?"secondary":"primary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()"<?php //echo (empty($record))?"disabled":"" ?> ></div>
+                        <div class="col"><input type="button" class="btn btn-<?php //echo (empty($record))?"secondary":"primary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()"<?php //echo (empty($record))?"disabled":"" ?> ></div>
+                        -->
+						<?php 
                             if($record){
                         ?>
                             <div class="col"><input type="submit" class="btn btn-primary btn-block"  value="Update" id="update" name="update"></div>
@@ -385,9 +442,15 @@
                 </div>
             </div>
         </form>
+        <div id="gisce" hidden>
+        <?php 
+            // include("gis_sheet_in_coe.php"); 
+             include("gisv2_print.php"); 
+        ?>
+        </div>
         <div id="coe" class="printable" hidden>
         <?php 
-			if(substr_count(strval($type), "Medic") > 0){
+			/* if(substr_count(strval($type), "Medic") > 0){
                 include("coe_med.php"); 
             }elseif(substr_count(strval($type), "Trans") > 0){
                 include("coe_trans.php");
@@ -405,32 +468,53 @@
 
             if(!empty($client_assistance[2]['type'])){
                 include("coe_food2.php");
-            }   
+            }  */ 
 
+			include("coev2_print.php"); 
+			
             ?>
         </div>
     </body>
     <?php 
     if(isset($_POST["save"])){
+		print_r($_POST);
         $docu = "";
         $id_pres = "";
         $others_input = "";
+        $others_medical = "";
+        $others_burial = "";
         $signName = "";
         $amount1 = "";
         $amount2 = "";
+        $amount3 = "";
+        $amount4 = "";
+		$sdo = "";
+            $amount5 = "";
+            $id_sign = $client['signatory_id'];
         if(isset($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);
+        }
+		if(isset($_POST['sd_officer'])){
+            $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
         }
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }
    
         if(isset($_POST['val_id'])){
-            $id_pres = mysqli_real_escape_string($user->db, strtoupper($_POST['pres_id']));
+            $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
         }
 
         if(isset($_POST['others'])){ //if na check si other
-            $others_input = mysqli_real_escape_string($user->db, strtoupper($_POST['others_input']));
+            $others_input = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_input'])));
+        }
+        
+        if(isset($_POST['others_m'])){ //if na check si other
+            $others_medical = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_medical'])));
+        } 
+        
+        if(isset($_POST['others_b'])){ //if na check si other
+            $others_burial = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_burial'])));
         }
 
         if(isset($_POST['amountf1'])){
@@ -440,10 +524,22 @@
         if(isset($_POST['amountf11'])){
             $amount2 = $_POST['amountf11'];
         }
+        
+        if(isset($_POST['amountf111'])){
+            $amount3 = $_POST['amountf111'];
+        }
+
+        if(isset($_POST['amountf1111'])){
+            $amount4 = $_POST['amountf1111'];
+        }
+
+        if(isset($_POST['amountf11111'])){
+            $amount5 = $_POST['amountf11111'];
+        }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
-        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $modecon);
+        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $modecon, $id_sign, $sdo);
     }
 
 
@@ -451,25 +547,42 @@
         $docu = "";
         $id_pres = "";
         $others_input = "";
+		$sdo = "";
         if(!empty($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);
         }else{
             $signName = "";
         }
+		if(isset($_POST['sd_officer'])){
+            $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
+        }
+        $id_sign = $client['signatory_id'];
 		$amount1 = "";
         $amount2 = "";
+		$amount3 = "";
+        $amount4 = "";
+        $amount5 = "";
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }
 
        
         if(isset($_POST['val_id'])){
-            $id_pres = mysqli_real_escape_string($user->db, strtoupper($_POST['pres_id']));
+            $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
         }
         
         if(isset($_POST['others'])){ //if na check si other
-            $others_input = mysqli_real_escape_string($user->db, strtoupper($_POST['others_input']));
+            $others_input = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_input'])));
         }
+        
+        if(isset($_POST['others_m'])){ //if na check si other
+            $others_medical = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_medical'])));
+        } 
+        
+        if(isset($_POST['others_b'])){ //if na check si other
+            $others_burial = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_burial'])));
+        }
+
 		if(isset($_POST['amountf1'])){
             $amount1 = $_POST['amountf1'];
         }
@@ -477,65 +590,139 @@
         if(isset($_POST['amountf11'])){
             $amount2 = $_POST['amountf11'];
         }
+        
+        if(isset($_POST['amountf111'])){
+            $amount3 = $_POST['amountf111'];
+        }
+
+        if(isset($_POST['amountf1111'])){
+            $amount4 = $_POST['amountf1111'];
+        }
+
+        if(isset($_POST['amountf11111'])){
+            $amount5 = $_POST['amountf11111'];
+        }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         // echo $signName;
-        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $modecon);
+        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $modecon, $id_sign, $sdo);
     }
 ?>
     <script>
+        $(document).ready(function () {
+            var afterPrint = function () {
+                window.location='coe.php?id=<?php echo $_GET['id'] ?>';
+            };
+
+            window.onafterprint = afterPrint;
+        });
+
         $(document).ready(function() {
             var totaldist = parseFloat("<?php echo $am?>");
             var amount1 = parseFloat(0.00);
             var amount2 = parseFloat(0.00);
+            var amount3 = parseFloat(0.00);
+            var amount4 = parseFloat(0.00);
+            var amount5 = parseFloat(0.00);
             if(document.getElementById("amountf1").value.length > 0){
                 amount1 = document.getElementById("amountf1").value;
                 amount1 = parseFloat(amount1.replace(",",""));
             }
-            if(document.getElementById("amountf11").value.length > 0){
-                amount2 = document.getElementById("amountf11").value;
-                amount2 = parseFloat(amount2.replace(",",""));
-            }
+			if($("#amountf11").val() != undefined){
+				if(document.getElementById("amountf11").value.length > 0){
+					amount2 = document.getElementById("amountf11").value;
+					amount2 = parseFloat(amount2.replace(",",""));
+				}
+			}
+            if($("#amountf111").val() != undefined){
+				if(document.getElementById("amountf111").value.length > 0){
+					amount3 = document.getElementById("amountf111").value;
+					amount3 = parseFloat(amount3.replace(",",""));
+				}
+			}
+			if($("#amountf1111").val() != undefined){
+				if(document.getElementById("amountf1111").value.length > 0){
+					amount4 = document.getElementById("amountf1111").value;
+					amount4 = parseFloat(amount4.replace(",",""));
+				}
+			}
+			if($("#amountf11111").val() != undefined){
+				if(document.getElementById("amountf11111").value.length > 0){
+					amount5 = document.getElementById("amountf11111").value;
+					amount5 = parseFloat(amount5.replace(",",""));
+				}
+			}
+			
             var total = Number(0.00);
             var total2 = Number(0.00);
             $("#totalamount").val(CurrencyFormat(totaldist));
             $("#dtotalamount").val(0.00);
+			
             if(document.getElementById("amountf1").value.length > 0){
-                total = parseFloat(amount1 + amount2);
+                total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
                 total = parseFloat(totaldist - total);
+				
                 // total = parseFloat(Number(total).toFixed(2))
                 $("#totalamount").val(CurrencyFormat(total));
-                total2 = parseFloat(amount1 + amount2);
+                total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
                 // total2 = parseFloat(Number(total2).toFixed(2));
                 $("#dtotalamount").val(CurrencyFormat(total2));
             }
 
-            $("#amountf1, #amountf11").keyup(function() {
+            $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
                 amount1 = parseFloat(0);
+                // console.log(amount1);
                 amount2 = parseFloat(0);
+                // console.log(amount2);
+                amount3 = parseFloat(0);
+                // console.log(amount3);
+                amount4 = parseFloat(0);
+                // console.log(amount4);
+                amount5 = parseFloat(0);
+                // console.log(amount5);
                 if(document.getElementById("amountf1").value.length > 0){
                     amount1 = document.getElementById("amountf1").value;
                     amount1 = parseFloat(amount1.replace(",",""));
                 }
-                if(document.getElementById("amountf11").value.length > 0){
-                    amount2 = document.getElementById("amountf11").value;
-                    amount2 = parseFloat(amount2.replace(",",""));
-                }
-                total = parseFloat(amount1 + amount2);
+				if($("#amountf11").val() != undefined){
+					if(document.getElementById("amountf11").value.length > 0){
+						amount2 = document.getElementById("amountf11").value;
+						amount2 = parseFloat(amount2.replace(",",""));
+					}
+				}
+                if($("#amountf111").val() != undefined){
+					if(document.getElementById("amountf111").value.length > 0){
+						amount3 = document.getElementById("amountf111").value;
+						amount3 = parseFloat(amount3.replace(",",""));
+					}
+				}
+				if($("#amountf1111").val() != undefined){
+					if(document.getElementById("amountf1111").value.length > 0){
+						amount4 = document.getElementById("amountf1111").value;
+						amount4 = parseFloat(amount4.replace(",",""));
+					}
+				}
+				if($("#amountf11111").val() != undefined){
+					if(document.getElementById("amountf11111").value.length > 0){
+						amount5 = document.getElementById("amountf11111").value;
+						amount5 = parseFloat(amount5.replace(",",""));
+					}
+				}
+                total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
                 total = parseFloat(totaldist - total);
                 // total = parseFloat(Number(total).toFixed(2))
                 // console.log(amount1);console.log(amount2);
                 $("#totalamount").val(CurrencyFormat(total));
             });
 
-            $("#amountf1, #amountf11").keyup(function() {
-                total2 = parseFloat(amount1 + amount2);
-                // total2 = parseFloat(Number(total2).toFixed(2));
+            $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
+                total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                // total2 = parseF-loat(Number(total2).toFixed(2));
                 $("#dtotalamount").val(CurrencyFormat(total2));
             });
             
         });
-        
+        $('.salary_monthly').mask("#,000,000,000", {reverse: true});
         $('.money').mask("#,000,000.00", {reverse: true});
         
         function CurrencyFormat(number)
@@ -571,7 +758,7 @@
         }
         $(document).ready(function() {
             if(document.getElementById("totalamount").value != 0.00){
-                console.log("dri ra");
+                // console.log("dri ra");
                 $('#update').attr('disabled','disabled');
                 $('#save').attr('disabled','disabled');
                 $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -579,7 +766,7 @@
                 $('#update').removeClass('btn-primary').addClass('btn-dark ');
                 $(this).addClass('btn-default').removeClass('btn-primary ');
             } else {
-                console.log("dd2 ra");
+                // console.log("dd2 ra");
                 $('#update').removeAttr('disabled');
                 $('#save').removeAttr('disabled');
                 $('#save').removeClass('btn-dark').addClass('btn-primary ');
@@ -587,9 +774,9 @@
                 $('#update').removeClass('btn-dark').addClass('btn-primary ');
                 $(this).addClass('btn-default').removeClass('btn-dark ');
             }
-            $("#amountf1, #amountf11").keyup(function() {
+            $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
                 if(document.getElementById("totalamount").value != 0.00){
-                    console.log("dri");
+                    // console.log("dri");
                     $('#update').attr('disabled','disabled');
                     $('#save').attr('disabled','disabled');
                     $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -597,7 +784,7 @@
                     $('#update').removeClass('btn-primary').addClass('btn-dark ');
                     $(this).addClass('btn-default').removeClass('btn-primary ');
                 } else {
-                    console.log("dd2");
+                    // console.log("dd2");
                     $('#update').removeAttr('disabled');
                     $('#save').removeAttr('disabled');
                     $('#save').removeClass('btn-dark').addClass('btn-primary ');
@@ -607,7 +794,62 @@
                 }
             });
         });
-        
+        $("#coesignatoryid").ready(function() {
+            if(document.getElementById("coesignatoryid").value == ""){
+                // console.log("dri sa");
+                $('#update').attr('disabled','disabled');
+                $('#save').attr('disabled','disabled');
+                $('#save').removeClass('btn-primary').addClass('btn-dark ');
+                $(this).addClass('btn-default').removeClass('btn-primary ');
+                $('#update').removeClass('btn-primary').addClass('btn-dark ');
+                $(this).addClass('btn-default').removeClass('btn-primary ');
+            } else {
+                // console.log("dd2 sa");
+                $('#update').removeAttr('disabled');
+                $('#save').removeAttr('disabled');
+                $('#save').removeClass('btn-dark').addClass('btn-primary ');
+                $(this).addClass('btn-default').removeClass('btn-dark ');
+                $('#update').removeClass('btn-dark').addClass('btn-primary ');
+                $(this).addClass('btn-default').removeClass('btn-dark ');
+            }
+            $("#coesignatoryid").keyup(function() {
+                if(document.getElementById("coesignatoryid").value == ""){
+                    // console.log("dri sa");
+                    $('#update').attr('disabled','disabled');
+                    $('#save').attr('disabled','disabled');
+                    $('#save').removeClass('btn-primary').addClass('btn-dark ');
+                    $(this).addClass('btn-default').removeClass('btn-primary ');
+                    $('#update').removeClass('btn-primary').addClass('btn-dark ');
+                    $(this).addClass('btn-default').removeClass('btn-primary ');
+                } else {
+                    // console.log("dd2 sa");
+                    $('#update').removeAttr('disabled');
+                    $('#save').removeAttr('disabled');
+                    $('#save').removeClass('btn-dark').addClass('btn-primary ');
+                    $(this).addClass('btn-default').removeClass('btn-dark ');
+                    $('#update').removeClass('btn-dark').addClass('btn-primary ');
+                    $(this).addClass('btn-default').removeClass('btn-dark ');
+                }
+            });
+        });
+		
+        document.getElementById("coesignatoryid1").addEventListener('input', function(e) {
+            var input = e.target,
+                list = input.getAttribute('list'),
+                options = document.querySelectorAll('#' + list + ' option'),
+                hiddenInput = document.getElementById('coesignatoryid'),
+                inputValue = input.value;
+            hiddenInput.value = inputValue;
+
+            for(var i = 0; i < options.length; i++) {
+                var option = options[i];
+
+                if(option.innerText === inputValue) {
+                    hiddenInput.value = option.getAttribute('data-value');
+                    break;
+                }
+            }
+        });
     </script>
 
 </html>

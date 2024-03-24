@@ -14,26 +14,43 @@
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
         
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
-
+		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
+		$client_fam = $user->getclientFam($_GET['id']);
+		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+    
+        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
+			
         $am = str_replace(",","",$client_assistance[1]['amount']);
-
-        if($am > 5000){
+		
+        if($am > 50000){
             if($record){
                 $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
             }
         }
         $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
 
-        $name =  $client["firstname"]." ". strtoupper($client["middlename"][0]) .". ". $client["lastname"];
+        $name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"];
 		if(!empty($client['extraname'])){
-			$name .= " ". $client['extraname'];
+			$name .= " ". strtoupper($client['extraname']) .".";
 		}
-		$bname =  $client["b_fname"]." ". strtoupper($client["b_mname"][0]) .". ". $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname']: "");
+		$bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname'].".": "");
         $signatoryGLNamePos = "";
         if(!empty($signatoryGL)){
-            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". $signatoryGL['middle_I'] .". ". $signatoryGL['last_name'] ."-". $signatoryGL['position']);
+            $signatoryGLNamePos = (!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position']);
         }
-        //ADDRESS
+		
+        $today = date("Y-m-d");
+        $diff = date_diff(date_create($client['date_birth']), date_create($today));
+        $age_client = $diff->format('%y');
+		if(!empty($client["b_lname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['b_bday']), date_create($today));
+			$age_bene = $diff->format('%y');
+        }else{
+			$age_bene = "";
+		}
+        
+		//ADDRESS
         $c_add = '';
         $b_add = '';
         $cash_add=""; //set as the payee address for CAV
@@ -64,7 +81,25 @@
         //magkuhag data if ever naa na s database
         $gl = $user->getGL($_GET['id']); //gl table
         $cash = $user->getCash($_GET['id']); //cash table
-
+        $ft_signatoryini = "";
+        $forthepositiongl = "";
+        $signatoryforthe = "";
+        if(!empty($gl['for_the_id'])){
+            $signatoryforthe = $user->getsignatory($gl['for_the_id']);
+            $z = explode('/', $signatoryGL['position']);
+            if(!empty($z[1])){ 
+                $forthepositiongl = $z[1];
+            }else{
+                $forthepositiongl = $z[0];
+            }
+            $ft_signatoryini = $user->getinitialsSignatory($gl['for_the_id']);
+        }
+        $GLid = "";
+        if (empty($gl['control_no'])) {
+            $GLid = $user->controlNumberForGL();
+        }else{
+            $GLid = $gl['control_no'];
+        }
         $mode1 = "";
         $mode2 = "";
         		
@@ -73,10 +108,27 @@
         if(!empty($client_assistance[2]['mode'])){
             $mode2 = $client_assistance[2]['mode'];
         }
+		
+        $amountToWord = $user->toWord($client_assistance[1]['amount']);
+  
+		$soc_worker = $user->getuserInfo($_SESSION['userId']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+        
+		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
+        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+        $GISsignatoryPosition = $GISsignatory['position'];
+        
+		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
+        $GLsignatoryPosition = $GLsignatory['position'];
+		
+		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+       
     }
 
-?>
-<?php
 	if(!$_SESSION['login']){
 		header('Location:../index.php');
 		}
@@ -92,7 +144,6 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
 		<link rel="stylesheet" href="../css/coe.css">
-        <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"> 
         <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 		
@@ -101,13 +152,11 @@
         <script src="../js/jquery.slim.min.js"></script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
         <script type="text/javascript" src="../js/main.js"></script>
-        <script type="text/javascript" src="../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/maince.js"></script>
 		
         <script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
         <script type="text/javascript" src="../js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="../js/main.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
         <title>LAST</title>
@@ -120,17 +169,6 @@
                 font-size: 17pt;
                 font-family: 'Times New Roman', Times, serif;
                 text-align: justify;
-            }
-            @page {
-                size: 8.5in 13in;
-                margin: .10in /* change the margins as you want them to be. */
-            }
-
-            @media print{
-                html, body {
-                    width: 210mm;
-                    height: 297mm;
-                }
             }
 		</style>
     </head>
@@ -167,10 +205,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="input-group input-group-lg">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i>'. $client_assistance[1]['fund'] .'-</i></span>
-                                                        </div>
-                                                        <input type="number" class="form-control mr-sm-2 b" id="c_no" onblur="checkNum('.$_GET['id'].')" value="' .$gl['control_no']. '" name="c_no" placeholder="Control No." required>
+                                                        <input type="text" class="form-control mr-sm-2 b" id="c_no" onblur="checkNum('.$_GET['id'].')" value="' .$GLid. '" name="c_no" placeholder="Control No." required readonly>
                                                         <span id="gl_error" style="color:red"></span>
                                                     </div>
                                                 </div>
@@ -182,6 +217,23 @@
                                             <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
                                             <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
                                             <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
+                                            <div class="row">
+                                                <div class="checkbox col-3">
+                                                    <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                        <input type="checkbox" id="radiobutton" class="checkbutton" name="forthebtn" style="height:15px;width:15px;margin: 10px" '. (!empty($gl['for_the_id'])?'checked':'').'> Set "For The" SIGNATORY
+                                                    </label>
+                                                </div>
+                                                <div id="collapseOne" aria-expanded="false" class="collapse col-9">
+                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'">
+                                                    <datalist id="signatory">';
+                                                        $data = $user->signatoryGIS();
+                                                        foreach ($data as $index => $value) {
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). $value['first_name'] . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  $value['last_name'];
+                                                            echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "-" . $value['signatory_id'] ."'></option>";
+                                                        }
+                        echo                        '</datalist>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>';
@@ -219,10 +271,7 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="input-group input-group-lg">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i>'. $client_assistance[1]['fund'] .'-</i></span>
-                                                        </div>
-                                                        <input type="number" class="form-control mr-sm-2 b" id="c_no" onblur="checkNum('.$_GET['id'].')" value="' .$gl['control_no']. '" name="c_no" placeholder="Control No." required>
+                                                        <input type="text" class="form-control mr-sm-2 b" id="c_no" onblur="checkNum('.$_GET['id'].')" value="' .$GLid. '" name="c_no" placeholder="Control No." required readonly>
                                                         <span id="gl_error" style="color:red"></span>
                                                     </div>
                                                 </div>
@@ -231,9 +280,28 @@
                                             <h3>Providers Info</h3>
                                             <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
+                                            
                                             <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
                                             <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
                                             <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.$gl['to_mention'].'" placeholder="Addressee to Mention in GL" hidden><br>
+                                            <div class="row">
+                                                <div class="checkbox col-3">
+                                                    <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                        <input type="checkbox" id="radiobutton" class="checkbutton" name="forthebtn" style="height:15px;width:15px;margin: 10px" '. (!empty($gl['for_the_id'])?'checked':'').'> Set "For The" SIGNATORY
+                                                    </label>
+                                                </div>
+                                                <div id="collapseOne" aria-expanded="false" class="collapse col-9">
+                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'">
+                                                    <datalist id="signatory">';
+                                                        $data = $user->signatoryGIS();
+                                                        foreach ($data as $index => $value) {
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). $value['first_name'] . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  $value['last_name'];
+                                                            echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "-" . $value['signatory_id'] ."'></option>";
+                                                        }
+                        echo                        '</datalist>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>';
@@ -265,17 +333,21 @@
                     }  
                 ?>
                 <div class="row">
-                    <?php if((strtolower($client_assistance[1]['type']) == "cash assistance") && ($client_assistance[2]['type'] == "") || (strtolower($client_assistance[1]['type']) == "non-food items") && ($client_assistance[2]['type'] == "")){ ?>
-                    <div class="col"><a href="gis.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> GIS</a></div>
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash))?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash))?"":"disabled" ?> ></div>
+					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash))?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash))?"":"disabled" ?> ></div>
+					<div class="col">
+                        <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
+                    </div>
+                    <div class="col">
+                        <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()" <?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
+                    </div>
+                </div><br>
+				<div class="row">
+                    <?php if(((strtolower(!empty($client_assistance[1]['type'])) == "cash assistance") && (!empty($client_assistance[2]['type']) == "")) || ((strtolower(!empty($client_assistance[1]['type'])) == "non-food items") && (!empty($client_assistance[2]['type']) == ""))){ ?>
+                        <div class="col"><a href="gis.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> GIS</a></div>
                     <?php } else { ?>
-                    <div class="col"><a href="coe.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> COE</a></div>
+                        <div class="col"><a href="coe.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> COE</a></div>
                     <?php } ?>
-                    <div class="col">
-                        <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()"<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
-                    </div>
-                    <div class="col">
-                        <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()"<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
-                    </div>
                         <?php 
                             if($cash || $gl){
                                 echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Update" name="update"></div>';
@@ -305,6 +377,23 @@
                     }
                 ?>
             </div>
+			<div id="gisce" hidden>
+			<?php 
+				 include("gisv2_print.php"); 
+			?>
+			</div>
+			<div id="coe" class="printable" hidden>
+			<?php 
+                if($mode1 == "CAV" || !empty($mode2) == "CAV"){
+				    include("coev2_print_cav.php"); 
+                }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
+				    include("coev2_print_gl.php"); 
+                }else{
+				    include("coev2_print.php"); 
+                }
+				
+				?>
+			</div>
         </div>
     </body>
     <?php 
@@ -316,6 +405,38 @@
         
     ?>
 	<script type="text/javascript">
+        $(function () {
+            $("#radiobutton").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#collapseOne").show();
+                } else {
+                    $("#collapseOne").hide();
+                }
+            });
+        });
+
+        $(document).ready(function(){
+            if ($("#radiobutton").is(":checked")) {
+                $("#collapseOne").show();
+                $(".for_the").attr('required', '');
+            } else {
+                $("#collapseOne").hide();
+                $(".for_the").removeAttr('required');
+            }
+        });
+
+        $(function () {
+            $("#radiobutton").click(function () {
+                if ($(this).is(":checked")) {
+                    // console.log("require");
+                    $(".for_the").attr('required', '');
+                } else {
+                    // console.log("wla na require");
+                    $(".for_the").removeAttr('required');
+                }
+            });
+        });
+
         function confirmdone(id, trans){
             var retval = confirm("Do you want to Proceed Done client?");
             if(retval == true){
@@ -335,6 +456,7 @@
                             
                             var json = JSON.parse(html);
                             $('#a_pos').val( json["position"]);
+                            $('#tomention').val( json["to_mention"]);
                             $('#addressee').val( json["aname"]);
                             $('#address').val( json["address"]);
                         }
@@ -402,13 +524,23 @@
 
             if(strtolower($mode1) == "gl" || strtolower($mode2)=="gl"){
                 $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                $signatory = mysqli_real_escape_string($user->db,strtoupper($_POST['gl_signatory']));
+                $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
                 $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
                 $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
+                $forthe = '';
+                if(!empty($_POST['forthebtn'])){
+                    $forthe_id = explode('-',$_POST['for_the']);
+                    if(!empty($forthe_id[3])){
+                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[3]);
+                    }else{
+                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[2]);
+                    }
+                }
                 $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
                 $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
+                $tomention= mysqli_real_escape_string($user->db,$_POST['tomention']); 
                 //print_r($_POST);
-                $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $cname, $add);
+                 $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
             }
         }
 
@@ -427,16 +559,27 @@
 
             if( $if1 || $if2 ){
                 //GL 
+                // print_r($_POST["c_no"]);
                 $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                $signatory = mysqli_real_escape_string($user->db,strtoupper($_POST['gl_signatory']));
+                $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
                 $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
                 $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
+                $forthe = '';
+                if(!empty($_POST['forthebtn'])){
+                    $forthe_id = explode('-',$_POST['for_the']);
+                    if(!empty($forthe_id[3])){
+                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[3]);
+                    }else{
+                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[2]);
+                    }
+                }
                 $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
                 $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
+                $tomention= mysqli_real_escape_string($user->db,$_POST['tomention']); 
                 //CASH
                 $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
 
-                $user->updateGLCash($_GET['id'], $sd_officer, $c_no, $signatory, $addressee, $a_pos, $cname, $add);
+                $user->updateGLCash($_GET['id'], $sd_officer, $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
 
             }else{
                 if((strtolower($mode1) == "cav" || strtolower($mode2) == "cav")){
@@ -451,17 +594,27 @@
                 }else{
                     
                     $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                    $signatory = mysqli_real_escape_string($user->db,strtoupper($_POST['gl_signatory']));
+                    $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
                     $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
                     $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
+                    $forthe = '';
+                    if(!empty($_POST['forthebtn'])){
+                        $forthe_id = explode('-',$_POST['for_the']);
+                        if(!empty($forthe_id[3])){
+                            $forthe = mysqli_real_escape_string($user->db,$forthe_id[3]);
+                        }else{
+                            $forthe = mysqli_real_escape_string($user->db,$forthe_id[2]);
+                        }
+                    }
                     $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
                     $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
+                    $tomention = mysqli_real_escape_string($user->db,$_POST['tomention']); 
         
                     //pag empty mag insert sya kay basig gi update lang and GIS
                     if(empty($gl)){
-                        $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $cname, $add);
+                        $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
                     }else{
-                        $user->updateGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $cname, $add);
+                        $user->updateGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
                     }
                 }
                 
@@ -472,4 +625,13 @@
         }
         
     ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var afterPrint = function () {
+                window.location='last.php?id=<?php echo $_GET['id'] ?>';
+            };
+
+            window.onafterprint = afterPrint;
+        });
+    </script>
  </html>

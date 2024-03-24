@@ -16,13 +16,11 @@
         if(!empty($_POST['designation'])){
             $position = $_POST['designation'];
         }
-        $username = $_POST['username'];
-        $password = $_POST['password'];
         if(!empty($_POST['user_status'])){
             $status = $_POST['user_status'];
         }
         $office = $_POST['office'];
-        $result = $user->UpdateEmployee($emp_id, $id, $position, $username, $password, $status, $office);
+        $result = $user->UpdateEmployee($emp_id, $id, $position, $status, $office);
 
         if($result){
             echo "<script>alert('Updated Succesfully')</script>";
@@ -53,19 +51,30 @@
                 </label>
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                     
+					<div class="form-group col-lg-3">
+                    </div>
                     <div class="form-group col-lg-6">
                         <input value="<?php echo $getemp['empid']; ?>" id="empid" name="empid" type="text" class="form-control" readonly>
                         <label class="active" for="empid">Employee ID</label>
                     </div>
-                    <div class="form-group col-lg-6">
-                        <input value="<?php echo $getemp['empuser']; ?>" id="username" name="username" type="text" class="form-control" required>
-                        <label class="active" for="username">Employee Username</label>
+					<div class="form-group col-lg-3">
+                    </div>
+					<div class="form-group col-lg-6">
+                        <input value="<?php echo $getemp['emplname']; ?>" id="lastname" name="lastname" type="text" class="form-control" readonly>
+                        <label class="active" for="lastname">Lastname</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input value="<?php echo $getemp['emppass']; ?>" id="password" name="password" type="text" class="form-control" required>
-                        <label class="active" for="password">Employee Password</label>
+                        <input value="<?php echo $getemp['empfname']; ?>" id="firstname" name="firstname" type="text" class="form-control" readonly>
+                        <label class="active" for="firstname">Firstname</label>
                     </div>
-                    
+                    <div class="form-group col-lg-6">
+                        <input value="<?php echo $getemp['empmname']; ?>" id="middlename" name="middlename" type="text" class="form-control" readonly>
+                        <label class="active" for="middlename">Middlename</label>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <input value="<?php echo $getemp['empext']; ?>" id="extraname" name="extraname" type="text" class="form-control" readonly>
+                        <label class="active" for="extraname">Extraname</label>
+                    </div>
                     <label class="col-lg-12" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     <h5><small>&emsp;CPMS User Access &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</small></h5>
                     </label>

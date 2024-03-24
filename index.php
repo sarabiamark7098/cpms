@@ -1,36 +1,34 @@
 <?php
-		require('php/class.user.php');
-		$user = new User();
+	require('php/class.user.php');
+	$user = new User();
 
+	if (isset($_GET['confirm_id'])) {
+		
+		$confirm_id = $_GET['confirm_id'];
+		$requestposition = $_POST['designation'];
+		$requestoffice = $_POST['office'];
+		
+		$validation = $user->validateid($confirm_id);
+		
+		if($validation < 1){
 
-		//echo $user->try();
-		if (isset($_GET['confirm_id'])) {
+			$result = $user->insert_request($confirm_id, $requestposition, $requestoffice);
 			
-			$confirm_id = $_GET['confirm_id'];
-			$requestposition = $_POST['designation'];
-			$requestoffice = $_POST['office'];
-			
-			$validation = $user->validateid($confirm_id);
-			
-			if($validation < 1){
-
-				$result = $user->insert_request($confirm_id, $requestposition, $requestoffice);
-				
-				if($result){
-					echo "<script type='text/javascript'>alert('Request Submitted! Wait for Admin Confirmation.');</script>";		
-					echo "<script type='text/javascript'>window.location='index.php';</script>";
-				}else{
-					echo "<script type='text/javascript'>alert('Error!! Try Again');</script>";			
-					echo "<script type='text/javascript'>window.location='index.php';</script>";
-				}
+			if($result){
+				echo "<script type='text/javascript'>alert('Request Submitted! Wait for Admin Confirmation.');</script>";		
+				echo "<script type='text/javascript'>window.location='index.php';</script>";
 			}else{
-				echo "<script type='text/javascript'>alert('Wait For Confirmation!');</script>";		
+				echo "<script type='text/javascript'>alert('Error!! Try Again');</script>";			
 				echo "<script type='text/javascript'>window.location='index.php';</script>";
 			}
-
-			// echo "<script>window.location='index.php';</script>";
-			// header( "Location: https://localhost/xcpms/index.php");
+		}else{
+			echo "<script type='text/javascript'>alert('Wait For Confirmation!');</script>";		
+			echo "<script type='text/javascript'>window.location='index.php';</script>";
 		}
+
+		// echo "<script>window.location='index.php';</script>";
+		// header( "Location: https://localhost/xcpms/index.php");
+	}
 	if(isset($_POST['close'])){
 		echo "<script>window.location='index.php';</script>";
 		session_destroy();
@@ -57,6 +55,7 @@
 				 echo "<script>window.location='index.php';</script>";
 		}
 	}
+	
 	if (isset($_REQUEST['login'])) {
 		extract($_REQUEST);
 		
@@ -65,49 +64,47 @@
 		
 	    $login = $user->check_login($username, $password);
 	  
-
-	  if ($login) {
-			
+		if ($login) {
 			$user_id = $user->getUserId($username, $password);
 			$user_info = $user->check_user($user_id);
 			$useroffice = $user->show_office_data($user_info['office_id']);
 			// echo "<script>confirm('". $user_info['fullname'] ." you are currently Assigned to: ". $useroffice['office_name'] ."')</script>";
 			switch ($user_info['position']){
-					case 'Encoder': echo '<script>var x = true;
-								window.location="index.php?optionenc="+x</script>';
-								// echo "<script>window.location='encoder/home.php'</script>";
-								$_SESSION['login'] = $login;
-								$_SESSION['userAccountusername'] = $username;
-								$_SESSION['userAccountpassword'] = $password;
-								$_SESSION['userId'] = $user_id;
-								$_SESSION['position'] = $user_info['position'];
-								$_SESSION['userfullname'] = $user_info['fullname'];
-								$_SESSION['f_office']=$user_info['office_id'];
-								break;
-					case 'Social Worker': echo '<script>var x = true;
-								window.location="index.php?optionsw="+x</script>';
-								// echo "<script>window.location='socialwork/home.php'</script>";
-								$_SESSION['login'] = $login;
-								$_SESSION['userAccountusername'] = $username;
-								$_SESSION['userAccountpassword'] = $password;
-								$_SESSION['userId'] = $user_id;
-								$_SESSION['position'] = $user_info['position'];
-								$_SESSION['userfullname'] = $user_info['fullname'];
-								$_SESSION['f_office']=$user_info['office_id'];
-								break;
-					case 'Admin': echo '<script>var x = true;
-								window.location="index.php?optionadmin="+x</script>';
-								// echo "<script>window.location='admin/home.php'</script>";
-								$_SESSION['login'] = $login;
-								$_SESSION['userAccountusername'] = $username;
-								$_SESSION['userAccountpassword'] = $password;
-								$_SESSION['userId'] = $user_id;
-								$_SESSION['position'] = $user_info['position'];
-								$_SESSION['userfullname'] = $user_info['fullname'];
-								$_SESSION['f_office']=$user_info['office_id'];
-								break;
-					default:
-						// echo "<script>window.location='index.php';</script>";
+				case 'Encoder': echo '<script>var x = true;
+					window.location="index.php?optionenc="+x</script>';
+					// echo "<script>window.location='encoder/home.php'</script>";
+					$_SESSION['login'] = $login;
+					$_SESSION['userAccountusername'] = $username;
+					$_SESSION['userAccountpassword'] = $password;
+					$_SESSION['userId'] = $user_id;
+					$_SESSION['position'] = $user_info['position'];
+					$_SESSION['userfullname'] = $user_info['fullname'];
+					$_SESSION['f_office']=$user_info['office_id'];
+					break;
+				case 'Social Worker': echo '<script>var x = true;
+					window.location="index.php?optionsw="+x</script>';
+					// echo "<script>window.location='socialwork/home.php'</script>";
+					$_SESSION['login'] = $login;
+					$_SESSION['userAccountusername'] = $username;
+					$_SESSION['userAccountpassword'] = $password;
+					$_SESSION['userId'] = $user_id;
+					$_SESSION['position'] = $user_info['position'];
+					$_SESSION['userfullname'] = $user_info['fullname'];
+					$_SESSION['f_office']=$user_info['office_id'];
+					break;
+				case 'Admin': echo '<script>var x = true;
+					window.location="index.php?optionadmin="+x</script>';
+					// echo "<script>window.location='admin/home.php'</script>";
+					$_SESSION['login'] = $login;
+					$_SESSION['userAccountusername'] = $username;
+					$_SESSION['userAccountpassword'] = $password;
+					$_SESSION['userId'] = $user_id;
+					$_SESSION['position'] = $user_info['position'];
+					$_SESSION['userfullname'] = $user_info['fullname'];
+					$_SESSION['f_office']=$user_info['office_id'];
+					break;
+				default:
+					// echo "<script>window.location='index.php';</script>";
 			}
 		}
 		else{
@@ -117,7 +114,7 @@
 		}
 	}
 	
-	/*if(isset($_REQUEST['save'])){
+	if(isset($_REQUEST['save'])){
 		extract($_REQUEST);
 			$password_partial = $_POST['password_partial'];
 			$password_final = $_POST['password_final'];
@@ -142,7 +139,7 @@
 				echo "<meta http-equiv='refresh' content='0'>";
 			}
 		}
-	}*/
+	}
 ?>
 
 <!DOCTYPE html>
@@ -227,9 +224,8 @@
 						</div>
 
 						<div class="text-center w-full p-t-23">
-							<a href="#" class="txt1">
-								<!-- <h4>&copy Copyright</h4> -->
-								<h5><b></b></h5><br>
+							<a href="cpms_verification" class="txt1">
+								Go to Offline Verification
 							</a>
 						</div>
 					</form>

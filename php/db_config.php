@@ -1,13 +1,12 @@
 <?php
-    define('DB_SERVER', 'localhost');
-    define('DB_USERNAME', 'root');
-    define('DB_PASSWORD', '');
-    define('DB_DATABASE', 'cpmsdatabase');
-
-
-    // define('DB_SERVER', '172.26.126.103:3361');
-    // define('DB_USERNAME', 'dswd11');
-    // define('DB_PASSWORD', 'DSWDonse-123');
-    // define('DB_DATABASE', 'cpmsdatabase2020');
+    //define('DB_SERVER', '192.168.1.102');
+    //define('DB_USERNAME', 'msarabia');
+    //define('DB_PASSWORD', 'DSWD@123');
+    //define('DB_DATABASE', 'cpmsdatabase');
+	
+    define('DB_SERVER', '172.31.176.27:3306');
+    define('DB_USERNAME', 'onse');
+    define('DB_PASSWORD', 't,fL^C:P2mgNK}e7~!j{GA');
+    define('DB_DATABASE', 'onse_cpms');
 
 ?>

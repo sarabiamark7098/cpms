@@ -13,11 +13,12 @@
 
     if(isset($_POST['Update'])) {
         $id = $_GET['id'];
-        $officename = $_POST['officename'];
+        $officename = $_POST['updateofficename'];
         $descrip = $_POST['description'];
         $m = $_POST['updatecity'];
+        $officeacronym = $_POST['updateofficeacronym'];
         
-        $result = $user->updateOffice($officename, $descrip, $m, $id);
+        $result = $user->updateOffice($officename, $officeacronym, $descrip, $m, $id);
         
         if(!empty($result)){
             echo "<script>alert('Successfully Updating Office!');</script>";
@@ -105,8 +106,16 @@
                         </datalist>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input placeholder="Office Name" id="officename" value="<?php echo (!empty($getinfo)?$getinfo['office_name']:"")?>"  name="officename" type="text" class="form-control" required>
-                        <label class="active" for="officename">Office Name</label>
+                        <div class="row">
+                            <div class="form-group col-lg-9">
+                                <input placeholder="Office Name" id="officename" value="<?php echo (!empty($getinfo)?$getinfo['office_name']:"")?>"  name="updateofficename" type="text" class="form-control" required>
+                                <label class="active" for="officename">Office Name</label>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <input placeholder="Office Acronym" id="officeacronym" value="<?php echo (!empty($getinfo)?$getinfo['office_accronym']:"")?>" name="updateofficeacronym" type="text" class="form-control" required>
+                                <label class="active" for="officename">Office Acronym</label>
+                            </div>
+                        <div>
                     </div>
                     <div class="form-group col-lg-12">
                         <textarea placeholder="Description" id="description" name="description" class="form-control " required><?php echo (!empty($getinfo)?$getinfo['description']:"")?></textarea>

@@ -3,6 +3,11 @@
      $user = new User();
      if(isset($_GET['m'])){
         $month  = intval($_GET['m']);
+		if(strlen($month)==1){
+			$monthnum = '0'.$month;
+		}else{
+			$monthnum = $month;
+		}
      }
      if(isset($_GET['y'])){
         $year=  intval($_GET['y']);
@@ -12,17 +17,18 @@
 
 <?php
     $count = 0;
-    $query= "SELECT
-            client_id, trans_id, date_entered, encoded_encoder, control_no , date_accomplished, 
+    $query= "SELECT DISTINCT
+            client_id, trans_id, date_entered, encoded_encoder, control_no, date_accomplished, mode, bene_id,
             client_region, client_province, client_municipality, client_barangay, client_district,
             lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-            b_lname, b_fname, b_mname, b_exname, cname, subCategory
+            b_lname, b_fname, b_mname, b_exname, cname, subCategory, status_client
             from client_data
-            LEFT JOIN tbl_transaction USING (client_id)
-            LEFT JOIN beneficiary_data USING (bene_id)
-            LEFT JOIN assessment USING (trans_id)
-            LEFT JOIN gl USING (trans_id)
-            WHERE Left(trans_id, 9) = '{$office_loc}' AND YEAR(date_accomplished) = {$year} AND MONTH(date_accomplished) = {$month} AND tbl_transaction.status_client='Done' 
+            inner join tbl_transaction USING (client_id)
+            left outer join beneficiary_data USING (bene_id)
+            inner join assessment USING (trans_id)
+            inner join assistance USING (trans_id)
+            left outer join gl USING (trans_id)
+            WHERE Left(trans_id, 16) = CONCAT('$office_loc','-','$year','$monthnum') and status_client = 'Done' 
             ORDER BY tbl_transaction.date_entered ASC";
     
     $result = mysqli_query($user->db,$query);
@@ -32,7 +38,7 @@
                     "City/Municipality"."\t"."Barangay"."\t"."District"."\t"."LastName"."\t"."FirstName"."\t"."MiddleName"."\t".
                     "ExtraName"."\t"."Sex"."\t"."CivilStatus"."\t"."DOB"."\t"."Age"."\t"."ModeOfAdmission"."\t"."Type of Assistance1"."\t".
                     "Amount1"."\t"."Source of Fund1"."\t"."Type of Assistance2"."\t"."Amount2"."\t". "Source of Fund2"."\t"."ClientCategory".
-                    "\t"."CHARGING"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
+                    "\t"."CHARGING1"."\t"."CHARGING2"."\t"."CHARGING3"."\t"."CHARGING4"."\t"."CHARGING5"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
                     ."B. EXT."."\t"."Sub Category";
     $setData='';
     
@@ -40,10 +46,26 @@
     {
         $mode = "";
         $fullname = $user->getuserFullname($row['encoded_encoder']);
-        $assistance = $user-> getAssistanceData($row['trans_id']);
+        $assistance = $user->getAssistanceData($row['trans_id']);
+        $fund = $user->getfundsourcedata($row['trans_id']);
         $rowData = '';
+		$lname2 = $row['b_lname'];
+        $fname2 = $row['b_fname'];
+		$mname2 = $row['b_mname'];
+		$ename2 = $row['b_exname'];
+		if($row['bene_id']<>''){
+		$lname = $lname2;					
+		$fname = $fname2;					
+		$mname = $mname2;					
+		$ename = $ename2;					
+		}else{
+		$lname = "";					
+		$fname = "";					
+		$mname = "";					
+		$ename = "";						
+		}
         $rowData =  $row['date_entered']         ."\t".
-                    $fullname                    ."\t'".
+                    $fullname                    ."\t".
                     $row['control_no']            ."\t".
                     $row['date_accomplished']    ."\t".
                     $row['client_region']        ."\t".
@@ -72,17 +94,52 @@
                 $rowData .= "\t\t\t";
             }
                 $rowData .=
-                    $row['category']                        ."\t".
-                    $assistance[1]['fund']                  ."\t".
-                    $assistance[1]['mode'] .''. $mode       ."\t".
-                    $row['cname']                    ."\t".
-                    $row['b_lname']                         ."\t".
-                    $row['b_fname']                         ."\t".
-                    $row['b_mname']                         ."\t".
-                    $row['b_exname']                        ."\t".
+                    $row['category']                        ."\t";
+				if(!empty($fund[1]['fundsource'])){
+				$rowData .= 
+					$fund[1]['fundsource']." - ".$fund[1]['fs_amount']					    ."\t";
+				} else {
+				$rowData .= 
+					$assistance[1]['fund']					."\t";
+				}   
+                if(!empty($fund[2]['fundsource'])){               	
+				$rowData .= 
+					$fund[2]['fundsource']." - ".$fund[2]['fs_amount']                  	."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                   
+                if(!empty($fund[3]['fundsource'])){               	
+				$rowData .= 
+					$fund[3]['fundsource']." - ".$fund[3]['fs_amount']                  	."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[4]['fundsource'])){               	
+				$rowData .= 
+					$fund[4]['fundsource']." - ".$fund[4]['fs_amount']                  	."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[5]['fundsource'])){               	
+				$rowData .= 
+					$fund[5]['fundsource']." - ".$fund[5]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                $rowData .=  $row['mode']         ."\t".
+                    $row['cname']                    		."\t".
+					$lname			                        ."\t".
+                    $fname			                        ."\t".
+                    $mname          			            ."\t".
+                    $ename                     		        ."\t".	
                     $row['subCategory'];
         $setData .= trim(strtoupper($rowData))."\n"; //for another line of data
-        //print_r($rowData);
+        // print_r($rowData);
         $count++;
     }
     if($count > 0){
@@ -94,7 +151,7 @@
     }
     else{
         echo "<script>alert('NO TRANSACTION MADE ON THIS DATE!');
-        window.location.href='export.php';</script>";
+		window.location.href='export.php';</script>";
     }
     
    

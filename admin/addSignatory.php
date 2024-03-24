@@ -54,6 +54,10 @@
                         <label class="active" for="empid">Signatory ID</label>
                     </div> -->
                     <div class="form-group col-lg-12">
+                        <input placeholder="Signatory Title" id="title" name="title" type="text" class="form-control">
+                        <label class="active" for="title">Signatory Title (e.g. Atty.)</label>
+                    </div>
+                    <div class="form-group col-lg-12">
                         <input placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required>
                         <label class="active" for="fname">First Name</label>
                     </div>
@@ -83,15 +87,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-lg-6 srange">
-                        <input placeholder="&#8369; Range Start" id="rangestart" name="rangestart" type="number" class="form-control">
-                        <label class="active" for="rangestart">Range Start</label>
+                    <div class="form-group col-lg-6">
+                        <select placeholder="SIGNATORY TREE" id="s_tree" name="s_tree" type="text" class="form-control" required>
+							<option value="none" selected> - </option>
+                            <option value="CURRENTHEAD1" >DSWD SECRETARY</option>
+                            <option value="CURRENTHEAD2" >Regional Director</option>
+                            <option value="CURRENTHEAD3" >ARD for Operation</option>
+                            <option value="CURRENTHEAD4" >ARD for Administration</option>
+                            <option value="CURRENTHEAD5" >PSD CHIEF</option>
+                            <option value="CURRENTHEAD6" >CIS HEAD</option>
+                            <option value="CURRENTHEAD7" >SWADO - 3RD DISTRICT</option>
+                            <option value="CURRENTHEAD8" >SWADO - DAVAO DEL SUR</option>
+                            <option value="CURRENTHEAD9" >SWADO - DAVAO DEL NORTE</option>
+                            <option value="CURRENTHEAD10" >SWADO - DAVAO DE ORO</option>
+                            <option value="CURRENTHEAD11" >SWADO - DAVAO ORIENTAL</option>
+                            <option value="CURRENTHEAD12" >SWADO - DAVAO OCCIDENTAL</option>
+                            <option value="CURRENTHEAD13" >SPMC</option>
+                            <option value="CURRENTHEAD14" >DRMC</option>
+                            <option value="CURRENTHEAD15" >ASSISTANT TO CIS HEAD</option>
+						</select>
+						<label class="active" for="s_tree">SIGNATORY TREE</label>
                     </div>
-                    <div class="form-group col-lg-6 srange">
-                        <input  placeholder="&#8369; Range End" id="rangeend" name="rangeend" type="number" class="form-control">
-                        <label class="active" for="rangeend">Range End</label>
+                    <div class="form-group col-lg-6">
+                        <select placeholder="SPECIAL SIGNATORY" id="s_signatory" name="s_signatory" type="text" class="form-control" required>
+							<option value="0" selected>De-Activate</option>
+							<option value="1">Active</option>
+						</select>
+                        <label class="active" for="s_signatory">SPECIAL SIGNATORY</label>
                     </div>
-                    
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -100,7 +100,7 @@
                             <span style="border: solid 1px;width: 10px;margin-left: -15px"> B</span> PAID BY:
                             <div class="row text-center" style="margin-top: 25px;margin-left:25%;">
                                 <div class="col-12"><b><?php echo strtoupper($cash['sd_officer'])?></b></div>                                   <!--NAME SA REQUESTOR-->
-                                <div class="col-12" style="border-top: solid 1px"> SPECIAL DISTURBING OFFICER</div>
+                                <div class="col-12" style="border-top: solid 1px"> SPECIAL DISBURSING OFFICER</div>
                             </div>
                             <div class="row">
                                 &nbsp&nbsp&nbsp&nbsp<span>Cash Recieved by:</span>
@@ -204,7 +204,7 @@
                             <span style="border: solid 1px;width: 10px;margin-left: -15px"> B</span> PAID BY:
                             <div class="row text-center" style="margin-top: 25px;margin-left:25%;">
                                 <div class="col-12"><b><?php echo strtoupper($cash['sd_officer'])?></b></div>                                   <!--NAME SA REQUESTOR-->
-                                <div class="col-12" style="border-top: solid 1px"> SPECIAL DISTURBING OFFICER</div>
+                                <div class="col-12" style="border-top: solid 1px"> SPECIAL DISBURSING OFFICER</div>
                             </div>
                             <div class="row">
                                 &nbsp&nbsp&nbsp&nbsp<span>Cash Recieved by:</span>

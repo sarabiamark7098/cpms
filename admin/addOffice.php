@@ -69,6 +69,10 @@
                         <label class="active" for="officename">Office Name</label>
                     </div>
                     <div class="form-group col-lg-12">
+                        <input placeholder="Office Acronym" id="officeacronym" name="officeacronym" type="text" class="form-control" required>
+                        <label class="active" for="officename">Office Acronym</label>
+                    </div>
+                    <div class="form-group col-lg-12">
                         <textarea placeholder="Description" id="description" name="description" class="form-control " required></textarea>
                         <label class="active" for="description">Description</label>
                     </div>

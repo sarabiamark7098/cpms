@@ -99,6 +99,18 @@
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                 </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
             </ul>
         </nav>
 
@@ -146,10 +158,11 @@
                                 $getemployees = $user->getallEmployee();
                                 if($getemployees){
                                     foreach($getemployees as $index => $value){
-                                        $compare = $user->compareEmpNum($value['empnum'], $_SESSION['f_office']);
-                                        if($_SESSION['userId'] == '11-Sample'){
+                                        $compare = $user->compareEmpNum($value['empnum']);
+										
+                                        /*if($_SESSION['userId'] == '11-Sample'){
                                             $compare = $user->compareEmpNumSA($value['empnum'], $_SESSION['f_office']);
-                                        }
+                                        }*/
                                         if($compare > 0){
                                             echo "<tr>
                                                 <td scope='row' style='width: 15%'>" . $value["empid"] . "</td> 

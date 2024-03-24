@@ -43,6 +43,10 @@
                         <label class="active" for="addresseeposition">Addressee Position(e.g. Adminisitrator)</label>
                     </div>
                     <div class="form-group col-lg-12">
+                        <input placeholder="Addressee To Mention in GL" id="addresseetomention" name="addresseetomention" type="text" class="form-control">
+                        <label class="active" for="addresseetomention">Addressee To Mention(e.g. Mr. Dela Cruz OR Leave Empty if None)</label>
+                    </div>
+                    <div class="form-group col-lg-12">
                         <input placeholder="Company Name" id="companyname" name="companyname" type="text" class="form-control" required>
                         <label class="active" for="companyname">Company Name</label>
                     </div>

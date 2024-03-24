@@ -67,6 +67,16 @@ $user = new User();
 				  <label class="active" for="addresseeposition">Addressee Position</label>
 				</div>
 				<div class="form-group col-lg-12">
+				  <input value="<?php 
+				  if($getprovider['to_mention']==NULL){
+					echo 'N/A';
+				  }else{
+					echo $getprovider['to_mention'];
+				  }?>
+				  " id="tomention" name="tomention" type="text" class="form-control" readonly>
+				  <label class="active" for="tomention">Addressee To Mention(e.g. Mr. Dela Cruz OR Leave Empty if None)</label>
+				</div>
+				<div class="form-group col-lg-12">
 				  <input value="<?php echo $getprovider['company_name']?>" id="companyname" name="companyname" type="text" class="form-control" readonly>
 				  <label class="active" for="companyname">Company Name</label>
 				</div>

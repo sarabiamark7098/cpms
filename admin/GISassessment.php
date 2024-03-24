@@ -116,6 +116,18 @@
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                 </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
                 <!-- <li>
                     <a href="Relation_District_Page.php">Additional <i style="float: right;font-size:25px" class="fa fa-expand"></i></a>
                 </li>     -->
@@ -159,42 +171,22 @@
 						</thead>
 						<tbody>
 							<?php
-							if(!isset($_REQUEST['buttonSearch'])){
-								$getuser = $user->get_ass_opt_to_admin_table();
-								if($getuser){
-									foreach($getuser as $index => $value){
-									echo "<tr>
-												<td scope='row'>" . $value["ass_opt"]. "</td> 
-												<td style='width: 30%'>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["ass_opt"]. "' style='margin-right: 10px;' data-target='#assInfo'> View </button>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["ass_opt"]. "' style='margin-right: 10px;' data-target='#Updateass'> Update </button>
-												</td>
-												</tr>
-												
-											";		
-									}
-								} else {
-									echo "NO DATA";
-								}
-							} else {
-								$search = $_POST["searchdata"];
-								$getuser = $user->search_provider($search);
-								if($getuser){
-									foreach($getuser as $index => $value){
-									echo "<tr>
-												<td scope='row'>" . $value["ass_opt"]. "</td> 
-												<td style='width: 30%'>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["ass_opt"]. "' style='margin-right: 10px;' data-target='#assInfo'> View </button>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["ass_opt"]. "' style='margin-right: 10px;' data-target='#Updateass'> Update </button>
-												</td>
-												</tr>
-												
-											";		
-									}
-								} else {
-									echo "NO DATA";
-								}
-							}
+                            $getuser = $user->get_ass_opt_to_admin_table();
+                            if($getuser){
+                                foreach($getuser as $index => $value){
+                                echo "<tr>
+                                            <td scope='row'>" . $value["ass_opt"]. "</td> 
+                                            <td style='width: 30%'>
+                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["ass_opt"]. "' style='margin-right: 10px;' data-target='#assInfo'> View </button>
+                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["ass_opt"]. "' style='margin-right: 10px;' data-target='#Updateass'> Update </button>
+                                            </td>
+                                            </tr>
+                                            
+                                        ";		
+                                }
+                            } else {
+                                echo "NO DATA";
+                            }
 							?>
 						</tbody>
 					</table>

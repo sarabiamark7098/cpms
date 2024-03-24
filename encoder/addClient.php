@@ -6,32 +6,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>DSWD HOME</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
-		<link rel="stylesheet" type="text/css" href="../css/main.css">
-        <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">	
-		<link rel="stylesheet" type="text/css" href="../css/table.responsive.css">
-        <link rel="stylesheet" type="text/css" href="../style5.css">
-        
-        <script defer src="../js/solid.js"></script>
-        <script defer src="../js/fontawesome.js"></script>
-        <script src="../js/jquery.slim.min.js"></script>
-        <script src="../js/popper.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
-        <script type="text/javascript" src="../js/main.js"></script>
-        <script type="text/javascript" src="../js/PSGC.js"></script>
-        <script type="text/javascript" src="../js/jquery.min.js"></script>
-        
-        <!-- added -->
-        
-        <script type="text/javascript" src="../js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
-        
+      
         
 		<style type="text/css">
 			:required  {  
@@ -54,7 +29,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" required>
+                        <input type="text" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -84,8 +59,12 @@
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 label" style="font-size: 20px">Birth Date: </label>
-                    <div class="col-sm-10">
-                        <input type="date" class="form-control mr-sm-2" name="birthday" placeholder="Birth Date" max='<?php echo date("Y-m-d") ?>' required>
+                    <div class="col-sm-6">
+                        <input type="date" class="form-control mr-sm-2" id="birthday" name="birthday" placeholder="Birth Date" max='<?php echo date("Y-m-d") ?>' required>
+                    </div>
+                    <label class="col-sm-1 label" style="font-size: 20px">Age: </label>
+                    <div class="col-sm-3">
+                        <input type="number" class="form-control mr-sm-2" id="age" name="age" placeholder="Age" disabled>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -102,7 +81,7 @@
                         <option value="Single">Single</option>
                         <option value="Married">Married</option>
                         <option value="Separated">Separated</option>
-                        <option value="Widow/Widower">Widow/Widower</option>
+                        <option value="Widow/Widowed">Widow/Widowed</option>
                         <option value="Common-Law">Common-law</option>
                     </select>  
                     </div>
@@ -123,7 +102,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <input list="categories" class="form-control mr-sm-2 b" type="text" name="category" placeholder="Category" name="category" required>
                         <datalist id="categories">
                             <option>Children in Need of Special Protection</option>
@@ -135,9 +114,6 @@
                             <option>Family Heads and Other Needy Adult</option>
                             <option>None of the Above</option>
                         </datalist>
-                    </div>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control mr-sm-2 b" name="subcategory" placeholder="Sub-Category">
                     </div>
                 </div>
                     <!--Address-->
@@ -176,7 +152,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" required>
+                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_hc_Barangay(this)" required>
                     <datalist id="barangayClist">
                     </datalist>
                     </div>
@@ -184,10 +160,10 @@
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <select class="form-control mr-sm-2 b" name="district" id="client_district">
-                            <option value="" selected>Select District</option>
                             <?php
                                 $getdistrict = $user->getdistrictlist();
-                                //Loop through results
+                                // Loop through results
+                                echo "<option value='' selected>Select District</option>";
                                 foreach($getdistrict as $index => $value){
                                     //Display info
                                     echo '<option value="'. $value['district_name'] .'"> ';
@@ -248,7 +224,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
+                            <input type="text" class="form-control mr-sm-2 b" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
                         </div>
                     </div>
                     <div class="form-group row">
@@ -278,8 +254,12 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 label" style="font-size: 20px">Birth Date: </label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control mr-sm-2 benerequire" name="b_bday" placeholder="Beneficiary Birth Date"  max='<?php echo date("Y-m-d") ?>'>  
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control mr-sm-2 benerequire" name="b_bday" id="b_bday" placeholder="Beneficiary Birth Date"  max='<?php echo date("Y-m-d") ?>'>  
+                        </div>
+                        <label class="col-sm-1 label" style="font-size: 20px">Age: </label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control mr-sm-2" name="b_age" id="b_age" placeholder="Beneficiary Age" disabled>  
                         </div>
                     </div>
                     <div class="form-group row">
@@ -296,18 +276,28 @@
                             <option value="Single">Single</option>
                             <option value="Married">Married</option>
                             <option value="Separated">Separated</option>
-                            <option value="Widow/Widower">Widow/Widower</option>
+                            <option value="Widow/Widowed">Widow/Widowed</option>
                             <option value="Common-Law">Common-law</option>
                         </select>  
                         </div>
                     </div>
-                        <div class="form-group row">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control mr-sm-2 b benerequire" name="b_occupation" placeholder="Beneficiary Occupation">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control mr-sm-2 b" name="b_salary" placeholder="Beneficiary Salary">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="col-sm-12">
                         <input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;" >
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
                             <datalist id="b_categories">
                                 <option>Children in Need of Special Protection</option>
@@ -319,9 +309,6 @@
                                 <option>Family Heads and Other Needy Adult</option>
                                 <option>None of the Above</option>
                             </datalist>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control mr-sm-2 b" name="b_subcat" placeholder="Beneficiary Sub-Category" >
                         </div>
                     </div>
                     
@@ -398,7 +385,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-md" data-dismiss="modal">Close</button>
                 <input type="submit" class="btn btn-primary btn-md submitload" name="addClient" value="Submit" onclick="msg()">      
             </div>
             <script>
@@ -410,27 +396,33 @@
         </form> 
             
         <script type="text/javascript">
+
+        function calculateage(dob) {
+            var diff_ms=Date.now() - dob.getTime();
+            var age_dt=new Date(diff_ms);
+            return (Math.abs(age_dt.getUTCFullYear() - 1970));
+        }
         
-        // $(function () {
-        //     $("#district_hidden_client").hide();
-        //     did = document.getElementById('client_district').value;
-        //     console.log(did); 
-             
-        // });
-        // $(function () { data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing"
-        //     $('.submitload').on('click', function() {
-        //             var $this = $(this);
-        //         $this.button('loading');
-        //             setTimeout(function() {
-        //             $this.button('reset');
-        //         }, 8000);
-        //     });
-        // });
-        // function submittingForm(form) {
-        //     form.addClient.disabled = true;
-        //     form.addClient.value = "Please wait...";
-        //     return true;
-        // }
+        $(function () {
+            $("#birthday").on("change", function () {
+                var bd = $("#birthday").val();
+                explodebd = bd.split("-");
+                age = calculateage(new Date(explodebd[0],explodebd[1],explodebd[2]))
+                var age1 = age.toString();
+
+                document.getElementById("age").value = age1;
+            }); 
+        });
+        $(function () {
+            $("#b_bday").on("change", function () {
+                var b_bd = $("#b_bday").val();
+                b_explodebd = b_bd.split("-");
+                b_age = calculateage(new Date(b_explodebd[0],b_explodebd[1],b_explodebd[2]))
+                var b_age1 = b_age.toString();
+
+                document.getElementById("b_age").value = b_age1;
+            }); 
+        });
 
         $(function () {
             $("#radiobutton2").click(function () {
@@ -508,7 +500,7 @@
             brgy = document.getElementById('cbrgy').value;
             dist = document.getElementById('client_district').value;
             str = document.getElementById('cstr').value;
-            // console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
+            //console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
 			document.getElementById('breg').value = reg;
 			document.getElementById('bprov').value = prov;

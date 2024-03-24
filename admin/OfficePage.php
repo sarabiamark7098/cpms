@@ -27,8 +27,9 @@
         $officename = $_POST['officename'];
         $descrip = $_POST['description'];
         $m = $_POST['city'];
+        $officeacronym = $_POST['officeacronym'];
         
-        $result = $user->addOffice($officename, $descrip, $m);
+        $result = $user->addOffice($officename, $officeacronym, $descrip, $m);
         
         if($result){
             echo "<script>alert('Successfully Adding Office!');</script>";
@@ -116,6 +117,18 @@
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                 </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
             </ul>
         </nav>
 
@@ -154,18 +167,20 @@
 							<tr>
 							<th scope="col" style='width: 15%'>Office id</th>
 							<th scope="col">Office Name</th>
+							<th scope="col">Office Acronym</th>
 							<th scope="col" style="width: 25%">Action</th>
 							</tr>
 						</thead>
 						<tbody>
                         <?php
                         if(!isset($_REQUEST['buttonSearch'])){
-                            $getoffices = $user->get_offices_to_admin_table();
+                            $getoffices = $user->optionoffice();
                             if($getoffices){
                                 foreach($getoffices as $index => $value){
                                 echo "<tr>
                                             <td scope='row' style='width: 15%'>" . $value["office_id"] . "</td> 
                                             <td>" . $value["office_name"] ." </td>
+                                            <td>" . $value["office_accronym"] ." </td>
                                             <td style='width: 25%'>
                                             <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["office_id"] . "' style='margin-right: 10px;' data-target='#OfficeInfo'> View </button>
                                             <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["office_id"]. "' style='margin-right: 10px;' data-target='#UpdateOffice'> Update </button>

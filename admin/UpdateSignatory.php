@@ -6,11 +6,14 @@ $user = new User();
 	
 	if(isset($_POST['update'])) {
 		// $setnewid = $_POST['empid'];
-		$setfirstname = $_POST['fname'];
-		$setlastname = $_POST['lname'];
-		$setmiddleI = $_POST['mi'];
-		$setinitials = $_POST['initials'];
+		$settitle = ucwords($_POST['title']);
+		$setfirstname = ucwords($_POST['fname']);
+		$setlastname = ucwords($_POST['lname']);
+		$setmiddleI = strtoupper($_POST['mi']);
+		$setinitials = strtoupper($_POST['initials']);
 		$setposition = $_POST['position'];
+		$set_s_tree = strtoupper($_POST['s_tree']);
+		$set_s_signatory = strtoupper($_POST['s_signatory']);
 		$setoptionsgis = 0;
 		$setoptionsgl = 0;
 		if(isset($_POST['gis_ce_check'])){
@@ -21,9 +24,7 @@ $user = new User();
 			$setoptionsgl = 1;
 		}
 		$setid = $_GET['id'];
-		$setrange_start = $_POST['rangestart'];
-		$setrange_end = $_POST['rangeend'];
-		$result = $user->updatesignatory($setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $setoptionsgis, $setoptionsgl, $setid, $setrange_start, $setrange_end);
+		$result = $user->updatesignatory($settitle, $setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $setoptionsgis, $setoptionsgl, $set_s_tree, $set_s_signatory, $setid);
 	
 		if($result){
 			echo "<script>alert('Successfully Updating Signatory!');</script>";
@@ -103,11 +104,15 @@ $user = new User();
 				</div>
 				<div class="form-group col-lg-3">
 				</div> -->
-				<div class="form-group col-lg-6">
+				<div class="form-group col-lg-12">
+                  <input value="<?php echo $getsignatory['name_title']; ?>" placeholder="Signatory Title" id="title" name="title" type="text" class="form-control">
+                  <label class="active" for="title">Signatory Title (e.g. Atty.)</label>
+                </div>
+                <div class="form-group col-lg-12">
 				  <input value="<?php echo $getsignatory['first_name']; ?>" placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required>
 				  <label class="active" for="fname">First Name</label>
 				</div>
-				<div class="form-group col-lg-6">
+				<div class="form-group col-lg-12">
 				  <input value="<?php echo $getsignatory['last_name']; ?>" placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required>
 				  <label class="active" for="lname">Last Name</label>
 				</div>
@@ -145,15 +150,34 @@ $user = new User();
 					</select>
 					 <label class="active" for="position">Options</label> -->
 				</div>
-				
-				<div class="form-group col-lg-6 srange">
-				  <input value="<?php echo $getsignatory['range_start']; ?>" placeholder="&#8369; Range Start" id="rangestart" name="rangestart" type="number" class="form-control">
-				  <label class="active" for="rangestart">Range Start</label>
-				</div>
-				<div class="form-group col-lg-6 srange">
-				  <input value="<?php echo $getsignatory['range_end']; ?>" placeholder="&#8369; Range End" id="rangeend" name="rangeend" type="number" class="form-control">
-				  <label class="active" for="rangeend">Range End</label>
-				</div>
+                <div class="form-group col-lg-6">
+                    <select placeholder="SIGNATORY TREE" id="s_tree" name="s_tree" type="text" class="form-control" required>
+						<option value="none" <?php echo (strtolower($getsignatory['signatory_tree']) == "none"?"selected":"") ?>> - </option>
+                        <option value="CURRENTHEAD1" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead1"?"selected":"") ?>>DSWD SECRETARY</option>
+                        <option value="CURRENTHEAD2" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead2"?"selected":"") ?>>Regional Director</option>
+                        <option value="CURRENTHEAD3" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead3"?"selected":"") ?>>ARD for Operation</option>
+                        <option value="CURRENTHEAD4" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead4"?"selected":"") ?>>ARD for Administration</option>
+                        <option value="CURRENTHEAD5" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead5"?"selected":"") ?>>PSD CHIEF</option>
+                        <option value="CURRENTHEAD6" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead6"?"selected":"") ?>>CIS HEAD</option>
+                        <option value="CURRENTHEAD7" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead7"?"selected":"") ?>>SWADO - 3RD DISTRICT</option>
+                        <option value="CURRENTHEAD8" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead8"?"selected":"") ?>>SWADO - DAVAO DEL SUR</option>
+                        <option value="CURRENTHEAD9" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead9"?"selected":"") ?>>SWADO - DAVAO DEL NORTE</option>
+                        <option value="CURRENTHEAD10" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead10"?"selected":"") ?>>SWADO - DAVAO DE ORO</option>
+                        <option value="CURRENTHEAD11" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead11"?"selected":"") ?>>SWADO - DAVAO ORIENTAL</option>
+                        <option value="CURRENTHEAD12" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead12"?"selected":"") ?>>SWADO - DAVAO OCCIDENTAL</option>
+                        <option value="CURRENTHEAD13" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead13"?"selected":"") ?>>SPMC</option>
+                        <option value="CURRENTHEAD14" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead14"?"selected":"") ?>>DRMC</option>
+                        <option value="CURRENTHEAD15" <?php echo (strtolower($getsignatory['signatory_tree']) == "currenthead15"?"selected":"") ?>>ASSISTANT TO CIS HEAD</option>
+					</select>
+					<label class="active" for="s_tree">SIGNATORY TREE</label>
+                </div>
+                <div class="form-group col-lg-6">
+                    <select placeholder="SPECIAL SIGNATORY" id="s_signatory" name="s_signatory" type="text" class="form-control" required>
+						<option value="0" <?php echo ($getsignatory['special_ini'] == "0"?"selected":"") ?>>De-Activate</option>
+						<option value="1" <?php echo ($getsignatory['special_ini'] == "1"?"selected":"") ?>>Active</option>
+					</select>
+                    <label class="active" for="s_signatory">SPECIAL SIGNATORY</label>
+                </div>
 			</div>
 		</div>
 		<div class="modal-footer">

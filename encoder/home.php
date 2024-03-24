@@ -23,10 +23,10 @@
     if(!isset($_POST['wbeneficiary'])){
 		if(isset($_POST['addClient'])){
 			//client the one that process the transaction
-			$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
-			$mname = mysqli_real_escape_string($user->db,strtoupper($_POST['middlename']));
-			$lname = mysqli_real_escape_string($user->db,strtoupper($_POST['lastname']));
-			$exname = mysqli_real_escape_string($user->db,strtoupper($_POST['extraname']));
+			$fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname'])," "));
+			$mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename'])," "));
+			$lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lastname'])," "));
+			$exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['extraname']), " "));
 			$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
 			$bday = $_POST['birthday'];
 			$age = $user->getAge($bday);
@@ -37,7 +37,6 @@
 				$salary = '0';
 			}
 			$category = mysqli_real_escape_string($user->db,$_POST['category']);
-			$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
 			$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 			$contact = mysqli_real_escape_string($user->db,$_POST['contact']);
 			
@@ -48,13 +47,23 @@
 			$district = mysqli_real_escape_string($user->db,$_POST['district']);
 			$street= mysqli_real_escape_string($user->db,$_POST['street']);
             
-            $execute = $user->insertClient($fname, $mname, $lname, $exname, $sex, $bday, $age, $occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street);
+            if($age > 17){
+                $execute = $user->insertClient($fname, $mname, $lname, $exname, $sex, $bday, $age, $occupation, $salary, $category, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street);
+            }
+            else {
+                $dedup = $user->cleardup();
+				echo "<script>alert('Error! Minor Client');</script>";
+                echo "<script>window.location='home.php';</script>";
+				echo "<meta http-equiv='refresh' content='0'>";
+            }
             if($execute){
+                $dedup = $user->cleardup();
 				echo "<script>alert('Client Successfully Added!');</script>";
                 echo "<script>window.location='picture.php?id=".$execute."';</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
 			}
 			else{
+                $dedup = $user->cleardup();
 				echo "<script>alert('Sorry Error uploading!');</script>";
                 echo "<script>window.location='home.php';</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
@@ -64,13 +73,13 @@
 	else{
 		if(isset($_POST['addClient'])){
 		//client the one that process the transaction
-		$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
-		$mname = mysqli_real_escape_string($user->db,strtoupper($_POST['middlename']));
-		$lname = mysqli_real_escape_string($user->db,strtoupper($_POST['lastname']));
-		$exname = mysqli_real_escape_string($user->db,strtoupper($_POST['extraname']));
+		$fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname']), " "));
+		$mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename']), " "));
+		$lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lastname']), " "));
+		$exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['extraname']), " "));
 		$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
 		$bday = $_POST['birthday'];
-		//$age = $user->getAge($bday);
+		$age = $user->getAge($bday);
 		$occupation = mysqli_real_escape_string($user->db,strtoupper($_POST['occupation']));
 		if($_POST['salary'] != ''){
 			$salary= $_POST['salary'];
@@ -78,7 +87,6 @@
 			$salary = '0';
 		}
 		$category = mysqli_real_escape_string($user->db,$_POST['category']);
-		$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
 		$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 		$contact = mysqli_real_escape_string($user->db,$_POST['contact']);
 		$region = mysqli_real_escape_string($user->db,$_POST['regions']);
@@ -90,17 +98,22 @@
 	
 		// beneficiary
 		$relationship = mysqli_real_escape_string($user->db,$_POST['relation']);
-		$b_fname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_fname']));
-		$b_mname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_mname']));
-		$b_lname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_lname']));
-		$b_exname = mysqli_real_escape_string($user->db,strtoupper($_POST['b_exname']));
+		$b_fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_fname']), " "));
+		$b_mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_mname']), " "));
+		$b_lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_lname']), " "));
+		$b_exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_exname']), " "));
 		$b_bday = $_POST['b_bday'];
 		//$b_age = $user->getAge($b_bday);
+		$b_occupation = mysqli_real_escape_string($user->db,strtoupper($_POST['b_occupation']));
+		if($_POST['b_salary'] != ''){
+			$b_salary= $_POST['b_salary'];
+		}else{
+			$b_salary = '0';
+		}
 		$b_sex = mysqli_real_escape_string($user->db,$_POST['b_sex']);
 		$b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
 		$b_contact = mysqli_real_escape_string($user->db,$_POST['b_contact']);
 		$b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
-		$b_subCat = mysqli_real_escape_string($user->db,$_POST['b_subcat']);
 		$b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
 		$b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
 		$b_city_mun = mysqli_real_escape_string($user->db,$_POST['b_city']);
@@ -109,16 +122,26 @@
 		$b_street = mysqli_real_escape_string($user->db,$_POST['b_street']);
 		
 		
-        $execute = $user->insertClientWB($fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, 
-        $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, 
-        $b_category, $b_subCat, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street);
+       if($age > 17){
+            $execute = $user->insertClientWB($fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $civilStatus, $contact, $region, 
+            $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, 
+            $b_occupation, $b_salary, $b_category, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street);
+        }
+        else{
+            $dedup = $user->cleardup();
+            echo "<script>alert('Error! Minor Client');</script>";
+            echo "<script>window.location='home.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+        }
 		
 			if($execute){
+                $dedup = $user->cleardup();
 				echo "<script>alert('Client Successfully Added!');</script>";
                 echo "<script>window.location='picture.php?id=".$execute."';</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
 			}
 			else{
+                $dedup = $user->cleardup();
 				echo "<script>alert('Sorry Error uploading!');</script>";
                 echo "<script>window.location='home.php';</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
@@ -135,6 +158,7 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="UTF-8">
 		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
 		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
@@ -257,26 +281,40 @@
                         </tbody>
                     </table>
                 
-                <script>
-                    $(document).ready(function(){
-                        $('#search_text').keyup(function(){  //On pressing a key on "Search box". This function will be called
-                            var txt = $('#search_text').val(); //Assigning search box value to javascript variable.
-                            // console.log(txt);
-                            if(txt != ''){ //Validating, if "name" is empty.
-                                $.ajax({
-                                    type: "post", //method to use
-                                    url: "fetch.php", //ginapasa  sa diri nga file and data
-                                    data: {search:txt}, //mao ni nga data
-                                    success: function(html){  //If result found, this funtion will be called.
-                                        $('#search_result').html(html).show();  //Assigning result to "#result" div.
-                                    }
-                                });
-                            }else{
-                            $('#search_result').html(""); //Assigning no result to "result" div.
-                            }
+                    <script>
+                        // Custom debounce function
+                        function debounce(func, wait) {
+                            let timeout;
+                            return function () {
+                                const context = this;
+                                const args = arguments;
+                                clearTimeout(timeout);
+                                timeout = setTimeout(function () {
+                                    func.apply(context, args);
+                                }, wait);
+                            };
+                        }
+
+                        $(document).ready(function () {
+                            const debouncedSearch = debounce(function () {
+                                var txt = $('#search_text').val();
+                                if (txt !== '') {
+                                    $.ajax({
+                                        type: "post",
+                                        url: "fetch.php",
+                                        data: { search: txt },
+                                        success: function (html) {
+                                            $('#search_result').html(html).show();
+                                        }
+                                    });
+                                } else {
+                                    $('#search_result').html("");
+                                }
+                            }, 1000); 
+
+                            $('#search_text').keyup(debouncedSearch);
                         });
-                    });
-                </script>
+                    </script>
             </div>
             </div>
         </div>
@@ -370,6 +408,20 @@
             });  
         })
     </script>
+    <div class="modal hide fade" id="cancelGL" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cancellation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+				<div class="cancelbody">
+				</div>
+			</div>	
+		</div>
+	</div>
     <div class="modal hide fade" id="passclient" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -399,6 +451,7 @@
 			</div>	
 		</div>
 	</div>
+    
 		<!-- Modal for Passing Beneficiary into Client -->
 	<div class="modal hide fade" id="passbenetoclient" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document">
@@ -485,6 +538,27 @@ $('#clientdata').appendTo("body").on('show.bs.modal', function (event) {
 $(".clientdata").appendTo("body").on("hidden.bs.modal", function(){
     $(".showClientData").html("");
 });
+
+//jscript pass Client
+$('#cancelGL').appendTo("body").on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var userid = button.data('id') // Extract info from data-* attributes
+          var modal = $(this);
+          var dataString = 'id=' + userid;
+		    // console.log(dataString);
+            $.ajax({
+                type: "GET",
+                url: "cancelclientGL.php",
+                data: dataString,
+                cache: false,
+                success: function (data) {
+                    modal.find('.cancelbody').html(data);
+                },
+                error: function(err) {
+                    // console.log(err);
+                }
+            });  
+    });
 
 //jscript pass Client
 $('#passclient').appendTo("body").on('show.bs.modal', function (event) {
@@ -659,7 +733,10 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
         function re_print(id){
             window.location.href = "reprint.php?id=" + id;
         }
-        
+        function create_osap(id){
+            window.location.href = "osap_page.php?id=" + id;
+        }
+
         $(function () {
             $("#radiobutton2").click(function () {
                 if ($("#radiobutton2").is(":checked")) {

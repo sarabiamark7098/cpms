@@ -1,5 +1,5 @@
 <?php
-
+	error_reporting(0);
 	session_start();
 	include ("db_config.php");
 	include ("db_config2.php");
@@ -15,127 +15,120 @@
 		public function __construct(){
 
 			$this->db =  mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-
 				if(mysqli_connect_errno()) 	 {
 					die("Database connection failed: " . 
 						mysqli_connect_error() . 
 						" (" . mysqli_connect_errno() . ")"
 					);
 				}
-
+            mysqli_query($this->db, "set global sql_mode=''");
 			$this->db2 =  mysqli_connect(DB_SERVER2, DB_USERNAME2, DB_PASSWORD2, DB_DATABASE2);
-
 				if(mysqli_connect_errno()) {
 					die("Database connection failed: " . 
 						mysqli_connect_error() . 
 						" (" . mysqli_connect_errno() . ")"
 					);
 				}
-			
-			// $this->db3 =  mysqli_connect(DB_SERVER3, DB_USERNAME3, DB_PASSWORD3, DB_DATABASE3);
-
-			// 	if(mysqli_connect_errno()) {
-			// 		die("Database connection failed: " . 
-			// 			mysqli_connect_error() . 
-			// 			" (" . mysqli_connect_errno() . ")"
-			// 		);
-			// 	}
+            // mysqli_query($this->db2, "set global sql_mode=''");
 			}
 			
 
-		/*** for login process ***/
-		public function check_login($user, $pass){
-			$username = mysqli_real_escape_string($this->db2,$user); 
-			$password = mysqli_real_escape_string($this->db2,$pass); 
-			
-			$sqlquery="SELECT * from employee_info WHERE empuser='{$username}' and emppass='{$password}'";
-	
-			//checking if the username is available in the table
-        	$result = mysqli_query($this->db2,$sqlquery);
-			while($row = mysqli_fetch_assoc($result)) {
-					$user = $row['empuser'];
-					$pass = $row['emppass'];
-			
-			if(($user === $username) && ($pass === $password)){
-				return true;
-			}
-			else{
-				return false;
-			}
-			}
-		}
+			/*** for login process ***/
+			public function check_login($user, $pass){
+				$username = mysqli_real_escape_string($this->db2,$user); 
+				$password = mysqli_real_escape_string($this->db2,$pass); 
+				
+				$sqlquery="SELECT * from employee_info WHERE empuser='{$username}' and emppass='{$password}'";
 		
-		//check nya ang status kung pwd sa maka login kung active ba sya
-		public function check_status($user, $pass){
-
-			$username = mysqli_real_escape_string($this->db2,$user); 
-			$password = mysqli_real_escape_string($this->db2,$pass); 
-			
-			$query = "SELECT status FROM employee_info
-			LEFT JOIN tbl_employment USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empuser='{$username}' and emppass='{$password}';";
-			$result = mysqli_query($this->db2,$query);
-
-			if($data === 'Activated'){
-				return true;
+				//checking if the username is available in the table
+				$result = mysqli_query($this->db2,$sqlquery);
+				while($row = mysqli_fetch_assoc($result)) {
+						$user = $row['empuser'];
+						$pass = $row['emppass'];
+				
+				if(($user === $username) && ($pass === $password)){
+					return true;
+				}
+				else{
+					return false;
+				}
+				}
 			}
-			else{
-				return false;
-			}
-		}
 		
-		//nagakuha sa position sa user para makapli ug asa sya iredirect
-		public function check_user($id){
-			$id = mysqli_real_escape_string($this->db2,$id);
+			//check nya ang status kung pwd sa maka login kung active ba sya
+			public function check_status($user, $pass){
+				$username = mysqli_real_escape_string($this->db2,$user); 
+				$password = mysqli_real_escape_string($this->db2,$pass); 
+				
+				$query = "SELECT status FROM employee_info
+				LEFT JOIN tbl_employment USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empuser='{$username}' and emppass='{$password}';";
+				$result = mysqli_query($this->db2,$query);
 
-			$query = "SELECT * FROM tbl_employment
-			LEFT JOIN employee_info  USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid = '{$id}';";
-			
-			$result = mysqli_query($this->db2,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$data['office_id'] = $row['office_id'];
-			$data['position'] = $row['position'];
-			$data['fullname'] = strtoupper($row['empfname'] ." ". $row['empmname'][0] .". ". $row['emplname']);
-			if($data){
-				return $data;
+				$row = mysqli_fetch_assoc($result);
+
+				$data = $row['status'];
+
+				if($data === 'Activated'){
+					return true;
+				}
+				else{
+					return false;
+				}
 			}
-			else {
-				return false;
+		
+			//nagakuha sa position sa user para makapli ug asa sya iredirect
+			public function check_user($id){
+				$id = mysqli_real_escape_string($this->db2,$id);
+
+				$query = "SELECT * FROM tbl_employment
+				LEFT JOIN employee_info  USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empid = '{$id}';";
+				
+				$result = mysqli_query($this->db2,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$data['office_id'] = $row['office_id'];
+				$data['position'] = $row['position'];
+				$data['fullname'] = strtoupper($row['empfname'] ." ". (!empty($row['empmname'][0])?$row['empmname'][0] .". ":""). $row['emplname'] ." ". (!empty($row['empext'][0])?$row['empext'][0] .".":""));
+				if($data){
+					return $data;
+				}
+				else {
+					return false;
+				}
 			}
-		}
 
-		public function login_log(){
-			$datenow = date("Y-m-d H:i:s");
+			public function login_log(){
+				$datenow = date("Y-m-d H:i:s");
 
-			$query = "INSERT INTO user_log(empid, office_id, login_datetime) VALUES
-			('{$_SESSION['userId']}', '{$_SESSION['f_office']}', '{$datenow}')";
-			$result = mysqli_query($this->db, $query);
+				$query = "INSERT INTO user_log(empid, office_id, login_datetime) VALUES
+				('{$_SESSION['userId']}', '{$_SESSION['f_office']}', '{$datenow}')";
+				$result = mysqli_query($this->db, $query);
 
-			if($result){
-				return $result;
-			}else{
-				return false;
+				if($result){
+					return $result;
+				}else{
+					return false;
+				}
 			}
-		}
 
-		public function logout_log(){
-			$datenow = date("Y-m-d H:i:s");
-			$now = date("Y-m-d");
+			public function logout_log(){
+				$datenow = date("Y-m-d H:i:s");
+				$now = date("Y-m-d");
 
-			$query = "UPDATE user_log SET logout_datetime = '{$datenow}' 
-			WHERE empid = '{$_SESSION['userId']}' AND login_datetime LIKE '%{$now}%' AND logout_datetime IS NULL";
-			$result = mysqli_query($this->db, $query);
+				$query = "UPDATE user_log SET logout_datetime = '{$datenow}' 
+				WHERE empid = '{$_SESSION['userId']}' AND login_datetime LIKE '%{$now}%' AND logout_datetime IS NULL";
+				$result = mysqli_query($this->db, $query);
 
-			if($result){
-				return $result;
-			}else{
-				return false;
+				if($result){
+					return $result;
+				}else{
+					return false;
+				}
 			}
-		}
 
 		// public function Forgot_to_logout(){
 		// 	$datenow = date("18:00:00");
@@ -150,376 +143,366 @@
 		// 	}
 		// }
 		
-		//kuha ug user id para isesson para sa linking sa nag encode
-		public function getUserId($username, $password){
-			$query = "SELECT * FROM tbl_employment
-			LEFT JOIN employee_info USING (empnum) WHERE empuser = '{$username}' and emppass='{$password}';";
-			$result = mysqli_query($this->db2,$query);
-			$row = mysqli_fetch_assoc($result);
-			$data = $row['empid'];
-			if($data){
-				return $data;
+			//kuha ug user id para isesson sa linking sa nag encode
+			public function getUserId($username, $password){
+				$query = "SELECT i.empnum, e.empid, i.emppass, i.empuser 
+				FROM tbl_employment e
+				LEFT JOIN employee_info i USING (empnum) 
+				WHERE empuser = '{$username}' and emppass='{$password}';";
+				$result = mysqli_query($this->db2,$query);
+				$row = mysqli_fetch_assoc($result);
+				$data = $row['empid'];
+				if($data){
+					return $data;
+				}
+				else {
+					return false;
+				}
 			}
-			else {
-				return false;
-			}
-		}
 
-		public function getuserInfo($id){
-			$query = "SELECT * FROM employee_info 
-			LEFT JOIN tbl_employment USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid='{$id}';";
-			$result = mysqli_query($this->db2, $query);
-			$row = mysqli_fetch_assoc($result);
-			if($row){
-				return $row;
+			public function getuserInfo($id){
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id 
+				FROM employee_info i
+				LEFT JOIN tbl_employment e USING (empnum)
+				LEFT JOIN cpms_account c USING (empid)
+				WHERE empid='{$id}';";
+				$result = mysqli_query($this->db2, $query);
+				$row = mysqli_fetch_assoc($result);
+				if($row){
+					return $row;
+				}
+				else {
+					return false;
+				}
 			}
-			else {
-				return false;
-			}
-		}
 
-		public function getuserFullname($id){
-			$query = "SELECT * FROM employee_info 
-			LEFT JOIN tbl_employment USING (empnum) 
-			LEFT JOIN cpms_account USING (empid) WHERE empid='{$id}';";
-			$result = mysqli_query($this->db2, $query);
-			$row = mysqli_fetch_assoc($result);
-			if($row){
-				$fullname = strtoupper($row['empfname'] ." ".(!empty($row['empmname'])?$row['empmname'][0] .". ":""). $row['emplname'] .' '. (!empty($row['empext'])?$row['empext']:"") );
-				return $fullname;
-			}else{
-				return "";
+			public function getuserFullname($id){
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empnum, e.empid, c.*
+				FROM employee_info i
+				LEFT JOIN tbl_employment e USING (empnum) 
+				LEFT JOIN cpms_account c USING (empid) WHERE empid='{$id}';";
+				$result = mysqli_query($this->db2, $query);
+				$row = mysqli_fetch_assoc($result);
+				if($row){
+					$fullname = strtoupper($row['empfname'] ." ".(!empty($row['empmname'])?$row['empmname'][0] .". ":""). $row['emplname'] .' '. (!empty($row['empext'])?$row['empext'].".":"") );
+					return $fullname;
+				}else{
+					return "";
+				}
 			}
-		}
-		/** Field Offices Page Functions */
-		public function optionoffice(){  // Show all rows in table region to SELECT tag of php
-			$query = "SELECT * FROM field_office";
-			$result = mysqli_query($this->db,$query);
-			$rows = mysqli_num_rows($result);
-			if($rows > 0){
-				return $result;
-			}else{
-				return false;
-			}
-		}
 
-		public function get_offices_to_admin_table(){	// Show all
-			$query = "SELECT * FROM field_office;";
-			$result = mysqli_query($this->db,$query);
-			
-			if(mysqli_num_rows($result) > 0) {
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
-
-		public function addOffice($officename, $descrip, $m){
-			$municipal = explode("/", $m);
-			
-			$query = "SELECT LEFT('{$municipal['1']}', 6) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
-			$result = mysqli_query($this->db,$query);
-			$num_row = mysqli_num_rows($result);
-			$num_row = $num_row + 1;
-
-			$num = sprintf("%02d", $num_row);
-			$office_id = $row['code']."-".$num;
-
-			$query = "INSERT INTO field_office(office_id, office_name, description) VALUES
-					('{$office_id}', '{$officename}', '{$descrip}')";
-			$result = mysqli_query($this->db,$query);
-			
-			if($result) {
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
-
-		public function updateOffice($officename, $descrip, $m, $fo_id){
-			$municipal = explode("/", $m);
-			
-			$query = "SELECT LEFT('{$municipal['1']}', 6) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
-			$result = mysqli_query($this->db,$query);
-			$num_row = mysqli_num_rows($result);
-			$num_row = $num_row + 1;
-
-			$num = sprintf("%02d", $num_row);
-			$office_id = $row['code']."-".$num;
-
-			$query = "SELECT LEFT('{$fo_id}', 6) as code";
-			$result = mysqli_query($this->db,$query);
-			$row1 = mysqli_fetch_assoc($result);
-			
-			$query = "UPDATE field_office SET ";
-			if($row1['code'] != $row['code']){
-				$query = "office_id = '{$office_id}', ";
-			}
-			$query .= "office_name = '{$officename}', description = '{$descrip}' WHERE office_id = '{$fo_id}'"; 
-			$result = mysqli_query($this->db,$query);
-			
-			if($result) {
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
-
-		public function show_office_data($officeid){
-			$query = "SELECT * FROM field_office WHERE office_id = '{$officeid}';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row;
-				
-			}
-			else{
-				return false;
-			}
-		}
-
-		public function get_office_name($officeid){
-			$query = "SELECT * FROM field_office WHERE office_id = '{$officeid}';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row['office_name'];
-				
-			}
-			else{
-				return false;
-			}
-		}		
-		/** Employee Page Functions */
-
-		public function getallEmployee(){
-			$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info using (empnum)
-				LEFT JOIN cpms_account using (empid);";
-			$result = mysqli_query($this->db2, $query);
-			
-			return $result;
-		}
-
-		public function getEmpData($id){
-			$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info using (empnum)
-				LEFT JOIN cpms_account using (empid)
-				WHERE empid = '{$id}';";
-			$result = mysqli_query($this->db2, $query);
-			$row = mysqli_fetch_assoc($result);
-			
-			if($row){
-				return $row;
-			}else{
-				return false;
-			}
-		}
-		
-		public function RequestData($id){
-			$query = "SELECT * FROM user_request
-				WHERE emp_num = '{$id}' AND (date_granted IS NULL AND date_cancel IS NULL);";
-			$result = mysqli_query($this->db, $query);
-			$row = mysqli_fetch_assoc($result);
-			
-			if($row){
-				return $row;
-			}else{
-				return false;
-			}
-		}
-
-
-		public function compareEmpNum($empnum, $office){
-			$query = "SELECT * FROM user_request WHERE emp_num = '{$empnum}' AND (date_granted IS NULL AND date_cancel IS NULL);";
-			$result = mysqli_query($this->db, $query);
-			$rows = mysqli_fetch_assoc($result);
-			$row = mysqli_num_rows($result);
-			// if(empty($rows['date_granted']) && empty($rows['date_cancel'])){
-				if($office == $rows['request_office']){
-					if($row > 0){
-						return $row;
-					}else{
-						return false;
-					}
+			/** Field Offices Page Functions */
+			public function optionoffice(){  // Show all rows in table region to SELECT tag of php
+				$query = "SELECT * FROM field_office";
+				$result = mysqli_query($this->db,$query);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $result;
 				}else{
 					return false;
 				}
-			// }else{
-			// 	return false;
-			// }
-		}
+			}
 
-		public function compareEmpNumSA($empnum, $office){
-			$query = "SELECT * FROM user_request WHERE emp_num = '{$empnum}' AND (date_granted IS NULL AND date_cancel IS NULL);";
-			$result = mysqli_query($this->db, $query);
-			$rows = mysqli_fetch_assoc($result);
-			$row = mysqli_num_rows($result);
-			// if(empty($rows['date_granted']) && empty($rows['date_cancel'])){
+			// public function get_offices_to_admin_table(){	// Show all
+			// 	$query = "SELECT * FROM field_office;";
+			// 	$result = mysqli_query($this->db,$query);
+				
+			// 	if(mysqli_num_rows($result) > 0) {
+			// 		return $result;
+			// 	}
+			// 	else{
+			// 		return false;
+			// 	}
+			// }
+
+			public function addOffice($officename, $officeacronym, $descrip, $m){
+				$municipal = explode("/", $m);
+				
+				$query = "SELECT LEFT('{$municipal['1']}', 6) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT office_id FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
+				$result = mysqli_query($this->db,$query);
+				$num_row = mysqli_num_rows($result);
+				$num_row = $num_row + 1;
+
+				$num = sprintf("%02d", $num_row);
+				$office_id = $row['code']."-".$num;
+
+				$query = "INSERT INTO field_office(office_id, office_name, office_accronym, description) VALUES
+						('{$office_id}', '{$officename}', '{$officeacronym}', '{$descrip}')";
+				$result = mysqli_query($this->db,$query);
+				
+				if($result) {
+					return $result;
+				}
+				else{
+					return false;
+				}
+			}
+
+			public function updateOffice($officename, $officeacronym, $descrip, $m, $fo_id){
+				$municipal = explode("/", $m);
+				
+				$query = "SELECT LEFT('{$municipal['1']}', 6) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
+				$result = mysqli_query($this->db,$query);
+				$num_row = mysqli_num_rows($result);
+				$num_row = $num_row + 1;
+
+				$num = sprintf("%02d", $num_row);
+				$office_id = $row['code']."-".$num;
+
+				$query = "SELECT LEFT('{$fo_id}', 6) as code";
+				$result = mysqli_query($this->db,$query);
+				$row1 = mysqli_fetch_assoc($result);
+				
+				$query = "UPDATE field_office SET ";
+				if($row1['code'] != $row['code']){
+					$query = "office_id = '{$office_id}', ";
+				}
+				$query .= "office_name = '{$officename}', description = '{$descrip}', office_accronym = '{$officeacronym}'  WHERE office_id = '{$fo_id}'"; 
+				$result = mysqli_query($this->db,$query);
+				
+				if($result) {
+					return $result;
+				}
+				else{
+					return false;
+				}
+			}
+
+			public function show_office_data($officeid){
+				$query = "SELECT * FROM field_office WHERE office_id = '{$officeid}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+				}
+				else{
+					return false;
+				}
+			}
+
+			public function get_office_name($officeid){
+				$query = "SELECT * FROM field_office WHERE office_id = '{$officeid}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row['office_name'];
+				}
+				else{
+					return false;
+				}
+			}
+
+			/** Employee Page Functions */
+			public function getallEmployee(){
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id 
+				FROM tbl_employment e
+				LEFT JOIN employee_info i using (empnum)
+				LEFT JOIN cpms_account c using (empid);";
+				$result = mysqli_query($this->db2, $query);
+				
+				return $result;
+			}
+
+			public function getEmpData($id){
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id
+				FROM tbl_employment e
+				LEFT JOIN employee_info i using (empnum)
+				LEFT JOIN cpms_account c using (empid)
+				WHERE empid = '{$id}';";
+				$result = mysqli_query($this->db2, $query);
+				$row = mysqli_fetch_assoc($result);
+				
+				if($row){
+					return $row;
+				}else{
+					return false;
+				}
+			}
+		
+			public function RequestData($id){
+				$query = "SELECT * FROM user_request
+					WHERE emp_num = '{$id}' AND (date_granted IS NULL AND date_cancel IS NULL);";
+				$result = mysqli_query($this->db, $query);
+				$row = mysqli_fetch_assoc($result);
+				
+				if($row){
+					return $row;
+				}else{
+					return false;
+				}
+			}
+
+
+			public function compareEmpNum($empnum){
+				$query = "SELECT * FROM user_request WHERE emp_num = '{$empnum}' AND (date_granted IS NULL AND date_cancel IS NULL);";
+				$result = mysqli_query($this->db, $query);
+				$rows = mysqli_fetch_assoc($result);
+				$row = mysqli_num_rows($result);
 				if($row > 0){
 					return $row;
 				}else{
 					return false;
 				}
-			// }else{
-			// 	return false;
-			// }
-		}
-
-		public function updateEmployee($empid, $id, $position, $user, $pass, $status, $office){
-			if($position != "" && $status != ""){
-				$query = "UPDATE cpms_account SET empid = '{$id}', position = '{$position}', status = '{$status}', office_id = '{$office}' WHERE empid = '{$empid}'";
-				$result = mysqli_query($this->db2, $query);
 			}
-			$query = "SELECT empnum FROM  tbl_employment WHERE empid = '{$empid}'";
-			$result = mysqli_query($this->db2, $query);
-			$row = mysqli_fetch_assoc($result);
 
-			$query = "UPDATE tbl_employment SET empid = '{$id}' WHERE empid = '{$empid}'";
-			$result = mysqli_query($this->db2, $query);
-
-			$query = "UPDATE employee_info SET empuser = '{$user}', emppass = '{$pass}' WHERE empnum = '{$row['empnum']}'";
-			$result = mysqli_query($this->db2, $query);
-			
-			return $result;
-		}
-
-		public function cancelRequest($id){
-			$datenow = date("Y-m-d H:i:s"); //serve as date_request
-			
-			$query = "UPDATE user_request SET date_cancel = '{$datenow}' WHERE emp_num = '{$id}'";
-			$result = mysqli_query($this->db, $query);
-
-			return $result;
-		}
-
-		public function grantRequest($position, $id, $num, $office){
-			$datenow = date("Y-m-d H:i:s"); //serve as date_request
-			$query = "SELECT * FROM cpms_account WHERE empid = '{$id}'";
-			$result = mysqli_query($this->db2, $query);
-			$rows = mysqli_fetch_assoc($result);
-			$row = mysqli_num_rows($result);
-			
-			if($row <= 0){
-				$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
+			public function compareEmpNumSA($empnum, $office){
+				$query = "SELECT * FROM user_request WHERE emp_num = '{$empnum}' AND (date_granted IS NULL AND date_cancel IS NULL);";
 				$result = mysqli_query($this->db, $query);
-
-				$query = "INSERT INTO cpms_account(empid, position, status, office_id) VALUES 
-						('{$id}','{$position}','Activated', '{$office}')";
-				$result = mysqli_query($this->db2, $query);
-
-				if($result){
-					echo "<script>alert('Request Granted')</script>";
-					echo "<script>window.location='Employee.php';</script>";
-					echo "<meta http-equiv='refresh' content='0'>";
+				$rows = mysqli_fetch_assoc($result);
+				$row = mysqli_num_rows($result);
+				if($row > 0){
+					return $row;
 				}else{
-					echo "<script>alert('Error! Please Try Again')</script>";
-					echo "<script>window.location='Employee.php';</script>";
-					echo "<meta http-equiv='refresh' content='0'>";
+					return false;
 				}
-			}elseif($rows['position'] == $position && $rows['office_id'] == $office){
-				
-				$query = "UPDATE user_request SET date_cancel = '{$datenow}' WHERE emp_num = '{$num}'";
-				$result = mysqli_query($this->db, $query);
+			}
 
-				echo "<script>alert('Employee is Already Activated with the same Request')</script>";
-				echo "<script>window.location='Employee.php';</script>";
-				echo "<meta http-equiv='refresh' content='0'>";
-				
-			}elseif($rows['position'] != $position || $rows['office_id'] != $office){
-				
-				$query = "UPDATE cpms_account SET ";
-				if($rows['position'] != $position){
-				$query .= "position = '{$position}', ";
+			public function updateEmployee($empid, $id, $position, $status, $office){
+				if($position != "" && $status != ""){
+					$query = "UPDATE cpms_account SET empid = '{$id}', position = '{$position}', status = '{$status}', office_id = '{$office}' WHERE empid = '{$empid}'";
+					$result = mysqli_query($this->db2, $query);
 				}
-				if($rows['office_id'] != $office){	
-					$query .= "office_id = '{$office}', ";	
-				}
-				$query .= "status = 'Activated' WHERE empid = '{$id}' ";
+				$query = "SELECT empnum FROM  tbl_employment WHERE empid = '{$empid}'";
+				$result = mysqli_query($this->db2, $query);
+				$row = mysqli_fetch_assoc($result);
+
+				$query = "UPDATE tbl_employment SET empid = '{$id}' WHERE empid = '{$empid}'";
 				$result = mysqli_query($this->db2, $query);
 
-				if($rows['position'] != $position || $rows['office_id'] != $office){
+				return $result;
+			}
+
+			public function cancelRequest($id){
+				$datenow = date("Y-m-d H:i:s"); //serve as date_request
+				
+				$query = "UPDATE user_request SET date_cancel = '{$datenow}' WHERE emp_num = '{$id}'";
+				$result = mysqli_query($this->db, $query);
+
+				return $result;
+			}
+
+			public function grantRequest($position, $id, $num, $office){
+				$datenow = date("Y-m-d H:i:s"); //serve as date_request
+				$query = "SELECT * FROM cpms_account WHERE empid = '{$id}'";
+				$result = mysqli_query($this->db2, $query);
+				$rows = mysqli_fetch_assoc($result);
+				$row = mysqli_num_rows($result);
+				
+				if($row <= 0){
 					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
 					$result = mysqli_query($this->db, $query);
 
-					echo "<script>alert('Employee Request Granted')</script>";
+					echo $query = "INSERT INTO cpms_account(empid, position, status, office_id) VALUES 
+							('{$id}','{$position}','Activated', '{$office}')";
+					$result = mysqli_query($this->db2, $query);
+
+					if($result){
+						echo "<script>alert('Request Granted')</script>";
+						echo "<script>window.location='Employee.php';</script>";
+						echo "<meta http-equiv='refresh' content='0'>";
+					}else{
+						echo "<script>alert('Error! Please Try Again')</script>";
+						echo "<script>window.location='Employee.php';</script>";
+						echo "<meta http-equiv='refresh' content='0'>";
+					}
+				}elseif($rows['position'] == $position && $rows['office_id'] == $office){
+					
+					$query = "UPDATE user_request SET date_cancel = '{$datenow}' WHERE emp_num = '{$num}'";
+					$result = mysqli_query($this->db, $query);
+
+					echo "<script>alert('Employee is Already Activated with the same Request')</script>";
 					echo "<script>window.location='Employee.php';</script>";
 					echo "<meta http-equiv='refresh' content='0'>";
-				}else{
-					echo "<script>alert('Error! Please Try Again')</script>";
-					echo "<script>window.location='Employee.php';</script>";
-					echo "<meta http-equiv='refresh' content='0'>";
+					
+				}elseif($rows['position'] != $position || $rows['office_id'] != $office){
+					
+					$query = "UPDATE cpms_account SET ";
+					if($rows['position'] != $position){
+					$query .= "position = '{$position}', ";
+					}
+					if($rows['office_id'] != $office){	
+						$query .= "office_id = '{$office}', ";	
+					}
+					$query .= "status = 'Activated' WHERE empid = '{$id}' ";
+					$result = mysqli_query($this->db2, $query);
+
+					if($rows['position'] != $position || $rows['office_id'] != $office){
+						$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
+						$result = mysqli_query($this->db, $query);
+
+						echo "<script>alert('Employee Request Granted')</script>";
+						echo "<script>window.location='Employee.php';</script>";
+						echo "<meta http-equiv='refresh' content='0'>";
+					}else{
+						echo "<script>alert('Error! Please Try Again')</script>";
+						echo "<script>window.location='Employee.php';</script>";
+						echo "<meta http-equiv='refresh' content='0'>";
+					}
 				}
 			}
-		}
 
-		public function searchEmployeeforRequest($val){
-			$value = mysqli_real_escape_string($this->db2,$val); 
-	
-			$query = "SELECT empnum, empfname, emplname, empmname, empext FROM employee_info
-			WHERE ((CONCAT
-			(empfname, ' ',empmname, ' ',emplname)
-			 LIKE '%".$value."%') 
-			 OR (CONCAT
-			(emplname, ' ',empmname, ' ',empfname)
-			 LIKE '%".$value."%') 
-			 OR (CONCAT
-			(empmname, ' ',empfname, ' ',emplname)
-			 LIKE '%".$value."%') 
-			 OR (CONCAT
-			(emplname, ' ',empfname, ' ',empmname)
-			 LIKE '%".$value."%') 
-			 OR (CONCAT
-			(empmname, ' ',emplname, ' ',empfname)
-			 LIKE '%".$value."%') 
-			 OR (CONCAT
-			(empfname, ' ',emplname, ' ',empmname)
-			 LIKE '%".$value."%')) 
-			LIMIT 300";
-	
-			$result = mysqli_query($this->db2, $query);
-	
-			if($result){
-				return $result;
+			public function searchEmployeeforRequest($val){
+				$value = mysqli_real_escape_string($this->db2,$val); 
+		
+				$query = "SELECT empnum, empfname, emplname, empmname, empext FROM employee_info
+				WHERE ((CONCAT
+				(empfname, ' ',empmname, ' ',emplname)
+				LIKE '%".$value."%') 
+				OR (CONCAT
+				(emplname, ' ',empmname, ' ',empfname)
+				LIKE '%".$value."%') 
+				OR (CONCAT
+				(empmname, ' ',empfname, ' ',emplname)
+				LIKE '%".$value."%') 
+				OR (CONCAT
+				(emplname, ' ',empfname, ' ',empmname)
+				LIKE '%".$value."%') 
+				OR (CONCAT
+				(empmname, ' ',emplname, ' ',empfname)
+				LIKE '%".$value."%') 
+				OR (CONCAT
+				(empfname, ' ',emplname, ' ',empmname)
+				LIKE '%".$value."%')) 
+				LIMIT 5";
+		
+				$result = mysqli_query($this->db2, $query);
+		
+				if($result){
+					return $result;
+				}
+				else{
+					return false;
+				}
 			}
-			else{
-				return false;
-			}
-		}
 
-		public function get_employee_data($val){
-			$value = mysqli_real_escape_string($this->db2,$val); 
-	
-			$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info using (empnum)
-				LEFT JOIN cpms_account using (empid)
-				WHERE empnum = '{$value}';";
-			$result = mysqli_query($this->db2, $query);
-			$row = mysqli_fetch_assoc($result);
-			
-			if($row){
-				return $row;
-			}else{
-				return false;
+			public function get_employee_data($val){
+				$value = mysqli_real_escape_string($this->db2,$val); 
+		
+				$query = "SELECT * FROM tbl_employment
+					LEFT JOIN employee_info using (empnum)
+					LEFT JOIN cpms_account using (empid)
+					WHERE empnum = '{$value}';";
+				$result = mysqli_query($this->db2, $query);
+				$row = mysqli_fetch_assoc($result);
+				
+				if($row){
+					return $row;
+				}else{
+					return false;
+				}
 			}
-		}
 
 		public function insert_request($id, $position, $office){
 			$datenow = date("Y-m-d H:i:s"); //serve as date_request
@@ -532,7 +515,6 @@
 			}else{
 				return false;
 			}
-
 		}
 		
 		public function validateid($id){
@@ -561,6 +543,22 @@
 				}
 			}
 
+			public function getDistrict($code) {
+				
+				$municipalitycode = explode(" /", $code);
+				$sql= "SELECT d_id FROM municipality WHERE psgc_code LIKE '{$municipalitycode[1]}%''";
+				$result = mysqli_query($this->db, $sql);
+				$rows = mysqli_fetch_assoc($result);
+
+				$sql= "SELECT * FROM tbl_district WHERE psgc_code LIKE '{$municipalitycode[1]}%''";
+				$result = mysqli_query($this->db, $sql);
+                if (mysqli_num_rows($result) > 0) {
+                    $row = mysqli_fetch_assoc($result);
+					$district = $row["district_name"];
+					return $district;
+                }
+			}
+
 			public function getrelationshiplist(){
 				$query = "SELECT * FROM tbl_relationship";
 				$result = mysqli_query($this->db, $query);
@@ -573,684 +571,960 @@
 				}
 			}
 		
-		//Logout
-		
-		public function user_logout() {
-	        $_SESSION['login'] = FALSE;
-			session_unset();
-			session_destroy();  
-	    }
-		
-		//Registration
-		
-		//pag insert ni ddto gikan sa modal sa registration sa users
-		public function get_users_data($id, $fullname, $position, $username, $password, $initials){
-			$query = "INSERT INTO users (emp_id, fullname, position, username, password, initials, status)
-			VALUES
-			('{$id}', '{$fullname}', '{$position}', '{$username}', '{$password}', '{$initials}')";
+			//Logout
 			
-			$result = mysqli_query($this->db,$query);
-			if($result){
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		
-		//Search Function show data
-		
-		//pag search sa encoder
-		public  function search_for_socialwork($val){
-
-			$value = mysqli_real_escape_string($this->db,$val); 
-			
-			$query = "SELECT * FROM client_data
-			LEFT JOIN client_address ON client_data.client_id = client_address.client_id
-			LEFT JOIN beneficiary_data ON client_data.client_id = beneficiary_data.client_id
-			LEFT JOIN transact ON client_data.client_id = transact.client_id 
-			WHERE status_client = 'Pending' OR status_client = 'Serving' 
-			ORDER BY date_entered ASC;" ;
-			$result = mysqli_query($this->db,$query);
-	
-			if(mysqli_num_rows($result) > 0){
-					 return $result;
-			 }else{
-				return false;
-			 }		
-		}
-		
-		//Admin
-		
-		//search users
-		public  function search_users($val){
-
-			$value = mysqli_real_escape_string($this->db,$val); 
-			
-			$query = "SELECT * FROM users WHERE fullname LIKE '%".$value."%';" ;
-			$result = mysqli_query($this->db,$query);
-	
-			if(mysqli_num_rows($result) > 0){
-					 return $result;
-			 }else{
-				return false;
-			 }		
-		}
-		
-		//Show All Employee Data
-		public function show_user_data($id){
-			
-			$id = mysqli_real_escape_string($this->db2,$id);
-			
-			$query = "SELECT * FROM tbl_employment
-			LEFT JOIN employee_info  USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid = '{$id}';";
-
-			$result = mysqli_query($this->db2,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			if($row){
-				return $row;
-			}
-			else{
-				return false;
-			}
-		}
-		
-		//pagdisplay sa data sa providers sa admin
-		public function get_provider_to_admin_table(){
-			$query = "SELECT * FROM provider;";
-			$result = mysqli_query($this->db,$query);
-			
-			if(mysqli_num_rows($result) > 0){
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
-		
-		//pag display sa providers na data sa admin
-		public function show_provider_data($cid){
-			$query = "SELECT * FROM provider WHERE company_id = '{$cid}';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row;
+			public function user_logout() {
+				$_SESSION['login'] = FALSE;
+				session_unset();
+				session_destroy();  
 				
-			}
-			else{
-				return false;
-			}
-		}		
-		
-		//update nya ang provider
-		public function updateProvider($addresseename, $addresseeposition, $companyid, $companyname, $companyaddress){	// UPDATE certain Provider
-			$id = $_SESSION['userId'];
-			$query1 = "SELECT * FROM tbl_employment
-			LEFT JOIN employee_info  USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid = '{$id}';";
-			$result1 = mysqli_query($this->db2, $query1);
-			
-			$row1 = mysqli_fetch_assoc($result1);
-			$fullname = strtoupper($row1['empfname'] ." ". (!empty($row1['empmname'][0])?$row1['empmname'][0].'. ':''). $row1['emplname']);
-
-			$addresseename = mysqli_escape_string($this->db,$addresseename);
-			$addresseeposition = mysqli_escape_string($this->db,$addresseeposition);
-			$companyname = mysqli_escape_string($this->db,$companyname);
-			$companyaddress = mysqli_escape_string($this->db,$companyaddress);
-
-			$query = "UPDATE provider SET addressee_name='{$addresseename}', addressee_position='{$addresseeposition}', company_name='{$companyname}', company_address='{$companyaddress}', action_executed_by='{$fullname}' WHERE company_id = {$companyid};";
-			
-			$result = mysqli_query($this->db,$query);
-			if($result){
 				return true;
 			}
-			else {
-				return false;
-			}
-		}
 		
-		//mag add siya ug company
-		public function addCompany($addressee_name, $addressee_position, $company_name, $company_address){	// Add Provider
-			$id = $_SESSION['userId'];
-			$query1 = "SELECT * FROM employee_info 
-			LEFT JOIN tbl_employment USING (empnum) 
-			LEFT JOIN cpms_account USING (empid) WHERE empid='{$id}';";
-			$result1 = mysqli_query($this->db2, $query1);
+			//Clear Duplicate
 			
-			$row1 = mysqli_fetch_assoc($result1);
-			$fullname = strtoupper($row1['empfname'] ." ". (!empty($row1['empmname'][0])?$row1['empmname'][0].'. ':'') . $row1['emplname']);
-			$addressee_name = mysqli_escape_string($this->db,$addressee_name);
-			$addressee_position = mysqli_escape_string($this->db,$addressee_position);
-			$company_name = mysqli_escape_string($this->db,$company_name);
-			$company_address = mysqli_escape_string($this->db,$company_address);
-
-			$query = "INSERT INTO provider(addressee_name, addressee_position, company_name, company_address, action_executed_by) 
-			VALUES ('{$addressee_name}','{$addressee_position}','{$company_name}','{$company_address}','{$fullname}');";
-
-			$result = mysqli_query($this->db,$query);
-			if($result){
-				return true;
-			}
-			else{
-				
-				return false;
-			}
-		}
-		
-		//search signatory
-		public function search_signatory($val){
-
-			$value = mysqli_real_escape_string($this->db,$val); 
-			
-			$query = "SELECT * FROM signatory WHERE ((CONCAT
-			(first_name, ' ',middle_I, ' ',last_name)
-			LIKE '%".$value."%')
-			OR (position LIKE '%".$value."%');";
-			$result = mysqli_query($this->db,$query);
-	
-			if(mysqli_num_rows($result) > 0){
-					 return $result;
-			 }else{
-				return false;
-			 }		
-		}
-		
-		//i show nya ang tanang data dsto sa admin table
-		public function get_signatory_to_admin_table(){	// Show all Signatory
-			$query = "SELECT * FROM signatory;";
-			$result = mysqli_query($this->db,$query);
-			
-			if(mysqli_num_rows($result) > 0) {
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
-		
-		public function show_signatory_data($signatory_id){	// Get certain Signatory Details
-			$query = "SELECT * FROM signatory WHERE signatory_id = '{$signatory_id}';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row;
-				
-			}
-			else{
-				return false;
-			}
-		}
-		
-		public function updatesignatory($signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_id, $range_start, $range_end){	// UPDATE certain Signatory Details
-			$query = "UPDATE signatory SET first_name='{$signatory_firstname}', last_name='{$signatory_lastname}', middle_I='{$signatory_middleI}', initials='{$signatory_initials}', position='{$signatory_position}', option_GIS='{$signatory_options_GIS}', option_GL='{$signatory_options_GL}', range_start={$range_start}, range_end={$range_end} WHERE signatory_id = '{$signatory_id}';";
-			$result = mysqli_query($this->db,$query);
-			if($result){
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		
-		public function addsignatory($signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $range_start, $range_end){	// Add Signatory
-			$query = "INSERT INTO signatory (first_name, last_name, middle_I, initials, position, option_GIS, option_GL, range_start, range_end) VALUES ('{$signatory_firstname}',"; 
-			$query .= "'{$signatory_lastname}', '{$signatory_middleI}', '{$signatory_initials}', '{$signatory_position}', '{$signatory_options_GIS}', '{$signatory_options_GL}', ";
-			$query .= "'{$range_start}', '{$range_end}');";
-			$result = mysqli_query($this->db,$query);
-
-			if($result){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		
-		public function get_psgc_to_admin_table(){	//Show all datas regarding the PSGC/Philippine Standard Geographic Code
-			$query = "SELECT * FROM psgc_relation 
-			RIGHT JOIN region using (psgc_code)
-			RIGHT JOIN province using (psgc_code)
-			RIGHT JOIN municipality using (psgc_code)
-			RIGHT JOIN barangay using (psgc_code) ORDER BY psgc_code ASC";
-			$result = mysqli_query($this->db,$query);
-			
-			if($result) {
-				return $result;
-			}
-			else{
-				return false;
-			}
-			
-		}
-		
-		public function show_psgc_data($psgc_code){	// Show a certain row datas regarding the PSGC/Philippine Standard Geographic Code
-			$query = "SELECT * FROM psgc WHERE psgc_code = '{$psgc_code}'";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row;
-			}
-			else{
-				return false;
-			}
-		}
-		
-		public function getregion($psgc_code){
-			$query = "SELECT LEFT('{$psgc_code}', 2) as code";
-			$result = mysqli_query($this->db,$query);
-			$row1 = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM region WHERE psgc_code LIKE '{$row1['code']}%';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			// echo "<script>console.log('".$row['r_name']."')</script>";
-			
-			if($rows > 0){
-				return $row;
-			}else{
-				return false;
-			}
-		}
-		
-		public function getprovince($psgc_code){
-			$query = "SELECT LEFT('{$psgc_code}', 4) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM province WHERE psgc_code LIKE '{$row['code']}%';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			 if($rows > 0){
-				return $row;
-			}else{
-				return false;
-			}
-		}
-		
-		public function getmunicipality($psgc_code){
-			$query = "SELECT LEFT('{$psgc_code}', 6) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM municipality WHERE psgc_code LIKE '{$row['code']}%';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row;
-			}else{
-				return false;
-			}
-		}
-		
-		public function getbarangay($psgc_code){
-			$query = "SELECT LEFT('{$psgc_code}', 9) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM barangay WHERE psgc_code LIKE '{$row['code']}%';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			 if($rows > 0){
-				return $row;
-			}else{
-				return false;
-			}
-		}
-		
-		public function optionregion(){  // Show all rows in table region to SELECT tag of php
-			$query = "SELECT * FROM region ORDER BY r_name ASC;";
-			$result = mysqli_query($this->db,$query);
-			$rows = mysqli_num_rows($result);
-			 if($rows > 0){
-				return $result;
-			}else{
-				return false;
-			}
-		}
-		
-		public function optionprovince($region){  // Show all rows in table province to SELECT tag of php
-			$query = "SELECT LEFT('{$region}', 2) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM province WHERE psgc_code LIKE '{$row['code']}%' ORDER BY p_name asc;";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			if($rows > 0){
-				return $result;
-			}else{
-				return false;
-			}
-		}
-		
-		public function optionmunicipality($province){ // Show all rows in table municipality to SELECT tag of php
-			$query = "SELECT LEFT('{$province}', 4) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM municipality WHERE psgc_code LIKE '{$row['code']}%' ORDER BY m_name asc;";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			 if($rows > 0){
-				return $result;
-			}else{
-				return false;
-			}
-		}
-		
-		public function optionbarangay($municipality){ // Show all rows in table barangay to SELECT tag of php
-			$query = "SELECT LEFT('{$municipality}', 6) as code";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$query = "SELECT * FROM barangay WHERE psgc_code LIKE '{$row['code']}%' ORDER BY b_name asc;";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			 if($rows > 0){
-				return $result;
-			}else{
-				return false;
-			}
-		}
-		
-		public function addPSGCtable($addcode, $addname, $setcategory, $district_name){  // Inserting data to database in table's region,psgc,psgc_codes and getting id of region via select statement and assigning temporary variables for each id;
-			if(!empty($district_name)){
-				$query = "INSERT INTO psgc (psgc_name, psgc_code, psgc_category, district) VALUES ('{$addname}', '{$addcode}', '{$setcategory}', '{$district_name}');";
+			public function cleardup() {
+				$query = "UPDATE client_data SET client_id = '-1' WHERE client_id = ''";
 				$result = mysqli_query($this->db,$query);
-			} else { 
-				$query = "INSERT INTO psgc (psgc_name, psgc_code, psgc_category) VALUES ('{$addname}', '{$addcode}', '{$setcategory}');";
+
+				$query = "UPDATE beneficiary_data SET bene_id = '-1' WHERE bene_id = ''";
 				$result = mysqli_query($this->db,$query);
-			}
-			
-			if($result){
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		public function deleteDescription($setPSGC){ // UPDATING all tables region, province, municipality, and barangay
-			$query = "DELETE FROM psgc WHERE psgc_code = '{$setPSGC}';";
-			$result = mysqli_query($this->db,$query);
-			if($result){
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		//pagdisplay sa data sa providers sa admin
-		public function get_ass_opt_to_admin_table(){
-			$query = "SELECT * FROM gisassessment;";
-			$result = mysqli_query($this->db,$query);
-			
-			if(mysqli_num_rows($result) > 0){
-				return $result;
-			}
-			else{
-				return false;
-			}
-		}
-
-		//mag add siya ug GIS Assessment
-		public function addassessment($opt, $prob, $ass){	// Add Provider
-			$query = "INSERT INTO gisassessment (ass_opt, prob_pres, ass_socwork) VALUES ('{$opt}', '{$prob}', '{$ass}');";
-			
-			$result = mysqli_query($this->db,$query);
-			if($result){
 				
 				return true;
 			}
-			else{
+			
+			public function no_dup() {
+				$query = "SELECT COUNT(auto_increment_4_id) as dup_no_client FROM client_data WHERE client_id = ''";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
 				
-				return false;
-			}
-		}
-		
-		public function show_ass_data($opt){
-			$query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
-			
-			if($rows > 0){
-				return $row;
+				$dup_no_client_data = $row['dup_no_client'];
 				
+				
+				$query = "SELECT COUNT(auto_increment_id_bene) as dup_no_bene FROM beneficiary_data WHERE bene_id = ''";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$dup_no_bene_data = $row['dup_no_bene'];
+				
+				 $a = intval($dup_no_bene_data) + intval($dup_no_client_data);
+				
+				return $a;
 			}
-			else{
-				return false;
-			}
-		}
-		
-		//update nya ang assessment
-		public function updateAssessment($newopt, $prob, $ass, $opt){	// UPDATE certain assessment
-			$query = "UPDATE gisassessment SET ass_opt='{$newopt}', prob_pres='{$prob}', ass_socwork='{$ass}' WHERE ass_opt = '{$opt}';";
-			$result = mysqli_query($this->db,$query);
-			if($result){
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		
-		//show datas
-		
-		//display sa tanang data ddto sa pag view sa fulldetails sa encoder
-		public function show_client_data($id){
-			$query = "SELECT * FROM client_data
-				LEFT JOIN tbl_transaction using (client_id)
-				LEFT JOIN service using (trans_id)
-				LEFT JOIN assistance using (trans_id)
-				LEFT JOIN beneficiary_data using (bene_id)
-				LEFT JOIN gl using (trans_id)
-				LEFT JOIN assessment using (trans_id)
-				WHERE trans_id = '{$id}';";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			$rows = mysqli_num_rows($result);
+			//Registration
 			
-			if($rows > 0){
-				return $row;
+			//pag insert ni ddto gikan sa modal sa registration sa users
+			public function get_users_data($id, $fullname, $position, $username, $password, $initials){
+				$query = "INSERT INTO users (emp_id, fullname, position, username, password, initials, status)
+				VALUES
+				('{$id}', '{$fullname}', '{$position}', '{$username}', '{$password}', '{$initials}')";
+				
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
-			else{
-				return false;
-			}
-		}
 		
-		public function getsocialWork($id){ // get socialwork data on specific id
-			$query = "SELECT * FROM tbl_employment
-			LEFT JOIN employee_info  USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid = '{$id}';";
-			$result = mysqli_query($this->db2,$query);
-			$row = mysqli_fetch_assoc($result);
-			if($row){
-				return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext']);
-			}
-			else {
-				return false;
-			}
-		}
-		public function getupdateby($id){ // get employee data on specific id
-			$query = "SELECT * FROM tbl_employment
-			LEFT JOIN employee_info  USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid = '{$id}';";
-			$result = mysqli_query($this->db2,$query);
-			$row = mysqli_fetch_assoc($result);
-			if($row){
-				return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext']);
-			}
-			else {
-				return false;
-			}
-		}
-		public function getEncoder($id){ // get encoder data on specific id
+			//Search Function show data
 			
-			$query = "SELECT * FROM employee_info 
-			LEFT JOIN tbl_employment USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid='{$id}';";
-			$result = mysqli_query($this->db2,$query);
-			$row = mysqli_fetch_assoc($result);
-			if($row){
-				return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext']);
-			}
-			else {
-				return false;
-			}
-		}
-		
-		public function dateformat($now){
-			$d = new DateTime( $now );
-			$date = $d->format( 'F d, Y' );
-			return $date;
-		}
+			//pag search sa encoder
+			// public  function search_for_socialwork($val){
 
-		public function threemonth($now){
-			$d = strtotime($now);
-			$date = date('F d, Y', strtotime('+ 91 days', $d));
-			if($date){
-				return $date;
-			}
-			else {
-				return false;
-			}
-		}
-
-		public function comparefivedays($d){
-			// $days = strtotime($d);
-			// echo $datefive1 = date("Y-m-t", $days);
-			// echo $datefive = date('Y-m-d', strtotime('+ 5 days', $datefive1));
-			// $datenow = date("Y-m-d");
-			
-			$date = date("Y-m-t", strtotime($d));
-			$dateafterfivedays = date('Y-m-d', strtotime($date. ' + 5 days')); 
-			$presentdate = date("Y-m-d");
-			// $presentdate = date("Y-m-d", strtotime(date("Y-m-d"). "+ 4 days"));
-			
-			if($dateafterfivedays >= $presentdate){
-				return 2;
-			}else{
-				return 1;
-			}
-
-			// if($datefive >= $datenow){
-			// 	return 2;
-			// }else{
-			// 	return 1;
+			// 	$value = mysqli_real_escape_string($this->db,$val); 
+				
+			// 	$query = "SELECT * FROM client_data
+			// 	LEFT JOIN client_address ON client_data.client_id = client_address.client_id
+			// 	LEFT JOIN beneficiary_data ON client_data.client_id = beneficiary_data.client_id
+			// 	LEFT JOIN transact ON client_data.client_id = transact.client_id 
+			// 	WHERE status_client = 'Pending' OR status_client = 'Serving' 
+			// 	ORDER BY date_entered ASC;" ;
+			// 	$result = mysqli_query($this->db,$query);
+		
+			// 	if(mysqli_num_rows($result) > 0){
+			// 			return $result;
+			// 	}else{
+			// 		return false;
+			// 	}		
 			// }
-		}
-
-		public function get_days($date1, $date2) { 
-			$current = date_create($date1); 
-			$datetime2 = date_create($date2); 
-			$diff = date_diff($current, $datetime2);
-			$days = $diff->format("%a Day/s");
-			if($days){
-				return $days;
-			}
-			else {
-				return false;
-			} 
-		} 
 		
-		public function datediffFromToEnd($now){ 
-			$e = strtotime($now);
-			$dateEnd = date('Y-m-d', strtotime('+ 91 days', $e));
+			//Admin
 			
-			$dateStart = date('Y-m-d');
-			
-			//$dateStart = new DateTime($dateStart);
-			//$date = DateTime::createFromFormat('Y-m-d', $now)->diff($dateEnd)->d;
-			if($dateEnd >= $dateStart){
-				$date = $this->get_days($dateStart, $dateEnd);
-			}else{
-				$date = $this->get_days(1999-12-12, 1999-12-12);
+			//search users
+			// public  function search_users($val){
+
+			// 	$value = mysqli_real_escape_string($this->db,$val); 
+				
+			// 	$query = "SELECT * FROM users WHERE fullname LIKE '%".$value."%';" ;
+			// 	$result = mysqli_query($this->db,$query);
+		
+			// 	if(mysqli_num_rows($result) > 0){
+			// 			return $result;
+			// 	}else{
+			// 		return false;
+			// 	}		
+			// }
+		
+			//Show All Employee Data
+			public function show_user_data($id){
+				
+				$id = mysqli_real_escape_string($this->db2,$id);
+				
+				$query = "SELECT * FROM tbl_employment
+				LEFT JOIN employee_info  USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empid = '{$id}';";
+
+				$result = mysqli_query($this->db2,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				if($row){
+					return $row;
+				}
+				else{
+					return false;
+				}
 			}
-			if($date){
+		
+			//pagdisplay sa data sa providers sa admin
+			public function get_provider_to_admin_table(){
+				$query = "SELECT * FROM provider;";
+				$result = mysqli_query($this->db,$query);
+				
+				if(mysqli_num_rows($result) > 0){
+					return $result;
+				}
+				else{
+					return false;
+				}
+			}
+		
+			//pag display sa providers na data sa admin
+			public function show_provider_data($cid){
+				$query = "SELECT * FROM provider WHERE company_id = '{$cid}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+					
+				}
+				else{
+					return false;
+				}
+			}		
+		
+			//update nya ang provider
+			public function updateProvider($addresseename, $addresseeposition, $companyid, $addresseetomention, $companyname, $companyaddress){	// UPDATE certain Provider
+				$id = $_SESSION['userId'];
+				$query1 = "SELECT * FROM tbl_employment
+				LEFT JOIN employee_info  USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empid = '{$id}';";
+				$result1 = mysqli_query($this->db2, $query1);
+				
+				$row1 = mysqli_fetch_assoc($result1);
+				$fullname = strtoupper($row1['empfname'] ." ". (!empty($row1['empmname'][0])?$row1['empmname'][0].'. ':''). $row1['emplname'] ." ". (!empty($row1['empext'][0])?$row1['empext'][0].'.':''));
+
+				$addresseename = mysqli_escape_string($this->db,$addresseename);
+				$addresseeposition = mysqli_escape_string($this->db,$addresseeposition);
+				$addresseetomention = mysqli_escape_string($this->db,$addresseetomention);
+				$addresseetomention = ucwords(strtolower($addresseetomention));
+				$companyname = mysqli_escape_string($this->db,$companyname);
+				$companyaddress = mysqli_escape_string($this->db,$companyaddress);
+
+				$query = "UPDATE provider SET addressee_name='{$addresseename}', addressee_position='{$addresseeposition}', to_mention='{$addresseetomention}', company_name='{$companyname}', company_address='{$companyaddress}', action_executed_by='{$fullname}' WHERE company_id = {$companyid};";
+				
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		
+			//mag add siya ug company
+			public function addCompany($addressee_name, $addressee_position, $addresseetomention, $company_name, $company_address){	// Add Provider
+				$id = $_SESSION['userId'];
+				$query1 = "SELECT * FROM employee_info 
+				LEFT JOIN tbl_employment USING (empnum) 
+				LEFT JOIN cpms_account USING (empid) WHERE empid='{$id}';";
+				$result1 = mysqli_query($this->db2, $query1);
+				
+				$row1 = mysqli_fetch_assoc($result1);
+				$fullname = strtoupper($row1['empfname'] ." ". (!empty($row1['empmname'][0])?$row1['empmname'][0].'. ':'') . $row1['emplname'] ." ". (!empty($row1['empext'])?$row1['empext'].'.':''));
+				$addressee_name = mysqli_escape_string($this->db,$addressee_name);
+				$addressee_position = mysqli_escape_string($this->db,$addressee_position);
+				$addresseetomention = mysqli_escape_string($this->db,$addresseetomention);
+				$addresseetomention = ucwords(strtolower($addresseetomention));
+				$company_name = mysqli_escape_string($this->db,$company_name);
+				$company_address = mysqli_escape_string($this->db,$company_address);
+
+				$query = "INSERT INTO provider(addressee_name, addressee_position, company_name, to_mention, company_address, action_executed_by) 
+				VALUES ('{$addressee_name}','{$addressee_position}','{$company_name}','{$addresseetomention}','{$company_address}','{$fullname}');";
+
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else{
+					
+					return false;
+				}
+			}
+		
+			//search signatory
+			public function search_signatory($val){
+				$value = mysqli_real_escape_string($this->db,$val); 
+				
+				$query = "SELECT * FROM signatory WHERE ((CONCAT
+				(first_name, ' ',middle_I, ' ',last_name)
+				LIKE '%".$value."%')
+				OR (position LIKE '%".$value."%');";
+				$result = mysqli_query($this->db,$query);
+		
+				if(mysqli_num_rows($result) > 0){
+						return $result;
+				}else{
+					return false;
+				}		
+			}
+		
+			//i show nya ang tanang data dsto sa admin table
+			public function get_signatory_to_admin_table(){	// Show all Signatory
+				$query = "SELECT * FROM signatory;";
+				$result = mysqli_query($this->db,$query);
+				
+				if(mysqli_num_rows($result) > 0) {
+					return $result;
+				}
+				else{
+					return false;
+				}
+			}
+			
+			public function show_signatory_data($signatory_id){	// Get certain Signatory Details
+				$query = "SELECT * FROM signatory WHERE signatory_id = '{$signatory_id}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+				}
+				else{
+					return false;
+				}
+			}
+		
+			public function updatesignatory($signatory_title, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_tree, $special_sign, $signatory_id){	// UPDATE certain Signatory Details
+				$query = "UPDATE signatory SET name_title='{$signatory_title}', first_name='{$signatory_firstname}', last_name='{$signatory_lastname}', middle_I='{$signatory_middleI}', initials='{$signatory_initials}', position='{$signatory_position}', ";
+				$query .= "option_GIS='{$signatory_options_GIS}', option_GL='{$signatory_options_GL}', signatory_tree='{$signatory_tree}', special_ini='{$special_sign}' WHERE signatory_id = '{$signatory_id}';";
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		
+			public function addsignatory($signatory_title, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_tree, $special_sign){	// Add Signatory
+				$query = "INSERT INTO signatory (name_title, first_name, last_name, middle_I, initials, position, option_GIS, option_GL, signatory_tree, special_ini) VALUES ('{$signatory_title}', '{$signatory_firstname}',"; 
+				$query .= "'{$signatory_lastname}', '{$signatory_middleI}', '{$signatory_initials}', '{$signatory_position}', '{$signatory_options_GIS}', '{$signatory_options_GL}', '{$signatory_tree}', '{$special_sign}');";
+				$result = mysqli_query($this->db,$query);
+
+				if($result){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		
+			public function get_psgc_to_admin_table(){	//Show all datas regarding the PSGC/Philippine Standard Geographic Code
+				$query = "SELECT * FROM psgc_relation 
+				RIGHT JOIN region using (psgc_code)
+				RIGHT JOIN province using (psgc_code)
+				RIGHT JOIN municipality using (psgc_code)
+				RIGHT JOIN barangay using (psgc_code) ORDER BY psgc_code ASC";
+				$result = mysqli_query($this->db,$query);
+				
+				if($result) {
+					return $result;
+				}
+				else{
+					return false;
+				}
+			}
+		
+			public function show_psgc_data($psgc_code){	// Show a certain row datas regarding the PSGC/Philippine Standard Geographic Code
+				$query = "SELECT * FROM psgc WHERE psgc_code = '{$psgc_code}'";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+				}
+				else{
+					return false;
+				}
+			}
+		
+			public function getregion($psgc_code){
+				$query = "SELECT LEFT('{$psgc_code}', 2) as code";
+				$result = mysqli_query($this->db,$query);
+				$row1 = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM region WHERE psgc_code LIKE '{$row1['code']}%';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				// echo "<script>console.log('".$row['r_name']."')</script>";
+				
+				if($rows > 0){
+					return $row;
+				}else{
+					return false;
+				}
+			}
+			
+			public function getprovince($psgc_code){
+				$query = "SELECT LEFT('{$psgc_code}', 4) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM province WHERE psgc_code LIKE '{$row['code']}%';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $row;
+				}else{
+					return false;
+				}
+			}
+			
+			public function getmunicipality($psgc_code){
+				$query = "SELECT LEFT('{$psgc_code}', 6) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM municipality WHERE psgc_code LIKE '{$row['code']}%';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+				}else{
+					return false;
+				}
+			}
+			
+			public function getbarangay($psgc_code){
+				$query = "SELECT LEFT('{$psgc_code}', 9) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM barangay WHERE psgc_code LIKE '{$row['code']}%';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $row;
+				}else{
+					return false;
+				}
+			}
+			
+			public function optionregion(){  // Show all rows in table region to SELECT tag of php
+				$query = "SELECT * FROM region ORDER BY r_name ASC;";
+				$result = mysqli_query($this->db,$query);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+			
+			public function optionprovince($region){  // Show all rows in table province to SELECT tag of php
+				$query = "SELECT LEFT('{$region}', 2) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM province WHERE psgc_code LIKE '{$row['code']}%' ORDER BY p_name asc;";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+			
+			public function optionmunicipality($province){ // Show all rows in table municipality to SELECT tag of php
+				$query = "SELECT LEFT('{$province}', 4) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM municipality WHERE psgc_code LIKE '{$row['code']}%' ORDER BY m_name asc;";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+			
+			public function optionbarangay($municipality){ // Show all rows in table barangay to SELECT tag of php
+				$query = "SELECT LEFT('{$municipality}', 6) as code";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$query = "SELECT * FROM barangay WHERE psgc_code LIKE '{$row['code']}%' ORDER BY b_name asc;";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+		
+		
+
+			public function addPSGCtable($addcode, $addname, $setcategory, $district_name){  // Inserting data to database in table's region,psgc,psgc_codes and getting id of region via select statement and assigning temporary variables for each id;
+				if(!empty($district_name)){
+					$query = "INSERT INTO psgc (psgc_name, psgc_code, psgc_category, district) VALUES ('{$addname}', '{$addcode}', '{$setcategory}', '{$district_name}');";
+					$result = mysqli_query($this->db,$query);
+				} else { 
+					$query = "INSERT INTO psgc (psgc_name, psgc_code, psgc_category) VALUES ('{$addname}', '{$addcode}', '{$setcategory}');";
+					$result = mysqli_query($this->db,$query);
+				}
+				
+				if($result){
+					return true;
+				} else {
+					return false;
+				}
+			}
+		
+			public function deleteDescription($setPSGC){ // UPDATING all tables region, province, municipality, and barangay
+				$query = "DELETE FROM psgc WHERE psgc_code = '{$setPSGC}';";
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				} else {
+					return false;
+				}
+			}
+			
+			//pagdisplay sa data sa providers sa admin
+			public function get_ass_opt_to_admin_table(){
+				$query = "SELECT * FROM gisassessment;";
+				$result = mysqli_query($this->db,$query);
+				
+				if(mysqli_num_rows($result) > 0){
+					return $result;
+				}
+				else{
+					return false;
+				}
+			}
+
+			//mag add siya ug GIS Assessment
+			public function addassessment($opt, $prob, $ass){	// Add Provider
+				$query = "INSERT INTO gisassessment (ass_opt, prob_pres, ass_socwork) VALUES ('{$opt}', '{$prob}', '{$ass}');";
+				
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					
+					return true;
+				}
+				else{
+					
+					return false;
+				}
+			}
+			
+			public function show_ass_data($opt){
+				$query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+					
+				}
+				else{
+					return false;
+				}
+			}
+			
+			//update nya ang assessment
+			public function updateAssessment($newopt, $prob, $ass, $opt){	// UPDATE certain assessment
+				$query = "UPDATE gisassessment SET ass_opt='{$newopt}', prob_pres='{$prob}', ass_socwork='{$ass}' WHERE ass_opt = '{$opt}';";
+				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+
+			//add fundsource addmin function
+			public function addFundS($funds,$desc) {
+				$query = "INSERT INTO tbl_fundsource(fundsource, fs_description) VALUES ('{$funds}', '{$desc}');";
+				$result = mysqli_query($this->db, $query);
+				if($result){
+					return true;
+				}else{
+					return false;
+				}
+			}
+			
+			//fetch all tbl_fundsource data's
+			public function get_fundsource_to_admin_table() {
+				$query = "SELECT * FROM tbl_fundsource";
+				
+				$result = mysqli_query($this->db, $query);
+				
+				if($result){
+					return $result;
+				}else{
+					return false;
+				}
+			}
+
+			//fetch data from tbl_fundsource
+			public function show_fundsource_data($id) {
+				$query = "SELECT * FROM tbl_fundsource WHERE id = '{$id}';";
+
+				$result = mysqli_query($this->db, $query);
+				$rows = mysqli_fetch_assoc($result);
+				if($result){
+					return $rows;
+				}else{
+					return false;
+				}
+			}
+
+			public function UpdateFundsource($id, $funds, $desc) {
+				$query = "UPDATE tbl_fundsource SET fundsource = '{$funds}', fs_description = '{$desc}' WHERE id = '{$id}';";
+
+				$result = mysqli_query($this->db, $query);
+				if($result){
+					return true;
+				}else{
+					return false;
+				}
+			}
+
+			public function getClientAndEmp($date1, $date2) {
+				$query = "SELECT tbl_transaction.trans_id, tbl_transaction.date_accomplished, tbl_transaction.encoded_encoder, tbl_transaction.encoded_socialWork,
+						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
+						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
+						LEFT JOIN client_data using (client_id)
+						LEFT JOIN beneficiary_data using (bene_id) WHERE (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+
+				$result = mysqli_query($this->db, $query);
+				return $result;
+			}
+
+			public function getClientAndEmpNum($date1, $date2) {
+				$query = "SELECT tbl_transaction.trans_id, tbl_transaction.date_accomplished, tbl_transaction.encoded_encoder, tbl_transaction.encoded_socialWork,
+						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
+						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
+						LEFT JOIN client_data using (client_id)
+						LEFT JOIN beneficiary_data using (bene_id) WHERE (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+
+				$result = mysqli_query($this->db, $query);
+				$row = mysqli_num_rows($result);
+				return $row;
+			}
+
+			public function getClientAndEmpSet($emp, $date1, $date2) {
+			$query = "SELECT tbl_transaction.trans_id, tbl_transaction.date_accomplished, tbl_transaction.encoded_encoder, tbl_transaction.encoded_socialWork,
+						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
+						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
+						LEFT JOIN client_data using (client_id)
+						LEFT JOIN beneficiary_data using (bene_id)
+						WHERE (encoded_encoder = '{$emp}' OR encoded_socialWork = '{$emp}') AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+
+				$result = mysqli_query($this->db, $query);
+				return $result;
+			}
+			public function getClientAndEmpSetNum($emp, $date1, $date2) {
+				$query = "SELECT tbl_transaction.trans_id, tbl_transaction.date_accomplished, tbl_transaction.encoded_encoder, tbl_transaction.encoded_socialWork,
+						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
+						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
+						LEFT JOIN client_data using (client_id)
+						LEFT JOIN beneficiary_data using (bene_id)
+						WHERE (encoded_encoder = '{$emp}' OR encoded_socialWork = '{$emp}') AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+
+				$result = mysqli_query($this->db, $query);
+				$row = mysqli_num_rows($result);
+				return $row;
+			}
+
+			public function encodersummarylist() {
+				$query = "SELECT distinct encoded_encoder FROM tbl_transaction WHERE status_client = 'Done';";
+				$result = mysqli_query($this->db, $query);
+				// $row = mysqli_fetch_assoc($result);
+
+				// return $row;
+				if ($result) {
+					return $result;
+				}else{
+					return false;
+				}
+			}
+
+			public function swsummarylist() {
+				$query = "SELECT distinct encoded_socialWork FROM tbl_transaction WHERE status_client = 'Done';";
+				$result = mysqli_query($this->db, $query);
+				// $row = mysqli_fetch_assoc($result);
+
+				// return $row;
+				if ($result) {
+					return $result;
+				}else{
+					return false;
+				}
+			}
+
+			public function getClientAndEmpSetforOsap($emp, $date1, $date2) {
+				$query = "SELECT o.trans_id, o.osap_created, o.signatory, o.empid, t.date_accomplished, c.firstname, c.middlename, c.lastname, 
+						c.extraname, b.b_fname, b.b_mname, b.b_lname, b.b_exname FROM tbl_osap o
+						LEFT JOIN tbl_transaction t using (trans_id)
+						LEFT JOIN client_data c using (client_id)
+						LEFT JOIN beneficiary_data b using (bene_id)
+						WHERE o.empid = '{$emp}' AND o.osap_created BETWEEN '{$date1}' AND '{$date2}';";
+
+				$result = mysqli_query($this->db, $query);
+				return $result;
+			}
+
+			public function getClientAndEmpSetNumforOsap($emp, $date1, $date2) {
+				$query = "SELECT o.trans_id FROM tbl_osap o
+						LEFT JOIN tbl_transaction t using (trans_id)
+						LEFT JOIN client_data c using (client_id)
+						LEFT JOIN beneficiary_data b using (bene_id)
+						WHERE o.empid = '{$emp}' AND o.osap_created BETWEEN '{$date1}' AND '{$date2}';";
+
+
+				$result = mysqli_query($this->db, $query);
+				$row = mysqli_num_rows($result);
+				return $row;
+			}
+
+			public function encoderosaplist() {
+				$query = "SELECT distinct empid FROM tbl_osap;";
+				$result = mysqli_query($this->db, $query);
+				// $row = mysqli_fetch_assoc($result);
+
+				// return $row;
+				if ($result) {
+					return $result;
+				}else{
+					return false;
+				}
+			}
+			
+			//show client datas for cancellation of gl
+			public function show_client_data_for_cancellation_of_gl($id){
+				$query = "SELECT * FROM client_data
+					LEFT JOIN tbl_transaction using (client_id)
+					LEFT JOIN service using (trans_id)
+					LEFT JOIN assistance using (trans_id)
+					LEFT JOIN beneficiary_data using (bene_id)
+					LEFT JOIN gl using (trans_id)
+					LEFT JOIN assessment using (trans_id)
+					WHERE trans_id = '{$id}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+				}
+				else{
+					return false;
+				}
+			}
+
+			public function cancelGLofClient($id) {
+				$now = date("Y-m-d H:i:s");
+
+				$query = "UPDATE tbl_transaction SET status_client = 'Cancelled' WHERE trans_id = '{$id}';";
+				$result = mysqli_query($this->db,$query);
+
+				$query = "INSERT INTO cancelgl (trans_id, date_cancelled, empid) VALUES
+				('{$id}','{$now}','{$_SESSION['userId']}')";
+				$result = mysqli_query($this->db,$query);
+				
+				if($result){
+					return true;
+				}else{
+					return false;
+				}
+			}
+
+			public function summaryDataTablecancelledGL($date1, $date2, $datenow, $datenow2) {
+				if (empty($datenow) && empty($datenow2)) {
+					$query = "SELECT g.trans_id, g.date_cancelled, g.empid, c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.relation, t.date_accomplished
+					FROM cancelgl g
+					LEFT JOIN tbl_transaction t using (trans_id)
+					LEFT JOIN client_data c using (client_id)
+					LEFT JOIN beneficiary_data b using (bene_id)
+					WHERE (t.status_client = 'Cancelled') AND (g.date_cancelled BETWEEN '{$date1}' AND '{$date2}') ORDER BY g.date_cancelled DESC";
+				}else{
+					$query = "SELECT g.trans_id, g.date_cancelled, g.empid, c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.relation, t.date_accomplished
+					FROM cancelgl g
+					LEFT JOIN tbl_transaction t using (trans_id)
+					LEFT JOIN client_data c using (client_id)
+					LEFT JOIN beneficiary_data b using (bene_id)
+					WHERE (t.status_client = 'Cancelled') AND (g.date_cancelled BETWEEN '{$datenow}' AND '{$datenow2}') ORDER BY g.date_cancelled DESC";
+				}
+				$result = mysqli_query($this->db, $query);
+				return $result;
+			}
+			public function summaryGetNumRowscancelledGL($date1, $date2, $datenow, $datenow2) {
+				if (empty($datenow) && empty($datenow2)) {
+					$query = "SELECT g.trans_id, g.date_cancelled, g.empid, c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.relation, t.date_accomplished
+					FROM cancelgl g
+					LEFT JOIN tbl_transaction t using (trans_id)
+					LEFT JOIN client_data c using (client_id)
+					LEFT JOIN beneficiary_data b using (bene_id)
+					WHERE (t.status_client = 'Cancelled') AND (g.date_cancelled BETWEEN '{$date1}' AND '{$date2}') ORDER BY g.date_cancelled DESC";
+					$result = mysqli_query($this->db, $query);
+					$rownum = mysqli_num_rows($result);
+				}else{
+					$query = "SELECT g.trans_id, g.date_cancelled, g.empid, c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.relation, t.date_accomplished
+					FROM cancelgl g
+					LEFT JOIN tbl_transaction t using (trans_id)
+					LEFT JOIN client_data c using (client_id)
+					LEFT JOIN beneficiary_data b using (bene_id)
+					WHERE (t.status_client = 'Cancelled') AND (g.date_cancelled BETWEEN '{$datenow}' AND '{$datenow2}') ORDER BY g.date_cancelled DESC";
+					$result = mysqli_query($this->db, $query);
+					$rownum = mysqli_num_rows($result);
+				}
+				return $rownum;
+			}
+		
+
+			//show datas
+			
+			//display sa tanang data ddto sa pag view sa fulldetails sa encoder
+			public function show_client_data($id){
+				$query = "SELECT * FROM client_data
+					LEFT JOIN tbl_transaction using (client_id)
+					LEFT JOIN service using (trans_id)
+					LEFT JOIN assistance using (trans_id)
+					LEFT JOIN beneficiary_data using (bene_id)
+					LEFT JOIN gl using (trans_id)
+					LEFT JOIN assessment using (trans_id)
+					WHERE trans_id = '{$id}';";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				$rows = mysqli_num_rows($result);
+				
+				if($rows > 0){
+					return $row;
+				}
+				else{
+					return false;
+				}
+			}
+		
+			public function getsocialWork($id){ // get socialwork data on specific id
+				$query = "SELECT * FROM tbl_employment
+				LEFT JOIN employee_info  USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empid = '{$id}';";
+				$result = mysqli_query($this->db2,$query);
+				$row = mysqli_fetch_assoc($result);
+				if($row){
+					return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext'].".");
+				}
+				else {
+					return false;
+				}
+			}
+
+			public function getupdateby($id){ // get employee data on specific id
+				$query = "SELECT * FROM tbl_employment
+				LEFT JOIN employee_info  USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empid = '{$id}';";
+				$result = mysqli_query($this->db2,$query);
+				$row = mysqli_fetch_assoc($result);
+				if($row){
+					return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext'].".");
+				}
+				else {
+					return false;
+				}
+			}
+
+			public function getEncoder($id){ // get encoder data on specific id
+				
+				$query = "SELECT * FROM employee_info 
+				LEFT JOIN tbl_employment USING (empnum)
+				LEFT JOIN cpms_account USING (empid)
+				WHERE empid='{$id}';";
+				$result = mysqli_query($this->db2,$query);
+				$row = mysqli_fetch_assoc($result);
+				if($row){
+					return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext'].".");
+				}
+				else {
+					return false;
+				}
+			}
+		
+			public function dateformat($now){
+				$d = new DateTime( $now );
+				$date = $d->format( 'F d, Y' );
 				return $date;
 			}
-			else {
-				return false;
-			}
-		}
-		
-		//Encoder //New Client
-		
-		//sa paginsert sa client data na sya mismo ang beneficiary
-		public function insertClient($f, $m, $l, $e, $sex, $bday, $age, $occupation, $salary, $category, $subcat, $cstatus,$contact,
-		 $r, $p, $c, $brgy, $d, $street){ 
-			 
-			$datenow = date("Y-m-d H:i:s"); //serve as date_entered
-			$relation = "Self";
-			$encoder = $_SESSION['userId'];
-			$office_id = $_SESSION['f_office'];
-			// $catered = "no";
-			$status_client = "Pending";
-			$note = "yes";
-			// $action = "passed";
-			
-			// $query = "SELECT office FROM cpms_account where empid = '{$encoder}'";
-			// $result = mysqli_query($this->db2, $query);
-			// $row = mysqli_fetch_assoc($result);
 
-			$now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
-			$datetoid = date_format($now, 'YmdHisu');
-			$newtransid = $office_id.'-'.$datetoid;
-			
-			$query = "INSERT INTO `client_data`(`lastname`, `firstname`, `middlename`, `extraname`, `sex`, 
-			`civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, `subCategory`, 
-			`client_region`, `client_province`, `client_municipality`, `client_barangay`, `client_street`, `client_district`, date_inserted) 
-			VALUES ('{$l}','{$f}','{$m}','{$e}','{$sex}','{$cstatus}','{$bday}','{$occupation}',
-			'{$salary}','{$contact}','{$category}','{$subcat}','{$r}','{$p}','{$c}','{$brgy}','{$street}','{$d}', '{$datenow}')";
-		 	$result = mysqli_query($this->db,$query);
-			
-			$query = "SELECT auto_increment_4_id FROM client_data WHERE lastname = '{$l}' AND firstname = '{$f}' AND middlename = '{$m}' AND date_inserted = '{$datenow}'";
-			$result = mysqli_query($this->db,$query);
-			$row = mysqli_fetch_assoc($result);
-			
-			$newclientid = "C-".$row['auto_increment_4_id'];
-			
-			$query = "UPDATE client_data SET client_id = '{$newclientid}' WHERE auto_increment_4_id = '{$row['auto_increment_4_id']}'";
-			$result = mysqli_query($this->db,$query);
- 
-			$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, date_entered, encoded_encoder, note, status_client, clientonly) VALUES 
-			('{$newtransid}','{$newclientid}', '{$relation}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1)";
-			$result = mysqli_query($this->db,$query);
-			
-			if($result){
-				return $newtransid;
+			public function threemonth($now){
+				$d = strtotime($now);
+				$date = date('F d, Y', strtotime('+ 91 days', $d));
+				if($date){
+					return $date;
+				}
+				else {
+					return false;
+				}
 			}
-			else{
-				return false;
+
+			public function comparefivedays($d){
+				// $days = strtotime($d);
+				// echo $datefive1 = date("Y-m-t", $days);
+				// echo $datefive = date('Y-m-d', strtotime('+ 5 days', $datefive1));
+				// $datenow = date("Y-m-d");
+				
+				$date = date("Y-m-t", strtotime($d));
+				$dateafterfivedays = date('Y-m-d', strtotime($date. ' + 5 days')); 
+				$presentdate = date("Y-m-d");
+				// $presentdate = date("Y-m-d", strtotime(date("Y-m-d"). "+ 4 days"));
+				
+				if($dateafterfivedays >= $presentdate){
+					return 2;
+				}else{
+					return 1;
+				}
+
+				// if($datefive >= $datenow){
+				// 	return 2;
+				// }else{
+				// 	return 1;
+				// }
 			}
+
+			public function get_days($date1, $date2) { 
+				$current = date_create($date1); 
+				$datetime2 = date_create($date2); 
+				$diff = date_diff($current, $datetime2);
+				$days = $diff->format("%a Day/s");
+				if($days){
+					return $days;
+				}
+				else {
+					return false;
+				} 
+			} 
+		
+			public function datediffFromToEnd($now){ 
+				$e = strtotime($now);
+				$dateEnd = date('Y-m-d', strtotime('+ 91 days', $e));
+				
+				$dateStart = date('Y-m-d');
+				
+				//$dateStart = new DateTime($dateStart);
+				//$date = DateTime::createFromFormat('Y-m-d', $now)->diff($dateEnd)->d;
+				if($dateEnd >= $dateStart){
+					$date = $this->get_days($dateStart, $dateEnd);
+				}else{
+					$date = $this->get_days(1999-12-12, 1999-12-12);
+				}
+				if($date){
+					return $date;
+				}
+				else {
+					return false;
+				}
+			}
+		
+			//Encoder //New Client
 			
-		}
+			//sa paginsert sa client data na sya mismo ang beneficiary
+			public function insertClient($f, $m, $l, $e, $sex, $bday, $age, $occupation, $salary, $category, $cstatus,$contact,
+			$r, $p, $c, $brgy, $d, $street){ 
+				
+				$datenow = date("Y-m-d H:i:s"); //serve as date_entered
+				$relation = "Self";
+				$encoder = $_SESSION['userId'];
+				$office_id = $_SESSION['f_office'];
+				// $catered = "no";
+				$status_client = "Pending";
+				$note = "yes";
+				// $action = "passed";
+				
+				// $query = "SELECT office FROM cpms_account where empid = '{$encoder}'";
+				// $result = mysqli_query($this->db2, $query);
+				// $row = mysqli_fetch_assoc($result);
+
+				$now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+				$datetoid = date_format($now, 'YmdHisu');
+				$newtransid = $office_id.'-'.$datetoid;
+				
+				$query = "INSERT INTO `client_data`(`lastname`, `firstname`, `middlename`, `extraname`, `sex`, 
+				`civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, 
+				`client_region`, `client_province`, `client_municipality`, `client_barangay`, `client_street`, `client_district`, date_inserted) 
+				VALUES ('{$l}','{$f}','{$m}','{$e}','{$sex}','{$cstatus}','{$bday}','{$occupation}',
+				'{$salary}','{$contact}','{$category}','{$r}','{$p}','{$c}','{$brgy}','{$street}','{$d}', '{$datenow}')";
+				$result = mysqli_query($this->db,$query);
+				
+				$query = "SELECT auto_increment_4_id FROM client_data WHERE lastname = '{$l}' AND firstname = '{$f}' AND middlename = '{$m}' AND date_inserted = '{$datenow}'";
+				$result = mysqli_query($this->db,$query);
+				$row = mysqli_fetch_assoc($result);
+				
+				$newclientid = "C-".$row['auto_increment_4_id'];
+				$query = "UPDATE client_data SET client_id = '{$newclientid}' WHERE auto_increment_4_id = '{$row['auto_increment_4_id']}'";
+				$result = mysqli_query($this->db,$query);
+				$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, date_entered, encoded_encoder, note, status_client, clientonly) VALUES 
+				('{$newtransid}','{$newclientid}', '{$relation}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1)";
+				$result = mysqli_query($this->db,$query);
+				
+				if($result){
+					return $newtransid;
+				}
+				else{
+					return false;
+				}
+				
+			}
 
 		//pag insert sa data sa client na naa syay benefeciary
-		public function insertClientWB($f, $m, $l, $e, $sex, $bday, $occupation, $salary, $category, $subcategory, 
+		public function insertClientWB($f, $m, $l, $e, $sex, $bday, $occupation, $salary, $category,
 		$cstatus, $contact, $r, $p, $c, $brgy, $d, $street, $relationship, $bf, $bm, $bl, $be, $b_bday, 
-		$b_sex, $b_cstatus, $b_contact, $b_category, $b_subCat, $b_region, $b_province, $b_city, $b_district, $b_barangay, $b_street){ 
+		$b_sex, $b_cstatus, $b_contact, $b_occupation, $b_salary, $b_category, $b_region, $b_province, $b_city, $b_district, $b_barangay, $b_street){ 
 			$datenow = date("Y-m-d H:i:s"); //serve as date_entered
 			$encoder = $_SESSION['userId'];
 			// $catered = "no";
@@ -1268,10 +1542,10 @@
 			$newtransid = $office_id.'-'.$datetoid;
 			
 			$query = "INSERT INTO `client_data`(`lastname`, `firstname`, `middlename`, `extraname`, `sex`, 
-			`civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, `subCategory`, 
+			`civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, 
 			`client_region`, `client_province`, `client_municipality`, 
 			`client_barangay`, `client_street`, `client_district`, date_inserted) VALUES ('{$l}','{$f}','{$m}',
-			'{$e}','{$sex}','{$cstatus}','{$bday}','{$occupation}','{$salary}','{$contact}','{$category}','{$subcategory}',
+			'{$e}','{$sex}','{$cstatus}','{$bday}','{$occupation}','{$salary}','{$contact}','{$category}',
 			'{$r}','{$p}','{$c}','{$brgy}','{$street}','{$d}', '{$datenow}')";
 		 	$result = mysqli_query($this->db,$query);
 			
@@ -1285,9 +1559,9 @@
 			$result = mysqli_query($this->db,$query);
 
 			$query = "INSERT INTO `beneficiary_data`(`b_fname`, `b_mname`, `b_lname`, `b_exname`, 
-			`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_category`, `b_subCategory`, `b_region`, 
+			`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_occupation`, `b_salary`, `b_category`, `b_region`, 
 			`b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, b_date_inserted) VALUES ('{$bf}','{$bm}',
-			'{$bl}','{$be}','{$b_cstatus}','{$b_contact}','{$b_bday}','{$b_sex}','{$b_category}','{$b_subCat}',
+			'{$bl}','{$be}','{$b_cstatus}','{$b_contact}','{$b_bday}','{$b_sex}','{$b_occupation}','{$b_salary}','{$b_category}',
 			'{$b_region}','{$b_province}','{$b_city}','{$b_barangay}','{$b_district}','{$b_street}', '{$datenow}')";
 			$result = mysqli_query($this->db,$query);
 			
@@ -1375,7 +1649,7 @@
 			}
 			
 			if($row){
-				return $row['client_id'];
+				return $newtransid;
 			}
 			else{
 				return false;
@@ -1805,43 +2079,62 @@
 		}
 
 		//All information in GIS
-		public function insertGIS($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
-									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS){
-		
+		public function insertGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
+									$fs1, $fs2, $fs3, $fs4, $fs5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
+										
+			if(strtolower($mode_ad) == "walk-in"){
+				$rl1 = "";
+				$rl2 = "";
+				$rl3 = "";
+			}
 		$query = "";
 			if(!empty($p1)){
-				$query = "INSERT INTO family (trans_id, name, age, occupation, salary) VALUES ('{$trans_id}','{$p1}', '{$e1}', '{$t1}', '{$b1}')";
-				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}', {$e2}, '{$t2}', '{$b2}')";}
-				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}', {$e3}, '{$t3}', '{$b3}')";}
+				$query = "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ('{$trans_id}','{$p1}','{$rb1}', '{$e1}', '{$t1}', '{$b1}')";
+				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}','{$rb2}', {$e2}, '{$t2}', '{$b2}')";}
+				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}','{$rb3}', {$e3}, '{$t3}', '{$b3}')";}
 				$query .= ";";
 			}
 			
 						
 			//insert sa service 
-			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, ref_name) 
-						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$ref_name}');"; 	
-
+			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3) 
+						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$s5}', '{$s6}','{$ref_name}', '{$rl1}','{$rl2}', '{$rl3}');"; 	
+			if(!empty($fs1)){
+				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource)	VALUES 
+						('{$trans_id}', '{$fs1}')";
+					if(!empty($fs2)){$query .= ",('{$trans_id}', '{$fs2}')";}
+					if(!empty($fs3)){$query .= ",('{$trans_id}', '{$fs3}')";}
+					if(!empty($fs4)){$query .= ",('{$trans_id}', '{$fs4}')";}
+					if(!empty($fs5)){$query .= ",('{$trans_id}', '{$fs5}')";}
+				$query .= ";";
+			}else{
+				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
+					('{$trans_id}', '{$f1}', '{$a1}');";
+			}
 			//insert Assistance need by client, 1 or 2 lng iyang ma cater na assistance 
-			$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$a1}', '{$m1}', '{$f1}', '{$pur1}', 'Type1')";
+			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, financial, material, amount, mode, fund, purpose, type_description) 
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
 					if($type2 !=""){
 						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 					}
 			$query .= ";";
 			
 			//INSERT TO ASSESSMENT
-			$query .= "INSERT INTO assessment (trans_id, gis_option, problem, soc_ass, mode_admission, client_num) VALUES ('{$trans_id}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			$query .= "INSERT INTO assessment (trans_id, target_sector, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
+			VALUES ('{$trans_id}', '{$targets}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
 
 			//update the tbl_transaction table
-			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
+			// $sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
+			$sign_id = $signatoryGIS;
 			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}'";
 			if($m1 == "GL"){ 
 				$amountcon = str_replace(",","", $a1);
-				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
 			}
 			if($m2 == "GL"){ 
 				$amountcon2 = str_replace(",","", $a2);
-				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
 			} 
 			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);
@@ -1851,7 +2144,6 @@
 				echo "<meta http-equiv='refresh' content='0'>";
 			}else{
 				echo "<script>alert('Something Went Wrong!');</script>";
-
 			}
 			
 		}
@@ -1860,6 +2152,7 @@
 			$signatory = explode('-', $signature);
 			//print_r($signatory);
 			$signname = explode(' ', $signatory[0]);
+			// print_r($signatory);
 			$size = sizeof($signname);
 			$query = "SELECT * FROM signatory WHERE first_name LIKE '%{$signname[0]}%' AND last_name LIKE '%{$signname[$size-1]}%';";
 			
@@ -1868,47 +2161,90 @@
 			if($row){
 				return $row['signatory_id'];
 			}else{
-				$this->getsignatureid($signature);
+				return false;
 			}
 		}
+		public function getfundsourcedata($id) {
+			$query = "SELECT * FROM tbl_coe_fund WHERE trans_id = '{$id}';";
+			$result = mysqli_query($this->db, $query);
 
-		public function updateGIS($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
-			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS){
+			$num = 0;
+			//$data = mysqli_fetch_row($result);
+			while($row = mysqli_fetch_assoc($result)){
+				$num++; //array index start as 1
+				$data[$num] = $row;
+			}
+			if(empty($data)){
+				return ""; //pass as dimensional array
+			}else{
+				return $data;
+			}
 			
+		}
+
+		public function updateGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, 
+			$targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
+				
+			if(strtolower($mode_ad) == "walk-in"){
+				$rl1 = "";
+				$rl2 = "";
+				$rl3 = "";
+			}
+				
 			$query ="";
 			$query .= "DELETE FROM family where trans_id='{$trans_id}';"; //delete first fmily then update 
 			if(!empty($p1)){
-				$query .= "INSERT INTO family (trans_id, name, age, occupation, salary) VALUES ('{$trans_id}','{$p1}', {$e1}, '{$t1}', '{$b1}')";
-				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}', {$e2}, '{$t2}', '{$b2}')";}
-				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}', {$e3}, '{$t3}', '{$b3}')";}
+				$query .= "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ('{$trans_id}','{$p1}', '{$rb1}', {$e1}, '{$t1}', '{$b1}')";
+				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}', '{$rb2}', {$e2}, '{$t2}', '{$b2}')";}
+				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}', '{$rb3}', {$e3}, '{$t3}', '{$b3}')";}
 				$query .= ";";
 			}
 			$assistance = $this-> getAssistanceData($trans_id);
 			//insert sa service 
 			$query .= "DELETE FROM service WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, ref_name) 
-						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$ref_name}');"; 
+			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3) 
+						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$s5}', '{$s6}','{$ref_name}', '{$rl1}','{$rl2}', '{$rl3}');"; 
 			
 			/*$query .= " UPDATE service SET service1={$s1}, service2={$s2}, service3={$s3}, service4={$s4}, ref_name='{$ref_name}' WHERE trans_id = '{$trans_id}';";*/
 			
 			//UPDATE assessment need by client/ 1 or 2 lng iyang ma cater na assistance 
 			$query .= "DELETE FROM assessment WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assessment (trans_id, gis_option, problem, soc_ass, mode_admission, client_num) 
-						VALUES 
-						('{$trans_id}', '{$gis_opt}', '{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
-			
+			$query .= "INSERT INTO assessment (trans_id, target_sector, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
+			VALUES ('{$trans_id}', '{$targets}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+
 			/*$query .= " UPDATE assessment SET problem = '{$prob}', soc_ass='{$ass}', mode_admission='{$mode_ad}', client_num='{$num}'
 						WHERE trans_id='{$trans_id}';";*/
 		
 			//UPDATE assissstance
 			$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$a1}', '{$m1}', '{$f1}', '{$pur1}', 'Type1')";
+			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, financial, material, amount, mode, fund, purpose, type_description) 
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
 					if($type2 !=""){
 						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 					}
 			$query .= ";";
-			
+
+			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
+			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
+			if (!empty($fs1)) {
+				$query .= "VALUES ('{$trans_id}', '{$fs1}', '')";
+				if (!empty($fs2)) {
+					$query .= ",('{$trans_id}', '{$fs2}', '')";
+				}
+				if (!empty($fs3)) {
+					$query .= ",('{$trans_id}', '{$fs3}', '')";
+				}
+				if (!empty($fs4)) {
+					$query .= ",('{$trans_id}', '{$fs4}', '')";
+				}
+				if (!empty($fs5)) {
+					$query .= ",('{$trans_id}', '{$fs5}', '')";
+				}
+			} else {
+				$query .= "VALUES ('{$trans_id}', '{$f1}', '{$a1}')";
+			}
+			$query .= ";";
 			/*$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '{$f1}', purpose = '{$pur1}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1'";
 			$query .= ";";
 			if($type2 !="" && !empty($assistance[2]['mode']) != ""){
@@ -1920,18 +2256,19 @@
 				('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2');";
 			}*/
 
-			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
+			// $sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
+			$sign_id = $signatoryGIS;
 			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', encoded_socialWork='{$empid}'";
 			if($m1 == "GL"){ 
 				$amountcon = str_replace(",","", $a1);
-				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
-				elseif($amountcon > 5000){ $query .= ", signatory_GL = ''"; }
+				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon >= 50001){ $query .= ", signatory_GL = ''"; }
 			}
 			if($m2 == "GL"){ 
 				$amountcon2 = str_replace(",","", $a2);
-				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
-				elseif($amountcon2 > 5000){ $query .= ", signatory_GL = ''"; }
-			} 
+				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon2 >= 50001){ $query .= ", signatory_GL = ''"; }
+			}
 			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);
 			
@@ -1947,7 +2284,7 @@
 		}
 
 		public function updateGISbyEncoder($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
-			$type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS){
+			$type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5){
 			
 			$encoder = $_SESSION['userId'];
 			$remark = "Updated by the Encoder with ID = ".$encoder;
@@ -1973,9 +2310,24 @@
 						WHERE trans_id='{$trans_id}';";
 		
 			//UPDATE assissstance
-			$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '{$f1}', purpose = '{$pur1}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1'";
+			$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '', purpose = '{$pur1}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1';";
+			//UPDATE fundsource
+			// $query .= "UPDATE tbl_coe_fund SET fundsource1 = '{$fs1}', fundsource2 = '{$fs2}', fundsource3 ='{$fs3}', fundsource4 = '{$fs4}', fundsource5 = '{$fs5}' WHERE trans_id = '{$trans_id}';";
+			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
+			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
+            if (empty($f1)) {
+                $query .= "VALUES ('{$trans_id}', '{$fs1}', '')";
+				if (!empty($fs2)) {$query .= ",('{$trans_id}', '{$fs2}', '')";}
+				if (!empty($fs3)) {$query .= ",('{$trans_id}', '{$fs3}', '')";}
+				if (!empty($fs4)) {$query .= ",('{$trans_id}', '{$fs4}', '')";}
+				if (!empty($fs5)) {$query .= ",('{$trans_id}', '{$fs5}', '')";}
+            }else{
+                $query .= "VALUES ('{$trans_id}', '{$f1}', '{$a1}')";
+            }
+			$query .= ";";
+
 			if($type2 !="" && !empty($assistance[2]['mode']) != ""){
-				$query .= "UPDATE assistance SET type = '{$type2}', amount = '{$a2}', mode ='{$m2}', fund = '{$f2}', purpose = '{$pur2}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2'";
+				$query .= "UPDATE assistance SET type = '{$type2}', amount = '{$a2}', mode ='{$m2}', fund = '{$f2}', purpose = '{$pur2}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
 			}elseif($type2 =="" && !empty($assistance[2]['mode']) != ""){
 				$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type2'";
 			}elseif($type2 !="" && !empty($assistance[2]['mode']) == ""){
@@ -1988,15 +2340,102 @@
 			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}'";
 			if($m1 == "GL"){ 
 				$amountcon = str_replace(",","", $a1);
-				if($amountcon <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
-				elseif($amountcon > 5000){ $query .= ", signatory_GL = ''"; }
+				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon >= 50001){ $query .= ", signatory_GL = ''"; }
 			}
 			if($m2 == "GL"){ 
 				$amountcon2 = str_replace(",","", $a2);
-				if($amountcon2 <= 5000){ $query .= ", signatory_GL = '{$sign_id}'"; }
-				elseif($amountcon2 > 5000){ $query .= ", signatory_GL = ''"; }
+				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon2 >= 50001){ $query .= ", signatory_GL = ''"; }
 			}
-			echo $query .= " WHERE trans_id = '{$trans_id}';";
+			$query .= " WHERE trans_id = '{$trans_id}';";
+			
+			
+			$result = mysqli_multi_query($this->db, $query);
+			if($result){
+				echo "<script>alert('Assessment Successfully UPDATED!');</script>";
+				echo "<script>document.getElementById('toCOE').style.visibility='visible';</script>";
+				echo "<meta http-equiv='refresh' content='0'>";
+			}else{
+				echo "<script>alert('Something Went Wrong!');</script>";
+				echo "<meta http-equiv='refresh' content='0'>";
+			}
+			
+		}
+		public function updateGISbySocialWork($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
+			$type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5){
+			
+			$socialwork = $_SESSION['userId'];
+			$remark = "Updated by the Social Worker with ID = ".$socialwork;
+			
+			
+			$query ="";
+			$query .= "DELETE FROM family where trans_id='{$trans_id}';"; //delete first fmily then update 
+			if(!empty($p1)){
+				$query .= "INSERT INTO family (trans_id, name, age, occupation, salary) VALUES ('{$trans_id}','{$p1}', {$e1}, '{$t1}', '{$b1}')";
+				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}', {$e2}, '{$t2}', '{$b2}')";}
+				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}', {$e3}, '{$t3}', '{$b3}')";}
+				$query .= ";";
+			}
+						
+			
+			//insert sa service 
+			$query .= " UPDATE service SET service1={$s1}, service2={$s2}, service3={$s3}, service4={$s4}, ref_name='{$ref_name}', remark_service_update='{$socialwork}' WHERE trans_id = '{$trans_id}';";
+			
+			$assistance = $this->getAssistanceData($trans_id);
+			
+			//UPDATE assessment need by client/ 1 or 2 lng iyang ma cater na assistance 
+			$query .= " UPDATE assessment SET problem = '{$prob}', gis_option = '{$gis_opt}', soc_ass='{$ass}', mode_admission='{$mode_ad}', client_num='{$num}', remark_onupdate='{$socialwork}'
+						WHERE trans_id='{$trans_id}';";
+		
+			//UPDATE assissstance
+			$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '', purpose = '{$pur1}', remark_assist_update = '{$socialwork}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1';";
+			// UPDATE fundsource
+			// $query .= "UPDATE tbl_coe_fund SET fundsource1 = '{$fs1}', fundsource2 = '{$fs2}', fundsource3 ='{$fs3}', fundsource4 = '{$fs4}', fundsource5 = '{$fs5}' WHERE trans_id = '{$trans_id}';";
+			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
+			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
+			if (empty($f1)) {
+				$query .= "VALUES ('{$trans_id}', '{$fs1}', '')";
+				if (!empty($fs2)) {
+					$query .= ",('{$trans_id}', '{$fs2}', '')";
+				}
+				if (!empty($fs3)) {
+					$query .= ",('{$trans_id}', '{$fs3}', '')";
+				}
+				if (!empty($fs4)) {
+					$query .= ",('{$trans_id}', '{$fs4}', '')";
+				}
+				if (!empty($fs5)) {
+					$query .= ",('{$trans_id}', '{$fs5}', '')";
+				}
+			} else {
+				$query .= "VALUES ('{$trans_id}', '{$f1}', '{$a1}')";
+			}
+			$query .= ";";
+            
+			
+			if($type2 !="" && !empty($assistance[2]['mode']) != ""){
+				$query .= "UPDATE assistance SET type = '{$type2}', amount = '{$a2}', mode ='{$m2}', fund = '{$f2}', purpose = '{$pur2}', remark_assist_update = '{$socialwork}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
+			}elseif($type2 =="" && !empty($assistance[2]['mode']) != ""){
+				$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
+			}elseif($type2 !="" && !empty($assistance[2]['mode']) == ""){
+				$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) VALUES
+					('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2');";
+			}
+
+			$sign_id = $signatoryGIS;//get the id of signaturory using fullname
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}'";
+			if($m1 == "GL"){ 
+				$amountcon = str_replace(",","", $a1);
+				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon >= 50001){ $query .= ", signatory_GL = ''"; }
+			}
+			if($m2 == "GL"){ 
+				$amountcon2 = str_replace(",","", $a2);
+				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+				elseif($amountcon2 >= 50001){ $query .= ", signatory_GL = ''"; }
+			}
+			$query .= " WHERE trans_id = '{$trans_id}';";
 			
 			
 			$result = mysqli_multi_query($this->db, $query);
@@ -2012,19 +2451,33 @@
 		}
 
 		public function getChargableagainst($id){
-			$query = "SELECT tbl_transaction.trans_id, assistance.fund, coe.fund1_amount, coe.fund2_amount  FROM tbl_transaction
-						LEFT JOIN assistance using (trans_id)
-						LEFT JOIN coe using (trans_id)
-						WHERE trans_id = '{$id}'";
+			$query = "SELECT *  FROM tbl_coe_fund WHERE trans_id = '{$id}'";
 			$result = mysqli_query($this->db, $query);
-			$row = mysqli_fetch_assoc($result);
 			
-			$fund = explode("/", $row["fund"]);
-			if(!empty($fund[1])){
-				$data = $fund[0]." = ".$row["fund1_amount"] ." / ". $fund[1]." = ".$row["fund2_amount"];
-			} else {
-				$data = $fund[0];
+			$num = 0;
+			//$data = mysqli_fetch_row($result);
+			while($rows = mysqli_fetch_assoc($result)){
+				$num++; //array index start as 1
+				$row[$num] = $rows;
 			}
+
+			$data = "";
+			if(!empty($row[1]['fundsource'])){
+				$data = $row[1]['fundsource']." = ".$row[1]["fs_amount"];
+			}
+			if(!empty($row[2]['fundsource'])){
+				$data .= "/". $row[2]['fundsource']." = ".$row[2]["fs_amount"];
+			}
+			if(!empty($row[3]['fundsource'])){
+				$data .= "/". $row[3]['fundsource']." = ".$row[3]["fs_amount"];
+			}
+			if(!empty($row[4]['fundsource'])){
+				$data .= "/". $row[4]['fundsource']." = ".$row[4]["fs_amount"];
+			}
+			if(!empty($row[5]['fundsource'])){
+				$data .= "/". $row[5]['fundsource']." = ".$row[5]["fs_amount"];
+			}
+			
 			return $data;
 		}
 
@@ -2061,6 +2514,20 @@
 				return false;
 			}
 		}
+
+		public function signatoryosap(){ //get all signatory
+			$query = "SELECT c.empid, t.empnum, e.empfname, c.position, e.emplname, e.empmname, e.empext FROM cpms_account c
+			LEFT JOIN tbl_employment t on c.empid = t.empid
+			LEFT JOIN employee_info e on t.empnum = e.empnum
+			WHERE c.position = 'Social Worker';";
+			$result = mysqli_query($this->db2,$query);
+			if($result){
+				return $result;
+			}
+			else {
+				return false;
+			}
+		}
 		
 		public function signatoryGIS(){
 			$query = "SELECT * FROM signatory WHERE option_GL = '1';";
@@ -2082,6 +2549,12 @@
 				if(!empty($firstname[0])){
 					$initials = strtoupper($firstname[0][0]);
 				}
+				if(!empty($firstname[1])){
+					$initials .= strtoupper($firstname[1][0]);
+				}
+				if(!empty($firstname[2])){
+					$initials .= strtoupper($firstname[2][0]);
+				}
 			}
 			
 			if(!empty($getuser['empmname'])){
@@ -2093,9 +2566,7 @@
 		
 			if(!empty($getuser['emplname'])){
 				$lastname = explode(" ",$getuser['emplname']);
-				if(!empty($lastname[1])){
-					$initials .= strtoupper($lastname[0][0]."".$lastname[1][0]);
-				}else{
+				if(!empty($lastname[0])){
 					$initials .= strtoupper($lastname[0][0]);
 				}
 			}
@@ -2111,6 +2582,12 @@
 				if(!empty($firstname[0])){
 					$initials = strtoupper($firstname[0][0]);
 				}
+				if(!empty($firstname[1])){
+					$initials .= strtoupper($firstname[1][0]);
+				}
+				if(!empty($firstname[2])){
+					$initials .= strtoupper($firstname[2][0]);
+				}
 			}
 			
 			if(!empty($getsignatory['middle_I'])){
@@ -2122,9 +2599,7 @@
 		
 			if(!empty($getsignatory['last_name'])){
 				$lastname = explode(" ",$getsignatory['last_name']);
-				if(!empty($lastname[1])){
-					$initials .= strtoupper($lastname[0][0]."".$lastname[1][0]);
-				}else{
+				if(!empty($lastname[0])){
 					$initials .= strtoupper($lastname[0][0]);
 				}
 			}
@@ -2172,7 +2647,8 @@
 				$str2 = "";
 			}
 			$str = $str1 . $str2 ."ONLY";
-			return strtoupper($str);
+			$str1 = str_replace("-", " ", $str);
+			return strtoupper($str1);
 		}
 
 		public function getsignatory($id){ // get signatory data on specific id
@@ -2188,10 +2664,10 @@
 		}
 
 		public function getSignatoryFullname($id){
-			$query = "SELECT first_name, middle_I, last_name, position, initials FROM signatory WHERE signatory_id = '{$id}';";
+			$query = "SELECT name_title, first_name, middle_I, last_name, position, initials FROM signatory WHERE signatory_id = '{$id}';";
 			$result = mysqli_query($this->db,$query);
 			$row = mysqli_fetch_assoc($result);
-			$data = $row['first_name'] ." ". (empty($row['middle_I'])?"":$row['middle_I'].". "). $row['last_name'] ."-". $row['position'];
+			$data = (empty($row['name_title'])?"":$row['name_title']." "). $row['first_name'] ." ". (empty($row['middle_I'])?"":$row['middle_I'].". "). $row['last_name'] ."-". $row['position']."-". $id;
 			if($data){
 				return $data;
 			}
@@ -2219,23 +2695,47 @@
 			}
 		}
 		
-		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $mode){
+		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $mode, $id_sign, $sd_officer){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			
-			if(!empty($signName)){
-				$signid = $this->getsignatureid($signName);
+			$signid = $signName;
+
+			if(empty($amount2)){
+				$amount1 = $am;
+			}
+			
+			$data = $this->getfundsourcedata($id);
+			// print_r($data);
+			$query = "INSERT INTO coe (trans_id, document, id_presented, others_input, others_medical, others_burial) 
+						VALUES 
+						('{$id}','{$docu}','{$id_pres}','{$others_input}','{$others_medical}','{$others_burial}');";
+			if($am >= 50001 && $mode == "GL"){
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}';";
+			}
+			if (!empty($data[2]['fundsource'])) {
+				$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}';";
+				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) 
+						VALUES ('{$id}', '{$data[1]['fundsource']}', '{$amount1}')";
+				if (!empty($data[2]['fundsource'])) {$query .= ",('{$id}', '{$data[2]['fundsource']}', '{$amount2}')";}
+				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
+				if (!empty($data[4]['fundsource'])) {$query .= ",('{$id}', '{$data[4]['fundsource']}', '{$amount4}')";}
+				if (!empty($data[5]['fundsource'])) {$query .= ",('{$id}', '{$data[5]['fundsource']}', '{$amount5}')";}
+				$query .= ";";
+			}
+			// echo $query;
+			// $query .= "UPDATE tbl_coe_fund SET fs_amount1 = '{$amount1}', fs_amount2 = '{$amount2}', fs_amount3 = '{$amount3}', fs_amount4 = '{$amount4}', fs_amount5 = '{$amount5}' WHERE trans_id = '{$id}'";
+			
+			if (!empty($sd_officer)) {
+				$query .= "DELETE FROM cash WHERE trans_id = '{$id}';";
+				$query .= "INSERT INTO cash (trans_id, sd_officer) 
+							VALUES 
+							('{$id}', '{$sd_officer}');";
 			}
 		
-			$query = "INSERT INTO coe (trans_id, document, id_presented, others_input, fund1_amount, fund2_amount) 
-						VALUES 
-						('{$id}','{$docu}','{$id_pres}','{$others_input}','{$amount1}','{$amount2}');";
-			if($am > 5000 && $mode == "GL"){
-				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}'";
-			}
 			$result = mysqli_multi_query($this->db, $query);
 			
-			$query;
+			// $query;
 			if($result){
 				echo "<script>alert('Successfully Saved!');</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
@@ -2244,18 +2744,47 @@
 			}
 		}
 
-		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $amount1, $amount2, $am, $mode){
+		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $mode, $id_sign, $sd_officer){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
-			
 			if(!empty($signName)){
 				$signid = $this->getsignatureid($signName);
 			}
 			
-			$query = "UPDATE coe SET document='{$docu}', id_presented='{$id_pres}', others_input='{$others_input}', fund1_amount='{$amount1}', fund2_amount='{$amount2}' where trans_id = '{$id}';";
-			if($am > 5000 && $mode == "GL"){
-				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}'";
+			$signid = $signName;
+			
+			if(empty($amount2)){
+				$amount1 = $am;
 			}
+			
+			$data = $this->getfundsourcedata($id);
+
+			$query = "UPDATE coe SET document='{$docu}', id_presented='{$id_pres}', others_input='{$others_input}', others_medical='{$others_medical}', others_burial='{$others_burial}' where trans_id = '{$id}';";
+			if($am >= 50001 && $mode == "GL"){
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}';";
+			}if($am < 50001){
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$id_sign}' WHERE trans_id = '{$id}';";
+			}
+
+			if (!empty($data[2]['fundsource'])) {
+				$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}';";
+				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) 
+						VALUES ('{$id}', '{$data[1]['fundsource']}', '{$amount1}')";
+				if (!empty($data[2]['fundsource'])) {$query .= ",('{$id}', '{$data[2]['fundsource']}', '{$amount2}')";}
+				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
+				if (!empty($data[4]['fundsource'])) {$query .= ",('{$id}', '{$data[4]['fundsource']}', '{$amount4}')";}
+				if (!empty($data[5]['fundsource'])) {$query .= ",('{$id}', '{$data[5]['fundsource']}', '{$amount5}')";}
+				$query .= ";";
+            }
+			
+			if (!empty($sd_officer)) {
+				$query .= "DELETE FROM cash WHERE trans_id = '{$id}';";
+				$query .= "INSERT INTO cash (trans_id, sd_officer) 
+							VALUES 
+							('{$id}', '{$sd_officer}');";
+			}
+			// echo $query;
+			// $query .= "UPDATE tbl_coe_fund SET fs_amount1 = '{$amount1}', fs_amount2 = '{$amount2}', fs_amount3 = '{$amount3}', fs_amount4 = '{$amount4}', fs_amount5 = '{$amount5}' WHERE trans_id = '{$id}';";
 			$result = mysqli_multi_query($this->db, $query);
 			
 			if($result){
@@ -2288,33 +2817,25 @@
 				return false;
 			}
 		}
+
+		public function getcharging() {
+			$fundsource = $this->get_fundsource_to_admin_table();
+			$row = mysqli_fetch_assoc($fundsource);
+			if($row){
+				return $row;
+			}else{
+				return false;
+			}
+		}
 		
 		public function chargings(){
+			$funds = $this->get_fundsource_to_admin_table();
 			$data='
-			<datalist id="chargings">
-				<option>DC1</option>
-				<option>DC2</option>
-				<option>DC3</option>
-				<option>CV1</option>
-				<option>CV2</option>
-				<option>DDS1</option>
-				<option>DDS2</option>
-				<option>DDN1</option>
-				<option>DDN2</option>
-				<option>R1</option>
-				<option>R2</option>
-				<option>R3</option>
-				<option>RDO1</option>
-				<option>RDO2</option>
-				<option>RDDN1<option>
-				<option>RDDN2</option>
-				<option>RCV1</option>
-				<option>RCV2</option>
-				<option>RDDS1</option>
-				<option>RDDS2</option>
-				<option>RDDS2</option>
-				<option>ROR</option>
-			</datalist>
+			<datalist id="chargings">';
+			foreach($funds as $index => $value){
+				$data .= '<option value='. $value["fundsource"] .'>'. $value['fundsource'] .'</option>';
+			}
+			$data .= '</datalist>
 			';
 			return $data;
 		}
@@ -2381,17 +2902,102 @@
 		}
 			
 	}
+	public function glfundsource($id) {
+		$query = "SELECT * FROM tbl_coe_fund WHERE trans_id = '{$id}';";
+		$result = mysqli_query($this->db, $query);
+		$num = 0;
+		
+		while($rows = mysqli_fetch_assoc($result)){
+			$num++; //array index start as 1
+			$row[$num] = $rows;
+		}
+
+		if(!empty($row[1]['fundsource'])){
+  	    	$data = $row[1]['fundsource'];
+        }
+        if (!empty($row[2]['fundsource'])) {
+            $data .= '/'. $row[2]['fundsource'];
+        }
+		if (!empty($row[3]['fundsource'])) {
+            $data .= '/'. $row[3]['fundsource'];
+        }
+        if (!empty($row[4]['fundsource'])) {
+            $data .= '/'. $row[4]['fundsource'];
+        }
+		if (!empty($row[5]['fundsource'])) {
+            $data .= '/'. $row[5]['fundsource'];
+        }
+		return $data;
+	}
+	// get all gl from year and month then count to generate an ID
+	
+	
+	public function getfundsource($id) {
+		$query = "SELECT * FROM tbl_coe_fund WHERE trans_id = '{$id}';";
+		$result = mysqli_query($this->db, $query);
+
+		$num = 0;
+		while($rows = mysqli_fetch_assoc($result)){
+			$num++; //array index start as 1
+			$row[$num] = $rows;
+		}
+		
+		if($row){
+			return $row;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public function controlNumberForGL(){
+		$count = 1;
+		$cid = date("Y-m");
+		$query="SELECT office_accronym FROM field_office WHERE office_id = '{$_SESSION['f_office']}';";
+		$result = mysqli_query($this->db, $query);
+		$row = mysqli_fetch_assoc($result);
+		$office = $row['office_accronym'];
+
+		$query="SELECT LEFT(control_no, 7) AS controlNumber FROM gl;";
+		$result = mysqli_query($this->db, $query);
+		// $rows = mysqli_fetch_assoc($result);
+        
+		/*while ($row = mysqli_fetch_array($result)) {
+			if($row['controlNumber'] == $cid){
+				$count = $count + 1;
+			}
+		}*/
+		// $query="SELECT RIGHT('{$count}', 6) as glid;";
+		// $result = mysqli_query($this->db, $query);
+		// $row = mysqli_fetch_assoc($result);
+		$glid = date("dHis");
+		return $cid."-".$glid." ".$office;
+	}
+
 	
     //INSERT INTO GL
-    public function insertGL($id, $control_no, $signatory, $addressee, $a_pos, $cname, $add){
-
-		$query = "INSERT INTO gl (trans_id, control_no, addressee, position, cname, caddress) 
+    public function insertGL($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
+		$now = date("Y-m-d H:i:s");
+		
+		$final_control_no = '';
+		$control2 = $this->controlNumberForGL();
+        if ($control_no == $control2) {
+        	$final_control_no = $control2;
+		}else{
+			$final_control_no = $control_no;
+		}
+		$query = "INSERT INTO gl (trans_id, control_no, addressee, position, to_mention, for_the_id, cname, caddress) 
                     VALUES 
-					('{$id}', '{$control_no}', '{$addressee}', '{$a_pos}', '{$cname}', '{$add}');";
+					('{$id}', '{$final_control_no}', '{$addressee}', '{$a_pos}', '{$tomention}', '{$forthe}', '{$cname}', '{$add}');";
 		$signatory_id = $this->getsignatureid($signatory);//kwaun ang id sa signatory
-		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory_id}' WHERE trans_id = '{$id}';";
+		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory}' WHERE trans_id = '{$id}';";
+		if($forthe != ""){
+			$query .= "INSERT INTO for_the_logs (trans_id, ft_created, for_the_id, ft_empid, ft_action) 
+						VALUES
+						('{$id}','{$now}','{$forthe}','{$_SESSION['userId']}', 'Insert')";
+		}
 	
-		//echo $query;
+		// echo $query;
         $result = mysqli_multi_query($this->db, $query);
 		
 		if($result){
@@ -2403,18 +3009,29 @@
         }
 	}
 
-	public function updateGL($id, $control_no, $signatory, $addressee, $a_pos, $cname, $add){
+	public function updateGL($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
 		/*$query = "UPDATE gl set control_no='{$control_no}', addressee='{$addressee}', position='{$a_pos}', cname='{$cname}' , caddress='{$add}'
 					WHERE trans_id='{$id}';";*/
-					
+		$final_control_no = '';
+		$control2 = $this->controlNumberForGL();
+        if ($control_no == $control2) {
+        	$final_control_no = $control2;
+		}else{
+			$final_control_no = $control_no;
+		}
+
 		$query = "DELETE FROM gl WHERE trans_id='{$id}';";
-		$query .= "INSERT INTO gl (trans_id, control_no, addressee, position, cname, caddress) 
+		$query .= "INSERT INTO gl (trans_id, control_no, addressee, position, to_mention, for_the_id, cname, caddress) 
                     VALUES 
-					('{$id}', '{$control_no}', '{$addressee}', '{$a_pos}', '{$cname}', '{$add}');";
+					('{$id}', '{$final_control_no}', '{$addressee}', '{$a_pos}', '{$tomention}', '{$forthe}', '{$cname}', '{$add}');";
 					
 		$signatory_id = $this->getsignatureid($signatory);
-		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory_id}' WHERE trans_id = '{$id}';";
-		
+		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory}' WHERE trans_id = '{$id}';";
+		if($forthe != ""){
+			$query .= "INSERT INTO for_the_logs (trans_id, ft_created, for_the_id, ft_empid, ft_action) 
+						VALUES
+						('{$id}','{$now}','{$forthe}','{$_SESSION['userId']}', 'Update of GL')";
+		}
 		$result = mysqli_multi_query($this->db, $query);
 		
 		if($result){
@@ -2426,13 +3043,12 @@
         }
 	}
 
-	public function updateGLbyEncoder($id, $control_no, $signatory, $addressee, $a_pos, $cname, $add){
+	public function updateGLbyEncoder($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
 		$encoder = $_SESSION['userId'];
-		
-		$query = "UPDATE gl set control_no='{$control_no}', addressee='{$addressee}', position='{$a_pos}', cname='{$cname}' , caddress='{$add}', remark_gl_update='{$encoder}'
+		$query = "UPDATE gl set control_no='{$control_no}', addressee='{$addressee}', position='{$a_pos}', for_the_id='{$forthe}', cname='{$cname}' , caddress='{$add}', to_mention='{$tomention}', remark_gl_update='{$encoder}'
 					WHERE trans_id='{$id}';";
 		$signatory_id = $this->getsignatureid($signatory);
-		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory_id}' WHERE trans_id = '{$id}';";
+		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory}' WHERE trans_id = '{$id}';";
 		
 		$result = mysqli_multi_query($this->db, $query);
 		
@@ -2445,18 +3061,21 @@
         }
 	}
 	
-	public function updateGLCash($id, $sd_officer, $c_no, $signatory,
-		$addressee, $a_pos, $cname, $add){
-			$query = "DELETE FROM `cash` WHERE trans_id= '{$id}';";
+	public function updateGLCash($id, $sd_officer, $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
+ 			$query = "DELETE FROM `cash` WHERE trans_id= '{$id}';";
 			$query .= "INSERT INTO `cash` (`trans_id`, `sd_officer`)
 					VALUES ('{$id}', '{$sd_officer}');";
 			$query .= "DELETE FROM `gl` WHERE trans_id='{$id}';";
-			$query .= "INSERT INTO gl (trans_id, control_no, addressee, position, cname, caddress)
+			$query .= "INSERT INTO gl (trans_id, control_no, addressee, position, to_mention, for_the_id, cname, caddress)
 					VALUES
-					('{$id}', '{$c_no}', '{$addressee}', '{$a_pos}', '{$cname}', '{$add}');";
+					('{$id}', '{$c_no}', '{$addressee}', '{$a_pos}', '{$tomention}', '{$forthe}', '{$cname}', '{$add}');";
 			$signatory_id = $this->getsignatureid($signatory);//kwaun ang id sa signatory
-			$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory_id}' WHERE trans_id = '{$id}';";
-
+			$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory}' WHERE trans_id = '{$id}';";
+			if($forthe != ""){
+				$query .= "INSERT INTO for_the_logs (trans_id, ft_created, for_the_id, ft_empid, ft_action) 
+							VALUES
+							('{$id}','{$now}','{$forthe}','{$_SESSION['userId']}', 'Update of GL and Cash')";
+			}
 			$result = mysqli_multi_query($this->db, $query);
 			
 		if($result){
@@ -2470,7 +3089,7 @@
 	}
 
 	public function updateGLCashbyEncoder($id, $sd_officer, $c_no, $signatory,
-		$addressee, $a_pos, $cname, $add){
+		$addressee, $a_pos, $forthe, $cname, $add, $tomention){
 		
 			$encoder = $_SESSION['userId'];
 			
@@ -2486,7 +3105,7 @@
 						('{$id}', '{$sd_officer}');";				
 			}
 			
-			$query .= "UPDATE gl set control_no='{$c_no}', addressee='{$addressee}', position='{$a_pos}', cname='{$cname}' , caddress='{$add}', remark_gl_update='{$encoder}'
+			$query .= "UPDATE gl set control_no='{$c_no}', addressee='{$addressee}', position='{$a_pos}', for_the_id='{$forthe}', cname='{$cname}' , caddress='{$add}', to_mention='{$tomention}', remark_gl_update='{$encoder}'
 						WHERE trans_id='{$id}';";
 			$signatory_id = $this->getsignatureid($signatory);
 			
@@ -2504,6 +3123,37 @@
 
     }
 
+	public function update_for_the_print($id, $forthe){
+		$p = 0;
+		$now = date("Y-m-d H:i:s");
+
+		$query = "SELECT for_the_id FROM gl WHERE trans_id = '{$id}';";
+		$result = mysqli_query($this->db, $query);
+		
+		$rows = mysqli_fetch_assoc($result);
+		
+		if($rows['for_the_id'] != $forthe){
+			$query = "UPDATE gl SET for_the_id = '{$forthe}', remark_gl_update = '{$_SESSION['userId']}' WHERE trans_id = '{$id}'; ";
+			
+			$result = mysqli_multi_query($this->db, $query);
+			$p = 1;
+		}else{
+			$p = 2;
+		}
+		
+		if($p == 2){
+			echo "<script>alert('For The Signatory Is The Same!');</script>";
+			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+		}elseif($result == 1){
+            echo "<script>alert('For The Signatory Successfully UPDATED!');</script>";
+			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+        }else{
+            echo "<script>alert('Something Went Wrong!');</script>";
+        }
+	}
+
 	public function done($id, $trans){
         $now = date("Y-m-d H:i:s");
 		
@@ -2516,11 +3166,23 @@
             echo "<script>alert('Something Went Wrong!');</script>";
         }
 	}
+	public function doneupdate($id, $trans){
+        $now = date("Y-m-d H:i:s");
+		
+		$query ="UPDATE tbl_transaction SET status_client = 'Done' where trans_id = '{$trans}'";
+		$result = mysqli_query($this->db,$query);
+		
+		if($result){
+            echo "<script>window.location='../reissue.php';</script>";
+        }else{
+            echo "<script>alert('Something Went Wrong!');</script>";
+        }
+	}
 	
 	public function enc_done($id, $trans){
 		$now = date("Y-m-d H:i:s");
 		
-		$query ="UPDATE tbl_transaction SET date_accomplished='{$now}',  status_client = 'Done' where trans_id = '{$trans}'";
+		$query ="UPDATE tbl_transaction SET status_client = 'Done' where trans_id = '{$trans}'";
 		$result = mysqli_query($this->db,$query);
 		
 		if($result){
@@ -2602,40 +3264,40 @@
 					WHERE YEAR(date_accomplished) = '{$year}' AND MONTH(date_accomplished) = '{$month}' AND tbl_transaction.status_client='Done'
 					ORDER BY tbl_transaction.date_entered ASC";
 		
-		$result = mysqli_query($this->db,$query);
-		$data = "";
-		while($row = mysqli_fetch_assoc($result)){
-			$mode="";
-			$fullname = $this->getuserFullname($row['encoded_encoder']);
-			$assistance = $this->getAssistanceData($row['trans_id']);
-			//print_r($assistance);
-			$data .= "<tr>
-						<td>{$row['date_accomplished']}</td>
-						<td>{$row['lastname']}</td>
-						<td>{$row['firstname']}</td>
-						<td>{$row['middlename']}</td>
-						<td>". $this->translateAss($assistance[1]['type'])."</td>
-						<td>{$assistance[1]['amount']}</td>
-						";
-					if(!empty($assistance[2]['mode'])){
-						$mode = ','.$assistance[2]['mode']; //mode sa 2nd assistance
-						$data .= "
-							<td>{$this->translateAss($assistance[2]['type'])}</td>
-							<td>{$assistance[2]['amount']}</td>";
-					}else{
-						$data .= "
-							<td></td>
-							<td></td>
-						";
-					}
-
+			$result = mysqli_query($this->db,$query);
+			$data = "";
+			while($row = mysqli_fetch_assoc($result)){
+				$mode="";
+				$fullname = $this->getuserFullname($row['encoded_encoder']);
+				$assistance = $this->getAssistanceData($row['trans_id']);
+				//print_r($assistance);
+				$data .= "<tr>
+					<td>{$row['date_accomplished']}</td>
+					<td>{$row['lastname']}</td>
+					<td>{$row['firstname']}</td>
+					<td>{$row['middlename']}</td>
+					<td>". $this->translateAss($assistance[1]['type'])."</td>
+					<td>{$assistance[1]['amount']}</td>
+					";
+				if(!empty($assistance[2]['mode'])){
+					$mode = ','.$assistance[2]['mode']; //mode sa 2nd assistance
 					$data .= "
-							<td>{$assistance[1]['fund']}</td>
-							<td>{$assistance[1]['mode']}{$mode}</td>
-						</tr>"; 
+						<td>{$this->translateAss($assistance[2]['type'])}</td>
+						<td>{$assistance[2]['amount']}</td>";
+				}else{
+					$data .= "
+						<td></td>
+						<td></td>
+					";
+				}
+
+				$data .= "
+						<td>{$assistance[1]['fund']}</td>
+						<td>{$assistance[1]['mode']}{$mode}</td>
+					</tr>"; 
+				}
+				return $data;
 			}
-			return $data;
-		}
 		public function getAssistanceData($id){
 			$query = "SELECT type, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
 			$result = mysqli_query($this->db, $query);
@@ -2673,6 +3335,8 @@
 				return "Transportation";
 			}elseif(substr_count(strval($type), "Food Sub") > 0){
 				return "Food";
+			}elseif(substr_count(strval($type), "Funeral") > 0){
+				return "Funeral";
 			}elseif(substr_count(strval($type), "Burial") > 0){
 				return "Burial";
 			}elseif(substr_count(strval($type), "Educ") > 0){
@@ -2685,7 +3349,7 @@
 		}
 	
 		public function getclientFam($id){
-			$query = "SELECT name, age, occupation, salary FROM family WHERE trans_id = '{$id}'";
+			$query = "SELECT name, relation_bene, age, occupation, salary FROM family WHERE trans_id = '{$id}'";
 			$result = mysqli_query($this->db, $query);
 			$num = 0;
 			//$data = mysqli_fetch_row($result);
@@ -2701,7 +3365,7 @@
 		}
 
 		public function getGISAssistance($id){
-			$query = "SELECT type, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
+			$query = "SELECT type, if_medical, if_burial, financial, material, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
 			$result = mysqli_query($this->db, $query);
 			$num = 0;
 			//$data = mysqli_fetch_row($result);
@@ -2739,7 +3403,7 @@
 		}
 	
 		public function getGISData($id){
-			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, ref_name, signatory_id from assessment 
+			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, others_subcat from assessment 
 						LEFT JOIN service USING (trans_id) 
 						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
 						
@@ -2822,12 +3486,11 @@
 
 			
 			$query = "INSERT INTO `beneficiary_data`
-					(`bene_id`, `b_fname`, `b_mname`, `b_lname`, `b_exname`, 
+					(`b_fname`, `b_mname`, `b_lname`, `b_exname`, 
 					`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_category`, `b_subCategory`, `b_region`, 
 					`b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, `b_date_inserted`) 
 					VALUES 
-					('{$bene_id}',
-					'{$fname}','{$mname}','{$lname}','{$exname}','{$status}','{$contact}','{$bday}','{$sex}','{$category}',
+					('{$fname}','{$mname}','{$lname}','{$exname}','{$status}','{$contact}','{$bday}','{$sex}','{$category}',
 					'{$s_category}','{$region}','{$province}','{$municipality}','{$barangay}','{$district}','{$street}', '{$datenow}')";
 			$result = mysqli_query($this->db,$query);
 			
@@ -2885,7 +3548,7 @@
 		public function casestudy($sub, $str, $amount){
 			$sub = strtolower($sub);
 			$str = strtolower($str);
-			if(substr_count(strval($str), $sub) > 0 || $amount > 5000){
+			if(substr_count(strval($str), $sub) > 0 || $amount >= 10001){
 				return "";
 			}else{
 				return "hidden";
@@ -2907,14 +3570,27 @@
 			if(substr_count(strval($type1), $str) > 0 || substr_count(strval($type2), $str) > 0){
 				if(substr_count(strval($type1), $str) > 0){
 					return strtoupper($content1);
+					// return strtoupper("current fund");
 				}elseif (substr_count(strval($type2), $str) > 0) {
 					return strtoupper($content2);
+					// return strtoupper("current fund");
 				}
 			}else{
 				return "";
 			}
 	}
 
+	public function checkFAssistance($type1, $str){
+		$type1 = strtolower($type1); // type1 of service
+		$str = strtolower($str); // the type of content to be compared
+		if(substr_count(strval($type1), $str) > 0){
+			return "checked";
+			// return strtoupper("current fund");
+		}else{
+			return "";
+		}
+	}
+	
 	public function listOfMonths(){
         $data =  '
         <datalist id="months">
@@ -2977,7 +3653,22 @@
 		else{
 			return false;
 		}
+	}
+	public function showdataServedforReissue(){
+		$query = "SELECT client_data.*, beneficiary_data.*, tbl_transaction.* FROM client_data
+		LEFT JOIN tbl_transaction using (client_id)
+		LEFT JOIN beneficiary_data using (bene_id)
+		WHERE status_client = 'Done'
+		limit 5;";
+		$result = mysqli_query($this->db,$query);
+		
+		if($result){
+			return $result;
 		}
+		else{
+			return false;
+		}
+	}
 	// public function showdataImported(){
 	// 	$query = "SELECT * FROM client_info
 	// 	limit 5;";
@@ -2992,15 +3683,32 @@
 	// 	}
 		
 		public function showdataUnserved(){
-		$query = "SELECT * FROM client_data
-		LEFT JOIN tbl_transaction using (client_id)
-		LEFT JOIN beneficiary_data using (bene_id) 
-		WHERE (status_client = 'Pending' OR status_client = 'Serving') 
-		ORDER BY client_id ASC;";
+			
+		$now = date("Y-m-d H:i:s");
+		$now2 = date('Y-m-d H:i:s', strtotime('-5 days'));
+		$query = "SELECT * FROM tbl_transaction
+		LEFT JOIN client_data USING (client_id)
+		LEFT JOIN beneficiary_data USING (bene_id) 
+		WHERE (status_client = 'Pending' OR status_client = 'Serving') AND encoded_encoder IS NOT NULL AND (date_entered BETWEEN '{$now2}' AND '{$now}')
+		ORDER BY date_entered DESC;";
 		$result = mysqli_query($this->db,$query);
 		
 		if($result){
 			return $result;
+		}
+		else{
+			return false;
+		}
+		}
+		public function getTransidOffice($trans_id){
+		$query = "SELECT LEFT('".$trans_id."', 9) as foid";
+		
+		$result = mysqli_query($this->db,$query);
+		
+		$row = mysqli_fetch_assoc($result);
+		
+		if($result){
+			return $row;
 		}
 		else{
 			return false;
@@ -3028,9 +3736,10 @@
 	// }
 
 	public function getBeneData($id){
+		// echo $id;
 		$id = mysqli_real_escape_string($this->db,$id);
 		
-		$query = "SELECT beneficiary_data.*, tbl_transaction.relation FROM `tbl_transaction`
+		$query = "SELECT beneficiary_data.*, tbl_transaction.relation FROM tbl_transaction
 		LEFT JOIN beneficiary_data USING (bene_id)
 		where trans_id = '$id'";
 		
@@ -3048,9 +3757,10 @@
 	public function searchServed($val){
 		$value = mysqli_real_escape_string($this->db,$val); 
 
-		$query = "SELECT client_data.*, beneficiary_data.*, tbl_transaction.* FROM client_data 
-		LEFT JOIN tbl_transaction using (client_id)
-		LEFT JOIN beneficiary_data using (bene_id)
+		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.trans_id, t.relation, t.date_accomplished, t.clientonly, t.clientsamebene, t.benetoclient
+		FROM client_data c 
+		LEFT JOIN tbl_transaction t using (client_id)
+		LEFT JOIN beneficiary_data b using (bene_id)
 		WHERE (status_client = 'Done' OR status_client = 'Decline')
 		AND ((CONCAT
 		(firstname, ' ',middlename, ' ',lastname)
@@ -3088,7 +3798,63 @@
 		 OR (CONCAT
 		(b_fname, ' ',b_lname, ' ',b_mname)
 		 LIKE '%".$value."%')) 
-		 ORDER BY date_entered DESC LIMIT 300";
+		 ORDER BY date_entered DESC LIMIT 3";
+
+		$result = mysqli_query($this->db, $query);
+
+		if($result){
+			return $result;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public function searchServedforReissue($val){
+		$value = mysqli_real_escape_string($this->db,$val); 
+
+		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.trans_id, t.relation, t.date_accomplished, t.clientonly, t.clientsamebene, t.benetoclient
+		FROM client_data as c
+		LEFT JOIN tbl_transaction as t using (client_id)
+		LEFT JOIN beneficiary_data as b using (bene_id)
+		WHERE (status_client = 'Done')
+		AND ((CONCAT
+		(firstname, ' ',middlename, ' ',lastname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		 (b_fname, ' ',b_mname, ' ',b_lname)
+		 LIKE '%".$value."%')
+		 OR (CONCAT
+		(lastname, ' ',middlename, ' ',firstname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		 (b_mname, ' ',b_fname, ' ',b_lname)
+		  LIKE '%".$value."%') 
+		 OR (CONCAT
+		(middlename, ' ',firstname, ' ',lastname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(b_lname, ' ',b_mname, ' ',b_fname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(lastname, ' ',firstname, ' ',middlename)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(b_lname, ' ',b_fname, ' ',b_mname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(middlename, ' ',lastname, ' ',firstname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(b_mname, ' ',b_lname, ' ',b_fname)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(firstname, ' ',lastname, ' ',middlename)
+		 LIKE '%".$value."%') 
+		 OR (CONCAT
+		(b_fname, ' ',b_lname, ' ',b_mname)
+		 LIKE '%".$value."%')) 
+		ORDER BY date_entered DESC LIMIT 3";
 
 		$result = mysqli_query($this->db, $query);
 
@@ -3116,19 +3882,20 @@
 	public function searchReissue_log($val){
 		$value = mysqli_real_escape_string($this->db,$val); 
 
-		$query = "SELECT client_data.*, beneficiary_data.*, tbl_transaction.*, reissuelog.* FROM client_data 
-		LEFT JOIN tbl_transaction using (client_id)
-		LEFT JOIN beneficiary_data using (bene_id)
-        LEFT JOIN reissuelog USING (trans_id)
-		WHERE (status_client = 'Done' OR status_client = 'Decline') 
-        AND reissuelog.date_reissued is NOT NULL		    
+		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.relation, t.trans_id, t.status_client, r.* 
+		FROM client_data c
+		LEFT JOIN tbl_transaction t using (client_id)
+		LEFT JOIN beneficiary_data b using (bene_id)
+        LEFT JOIN reissuelog r USING (trans_id)
+		WHERE (t.status_client = 'Done') 
+        AND r.date_reissued is NOT NULL
         AND ((CONCAT
-		(firstname, ' ',middlename, ' ',lastname) LIKE '%". $value. "%') 
-		 OR (CONCAT (b_fname, ' ',b_mname, ' ',b_lname) LIKE '%". $value. "%')
-		 OR (CONCAT (lastname, ' ',middlename, ' ',firstname) LIKE '%". $value. "%') 
-		 OR (CONCAT (b_lname, ' ',b_mname, ' ',b_fname) LIKE '%". $value. "%') 
-		 OR (CONCAT (lastname, ' ',firstname, ' ',middlename) LIKE '%". $value. "%'))
-		 ORDER BY date_entered DESC LIMIT 300";
+		(c.firstname,' ',c.middlename,' ',c.lastname) LIKE '%". $value ."%') 
+		 OR (CONCAT (b.b_fname, ' ',b.b_mname, ' ',b.b_lname) LIKE '%". $value ."%')
+		 OR (CONCAT (c.lastname, ' ',c.middlename, ' ',c.firstname) LIKE '%". $value ."%') 
+		 OR (CONCAT (b.b_lname, ' ',b.b_mname, ' ',b.b_fname) LIKE '%". $value ."%') 
+		 OR (CONCAT (c.lastname, ' ',c.firstname, ' ',c.middlename) LIKE '%". $value ."%'))
+		 ORDER BY t.date_entered DESC LIMIT 8";
 
 		$result = mysqli_query($this->db, $query);
 
@@ -3143,13 +3910,13 @@
 	public function searchReissue_log_noData($val){
 		$value = mysqli_real_escape_string($this->db,$val); 
 
-		$query = "SELECT client_data.*, beneficiary_data.*, tbl_transaction.*, reissuelog.* FROM client_data 
-		LEFT JOIN tbl_transaction using (client_id)
-		LEFT JOIN beneficiary_data using (bene_id)
-        LEFT JOIN reissuelog USING (trans_id)
-		WHERE (status_client = 'Done' OR status_client = 'Decline') 
-        AND reissuelog.date_reissued is NOT NULL		   
-        ORDER BY date_reissued DESC LIMIT 8";
+		$query = "SELECT c.*, b.*, t.*, r.* FROM client_data c
+		LEFT JOIN tbl_transaction t using (client_id)
+		LEFT JOIN beneficiary_data b using (bene_id)
+        LEFT JOIN reissuelog r USING (trans_id)
+		WHERE (t.status_client = 'Done') 
+        AND r.date_reissued is NOT NULL		   
+        ORDER BY r.date_reissued DESC LIMIT 8";
 
 		$result = mysqli_query($this->db, $query);
 
@@ -3164,7 +3931,7 @@
 
 
 	public function search_on_summary_encoder($value){
-		$value = mysqli_real_escape_string($this->db,$val); 
+		$value = mysqli_real_escape_string($this->db,$value); 
 		$encoder = $_SESSION['userId'];
 		$query = "SELECT * FROM client_data 
 		LEFT JOIN transact ON client_data.client_id = transact.client_id
@@ -3266,6 +4033,83 @@
 			return false;
 		}
 	}
+
+	public function summaryDataTableEncoder($date1, $date2, $datenow, $datenow2) {
+		if (empty($datenow) && empty($datenow2)) {
+			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_socialWork, b_fname, b_mname, b_lname, b_exname 
+			FROM `client_data` 
+			LEFT JOIN tbl_transaction USING (client_id) 
+			LEFT JOIN beneficiary_data USING (bene_id)
+			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}')) ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+		}else{
+			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_socialWork, b_fname, b_mname, b_lname, b_exname 
+			FROM `client_data` 
+			LEFT JOIN tbl_transaction USING (client_id) 
+			LEFT JOIN beneficiary_data USING (bene_id)
+			where status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}') ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+		}
+		$result = mysqli_query($this->db, $query);
+		return $result;
+	}
+	public function summaryGetNumRowsEnc($date1, $date2, $datenow, $datenow2) {
+		if (empty($datenow) && empty($datenow2)) {
+			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_socialWork, b_fname, b_mname, b_lname, b_exname 
+			FROM `client_data` 
+			LEFT JOIN tbl_transaction USING(client_id) 
+			LEFT JOIN beneficiary_data USING (bene_id)
+			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}'));";
+			$result = mysqli_query($this->db, $query);
+			$rownum = mysqli_num_rows($result);
+		}else{
+			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_socialWork, b_fname, b_mname, b_lname, b_exname 
+			FROM `client_data` 
+			LEFT JOIN tbl_transaction USING(client_id) 
+			LEFT JOIN beneficiary_data USING (bene_id)
+			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}'));";
+			$result = mysqli_query($this->db, $query);
+			$rownum = mysqli_num_rows($result);
+		}
+		return $rownum;
+	}
+
+	public function summaryDataTableSocialWork($date1, $date2, $datenow, $datenow2) {
+		if (empty($datenow) && empty($datenow2)) {
+			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_encoder, b_fname, b_mname, b_lname, b_exname 
+            FROM `client_data` 
+            LEFT JOIN tbl_transaction USING (client_id) 
+            LEFT JOIN beneficiary_data USING (bene_id)
+            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}')) ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+        }else{
+			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_encoder, b_fname, b_mname, b_lname, b_exname 
+            FROM `client_data` 
+            LEFT JOIN tbl_transaction USING (client_id) 
+            LEFT JOIN beneficiary_data USING (bene_id)
+            where status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}') ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+        }
+		$result = mysqli_query($this->db, $query);
+		return $result;
+	}
+	public function summaryGetNumRowsSocWork($date1, $date2, $datenow, $datenow2) {
+        if (empty($datenow) && empty($datenow2)) {
+            $query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_encoder, b_fname, b_mname, b_lname, b_exname 
+            FROM `client_data` 
+            LEFT JOIN tbl_transaction USING (client_id) 
+            LEFT JOIN beneficiary_data USING (bene_id)
+            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}'))";
+            $result = mysqli_query($this->db, $query);
+            $rownum = mysqli_num_rows($result);
+        } else {
+            $query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_encoder, b_fname, b_mname, b_lname, b_exname 
+            FROM `client_data` 
+            LEFT JOIN tbl_transaction USING (client_id) 
+            LEFT JOIN beneficiary_data USING (bene_id)
+            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}'));";
+            $result = mysqli_query($this->db, $query);
+            $rownum = mysqli_num_rows($result);
+        }
+		return $rownum;
+    }
+
 	public function getsignatoryINI($id){
 		$query = "SELECT initials FROM signatory WHERE signatory_id = '{$id}';";
 		$result = mysqli_query($this->db,$query);
@@ -3274,7 +4118,7 @@
 		if($result){
 			return $data;
 		}
-		else{
+		else{         
 			return false;
 		}
 	}
@@ -3436,6 +4280,76 @@
 			return $result;
 		}
 		else {
+			return false;
+		}
+	}
+
+	public function getosap($id) {
+		$year   = intval(Date("Y"));
+		$year1  = intval(date("Y", strtotime("+1 days")));
+		
+		$day    = intval(Date("d"));
+		if(strlen($day)==1){
+			$day = '0'.$day;
+		}else{
+			$day = $day;
+		}
+		$month  = intval(date('m'));
+		if(strlen($month)==1){
+			$monthnum = '0'.$month;
+		}else{
+			$monthnum = $month;
+		}
+		$month1  = intval(date('m', strtotime('+1 days')));
+		if(strlen($month1)==1){
+			$monthnum1 = '0'.$month1;
+		}else{
+			$monthnum1 = $month1;
+		}
+		$day1 = intval(date('d', strtotime('+1 days')));
+		if(strlen($day1)==1){
+			$day1 = '0'.$day1;
+		}else{
+			$day1 = $day1;
+		}
+		$date1 = $year.'-'.$monthnum.'-'.$day.' 00:00:00';
+		$date2 = $year1.'-'.$monthnum1.'-'.$day1.' 00:00:00';;
+
+		$query = "SELECT * from tbl_osap where trans_id = '{$id}' and (osap_created between '{$date1}' and '{$date2}')";
+		$result = mysqli_query($this->db, $query);
+
+		$rows = mysqli_fetch_assoc($result);
+		if($rows){
+			return $rows;
+		}else{
+			return false;
+		}
+	}
+
+	public function create_osap($id, $req_by, $sign){
+		$now = date("Y-m-d H:i:s"); //serve as date_entered
+		
+		$query = "INSERT INTO tbl_osap(trans_id, osap_created, requested_by, signatory, empid) VALUES
+		('{$id}', '{$now}', '{$req_by}', '{$sign}', '{$_SESSION['userId']}');";
+		$result = mysqli_query($this->db, $query);
+		
+		if($result){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function update_osap($id, $req_by, $sign){
+		$now = date("Y-m-d H:i:s"); //serve as date_entered
+		
+		$query = "UPDATE tbl_osap SET osap_created = '{$now}', requested_by = '{$req_by}', 
+		signatory = '{$sign}', empid = '{$_SESSION['userId']}' where trans_id = '{$id}';";
+		$result = mysqli_query($this->db, $query);
+		
+		if($result){
+			return true;
+		}else{
 			return false;
 		}
 	}
@@ -3627,6 +4541,157 @@
 		$result = mysqli_query($this->db,$query);
 	}
 
+	
+
+	public function initials_gl($sign_tree, $swid, $eid, $a) {
+		$ini = "";
+		
+		if($sign_tree == "CURRENTHEAD1"){
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD1'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini = $rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD2'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD3'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD4'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD5'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials']."/";
+			
+		}if($sign_tree == "CURRENTHEAD2"){
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD2'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini = $rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD3'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD4'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD5'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials']."/";
+
+		}if($sign_tree == "CURRENTHEAD3"){
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD3'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini = $rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD4'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD5'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials']."/";
+
+		}if($sign_tree == "CURRENTHEAD4"){
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD4'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini = $rows['initials'];
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD5'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= "/".$rows['initials']."/";
+
+		}if($sign_tree == "CURRENTHEAD5"){
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD5'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials']."/";
+
+		}if($sign_tree == "CURRENTHEAD6" || $_SESSION['f_office'] == "112402-01"){ // region
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD6'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD7" || $_SESSION['f_office'] == "112402-02"){ // davao 3rd dist
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD7'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD8" || $_SESSION['f_office'] == "112403-01"){ // davao del sur
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD8'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD9" || $_SESSION['f_office'] == "112319-01"){ // davao del norte
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD9'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD10" || $_SESSION['f_office'] == "118201-01"){ // davao de oro
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD10'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD11" || $_SESSION['f_office'] == "112509-01"){ // davao oriental
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD12'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD12" || $_SESSION['f_office'] == "118602-01"){ // davao occidental
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD11'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD13" || $_SESSION['f_office'] == "112402-03"){ // davao spmc
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD13'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($sign_tree == "CURRENTHEAD14" || $_SESSION['f_office'] == "112402-04"){ // davao drmc
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD14'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			$ini .= $rows['initials'];
+
+		}if($_SESSION['f_office'] == "112402-04" || empty($a) || $a == 0){ // special
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD15'";
+			$result = mysqli_query($this->db,$query);
+			$rows1 = mysqli_fetch_assoc($result);
+			
+			$query = "SELECT special_ini FROM signatory WHERE signatory_tree = 'CURRENTHEAD6'";
+			$result = mysqli_query($this->db,$query);
+			$rows = mysqli_fetch_assoc($result);
+			
+			if($rows["special_ini"] != 1){
+				$ini .= "/".$rows1['initials'];
+			}
+
+			
+		}
+		$sw = $this->getsocialWorkINI($swid);
+		$e = $this->getencoderINI($eid);
+		$ini .= strtolower("/".$sw."/".$e);
+		return $ini;
+	}
+	
+
 // public function searchImported($val){
 // 		$value = mysqli_real_escape_string($this->db,$val); 
 		
@@ -3677,6 +4742,16 @@
 // 			 return false;
 // 		 }
 // 	}
+	// public function createosapdatas() {
+	// 	$query = "SELECT DISTINCT t.bene_id,c.lastname,c.middlename,c.firstname,c.extraname, b.b_fname,b.b_lname,b.b_mname,DATEDIFF(now(),DATE(t.date_accomplished)) as days,
+	// 	date(t.date_accomplished) as date_accomplished,a.mode,a.type from tbl_transaction t
+	// 	LEFT OUTER JOIN client_data c on c.client_id = t.client_id 
+	// 	LEFT OUTER JOIN beneficiary_data b on b.bene_id = t.bene_id 
+	// 	INNER JOIN assistance a on a.trans_id = t.trans_id 
+	// 	WHERE status_client = 'Done' and DATEDIFF(now(),DATE(t.date_accomplished)) < 90 GROUP BY t.client_id";
+		
+	// }
 }
+
 
 ?>
