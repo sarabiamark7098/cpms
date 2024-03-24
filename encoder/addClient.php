@@ -116,6 +116,29 @@
                         </datalist>
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label class="col-sm-3 label" style="font-size: 20px">4Ps Beneficiary: </label>
+                    <div class="checkbox col-1">
+                        <label for='radiobutton-y'>
+                            <input type="checkbox" id="radiobutton-y" class="checkbutton" name="pantawid_y" style="height:25px;width:25px;margin: 0px" required>
+                        </label>
+                    </div>
+                    <div class="checkbox col-3" style="margin-top: 3px">
+                        <label for='radiobutton-y'>
+                            <label for="yes"> <b>Yes</b></label>
+                        </label>
+                    </div>
+                    <div class="checkbox col-1">
+                        <label for='radiobutton-n'>
+                            <input type="checkbox" id="radiobutton-n" class="checkbutton" name="pantawid_n" style="height:25px;width:25px;margin: 0px" required>
+                        </label>
+                    </div>
+                    <div class="checkbox col-3" style="margin-top: 3px">
+                        <label for='radiobutton-n'>
+                            <label for="no"> <b>No</b></label>
+                        </label>
+                    </div>
+                </div><br>
                     <!--Address-->
                 <h4 class="text-center">Address</h4>
                 <div class="form-group row">
@@ -398,9 +421,20 @@
         <script type="text/javascript">
 
         function calculateage(dob) {
-            var diff_ms=Date.now() - dob.getTime();
-            var age_dt=new Date(diff_ms);
-            return (Math.abs(age_dt.getUTCFullYear() - 1970));
+            var diff_ms = Date.now() - dob.getTime(); // Get difference in milliseconds
+            var age_dt = new Date(diff_ms); // Create a new Date object representing the difference
+            
+            var years = age_dt.getUTCFullYear() - 1970; // Calculate the number of years
+            var months = age_dt.getUTCMonth() + 1; // Get the number of months
+            var days = age_dt.getUTCDate() - 1; // Get the number of days
+            // console.log("Age: "+ years+ " years, "+ months + " months, and " + days + " days");
+            if (years === 0 && months > 11 && days > 0 ) {
+                years = 1;
+            }
+            if (years < 0 ) {
+                years = 0;
+            }
+            return years;
         }
         
         $(function () {
@@ -408,6 +442,7 @@
                 var bd = $("#birthday").val();
                 explodebd = bd.split("-");
                 age = calculateage(new Date(explodebd[0],explodebd[1],explodebd[2]))
+                
                 var age1 = age.toString();
 
                 document.getElementById("age").value = age1;
@@ -418,6 +453,7 @@
                 var b_bd = $("#b_bday").val();
                 b_explodebd = b_bd.split("-");
                 b_age = calculateage(new Date(b_explodebd[0],b_explodebd[1],b_explodebd[2]))
+
                 var b_age1 = b_age.toString();
 
                 document.getElementById("b_age").value = b_age1;
@@ -514,6 +550,43 @@
 			get_b_Municipality_sw(muni);
 			get_b_Barangay_sw(brgy);
 		}
+
+        $(function () {
+            $("#radiobutton-n").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#radiobutton-y").not($(this)).each(function () {
+                        $(this).removeAttr("checked");
+                    });
+                }
+            });
+        });
+
+        $(function () {
+            $("#radiobutton-y").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#radiobutton-n").not($(this)).each(function () {
+                        $(this).removeAttr("checked");
+                    })
+                }
+            });
+        });
+
+        $(function () {
+            $("#radiobutton-y").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#radiobutton-n").not($(this)).each(function () {
+                        $(this).removeAttr("required");
+                    });
+                }
+            });
+            $("#radiobutton-n").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#radiobutton-y").not($(this)).each(function () {
+                        $(this).removeAttr("required");
+                    });
+                }
+            });
+        });
 
         </script>
 </html>

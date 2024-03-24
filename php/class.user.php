@@ -1474,7 +1474,7 @@
 			//Encoder //New Client
 			
 			//sa paginsert sa client data na sya mismo ang beneficiary
-			public function insertClient($f, $m, $l, $e, $sex, $bday, $age, $occupation, $salary, $category, $cstatus,$contact,
+			public function insertClient($f, $m, $l, $e, $sex, $bday, $age, $occupation, $salary, $category, $pantawid, $cstatus,$contact,
 			$r, $p, $c, $brgy, $d, $street){ 
 				
 				$datenow = date("Y-m-d H:i:s"); //serve as date_entered
@@ -1508,8 +1508,8 @@
 				$newclientid = "C-".$row['auto_increment_4_id'];
 				$query = "UPDATE client_data SET client_id = '{$newclientid}' WHERE auto_increment_4_id = '{$row['auto_increment_4_id']}'";
 				$result = mysqli_query($this->db,$query);
-				$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, date_entered, encoded_encoder, note, status_client, clientonly) VALUES 
-				('{$newtransid}','{$newclientid}', '{$relation}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1)";
+				$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, pantawid_bene, date_entered, encoded_encoder, note, status_client, clientonly) VALUES 
+				('{$newtransid}','{$newclientid}', '{$relation}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1)";
 				$result = mysqli_query($this->db,$query);
 				
 				if($result){
@@ -1522,7 +1522,7 @@
 			}
 
 		//pag insert sa data sa client na naa syay benefeciary
-		public function insertClientWB($f, $m, $l, $e, $sex, $bday, $occupation, $salary, $category,
+		public function insertClientWB($f, $m, $l, $e, $sex, $bday, $occupation, $salary, $category, $pantawid,
 		$cstatus, $contact, $r, $p, $c, $brgy, $d, $street, $relationship, $bf, $bm, $bl, $be, $b_bday, 
 		$b_sex, $b_cstatus, $b_contact, $b_occupation, $b_salary, $b_category, $b_region, $b_province, $b_city, $b_district, $b_barangay, $b_street){ 
 			$datenow = date("Y-m-d H:i:s"); //serve as date_entered
@@ -1575,7 +1575,7 @@
 			$result = mysqli_query($this->db,$query);
 			
 			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) VALUES 
-			('{$newtransid}', '{$newclientid}', '{$newbeneid}', '{$relationship}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1,1,1)";
+			('{$newtransid}', '{$newclientid}', '{$newbeneid}', '{$relationship}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1,1,1)";
 			$result = mysqli_query($this->db,$query);
 
 			if($result){
@@ -1973,7 +1973,7 @@
 
 		//Age Calculation
 		
-		public function getAge($date){			
+		public function getAge($date){		
 			return  $age = date_diff(date_create($date), date_create('now'))->y;
 		}
 		

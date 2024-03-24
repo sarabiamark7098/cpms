@@ -36,6 +36,11 @@
 			}else{
 				$salary = '0';
 			}
+            if($_POST['pantawid_y']){
+                $pantawid = "Yes";
+            }elseif($_POST['pantawid_n']){
+                $pantawid = "No";
+            }
 			$category = mysqli_real_escape_string($user->db,$_POST['category']);
 			$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 			$contact = mysqli_real_escape_string($user->db,$_POST['contact']);
@@ -48,7 +53,7 @@
 			$street= mysqli_real_escape_string($user->db,$_POST['street']);
             
             if($age > 17){
-                $execute = $user->insertClient($fname, $mname, $lname, $exname, $sex, $bday, $age, $occupation, $salary, $category, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street);
+                $execute = $user->insertClient($fname, $mname, $lname, $exname, $sex, $bday, $age, $occupation, $salary, $category, $pantawid, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street);
             }
             else {
                 $dedup = $user->cleardup();
@@ -86,6 +91,11 @@
 		}else{
 			$salary = '0';
 		}
+        if($_POST['pantawid_y']){
+            $pantawid = "Yes";
+        }elseif($_POST['pantawid_n']){
+            $pantawid = "No";
+        }
 		$category = mysqli_real_escape_string($user->db,$_POST['category']);
 		$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 		$contact = mysqli_real_escape_string($user->db,$_POST['contact']);
@@ -123,7 +133,7 @@
 		
 		
        if($age > 17){
-            $execute = $user->insertClientWB($fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $civilStatus, $contact, $region, 
+            $execute = $user->insertClientWB($fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $pantawid, $civilStatus, $contact, $region, 
             $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, 
             $b_occupation, $b_salary, $b_category, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street);
         }
