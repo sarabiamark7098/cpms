@@ -64,7 +64,8 @@
                     </div>
                     <label class="col-sm-1 label" style="font-size: 20px">Age: </label>
                     <div class="col-sm-3">
-                        <input type="number" class="form-control mr-sm-2" id="age" name="age" placeholder="Age" disabled>
+                        <input type="number" class="form-control mr-sm-2" id="age" placeholder="Age" disabled>
+                        <input type="number" class="form-control mr-sm-2" id="hidden_age" name="age" placeholder="Age" hidden>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -178,13 +179,14 @@
                     <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_hc_Barangay(this)" required>
                     <datalist id="barangayClist">
                     </datalist>
-                    </div>
+                    </div>  
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <select class="form-control mr-sm-2 b" name="district" id="client_district">
                             <?php
                                 $getdistrict = $user->getdistrictlist();
+                                print_r($getdistrict);
                                 // Loop through results
                                 echo "<option value='' selected>Select District</option>";
                                 foreach($getdistrict as $index => $value){
@@ -428,8 +430,8 @@
             var months = age_dt.getUTCMonth() + 1; // Get the number of months
             var days = age_dt.getUTCDate() - 1; // Get the number of days
             // console.log("Age: "+ years+ " years, "+ months + " months, and " + days + " days");
-            if (years === 0 && months > 11 && days > 0 ) {
-                years = 1;
+            if (years >= 0 && months > 11 && days > 0 ) {
+                years += 1;
             }
             if (years < 0 ) {
                 years = 0;
@@ -446,6 +448,7 @@
                 var age1 = age.toString();
 
                 document.getElementById("age").value = age1;
+                document.getElementById("hidden_age").value = age1;
             }); 
         });
         $(function () {

@@ -22,6 +22,7 @@
 <?php
     if(!isset($_POST['wbeneficiary'])){
 		if(isset($_POST['addClient'])){
+            print_r($_POST);
 			//client the one that process the transaction
 			$fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname'])," "));
 			$mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename'])," "));
@@ -29,7 +30,7 @@
 			$exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['extraname']), " "));
 			$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
 			$bday = $_POST['birthday'];
-			$age = $user->getAge($bday);
+			echo $age = $_POST['age'];
 			$occupation = mysqli_real_escape_string($user->db,$_POST['occupation']);
 			if($_POST['salary'] != ''){
 				$salary= $_POST['salary'];
@@ -51,7 +52,6 @@
 			$barangay = mysqli_real_escape_string($user->db,$_POST['barangay']);
 			$district = mysqli_real_escape_string($user->db,$_POST['district']);
 			$street= mysqli_real_escape_string($user->db,$_POST['street']);
-            
             if($age > 17){
                 $execute = $user->insertClient($fname, $mname, $lname, $exname, $sex, $bday, $age, $occupation, $salary, $category, $pantawid, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street);
             }
@@ -77,85 +77,85 @@
 	}
 	else{
 		if(isset($_POST['addClient'])){
-		//client the one that process the transaction
-		$fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname']), " "));
-		$mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename']), " "));
-		$lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lastname']), " "));
-		$exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['extraname']), " "));
-		$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
-		$bday = $_POST['birthday'];
-		$age = $user->getAge($bday);
-		$occupation = mysqli_real_escape_string($user->db,strtoupper($_POST['occupation']));
-		if($_POST['salary'] != ''){
-			$salary= $_POST['salary'];
-		}else{
-			$salary = '0';
-		}
-        if($_POST['pantawid_y']){
-            $pantawid = "Yes";
-        }elseif($_POST['pantawid_n']){
-            $pantawid = "No";
-        }
-		$category = mysqli_real_escape_string($user->db,$_POST['category']);
-		$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
-		$contact = mysqli_real_escape_string($user->db,$_POST['contact']);
-		$region = mysqli_real_escape_string($user->db,$_POST['regions']);
-		$province = mysqli_real_escape_string($user->db,$_POST['province']);
-		$city_mun = mysqli_real_escape_string($user->db,$_POST['city']);
-		$barangay = mysqli_real_escape_string($user->db,$_POST['barangay']);
-		$district = mysqli_real_escape_string($user->db,$_POST['district']);
-		$street= mysqli_real_escape_string($user->db,$_POST['street']);
-	
-		// beneficiary
-		$relationship = mysqli_real_escape_string($user->db,$_POST['relation']);
-		$b_fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_fname']), " "));
-		$b_mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_mname']), " "));
-		$b_lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_lname']), " "));
-		$b_exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_exname']), " "));
-		$b_bday = $_POST['b_bday'];
-		//$b_age = $user->getAge($b_bday);
-		$b_occupation = mysqli_real_escape_string($user->db,strtoupper($_POST['b_occupation']));
-		if($_POST['b_salary'] != ''){
-			$b_salary= $_POST['b_salary'];
-		}else{
-			$b_salary = '0';
-		}
-		$b_sex = mysqli_real_escape_string($user->db,$_POST['b_sex']);
-		$b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
-		$b_contact = mysqli_real_escape_string($user->db,$_POST['b_contact']);
-		$b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
-		$b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
-		$b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
-		$b_city_mun = mysqli_real_escape_string($user->db,$_POST['b_city']);
-		$b_district = mysqli_real_escape_string($user->db,$_POST['b_district']);
-		$b_barangay = mysqli_real_escape_string($user->db,$_POST['b_barangay']);
-		$b_street = mysqli_real_escape_string($user->db,$_POST['b_street']);
-		
-		
-       if($age > 17){
-            $execute = $user->insertClientWB($fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $pantawid, $civilStatus, $contact, $region, 
-            $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, 
-            $b_occupation, $b_salary, $b_category, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street);
-        }
-        else{
-            $dedup = $user->cleardup();
-            echo "<script>alert('Error! Minor Client');</script>";
-            echo "<script>window.location='home.php';</script>";
-            echo "<meta http-equiv='refresh' content='0'>";
-        }
-		
-			if($execute){
+            
+            //client the one that process the transaction
+            $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname']), " "));
+            $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename']), " "));
+            $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lastname']), " "));
+            $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['extraname']), " "));
+            $sex = mysqli_real_escape_string($user->db,$_POST['sex']);
+            $bday = $_POST['birthday'];
+			$age = $_POST['age'];
+            $occupation = mysqli_real_escape_string($user->db,strtoupper($_POST['occupation']));
+            if($_POST['salary'] != ''){
+                $salary= $_POST['salary'];
+            }else{
+                $salary = '0';
+            }
+            if($_POST['pantawid_y']){
+                $pantawid = "Yes";
+            }elseif($_POST['pantawid_n']){
+                $pantawid = "No";
+            }
+            $category = mysqli_real_escape_string($user->db,$_POST['category']);
+            $civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
+            $contact = mysqli_real_escape_string($user->db,$_POST['contact']);
+            $region = mysqli_real_escape_string($user->db,$_POST['regions']);
+            $province = mysqli_real_escape_string($user->db,$_POST['province']);
+            $city_mun = mysqli_real_escape_string($user->db,$_POST['city']);
+            $barangay = mysqli_real_escape_string($user->db,$_POST['barangay']);
+            $district = mysqli_real_escape_string($user->db,$_POST['district']);
+            $street= mysqli_real_escape_string($user->db,$_POST['street']);
+        
+            // beneficiary
+            $relationship = mysqli_real_escape_string($user->db,$_POST['relation']);
+            $b_fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_fname']), " "));
+            $b_mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_mname']), " "));
+            $b_lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_lname']), " "));
+            $b_exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['b_exname']), " "));
+            $b_bday = $_POST['b_bday'];
+			// $b_age = $user->getAge($b_bday);
+            $b_occupation = mysqli_real_escape_string($user->db,strtoupper($_POST['b_occupation']));
+            if($_POST['b_salary'] != ''){
+                $b_salary= $_POST['b_salary'];
+            }else{
+                $b_salary = '0';
+            }
+            $b_sex = mysqli_real_escape_string($user->db,$_POST['b_sex']);
+            $b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
+            $b_contact = mysqli_real_escape_string($user->db,$_POST['b_contact']);
+            $b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
+            $b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
+            $b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
+            $b_city_mun = mysqli_real_escape_string($user->db,$_POST['b_city']);
+            $b_district = mysqli_real_escape_string($user->db,$_POST['b_district']);
+            $b_barangay = mysqli_real_escape_string($user->db,$_POST['b_barangay']);
+            $b_street = mysqli_real_escape_string($user->db,$_POST['b_street']);
+            
+            if($age > 17){
+                $execute = $user->insertClientWB($fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $pantawid, $civilStatus, $contact, $region, 
+                $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, 
+                $b_occupation, $b_salary, $b_category, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street);
+            }
+            else{
                 $dedup = $user->cleardup();
-				echo "<script>alert('Client Successfully Added!');</script>";
-                echo "<script>window.location='picture.php?id=".$execute."';</script>";
-				echo "<meta http-equiv='refresh' content='0'>";
-			}
-			else{
-                $dedup = $user->cleardup();
-				echo "<script>alert('Sorry Error uploading!');</script>";
+                echo "<script>alert('Error! Minor Client');</script>";
                 echo "<script>window.location='home.php';</script>";
-				echo "<meta http-equiv='refresh' content='0'>";
-			}
+                echo "<meta http-equiv='refresh' content='0'>";
+            }
+        
+    		if($execute){
+                $dedup = $user->cleardup();
+    			echo "<script>alert('Client Successfully Added!');</script>";
+                echo "<script>window.location='picture.php?id=".$execute."';</script>";
+    			echo "<meta http-equiv='refresh' content='0'>";
+    		}
+    		else{
+                $dedup = $user->cleardup();
+    			echo "<script>alert('Sorry Error uploading!');</script>";
+                echo "<script>window.location='home.php';</script>";
+    			echo "<meta http-equiv='refresh' content='0'>";
+    		}
 		}
 	}
 ?>

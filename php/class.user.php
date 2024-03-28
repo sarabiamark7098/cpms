@@ -764,15 +764,14 @@
 				$company_name = mysqli_escape_string($this->db,$company_name);
 				$company_address = mysqli_escape_string($this->db,$company_address);
 
-				$query = "INSERT INTO provider(addressee_name, addressee_position, company_name, to_mention, company_address, action_executed_by) 
+				echo $query = "INSERT INTO provider(addressee_name, addressee_position, company_name, to_mention, company_address, action_executed_by) 
 				VALUES ('{$addressee_name}','{$addressee_position}','{$company_name}','{$addresseetomention}','{$company_address}','{$fullname}');";
 
 				$result = mysqli_query($this->db,$query);
 				if($result){
 					return true;
 				}
-				else{
-					
+				else{					
 					return false;
 				}
 			}
@@ -1546,36 +1545,36 @@
 			`client_region`, `client_province`, `client_municipality`, 
 			`client_barangay`, `client_street`, `client_district`, date_inserted) VALUES ('{$l}','{$f}','{$m}',
 			'{$e}','{$sex}','{$cstatus}','{$bday}','{$occupation}','{$salary}','{$contact}','{$category}',
-			'{$r}','{$p}','{$c}','{$brgy}','{$street}','{$d}', '{$datenow}')";
+			'{$r}','{$p}','{$c}','{$brgy}','{$street}','{$d}', '{$datenow}');";
 		 	$result = mysqli_query($this->db,$query);
 			
-			$query = "SELECT auto_increment_4_id FROM client_data WHERE lastname = '{$l}' AND firstname = '{$f}' AND middlename = '{$m}' AND date_inserted = '{$datenow}'";
+			$query = "SELECT auto_increment_4_id FROM client_data WHERE lastname = '{$l}' AND firstname = '{$f}' AND middlename = '{$m}' AND date_inserted = '{$datenow}';";
 			$result = mysqli_query($this->db,$query);
 			$row = mysqli_fetch_assoc($result);
 			
 			$newclientid = "C-".$row['auto_increment_4_id'];
 			
-			$query = "UPDATE client_data SET client_id = '{$newclientid}' WHERE auto_increment_4_id = '{$row['auto_increment_4_id']}'";
+			$query = "UPDATE client_data SET client_id = '{$newclientid}' WHERE auto_increment_4_id = '{$row['auto_increment_4_id']}';";
 			$result = mysqli_query($this->db,$query);
 
 			$query = "INSERT INTO `beneficiary_data`(`b_fname`, `b_mname`, `b_lname`, `b_exname`, 
 			`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_occupation`, `b_salary`, `b_category`, `b_region`, 
 			`b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, b_date_inserted) VALUES ('{$bf}','{$bm}',
 			'{$bl}','{$be}','{$b_cstatus}','{$b_contact}','{$b_bday}','{$b_sex}','{$b_occupation}','{$b_salary}','{$b_category}',
-			'{$b_region}','{$b_province}','{$b_city}','{$b_barangay}','{$b_district}','{$b_street}', '{$datenow}')";
+			'{$b_region}','{$b_province}','{$b_city}','{$b_barangay}','{$b_district}','{$b_street}', '{$datenow}');";
 			$result = mysqli_query($this->db,$query);
 			
-			$query = "SELECT auto_increment_id_bene FROM beneficiary_data WHERE b_lname = '{$bl}' AND b_fname = '{$bf}' AND b_mname = '{$bm}' AND b_date_inserted = '{$datenow}'";
+			$query = "SELECT auto_increment_id_bene FROM beneficiary_data WHERE b_lname = '{$bl}' AND b_fname = '{$bf}' AND b_mname = '{$bm}' AND b_date_inserted = '{$datenow}';";
 			$result = mysqli_query($this->db,$query);
 			$row = mysqli_fetch_assoc($result);
 
 			$newbeneid = "B-".$row['auto_increment_id_bene'];
 			
-			$query = "UPDATE beneficiary_data SET bene_id = '{$newbeneid}' WHERE auto_increment_id_bene = '{$row['auto_increment_id_bene']}'";
+			$query = "UPDATE beneficiary_data SET bene_id = '{$newbeneid}' WHERE auto_increment_id_bene = '{$row['auto_increment_id_bene']}';";
 			$result = mysqli_query($this->db,$query);
 			
-			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) VALUES 
-			('{$newtransid}', '{$newclientid}', '{$newbeneid}', '{$relationship}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1,1,1)";
+			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, pantawid_bene, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) VALUES 
+			('{$newtransid}', '{$newclientid}', '{$newbeneid}', '{$relationship}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1,1,1);";
 			$result = mysqli_query($this->db,$query);
 
 			if($result){
@@ -2283,85 +2282,6 @@
 			
 		}
 
-		public function updateGISbyEncoder($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
-			$type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5){
-			
-			$encoder = $_SESSION['userId'];
-			$remark = "Updated by the Encoder with ID = ".$encoder;
-			
-			
-			$query ="";
-			$query .= "DELETE FROM family where trans_id='{$trans_id}';"; //delete first fmily then update 
-			if(!empty($p1)){
-				$query .= "INSERT INTO family (trans_id, name, age, occupation, salary) VALUES ('{$trans_id}','{$p1}', {$e1}, '{$t1}', '{$b1}')";
-				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}', {$e2}, '{$t2}', '{$b2}')";}
-				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}', {$e3}, '{$t3}', '{$b3}')";}
-				$query .= ";";
-			}
-						
-			
-			//insert sa service 
-			$query .= " UPDATE service SET service1={$s1}, service2={$s2}, service3={$s3}, service4={$s4}, ref_name='{$ref_name}', remark_service_update='{$encoder}' WHERE trans_id = '{$trans_id}';";
-			
-			$assistance = $this->getAssistanceData($trans_id);
-			
-			//UPDATE assessment need by client/ 1 or 2 lng iyang ma cater na assistance 
-			$query .= " UPDATE assessment SET problem = '{$prob}', gis_option = '{$gis_opt}', soc_ass='{$ass}', mode_admission='{$mode_ad}', client_num='{$num}', remark_onupdate='{$encoder}'
-						WHERE trans_id='{$trans_id}';";
-		
-			//UPDATE assissstance
-			$query .= "UPDATE assistance SET type = '{$type1}', amount = '{$a1}', mode ='{$m1}', fund = '', purpose = '{$pur1}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1';";
-			//UPDATE fundsource
-			// $query .= "UPDATE tbl_coe_fund SET fundsource1 = '{$fs1}', fundsource2 = '{$fs2}', fundsource3 ='{$fs3}', fundsource4 = '{$fs4}', fundsource5 = '{$fs5}' WHERE trans_id = '{$trans_id}';";
-			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
-            if (empty($f1)) {
-                $query .= "VALUES ('{$trans_id}', '{$fs1}', '')";
-				if (!empty($fs2)) {$query .= ",('{$trans_id}', '{$fs2}', '')";}
-				if (!empty($fs3)) {$query .= ",('{$trans_id}', '{$fs3}', '')";}
-				if (!empty($fs4)) {$query .= ",('{$trans_id}', '{$fs4}', '')";}
-				if (!empty($fs5)) {$query .= ",('{$trans_id}', '{$fs5}', '')";}
-            }else{
-                $query .= "VALUES ('{$trans_id}', '{$f1}', '{$a1}')";
-            }
-			$query .= ";";
-
-			if($type2 !="" && !empty($assistance[2]['mode']) != ""){
-				$query .= "UPDATE assistance SET type = '{$type2}', amount = '{$a2}', mode ='{$m2}', fund = '{$f2}', purpose = '{$pur2}', remark_assist_update = '{$encoder}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
-			}elseif($type2 =="" && !empty($assistance[2]['mode']) != ""){
-				$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type2'";
-			}elseif($type2 !="" && !empty($assistance[2]['mode']) == ""){
-				$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) VALUES
-					('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
-			}
-			$query .= ";";
-
-			$sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', remarks='{$remark}'";
-			if($m1 == "GL"){ 
-				$amountcon = str_replace(",","", $a1);
-				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
-				elseif($amountcon >= 50001){ $query .= ", signatory_GL = ''"; }
-			}
-			if($m2 == "GL"){ 
-				$amountcon2 = str_replace(",","", $a2);
-				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
-				elseif($amountcon2 >= 50001){ $query .= ", signatory_GL = ''"; }
-			}
-			$query .= " WHERE trans_id = '{$trans_id}';";
-			
-			
-			$result = mysqli_multi_query($this->db, $query);
-			if($result){
-				echo "<script>alert('Assessment Successfully UPDATED!');</script>";
-				echo "<script>document.getElementById('toCOE').style.visibility='visible';</script>";
-				echo "<meta http-equiv='refresh' content='0'>";
-			}else{
-				echo "<script>alert('Something Went Wrong!');</script>";
-				echo "<meta http-equiv='refresh' content='0'>";
-			}
-			
-		}
 		public function updateGISbySocialWork($empid, $trans_id, $id, $p1, $p2, $p3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5){
 			
@@ -2886,22 +2806,7 @@
 		}
 	}
 
-	public function updateCashbyEncoder($id, $sd_officer){
-		$encoder = $_SESSION['userId'];
-
-		$query = "UPDATE cash SET sd_officer='{$sd_officer}', remark_cash_update = '{$encoder}'
-					WHERE trans_id='{$id}'";
-		$result = mysqli_query($this->db, $query);
-		
-		if($result){
-			echo "<script>alert('Cash Successfully UPDATED!');</script>";
-			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
-			echo "<meta http-equiv='refresh' content='0'>";
-		}else{
-			echo "<script>alert('Something Went Wrong!');</script>";
-		}
-			
-	}
+	
 	public function glfundsource($id) {
 		$query = "SELECT * FROM tbl_coe_fund WHERE trans_id = '{$id}';";
 		$result = mysqli_query($this->db, $query);
@@ -3042,24 +2947,6 @@
             echo "<script>alert('Something Went Wrong!');</script>";
         }
 	}
-
-	public function updateGLbyEncoder($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
-		$encoder = $_SESSION['userId'];
-		$query = "UPDATE gl set control_no='{$control_no}', addressee='{$addressee}', position='{$a_pos}', for_the_id='{$forthe}', cname='{$cname}' , caddress='{$add}', to_mention='{$tomention}', remark_gl_update='{$encoder}'
-					WHERE trans_id='{$id}';";
-		$signatory_id = $this->getsignatureid($signatory);
-		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory}' WHERE trans_id = '{$id}';";
-		
-		$result = mysqli_multi_query($this->db, $query);
-		
-		if($result){
-            echo "<script>alert('GL Successfully UPDATED!');</script>";
-			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
-			echo "<meta http-equiv='refresh' content='0'>";
-        }else{
-            echo "<script>alert('Something Went Wrong!');</script>";
-        }
-	}
 	
 	public function updateGLCash($id, $sd_officer, $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
  			$query = "DELETE FROM `cash` WHERE trans_id= '{$id}';";
@@ -3087,41 +2974,6 @@
 		}
 
 	}
-
-	public function updateGLCashbyEncoder($id, $sd_officer, $c_no, $signatory,
-		$addressee, $a_pos, $forthe, $cname, $add, $tomention){
-		
-			$encoder = $_SESSION['userId'];
-			
-			$query = "SELECT * FROM cash WHERE trans_id='{$id}';";
-			$result = mysqli_query($this->db, $query);
-			$rows = mysqli_num_rows($result);
-			if($rows > 0){
-				$query = "UPDATE cash SET sd_officer='{$sd_officer}', remark_cash_update = '{$encoder}'
-					WHERE trans_id='{$id}';";
-			}else{
-				$query = "INSERT INTO cash (trans_id, sd_officer) 
-						VALUES 
-						('{$id}', '{$sd_officer}');";				
-			}
-			
-			$query .= "UPDATE gl set control_no='{$c_no}', addressee='{$addressee}', position='{$a_pos}', for_the_id='{$forthe}', cname='{$cname}' , caddress='{$add}', to_mention='{$tomention}', remark_gl_update='{$encoder}'
-						WHERE trans_id='{$id}';";
-			$signatory_id = $this->getsignatureid($signatory);
-			
-			$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory_id}' WHERE trans_id = '{$id}';";
-			
-			$result = mysqli_multi_query($this->db, $query);
-		
-		if($result){
-			echo "<script>alert('GL and Cash Successfully UPDATED!');</script>";
-			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
-			echo "<meta http-equiv='refresh' content='0'>";
-		}else{
-			echo "<script>alert('Something Went Wrong!');</script>";
-		}
-
-    }
 
 	public function update_for_the_print($id, $forthe){
 		$p = 0;
