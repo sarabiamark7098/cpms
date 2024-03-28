@@ -3255,7 +3255,8 @@
 		}
 	
 		public function getGISData($id){
-			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, others_subcat from assessment 
+			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, 
+								ref_name, signatory_id, subcat_ass, target_sector, others_subcat from assessment 
 						LEFT JOIN service USING (trans_id) 
 						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
 						
