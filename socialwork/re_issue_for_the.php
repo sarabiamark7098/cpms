@@ -15,20 +15,46 @@
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
         
+        $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
+		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
+		$client_fam = $user->getclientFam($_GET['id']);
+		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+    
+        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
+			
+        $am = str_replace(",","",$client_assistance[1]['amount']);
+		
+        if($am > 50000){
+            if($record){
+                $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
+            }
+        }
+        $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
+
         $name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"];
 		if(!empty($client['extraname'])){
-			$name .= " ". $client['extraname'].".";
+			$name .= " ". strtoupper($client['extraname']) .".";
 		}
 		$bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname'].".": "");
         $signatoryGLNamePos = "";
         if(!empty($signatoryGL)){
-            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position'] ."-". $signatoryGL['initials']);
+            $signatoryGLNamePos = (!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position']);
         }
-        $am = str_replace(",","",$client_assistance[1]['amount']);
-        if($am > 50000){
-            $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
-        }
-        //ADDRESS
+		
+		if(!empty($client["b_lname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['b_bday']), date_create($today));
+			$age_bene = $diff->format('%y');
+		}else{
+			$age_bene = "";
+		}
+		if(!empty($client["lastname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['date_birth']), date_create($today));
+			$age_client = $diff->format('%y');
+		}
+        
+		//ADDRESS
         $c_add = '';
         $b_add = '';
         $cash_add=""; //set as the payee address for CAV
@@ -59,8 +85,40 @@
         //magkuhag data if ever naa na s database
         $gl = $user->getGL($_GET['id']); //gl table
         $cash = $user->getCash($_GET['id']); //cash table
-        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
-
+        $ft_signatoryini = "";
+        $forthepositiongl = "";
+        $signatoryforthe = "";
+        if(!empty($gl['for_the_id'])){
+            $signatoryforthe = $user->getsignatory($gl['for_the_id']);
+            $z = explode('/', $signatoryGL['position']);
+            if(!empty($z[1])){ 
+                $forthepositiongl = $z[1];
+            }else{
+                $forthepositiongl = $z[0];
+            }
+            $ft_signatoryini = $user->getinitialsSignatory($gl['for_the_id']);
+        }
+        $GLid = "";
+        if (empty($gl['control_no'])) {
+            $GLid = $user->controlNumberForGL();
+        }else{
+            $GLid = $gl['control_no'];
+        }
+        $mode1 = "";
+        $mode2 = "";
+        		
+        $mode1 = $client_assistance[1]['mode'];
+        
+        if(!empty($client_assistance[2]['mode'])){
+            $mode2 = $client_assistance[2]['mode'];
+        }
+		
+        $amountToWord = $user->toWord($client_assistance[1]['amount']);
+  
+		$soc_worker = $user->getuserInfo($_SESSION['userId']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+        
 		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
         $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
         $GISsignatoryPosition = $GISsignatory['position'];
@@ -72,25 +130,7 @@
 		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
         //fullname of social worker
         $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
-        
-        $mode1 = "";
-        $mode2 = "";
 
-        $mode1 = $client_assistance[1]['mode'];
-        
-        if(!empty($client_assistance[2]['mode'])){
-            $mode2 = $client_assistance[2]['mode'];
-        }
-        if(!empty($gl['for_the_id'])){
-            $signatoryforthe = $user->getsignatory($gl['for_the_id']);
-            $z = explode('/', $signatoryGL['position']);
-            if(!empty($z[1])){ 
-                $forthepositiongl = $z[1];
-            }else{
-                $forthepositiongl = $z[0];
-            }
-            $ftsignatoryini= $user->getinitialsSignatory($gl['for_the_id']);
-        }
     }
 
     if(isset($_POST['save'])){

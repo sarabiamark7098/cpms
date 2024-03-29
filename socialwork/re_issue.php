@@ -16,20 +16,46 @@
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
         
+        $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
+		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
+		$client_fam = $user->getclientFam($_GET['id']);
+		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+    
+        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
+			
+        $am = str_replace(",","",$client_assistance[1]['amount']);
+		
+        if($am > 50000){
+            if($record){
+                $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
+            }
+        }
+        $GLsignatoryini= $user->getinitialsSignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
+
         $name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"];
 		if(!empty($client['extraname'])){
-			$name .= " ". $client['extraname'].".";
+			$name .= " ". strtoupper($client['extraname']) .".";
 		}
 		$bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]."". strtoupper($client['b_exname'] != ""? " ".$client['b_exname'].".": "");
         $signatoryGLNamePos = "";
         if(!empty($signatoryGL)){
-            $signatoryGLNamePos = strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position'] ."-". $signatoryGL['initials']);
+            $signatoryGLNamePos = (!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position']);
         }
-        $am = str_replace(",","",$client_assistance[1]['amount']);
-        if($am > 50000){
-            $COEsignatoryini= $user->getinitialsSignatory($client['signatory_id']); //kwaun ang data sa signatory using sign_id 
-        }
-        //ADDRESS
+		
+		if(!empty($client["b_lname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['b_bday']), date_create($today));
+			$age_bene = $diff->format('%y');
+		}else{
+			$age_bene = "";
+		}
+		if(!empty($client["lastname"])){
+			$today = date("Y-m-d");
+			$diff = date_diff(date_create($client['date_birth']), date_create($today));
+			$age_client = $diff->format('%y');
+		}
+        
+		//ADDRESS
         $c_add = '';
         $b_add = '';
         $cash_add=""; //set as the payee address for CAV
@@ -60,8 +86,40 @@
         //magkuhag data if ever naa na s database
         $gl = $user->getGL($_GET['id']); //gl table
         $cash = $user->getCash($_GET['id']); //cash table
-        $fundsourcedata = $user->getfundsourcedata($_GET['id']);
-
+        $ft_signatoryini = "";
+        $forthepositiongl = "";
+        $signatoryforthe = "";
+        if(!empty($gl['for_the_id'])){
+            $signatoryforthe = $user->getsignatory($gl['for_the_id']);
+            $z = explode('/', $signatoryGL['position']);
+            if(!empty($z[1])){ 
+                $forthepositiongl = $z[1];
+            }else{
+                $forthepositiongl = $z[0];
+            }
+            $ft_signatoryini = $user->getinitialsSignatory($gl['for_the_id']);
+        }
+        $GLid = "";
+        if (empty($gl['control_no'])) {
+            $GLid = $user->controlNumberForGL();
+        }else{
+            $GLid = $gl['control_no'];
+        }
+        $mode1 = "";
+        $mode2 = "";
+        		
+        $mode1 = $client_assistance[1]['mode'];
+        
+        if(!empty($client_assistance[2]['mode'])){
+            $mode2 = $client_assistance[2]['mode'];
+        }
+		
+        $amountToWord = $user->toWord($client_assistance[1]['amount']);
+  
+		$soc_worker = $user->getuserInfo($_SESSION['userId']);
+        //fullname of social worker
+        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
+        
 		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
         $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
         $GISsignatoryPosition = $GISsignatory['position'];
@@ -73,15 +131,7 @@
 		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
         //fullname of social worker
         $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
-        
-        $mode1 = "";
-        $mode2 = "";
 
-        $mode1 = $client_assistance[1]['mode'];
-        
-        if(!empty($client_assistance[2]['mode'])){
-            $mode2 = $client_assistance[2]['mode'];
-        }
     }
 
     
@@ -359,106 +409,4 @@
         </div>
     </body>
 
-	<script type="text/javascript">
-        function confirmdone(id, trans){
-            var retval = confirm("Do you want to Proceed Done client?");
-            if(retval == true){
-                window.location="last.php?id="+id+"&transid="+trans+"&confirmdone=1";
-            }
-        }
-    	$(document).ready(function(){
-             $('#comp_name').keyup(function(){  //On pressing a key on "Search box". This function will be called
-                var txt = $('#comp_name').val(); //Assigning search box value to javascript variable.
-                //console.log(txt);
-                if(txt != ''){ //Validating, if "name" is empty.
-                    $.ajax({
-                        type: "post", //method to use
-                        url: "fetch.php", //ginapasa  sa diri nga file and data
-                        data: {search:txt}, //mao ni nga data
-                        success: function(html){  //If result found, this funtion will be call
-                            
-                            var json = JSON.parse(html);
-                            $('#a_pos').val( json["position"]);
-                            $('#addressee').val( json["aname"]);
-                            $('#address').val( json["address"]);
-                        }
-                    });
-                }else{
-                $('#search_result').html(""); 
-                }
-            });
-        });
-
-        $(document).ready(function(){
-            $("#btnreissuedone").attr("disabled", true);
-        })
-
-            function checkNum(id){
-                //alert("came");
-                var clientid = id;
-                var no = $("#c_no").val();// value in field email
-                
-                $.ajax({
-                    type:'post',
-                    url:'fetch.php',// put your real file name 
-                    data:{num: no, id: clientid},
-                    success: function(msg){
-                        if(msg==1){
-                            document.getElementById("c_no").style.borderColor = "red";
-                            document.getElementById('gl_error').innerHTML = '*Client Number is already been used!';
-                            $('#update').attr('disabled','disabled');
-                            $('#save').attr('disabled','disabled');
-                            $('#save').removeClass('btn-primary').addClass('btn-dark ');
-                            $(this).addClass('btn-success').removeClass('btn-primary ');
-                            $('#update').removeClass('btn-primary').addClass('btn-dark ');
-                            $(this).addClass('btn-success').removeClass('btn-primary ');
-                        }else{
-                            document.getElementById("c_no").style.borderColor = "green";
-                            document.getElementById('gl_error').innerHTML = '';
-                            $('#update').removeAttr('disabled');
-                            $('#save').removeAttr('disabled');
-                            $('#save').removeClass('btn-dark').addClass('btn-primary ');
-                            $(this).addClass('btn-success').removeClass('btn-dark ');
-                            $('#update').removeClass('btn-dark').addClass('btn-primary ');
-                            $(this).addClass('btn-success').removeClass('btn-dark ');
-                        }  
-                    }
-                });
-            }
-
-    </script>
-
-    <?php 
-        //SAVA NA PART
-        if(isset($_POST['save'])){
-            $mode1 = "";
-            $mode2 = "";
-            if(!empty($client_assistance[1])){
-                $mode1 = $client_assistance[1]['mode'];
-            }
-            if(!empty($client_assistance[2])){
-                $mode2 = $client_assistance[2]['mode'];
-            }
-            
-            if(strtolower($mode1) == "cav" || strtolower($mode2) == "cav"){
-
-                $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
-                                                                                                                                                       
-                //print_r($_POST);
-                $user->insertCash($_GET['id'], $sd_officer);
-            }
-
-            if(strtolower($mode1) == "gl" || strtolower($mode2)=="gl"){
-                $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                $signatory = mysqli_real_escape_string($user->db,strtoupper($_POST['gl_signatory']));
-                $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
-                $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
-                $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
-                $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
-                //print_r($_POST);
-                $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $cname, $add);
-            }
-        }
-        
-    ?>
  </html>

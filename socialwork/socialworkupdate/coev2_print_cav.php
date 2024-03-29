@@ -13,12 +13,16 @@
     <div class="container" id="coev2_print" style="font-size:12px; padding:0%;">
         <br>
         <!--HEADER-->
-        <div class="row">
-            <div class="col-5">
+        <div class="row" style="margin-top:5%">
+            <div class="col-6">
                 <img src="../../images/dswd_olog.png" alt="" width="230px" height="60px">
+                <img src="../../images/AICS.png" alt="" width="70px" height="60px">
+                <img src="../../images/BP.png" alt="" width="70px" height="60px">
             </div>
-            <div class="col-7 ml-md-auto" style="color: #0000cc; text-align:right;">
-                <b style="font-size: 30px; font-family: arial, sans-serif;" class="right">CRISIS INTERVENTION SECTION<br><p style="font-size: 17px; text-indent: 20px; margin-top: -10px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p></b>
+            <div class="col-6 ml-md-auto" style="color: #000000; ">
+                <p class="text-center" style="font-size: 30px; font-family: arial, sans-serif; font-weight: bold;">CRISIS INTERVENTION SECTION</p><br>
+                <p class="text-center" style="font-size: 17px; font-family: arial, sans-serif; margin-top: -45px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p><br>
+                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-11 | REV 02 | 08 JAN 2024</p>
             </div>
         </div>
         <div class="row">
@@ -27,8 +31,8 @@
                 <div class="row">
                     <div class="col-3"></div>
                     <div class="col-6">
-                        <p style="font-size: 18px; margin-top: -10px;">(Financial Assistance)</p>
-                    </div>
+                        <p style="font-size: 18px; margin-top: -10px;">(Cash Outright)</p>
+                    </div>n
                     <div class="col-3"></div>
                 </div>
             </div>
@@ -75,9 +79,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-9">
-                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client['date_entered'])) ?>'>
-                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client['date_entered'])) ?>'>
-                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client['date_entered'])) ?>'>
+                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client["date_accomplished"])) ?>'>
                     </div>
                 </div>
             </div>
@@ -93,10 +97,17 @@
 					<input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])==""? "checked" : "") ?>> Returning
 				</div>
             </div>
-            <div class="col-6">
+            <div class="col-7">
                 <div class="row" style="font-size: 16px; margin-top: -5px; margin-right: -15px">
-                    <div class="col-sm-3" style="margin-left:-55px; margin-top: -1px;">
+                    <div class="col-sm-2" style="margin-left:-55px; margin-top: -1px;">
                         <p class="text-center">On-site:</p>
+                    </div>  
+                    <div class="col-sm-1" style="margin-left:-25px; margin-top: -2px;">
+                        <a></a>
+                        <input class="text-center fas fa-check" style="font-size:18px;margin-left:-5; width: 25px; height: 25px; padding:0; text-indent: 3px; border: 1px solid black;" type="text" value=''>
+
+                    </div>
+                    <div class="col-sm-1"">
                     </div>
                     <div class="col-sm-6" style="margin-left:-30px;font-size: 16px;">
                         <div style="width: 100%">
@@ -106,17 +117,16 @@
                             <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])=="referral"? "checked" : "") ?>> Referral
                         </div>
                     </div>
-                    <div class="col-sm-3" style="margin-top: -1px; margin-left:-10px;">
+                    <div class="col-sm-2" style="margin-top: -1px; margin-left:-10px;">
                         <p class="text-center">Off-site:</p>
                     </div>
-                    <div class="col-sm-2" style="margin-left:-25px; margin-top: -2px;">
+                    <div class="col-sm-1" style="margin-left:-25px; margin-top: -2px;">
                         <a></a>
                         <input class="text-center" style="font-size:18px;margin-left:-5; width: 25px; height: 25px; padding:0; text-indent: 3px; border: 1px solid black;" type="text" value=''>
-
+                    </div>
+                    <div class="col-sm-1"">
                     </div>
                 </div>
-            </div>
-            <div class="col-1">
             </div>
         </div><br>
 		
@@ -196,7 +206,7 @@
             The client is hereby recommended to receive <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 25%;" value="<?php echo strtoupper($client_assistance[1]['type']); ?>" /> assistance for <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 35%; text-transform: capitalize;" value="<?php echo $client_assistance[1]['purpose']; ?>" /><br> 
 			in the amount of <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 55%;" value="<?php echo $amountToWord; ?>"
             /> PHP <input class="text-center money" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 8%;" value="<?php echo $client_assistance[1]['amount']; ?>" />CHARGABLE AGAINST: PSP 
-			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="AICS Fund <?php echo Date('Y', strtotime($client['date_entered']))?>" />
+			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="AICS Fund <?php echo Date('Y', strtotime($client["date_accomplished"]))?>" />
         </div>
 <br><br>
         <!-- Signatory -->
@@ -240,9 +250,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-10">
-                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("m") ?>'>
-                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("d") ?>'>
-                        <input class="" style="width: 70px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("Y") ?>'>
+                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("m", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("d", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="" style="width: 70px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("Y", strtotime($client["date_accomplished"])) ?>'>
                     </div>
                 </div>
             </div>
@@ -327,6 +337,17 @@
             </div>
             <div class="col-6">
             <p style="text-align: right; margin-top: -15px; font-size: 13px;">*E.O 163 series 2022</p>
+            </div>
+        </div>
+        <div class="footer row">
+            <div class="col-10">
+                <div style="border-bottom: solid 1px black;"></div>
+                <p class="text-center">Page 1 of 1<br>
+                DSWD Field Office XI, Ramon Magsaysay Avenue corner Damaso Suazo Street, Davao City, Philippines 8000<br>
+                Website: http://fo11.dswd.gov.ph Tel Nos.: (082)_227 1964 / (082) 227 8746 / (082)_227 1435 Telefax: (082) 226 2857</p>
+            </div>
+            <div class="col-2">
+                <img src="../../images/dswd-ISO.png" alt="" width="110px" height="60px">
             </div>
         </div>
                         <!--Container-->
