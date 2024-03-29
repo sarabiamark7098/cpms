@@ -22,7 +22,7 @@
 <?php
     if(!isset($_POST['wbeneficiary'])){
 		if(isset($_POST['addClient'])){
-            print_r($_POST);
+            // print_r($_POST);
 			//client the one that process the transaction
 			$fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname'])," "));
 			$mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename'])," "));
@@ -30,7 +30,7 @@
 			$exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['extraname']), " "));
 			$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
 			$bday = $_POST['birthday'];
-			echo $age = $_POST['age'];
+			$age = $_POST['age'];
 			$occupation = mysqli_real_escape_string($user->db,$_POST['occupation']);
 			if($_POST['salary'] != ''){
 				$salary= $_POST['salary'];

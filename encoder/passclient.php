@@ -3,9 +3,9 @@ include('../php/class.user.php');
 $user = new User();
 
 	$clientid = $_GET['id'];
-		
 		if(!isset($_POST['beneficiary'])){
 			if(isset($_POST['pass'])){
+		print_r($_POST);
 				$trans = $_GET['trans_id'];
 				//client the one that process the transaction
 				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
@@ -20,9 +20,13 @@ $user = new User();
 					$salary= $_POST['salary'];
 				}else{
 					$salary = '0';
+				} 
+				if($_POST['pantawid_y']){
+					$pantawid = "Yes";
+				}elseif($_POST['pantawid_n']){
+					$pantawid = "No";
 				}
 				$category = mysqli_real_escape_string($user->db,$_POST['category']);
-				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
 				$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 				$contact = $_POST['contact'];
 				$region = mysqli_real_escape_string($user->db,$_POST['Cregion']);
@@ -33,8 +37,8 @@ $user = new User();
 				$street= mysqli_real_escape_string($user->db,$_POST['Cstreet']);
 				$note = mysqli_real_escape_string($user->db,$_POST['note']);
 				
-				$execute = $user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, 
-				$subCategory, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $note);
+				$execute = $user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $pantawid, $category, 
+				$civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $note, 1, 0);
 				
 				if($execute){
 					echo "<script>alert('Client Successfully Passed!');</script>";
@@ -51,6 +55,7 @@ $user = new User();
 		}
 		else{
 			if(isset($_POST['pass'])){
+		print_r($_POST);
 				$trans = $_GET['trans_id'];
 				//client the one that process the transaction
 				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
@@ -66,8 +71,12 @@ $user = new User();
 				}else{
 					$salary = '0';
 				}
+				if($_POST['pantawid_y']){
+					$pantawid = "Yes";
+				}elseif($_POST['pantawid_n']){
+					$pantawid = "No";
+				}
 				$category = mysqli_real_escape_string($user->db,$_POST['category']);
-				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
 				$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 				$contact = $_POST['contact'];
 				
@@ -91,7 +100,6 @@ $user = new User();
 				$b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
 				$b_contact = $_POST['b_contact'];
 				$b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
-				$b_subCat = mysqli_real_escape_string($user->db,$_POST['b_subcat']);
 				$b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
 				$b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
 				$b_city_mun = mysqli_real_escape_string($user->db,$_POST['b_city']);
@@ -102,10 +110,10 @@ $user = new User();
 				
 
 				$execute = $user->insertClientWBPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, 
-				$occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, $province, 
+				$occupation, $salary, $pantawid, $category, $civilStatus, $contact, $region, $province, 
 				$city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, 
-				$b_bday, $b_sex, $b_civilStatus, $b_contact, $b_category, $b_subCat, $b_region, $b_province, 
-				$b_city_mun, $b_district, $b_barangay, $b_street, $note);
+				$b_bday, $b_sex, $b_civilStatus, $b_contact, $b_category, $b_region, $b_province, 
+				$b_city_mun, $b_district, $b_barangay, $b_street, $note, 1, 0, 0);
 			
 				if($execute){
 					echo "<script>alert('Client Successfully Passed!');</script>";
@@ -334,7 +342,7 @@ $user = new User();
 				</div>
 			</div>
 			<div class="form-group row">
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					<input list="categories" type="text" value="<?php echo $getClient['category'] ?>" class="form-control mr-sm-2 b" name="category" placeholder="Category" required >
 					<datalist id="categories">
 						<option>Children in Need of Special Protection</option>
@@ -347,12 +355,31 @@ $user = new User();
 						<option>None of the Above</option>
 					</datalist>
 					<label>Category</label>
-				</div>				
-				<div class="col-sm-6">
-					<input type="text" value="<?php echo $getClient['subCategory'] ?>" class="form-control mr-sm-2 b" name="subcategory" placeholder="Sub-Category" >
-					<label>SubCategory</label>
 				</div>
 			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 label" style="font-size: 20px">4Ps Beneficiary: </label>
+				<div class="checkbox col-1">
+					<label for='radiobutton-y'>
+						<input type="checkbox" id="radiobutton-y" class="checkbutton" name="pantawid_y" style="height:25px;width:25px;margin: 0px" required>
+					</label>
+				</div>
+				<div class="checkbox col-3" style="margin-top: 3px">
+					<label for='radiobutton-y'>
+						<label for="yes"> <b>Yes</b></label>
+					</label>
+				</div>
+				<div class="checkbox col-1">
+					<label for='radiobutton-n'>
+						<input type="checkbox" id="radiobutton-n" class="checkbutton" name="pantawid_n" style="height:25px;width:25px;margin: 0px" required>
+					</label>
+				</div>
+				<div class="checkbox col-3" style="margin-top: 3px">
+					<label for='radiobutton-n'>
+						<label for="no"> <b>No</b></label>
+					</label>
+				</div>
+			</div><br>	
 				<!--Address-->
 			<h4 class="text-center">Address</h4>
 			<div class="form-group row">
@@ -520,7 +547,7 @@ $user = new User();
 					</div>
 				</div>
 				<div class="form-group row">
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
 						<datalist id="b_categories">
 							<option>Children in Need of Special Protection</option>
@@ -532,9 +559,6 @@ $user = new User();
 							<option>Family Heads and Other Needy Adult</option>
 							<option>None of the Above</option>
 						</datalist>
-					</div>
-					<div class="col-sm-6">
-						<input type="text" class="form-control mr-sm-2 b" name="b_subcat" placeholder="Beneficiary Sub-Category" >
 					</div>
 				</div>
 				
@@ -679,5 +703,42 @@ $user = new User();
 		get_b_Municipality_sw(muni);
 		get_b_Barangay_sw(brgy);
 	}
+	$(function () {
+		$("#radiobutton-n").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-y").not($(this)).each(function () {
+					$(this).removeAttr("checked");
+				});
+			}
+		});
+	});
+
+	$(function () {
+		$("#radiobutton-y").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-n").not($(this)).each(function () {
+					$(this).removeAttr("checked");
+				})
+			}
+		});
+	});
+
+	$(function () {
+		$("#radiobutton-y").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-n").not($(this)).each(function () {
+					$(this).removeAttr("required");
+				});
+			}
+		});
+		$("#radiobutton-n").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-y").not($(this)).each(function () {
+					$(this).removeAttr("required");
+				});
+			}
+		});
+	});
+
 </script>
 </html>

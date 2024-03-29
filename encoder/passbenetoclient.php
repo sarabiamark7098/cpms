@@ -7,6 +7,7 @@ $user = new User();
 		
 		if(!isset($_POST['beneficiary'])){
 			if(isset($_POST['pass'])){
+				// print_r($_POST);
 				$trans = $_GET['id'];
 				//client the one that process the transaction
 				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
@@ -15,12 +16,17 @@ $user = new User();
 				$exname = mysqli_real_escape_string($user->db,strtoupper($_POST['extraname']));
 				$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
 				$bday = $_POST['birthday'];
-				//$age = $user->getAge($bday);
+				$age = $user->getAge($bday);
 				$occupation = mysqli_real_escape_string($user->db,$_POST['occupation']);
 				if($_POST['salary'] != ''){
 					$salary= $_POST['salary'];
 				}else{
 					$salary = '0';
+				}
+				if($_POST['pantawid_y']){
+					$pantawid = "Yes";
+				}elseif($_POST['pantawid_n']){
+					$pantawid = "No";
 				}
 				$category = mysqli_real_escape_string($user->db,$_POST['category']);
 				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
@@ -34,8 +40,15 @@ $user = new User();
 				$street= mysqli_real_escape_string($user->db,$_POST['Cstreet']);
 				$note = mysqli_real_escape_string($user->db,$_POST['note']);
 				
-				$execute = $user->insertBeneAsClient($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $note);
-				
+				if($age >17 ){
+					$execute = $user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary,  $pantawid, $category, $civilStatus, 
+					$contact, $region, $province, $city_mun, $barangay, $district, $street, $note, 0, 1);
+				}else{
+					echo "<script>alert('Error! Minor Client');</script>";
+					echo "<script>window.location='home.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}
+
 				if($execute){
 					echo "<script>alert('Client Successfully Added!');</script>";
 					echo "<script>window.location='picture.php?id=".$execute."';</script>";
@@ -59,12 +72,17 @@ $user = new User();
 				$exname = mysqli_real_escape_string($user->db,strtoupper($_POST['extraname']));
 				$sex = mysqli_real_escape_string($user->db,$_POST['sex']);
 				$bday = $_POST['birthday'];
-				//$age = $user->getAge($bday);
+				$age = $user->getAge($bday);
 				$occupation = mysqli_real_escape_string($user->db,$_POST['occupation']);
 				if($_POST['salary'] != ''){
 					$salary= $_POST['salary'];
 				}else{
 					$salary = '0';
+				}
+				if($_POST['pantawid_y']){
+					$pantawid = "Yes";
+				}elseif($_POST['pantawid_n']){
+					$pantawid = "No";
 				}
 				$category = mysqli_real_escape_string($user->db,$_POST['category']);
 				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
@@ -98,9 +116,16 @@ $user = new User();
 				$b_street = mysqli_real_escape_string($user->db,$_POST['b_street']);
 				
 				
+				if($age >17 ){
+					$execute = $user->insertClientWBPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $pantawid, $category, $civilStatus, 
+					$contact, $region, $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, 
+					$b_contact, $b_category, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street, $note, 0, 0, 1);
+				}else{
+					echo "<script>alert('Error! Minor Client');</script>";
+					echo "<script>window.location='home.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}
 
-				$execute = $user->insertBeneAsClientWB($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $category, $subCategory, $civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, $b_bday, $b_sex, $b_civilStatus, $b_contact, $b_category, $b_subCat, $b_region, $b_province, $b_city_mun, $b_district, $b_barangay, $b_street, $note);
-			
 				if($execute){
 					echo "<script>alert('Client Successfully Passed!');</script>";
 					echo "<script>window.location='picture.php?id=".$execute."';</script>";
@@ -250,7 +275,7 @@ $user = new User();
 			
 			<div class="form-group row">
 			<div class="col-sm-6">
-					<input list="sexs" name="sex" value="<?php echo $getClient['sex'] ?>" class="form-control mr-sm-2 b" placeholder="Sex" required >
+					<input list="sexs" name="sex" value="<?php echo $getClient['b_sex'] ?>" class="form-control mr-sm-2 b" placeholder="Sex" required >
 						<datalist id="sexs">
 							<option value="Male">
 							<option value="Female">
@@ -311,13 +336,13 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" class="form-control mr-sm-2 b" name="occupation" placeholder="Occupation" required >
+				<input type="text" class="form-control mr-sm-2 b" name="occupation" value="<?php echo $getClient['b_occupation'] ?>" placeholder="Occupation" required >
 				<label>Occupation</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" class="form-control mr-sm-2 b" name="salary" placeholder="Salary" >
+				<input type="number" class="form-control mr-sm-2 b" name="salary" value="<?php echo $getClient['b_salary'] ?>" placeholder="Salary" >
 				<label>Salary</label>
 				</div>
 			</div>
@@ -328,7 +353,7 @@ $user = new User();
 				</div>
 			</div>
 			<div class="form-group row">
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					<input list="categories" type="text" value="<?php echo $getClient['b_category'] ?>" class="form-control mr-sm-2 b" name="category" placeholder="Category" required >
 						<datalist id="categories">
 							<option>Children in Need of Special Protection</option>
@@ -341,12 +366,31 @@ $user = new User();
 							<option>None of the Above</option>
 						</datalist>
 					<label>Category</label>
-				</div>				
-				<div class="col-sm-6">
-					<input type="text" value="<?php echo $getClient['b_subCategory'] ?>" class="form-control mr-sm-2 b" name="subcategory" placeholder="Sub-Category" >
-					<label>SubCategory</label>
-				</div>
+				</div>	
 			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 label" style="font-size: 20px">4Ps Beneficiary: </label>
+				<div class="checkbox col-1">
+					<label for='radiobutton-y'>
+						<input type="checkbox" id="radiobutton-y" class="checkbutton" name="pantawid_y" style="height:25px;width:25px;margin: 0px" required>
+					</label>
+				</div>
+				<div class="checkbox col-3" style="margin-top: 3px">
+					<label for='radiobutton-y'>
+						<label for="yes"> <b>Yes</b></label>
+					</label>
+				</div>
+				<div class="checkbox col-1">
+					<label for='radiobutton-n'>
+						<input type="checkbox" id="radiobutton-n" class="checkbutton" name="pantawid_n" style="height:25px;width:25px;margin: 0px" required>
+					</label>
+				</div>
+				<div class="checkbox col-3" style="margin-top: 3px">
+					<label for='radiobutton-n'>
+						<label for="no"> <b>No</b></label>
+					</label>
+				</div>
+			</div><br>	
 				<!--Address-->
 			<h4 class="text-center">Address</h4>
 			<div class="form-group row">
@@ -507,7 +551,7 @@ $user = new User();
 					</div>
 				</div>
 				<div class="form-group row">
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
 							<datalist id="b_categories">
 								<option>Children in Need of Special Protection</option>
@@ -519,9 +563,6 @@ $user = new User();
 								<option>Family Heads and Other Needy Adult</option>
 								<option>None of the Above</option>
 							</datalist>
-					</div>
-					<div class="col-sm-6">
-						<input type="text" class="form-control mr-sm-2 b" name="b_subcat" placeholder="Beneficiary Sub-Category" >
 					</div>
 				</div>
 				
@@ -666,5 +707,41 @@ $user = new User();
 		get_b_Municipality_sw(muni);
 		get_b_Barangay_sw(brgy);
 	}
+	$(function () {
+		$("#radiobutton-n").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-y").not($(this)).each(function () {
+					$(this).removeAttr("checked");
+				});
+			}
+		});
+	});
+
+	$(function () {
+		$("#radiobutton-y").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-n").not($(this)).each(function () {
+					$(this).removeAttr("checked");
+				})
+			}
+		});
+	});
+
+	$(function () {
+		$("#radiobutton-y").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-n").not($(this)).each(function () {
+					$(this).removeAttr("required");
+				});
+			}
+		});
+		$("#radiobutton-n").change(function () {
+			if ($(this).is(":checked")) {
+				$("#radiobutton-y").not($(this)).each(function () {
+					$(this).removeAttr("required");
+				});
+			}
+		});
+	});
 </script>
 </html>
