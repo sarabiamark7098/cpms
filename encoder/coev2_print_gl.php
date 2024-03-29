@@ -87,9 +87,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-9">
-                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client['date_entered'])) ?>'>
-                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client['date_entered'])) ?>'>
-                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client['date_entered'])) ?>'>
+                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client['date_accomplished'])) ?>'>
+                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client['date_accomplished'])) ?>'>
+                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client['date_accomplished'])) ?>'>
                     </div>
                 </div>
             </div>
@@ -220,13 +220,13 @@
             <div class="col-3" style="font-size: 15px">
                 <input class="text-left" style="height: 100%; width: 100%; font-size: 15px; border:none;" value="Chargable Against : "></input><br>
             </div>
-            <div class="col-3" style="margin-left: -80px;">
+            <div class="col-2" style="margin-left: -80px;">
                 <input class="text-center" style="height: 100%; width: 100%; font-size: 15px; border-bottom: 1px solid black;" value="AICS Fund"></input><br>
             </div>
             <div class="col-2" style="font-size: 15px">
                 <input class="text-left" style="height: 100%; width: 100%; font-size: 15px; border:none;" value="Clientele Category : "></input><br>
             </div>
-            <div class="col-4" ">
+            <div class="col-5" ">
                 <input class="text-center" style="height: 100%; width: 100%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $client["category"]; ?>"></input><br>
             </div>
         </div>

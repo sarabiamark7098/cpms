@@ -24,14 +24,10 @@
 				</div>
 			</div><br>
 			<div class="row" style="margin-bottom: 10px;">
-				<div class="col-5">
-                    <br><br>
+				<div class="col-12">
+                    <b style="font-size:24px;">GL No: </b><span id="number" style="text-transform:uppercase;"><?php echo $gl['control_no']?></span><br>
 					<b style="text-left">Date:</b> <input id="signatory" style="text-transform:capitalize;width:60%;border-bottom:none; " value="<?php echo date(" F j, Y ")?>">
 					<br>
-				</div>
-				<div class="col-7 ml-md-auto" style="text-align:right;">
-					<br>
-                    <p style="text-transform:uppercase; font-size:24px;">Control No: <span id="number"><?php echo $gl['control_no']?></span></p>
 				</div>
 			</div>
             <div class="row">
@@ -78,18 +74,20 @@
 					echo '<p class="">Valid within 30 days upon receipt.</p>';
 					*/
 					echo '<p class="">This has reference to the request for the <b>'. ucwords(strtolower($client_assistance[1]['type'])) .'</b> of herein client,
-					<b>'.strtoupper($name).'</b>, '. ucwords($client["sex"]) .', '. $age_client .', '. ucwords(strtolower($c_add)) .'.</p>';
+					<b>'.strtoupper($name).'</b>, from '. ucwords(strtolower($c_add)) .'.</p>';
 
                     echo '<p class="">The Department of Social Welfare and Development has assessed and validated the said request for assistance through the Crisis Intervention Section. 
-					Thus, the Department is using this letter to guarantee the payment of the bill in the amount of <b>'. $user->toWord($client_assistance[1]["amount"]) .' (Php'. $client_assistance[1]['amount'].')</b>.</p>';
+					Thus, the Department is issuing this letter to guarantee the payment of the bill in the amount of <b>'. $user->toWord($client_assistance[1]["amount"]) .' (Php'. $client_assistance[1]['amount'].')</b>.</p>';
 					
-                    echo '<p class="">To facilitate the payment submit to the Crisis Intervention Section through CIS Finance Unit the following documents for the preparation of 
-					Disbursement Voucher with one week of service has been completed.</p>';
+                    echo '<p class="">To facilitate the payment, please submit to the Crisis Intervention Section through CIS Finance Unit the following documents for the preparation of the
+					Disbursement Voucher within one week after the service has been completed.</p>';
 					
-					echo "<p><input type='radio' style='height: 20px; width:20px;'> &emsp; Guarantee Letter (GL) from the DSWD with your company's 'received' stamp<br>
-					<input type='radio' style='height: 20px; width:20px;'> &emsp; Statement of Accounts (SOA) or Billing Statement addressed to DSWD</p>";
+					echo "<p><input class='fas fa-check' type='input' style='height: 20px; width:20px; border: solid 1px black; border-radius: 40%;'> &emsp; Guarantee Letter (GL) from the DSWD with your company's 'received' stamp or 
+                    signature over printed name of the authorize representative<br>
+					<input class='fas fa-check' type='input' style='height: 20px; width:20px; border: solid 1px black; border-radius: 40%;'> &emsp; Statement of Accounts (SOA) or Billing Statement or Sales Invoice with corresponding 
+                    operative technique of charge slip addressed to DSWD</p>";
 					
-					echo "<p>Please be informed that the payment will be directly deposited to your company's bank account. Should you have any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
+					echo "<p>Please be informed that the payment will be directly deposited to your company's bank account. Should there be any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
 					with the telephone number 227-1964 local 1133.</p>";
 					
                 }else{
@@ -103,18 +101,20 @@
 					echo '<p class="">Valid within 30 days upon receipt.</p>';
 					*/
 					echo '<p class="">This has reference to the request for the <b>'. ucwords(strtolower($client_assistance[1]['type'])) .'</b> of herein client,
-					<b>'.strtoupper($name).'</b>, '. ucwords($client["sex"]) .', '. $age_client .', '. ucwords(strtolower($c_add)) .', for the beneficiary, <b>'.strtoupper($bname).'</b> of '. (($b_add!=$c_add)?ucwords(strtolower($b_add)):"the same address") .'.</p>';
+					<b>'.strtoupper($name).'</b>, from '. ucwords(strtolower($c_add)) .', for his/her <b>'.ucwords(strtolower($client['relation'])).'</b> , <b>'.strtoupper($bname).'</b> of '. (($b_add!=$c_add)?ucwords(strtolower($b_add)):"the same address") .'.</p>';
 
                     echo '<p class="">The Department of Social Welfare and Development has assessed and validated the said request for assistance through the Crisis Intervention Section. 
-					Thus, the Department is using this letter to guarantee the payment of the bill in the amount of <b>'. $user->toWord($client_assistance[1]["amount"]) .' (Php'. $client_assistance[1]['amount'].')</b>.</p>';
+					Thus, the Department is issuing this letter to guarantee the payment of the bill in the amount of <b>'. $user->toWord($client_assistance[1]["amount"]) .' (Php'. $client_assistance[1]['amount'].')</b>.</p>';
 					
-                    echo '<p class="">To facilitate the payment submit to the Crisis Intervention Section through CIS Finance Unit the following documents for the preparation of 
-					Disbursement Voucher with one week of service has been completed.</p>';
+                    echo '<p class="">To facilitate the payment, please submit to the Crisis Intervention Section through CIS Finance Unit the following documents for the preparation of the
+					Disbursement Voucher within one week after the service has been completed.</p>';
 					
-					echo "<p><input type='radio' style='height: 20px; width:20px;'> &emsp; Guarantee Letter (GL) from the DSWD with your company's 'received' stamp<br>
-					<input type='radio' style='height: 20px; width:20px;'> &emsp; Statement of Accounts (SOA) or Billing Statement addressed to DSWD</p>";
-					
-					echo "<p>Please be informed that the payment will be directly deposited to your company's bank account. Should you have any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
+					echo "<p><input class='fas fa-check' type='input' style='height: 20px; width:20px; border: solid 1px black; border-radius: 40%;'> &emsp; Guarantee Letter (GL) from the DSWD with your company's 'received' stamp or 
+                    signature over printed name of the authorize representative<br>
+					<input class='fas fa-check' type='input' style='height: 20px; width:20px; border: solid 1px black; border-radius: 40%;'> &emsp; Statement of Accounts (SOA) or Billing Statement or Sales Invoice with corresponding 
+                    operative technique of charge slip addressed to DSWD</p>";
+
+					echo "<p>Please be informed that the payment will be directly deposited to your company's bank account. Should there be any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
 					with the telephone number 227-1964 local 1133.</p>";
                 }
             ?>

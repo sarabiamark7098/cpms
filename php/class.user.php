@@ -2595,6 +2595,18 @@
 				return false;
 			}
 		}
+		public function getSignatoryFullnameCOE($id){
+			$query = "SELECT name_title, first_name, middle_I, last_name, position, initials FROM signatory WHERE signatory_id = '{$id}';";
+			$result = mysqli_query($this->db,$query);
+			$row = mysqli_fetch_assoc($result);
+			$data = (empty($row['name_title'])?"":$row['name_title']." "). $row['first_name'] ." ". (empty($row['middle_I'])?"":$row['middle_I'].". "). $row['last_name'] ."-". $row['position'];
+			if($data){
+				return $data;
+			}
+			else {
+				return false;
+			}
+		}
 
 		public function testing(){
 			echo "<script>document.getElementById('Final').style.visibility='visible';</script>";  
@@ -2648,7 +2660,7 @@
 			
 			if (!empty($sd_officer)) {
 				$query .= "DELETE FROM cash WHERE trans_id = '{$id}';";
-				$query .= "INSERT INTO cash (trans_id, sd_officer) 
+				echo $query .= "INSERT INTO cash (trans_id, sd_officer) 
 							VALUES 
 							('{$id}', '{$sd_officer}');";
 			}
@@ -3255,8 +3267,8 @@
 		}
 	
 		public function getGISData($id){
-			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, 
-								ref_name, signatory_id, subcat_ass, target_sector, others_subcat from assessment 
+			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6
+								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, others_subcat, pantawid_bene from assessment 
 						LEFT JOIN service USING (trans_id) 
 						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
 						

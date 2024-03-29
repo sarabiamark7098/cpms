@@ -1152,19 +1152,19 @@ if (!$_SESSION['login']) {
             //UPDATE CLIENT
         if (isset($_POST['c_update'])) {
                 //Client name
-            echo $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
-            echo $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
-            echo $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
-            echo $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
-            echo $bday = $_POST['bday'];
+            $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
+            $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
+            $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
+            $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
+            $bday = $_POST['bday'];
             
-            echo $region = mysqli_real_escape_string($user->db, ($_POST['region']));
-            echo $province = mysqli_real_escape_string($user->db, ($_POST['province']));
-            echo $municipality = mysqli_real_escape_string($user->db, ($_POST['municipality']));
-            echo $barangay = mysqli_real_escape_string($user->db, ($_POST['barangay']));
-            echo $street = mysqli_real_escape_string($user->db, ($_POST['street']));
-            echo $district = mysqli_real_escape_string($user->db, ($_POST['district']));
-            echo $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
+            $region = mysqli_real_escape_string($user->db, ($_POST['region']));
+            $province = mysqli_real_escape_string($user->db, ($_POST['province']));
+            $municipality = mysqli_real_escape_string($user->db, ($_POST['municipality']));
+            $barangay = mysqli_real_escape_string($user->db, ($_POST['barangay']));
+            $street = mysqli_real_escape_string($user->db, ($_POST['street']));
+            $district = mysqli_real_escape_string($user->db, ($_POST['district']));
+            $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
             
 
             $user->updateClient($id, $lname, $mname, $fname, $exname, $bday, $sex, 

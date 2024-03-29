@@ -13,12 +13,16 @@
     <div class="container" id="coev2_print" style="font-size:15px; padding:0%;">
         <br>
         <!--HEADER-->
-        <div class="row">
-            <div class="col-5">
+        <div class="row" style="margin-top:0%">
+            <div class="col-6">
                 <img src="../images/dswd_olog.png" alt="" width="230px" height="60px">
+                <img src="../images/AICS.png" alt="" width="70px" height="60px">
+                <img src="../images/BP.png" alt="" width="70px" height="60px">
             </div>
-            <div class="col-7 ml-md-auto" style="color: #0000cc; text-align:right;">
-                <b style="font-size: 30px; font-family: arial, sans-serif;" class="right">CRISIS INTERVENTION SECTION<br><p style="font-size: 17px; text-indent: 20px; margin-top: -10px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p></b>
+            <div class="col-6 ml-md-auto" style="color: #000000; ">
+                <p class="text-center" style="font-size: 30px; font-family: arial, sans-serif; font-weight: bold;">CRISIS INTERVENTION SECTION</p><br>
+                <p class="text-center" style="font-size: 17px; font-family: arial, sans-serif; margin-top: -45px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p><br>
+                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-11 | REV 02 | 08 JAN 2024</p>
             </div>
         </div>
         <div class="row">
@@ -83,9 +87,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-9">
-                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client['date_entered'])) ?>'>
-                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client['date_entered'])) ?>'>
-                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client['date_entered'])) ?>'>
+                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m") ?>'>
+                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d") ?>'>
+                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y") ?>'>
                     </div>
                 </div>
             </div>
@@ -101,10 +105,17 @@
 					<input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])==""? "checked" : "") ?>> Returning
 				</div>
             </div>
-            <div class="col-6">
+            <div class="col-7">
                 <div class="row" style="font-size: 16px; margin-top: -5px; margin-right: -15px">
-                    <div class="col-sm-3" style="margin-left:-55px; margin-top: -1px;">
+                    <div class="col-sm-2" style="margin-left:-55px; margin-top: -1px;">
                         <p class="text-center">On-site:</p>
+                    </div>  
+                    <div class="col-sm-1" style="margin-left:-25px; margin-top: -2px;">
+                        <a></a>
+                        <input class="text-center fas fa-check" style="font-size:18px;margin-left:-5; width: 25px; height: 25px; padding:0; text-indent: 3px; border: 1px solid black;" type="text" value=''>
+
+                    </div>
+                    <div class="col-sm-1"">
                     </div>
                     <div class="col-sm-6" style="margin-left:-30px;font-size: 16px;">
                         <div style="width: 100%">
@@ -114,17 +125,16 @@
                             <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])=="referral"? "checked" : "") ?>> Referral
                         </div>
                     </div>
-                    <div class="col-sm-3" style="margin-top: -1px; margin-left:-10px;">
+                    <div class="col-sm-2" style="margin-top: -1px; margin-left:-10px;">
                         <p class="text-center">Off-site:</p>
                     </div>
-                    <div class="col-sm-2" style="margin-left:-25px; margin-top: -2px;">
+                    <div class="col-sm-1" style="margin-left:-25px; margin-top: -2px;">
                         <a></a>
                         <input class="text-center" style="font-size:18px;margin-left:-5; width: 25px; height: 25px; padding:0; text-indent: 3px; border: 1px solid black;" type="text" value=''>
-
+                    </div>
+                    <div class="col-sm-1"">
                     </div>
                 </div>
-            </div>
-            <div class="col-1">
             </div>
         </div><br>
 		
@@ -208,16 +218,27 @@
         <br><br>
         <div class="row">
             <div class="col-3" style="font-size: 15px">
-                <input class="text-left" style="height: 22%; width: 100%; font-size: 15px; border:none;" value="Chargable Against : "></input><br>
-                <input class="text-left" style="height: 22%; width: 100%; font-size: 15px; border:none;" value="Client Category : "></input><br>
-                <input class="text-left" style="height: 22%; width: 100%; font-size: 15px; border:none;" value="Payable to : "></input><br>
-                <input class="text-left" style="height: 22%; width: 100%; font-size: 15px; border:none;" value="Mode of Admission : "></input>
+                <input class="text-left" style="height: 100%; width: 100%; font-size: 15px; border:none;" value="Chargable Against : "></input><br>
             </div>
-            <div class="col" style="margin-left: -100px;">
-                <input class="text-center" style="height: 22%; width: 75%; font-size: 15px;" value="AICS Fund"></input><br>
-                <input class="text-center" style="height: 22%; width: 75%; font-size: 15px;" value="<?php echo $client["category"]; ?>"></input><br>
-                <input class="text-center" style="height: 22%; width: 75%; font-size: 15px;" value="<?php echo $gl["cname"]; ?>"></input><br>
-                <input class="text-center" style="height: 22%; width: 75%; font-size: 15px;" value="<?php echo strtoupper((strtolower($gis["mode_admission"]) == "referral")?"R":"W")?>"></input>
+            <div class="col-2" style="margin-left: -80px;">
+                <input class="text-center" style="height: 100%; width: 100%; font-size: 15px; border-bottom: 1px solid black;" value="AICS Fund"></input><br>
+            </div>
+            <div class="col-2" style="font-size: 15px">
+                <input class="text-left" style="height: 100%; width: 100%; font-size: 15px; border:none;" value="Clientele Category : "></input><br>
+            </div>
+            <div class="col-5" ">
+                <input class="text-center" style="height: 100%; width: 100%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $client["category"]; ?>"></input><br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3" style="font-size: 15px">
+                <input class="text-left" style="height: 52%; width: 100%; font-size: 15px; border:none;" value="Payable to : "></input><br>
+                <input class="text-left" style="height: 52%; width: 100%; font-size: 15px; border:none;" value="Address : "></input>
+            </div>
+            <div class="col" style="margin-left: -80px;">
+                <input class="text-center" style="height: 52%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $gl["cname"]; ?>"></input><br>
+                <input class="text-center" style="height: 52%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $gl["caddress"]; ?>"></input>
+                <!-- <input class="text-center" style="height: 22%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo strtoupper((strtolower($gis["mode_admission"]) == "referral")?"R":"W")?>"></input> -->
             </div>
         </div><br><br>
         <!-- Signatory -->
@@ -298,7 +319,17 @@
 				</div>
 			</div>
 		</div>
-       
+        <div class="footer row">
+            <div class="col-10">
+                <div style="border-bottom: solid 1px black;"></div>
+                <p class="text-center">Page 1 of 1<br>
+                DSWD Field Office XI, Ramon Magsaysay Avenue corner Damaso Suazo Street, Davao City, Philippines 8000<br>
+                Website: http://fo11.dswd.gov.ph Tel Nos.: (082)_227 1964 / (082) 227 8746 / (082)_227 1435 Telefax: (082) 226 2857</p>
+            </div>
+            <div class="col-2">
+                <img src="../images/dswd-ISO.png" alt="" width="110px" height="60px">
+            </div>
+        </div>
                         <!--Container-->
 	</div>
 </body>
