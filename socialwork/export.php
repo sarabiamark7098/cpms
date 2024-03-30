@@ -17,8 +17,8 @@
        
         header("Location:" . $location);
     }
-    if(isset($_POST['export-today'])){
-        $location = "export-data-today.php";
+    if(isset($_POST['export_date'])){
+        $location = "export-data-today.php?date=".$_POST['export_date'];
         header("Location:" . $location);
     }
     if(isset($_POST['export_from_to'])){
@@ -142,7 +142,7 @@
 
 
                 <div class="container"  style="width: 50%">
-                    Export/Report
+                    <!-- Export/Report
                     <br><br>
                     <form action="export.php" method="POST">
                         <div class="container">
@@ -164,12 +164,18 @@
                                 <br>
                                 <button class="btn btn-success" id="export" name="export" type="submit">Export to Excel &nbsp <span class='fa fa-file-excel'></span></button><br><br><br>
                         </div>
-                    </form>
-                    Export Client's Served on (<?php echo date("F d, Y")?>), <br><br>
+                    </form> -->
+                    Export Client's Served<br><br>
                     <form action="export.php" method="POST">
                         <div class="container">
                             <div class="input-group input-group-lg">
-                                <button class="btn btn-success" id="export-today" name="export-today" type="submit">Today Served Client Export to Excel &nbsp <span class='fa fa-file-excel'></span></button>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px; text-align:center">Date:</span>
+                                </div>
+                                <input id="export_date" name="export_date" type="date" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required>
+                            </div> <br>
+                            <div class="input-group input-group-lg">
+                                <button class="btn btn-success" id="export-date" name="export-date" type="submit">Served Clients Export to Excel &nbsp <span class='fa fa-file-excel'></span></button>
                             </div>
                         </div>
                     </form>
@@ -193,7 +199,7 @@
                                     required >
                                 </div> 
                                 <br>
-                                <button class="btn btn-success" id="export_from_to" name="export_from_to" type="submit">Export to Excel &nbsp <span class='fa fa-file-excel'></span></button><br><br><br>
+                                <button class="btn btn-success" id="export_from_to" name="export_from_to" type="submit">Export to Excel &nbsp <span class='fa fa-file-excel'></span></button><br>
                         </div>
                     </form>
                 <div>

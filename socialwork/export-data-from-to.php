@@ -11,24 +11,31 @@
      $to_date = $todate." 23:59:00";
 
      $office_loc = $_SESSION['f_office'];
-?>
-<?php
+
     $count = 0;
     $query= "SELECT DISTINCT
             client_id, trans_id, date_entered, encoded_encoder, control_no, date_accomplished, mode, bene_id,
             client_region, client_province, client_municipality, client_barangay, client_district,
             lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-            b_lname, b_fname, b_mname, b_exname, cname, subCategory
+            b_lname, b_fname, b_mname, b_exname, cname, subCategory, pantawid_bene, status_client 
             from client_data
             inner join tbl_transaction USING (client_id)
             left outer join beneficiary_data USING (bene_id)
             inner join assessment USING (trans_id)
             inner join assistance USING (trans_id)
             left outer join gl USING (trans_id)
-            WHERE (Left(trans_id, 9) = '$office_loc') AND (date_accomplished BETWEEN '{$from_date}' and '{$to_date}') 
-            ORDER BY tbl_transaction.date_entered ASC";
+            WHERE (Left(trans_id, 9) = '$office_loc') AND (date_accomplished BETWEEN '{$from_date}' and '{$to_date}') and status_client = 'Done' 
+            ORDER BY tbl_transaction.date_accomplished ASC";
     
     $result = mysqli_query($user->db,$query);
+
+    $columnHeader = "Date Entered"."\t"."Entered By"."\t"."Client No"."\t"."Date Accomplished"."\t"."Region"."\t"."Province"."\t".
+                    "City/Municipality"."\t"."Barangay"."\t"."District"."\t"."LastName"."\t"."FirstName"."\t"."MiddleName"."\t".
+                    "ExtraName"."\t"."Sex"."\t"."CivilStatus"."\t"."DOB"."\t"."Age"."\t"."ModeOfAdmission"."\t"."Type of Assistance1"."\t".
+                    "Amount1"."\t"."Source of Fund1"."\t"."Type of Assistance2"."\t"."Amount2"."\t". "Source of Fund2"."\t"."ClientCategory".
+                    "\t"."CHARGING1"."\t"."CHARGING2"."\t"."CHARGING3"."\t"."CHARGING4"."\t"."CHARGING5"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
+                    ."B. EXT."."\t"."Sub Category"."\t"."Pantawid Beneficiary";
+    $setData='';
 
     while($row = mysqli_fetch_assoc($result))
     {
@@ -125,14 +132,15 @@
                     $fname			                        ."\t".
                     $mname          			            ."\t".
                     $ename                     		        ."\t".	
-                    $row['subCategory'];
+                    $row['subCategory']                     ."\t".
+                    $row['pantawid_bene'];
         $setData .= trim(strtoupper($rowData))."\n"; //for another line of data
         // print_r($rowData);
         $count++;
     }
     if($count > 0){
         header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=".$user->getMonthWord(date("m", strtotime($to_date)))."-".strval(date("Y", strtotime($to_date))).".xls");
+        header("Content-Disposition: attachment; filename=".strval(date("M d", strtotime($from_date)))."-".strval(date("M d Y", strtotime($to_date)))." Export.xls");
         header("Pragma: no-cache");
         header("Expires: 0");
         echo ucwords($columnHeader)."\n".$setData."\n";
