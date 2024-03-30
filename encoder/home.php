@@ -224,9 +224,9 @@
                 <li>
                     <a href="summary.php">Summary <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
-                <!-- <li>
-                    <a href="import_page.php">Import <i style="float: right;font-size:25px" class="fa fa-upload"></i></a>
-                </li> -->
+                <li>
+                    <!-- <a href="import_page.php">Import <i style="float: right;font-size:25px" class="fa fa-upload"></i></a> -->
+                </li>
             </ul>
         </nav>
 

@@ -149,7 +149,7 @@
                             <div class="form-group">
                                 <label for="exampleInputFile">File Upload</label><br>
                                 <input type="file" name="file" id="file" size="150">
-                                <p class="help-block">Only Excel/CSV File Import.</p>
+                                <p class="help-block">Only CSV File Import.</p>
                             </div>
                             <button type="submit" class="btn btn-primary" name="import" value="import">Upload</button>
                         </form>
