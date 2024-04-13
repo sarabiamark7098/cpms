@@ -111,7 +111,7 @@
                             <option value="Youth">Youth</option>
                             <option  value="Men/Women in Specially Difficult Circumstances">Men/Women in Specially Difficult Circumstances</option>
                             <option value="Persons with Disabilities">Persons with Disabilities</option>
-                            <option value="Senior Citizens (no subcategories)">Senior Citizens (no subcategories)</option>
+                            <option value="Senior Citizens">Senior Citizens</option>
                             <option  value="Family Heads and Other Needy Adult">Family Heads and Other Needy Adult</option>
                             <option value="None of the Above" >None of the Above</option>
                         </select>

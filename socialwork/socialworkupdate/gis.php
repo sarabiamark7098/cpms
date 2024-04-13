@@ -145,6 +145,149 @@ if (!$_SESSION['login']) {
                 <!-- Beneficiary Additional Information -->
                 <small>(Please Save/Update before printing)</small>
                 <div class="row">
+                    <div class="col-12" >
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">CLIENT SUB-CATEGORY</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row">
+                                            <label class="col-sm-3 label" style="font-size: 18px">Sub-category:</label>
+                                            <div class="col">
+                                                <select type="text" id="c_subcat" class="form-control" name="c_subcat" required>
+                                                    <option value="" <?php echo (empty($client['subCategory'])) ? "selected" : "" ?>>Select Client Subcategory </option>
+                                                    <?php if($client["category"] == "Family Heads and Other Needy Adult"){ ?>
+                                                    <option value="Victims of Disaster" <?php echo (($client['subCategory']) == "Victims of Disaster") ? "selected" : "" ?>>Victims of Disaster</option>
+                                                    <option value="Internally Displaced Family" <?php echo (($client['subCategory']) == "Internally Displaced Family") ? "selected" : "" ?>>Internally Displaced Family</option>
+                                                    <option value="Solo Parent" <?php echo (($client['subCategory']) == "Solo Parent") ? "selected" : "Solo Parent" ?>></option>
+                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client['subCategory']) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
+                                                    <option value="Surrendered drug users" <?php echo (($client['subCategory']) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
+                                                    <option value="Repatriated OFW" <?php echo (($client['subCategory']) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
+                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
+                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php } elseif ($client["category"] == "Men/Women in Specially Difficult Circumstances"){?>
+                                                    <option value="Sexually-abused" <?php echo (($client["subCategory"]) == "Sexually-abused") ? "selected" : "" ?>>Sexually-abused</option>
+                                                    <option value="Physically-abused/maltreated/battered" <?php echo (($client["subCategory"]) == "Physically-abused/maltreated/battered") ? "selected" : "" ?>>Physically-abused/maltreated/battered</option>
+                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
+                                                    <option value="Victims of involuntary prostitution" <?php echo (($client["subCategory"]) == "Victims of involuntary prostitution") ? "selected" : "" ?>>Victims of involuntary prostitution</option>
+                                                    <option value="Victims of armed conflict" <?php echo (($client["subCategory"]) == "Victims of armed conflict") ? "selected" : "" ?>>Victims of armed conflict</option>
+                                                    <option value="Victims of trafficking" <?php echo (($client["subCategory"]) == "Victims of trafficking") ? "selected" : "" ?>>Victims of trafficking</option>
+                                                    <option value="Others specify" <?php echo (($client["subCategory"]) == "Others specify") ? "selected" : "" ?>>Others specify</option>
+                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
+                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
+                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
+                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php } elseif ($client["category"] == "Children in Need of Special Protection"){?>
+                                                    <option value="Abandoned" <?php echo (($client["subCategory"]) == "Abandoned") ? "selected" : "" ?>>Abandoned</option>
+                                                    <option value="Neglected" <?php echo (($client["subCategory"]) == "Neglected") ? "selected" : "" ?>>Neglected</option>
+                                                    <option value="Voluntary Committed/Surrendered" <?php echo (($client["subCategory"]) == "Voluntary Committed/Surrendered") ? "selected" : "" ?>>Voluntary Committed/Surrendered</option>
+                                                    <option value="Sexually-Abused" <?php echo (($client["subCategory"]) == "Sexually-Abused") ? "selected" : "" ?>>Sexually-Abused</option>
+                                                    <option value="Sexually-Exploited" <?php echo (($client["subCategory"]) == "Sexually-Exploited") ? "selected" : "" ?>>Sexually-Exploited</option>
+                                                    <option value="Physically-abused/maltreated/battered" <?php echo (($client["subCategory"]) == "Physically-abused/maltreated/battered") ? "selected" : "" ?>>Physically-abused/maltreated/battered</option>
+                                                    <option value="Children in Situations of Armed Conflict" <?php echo (($client["subCategory"]) == "Children in Situations of Armed Conflict") ? "selected" : "" ?>>Children in Situations of Armed Conflict</option>
+                                                    <option value="Victims of Child Labor" <?php echo (($client["subCategory"]) == "Victims of Child Labor") ? "selected" : "" ?>>Victims of Child Labor</option>
+                                                    <option value="Victims of Child Trafficking" <?php echo (($client["subCategory"]) == "Victims of Child Trafficking") ? "selected" : "" ?>>Victims of Child Trafficking</option>
+                                                    <option value="Street Children" <?php echo (($client["subCategory"]) == "Street Children") ? "selected" : "" ?>>Street Children</option>
+                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
+                                                    <option value="Children with HIV/AIDS" <?php echo (($client["subCategory"]) == "Children with HIV/AIDS") ? "selected" : "" ?>>Children with HIV/AIDS</option>
+                                                    <option value="Children with Disabilities" <?php echo (($client["subCategory"]) == "Children with Disabilities") ? "selected" : "" ?>>Children with Disabilities</option>
+                                                    <option value="Children in Conflict with the Law (CICL)" <?php echo (($client["subCategory"]) == "Children in Conflict with the Law (CICL)") ? "selected" : "" ?>>Children in Conflict with the Law (CICL)</option>
+                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
+                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
+                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
+                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php } elseif ($client["category"] == "Youth"){?>
+                                                    <option value="Children in Conflict with the Law (9 to < 18 yrs. old)" <?php echo (($client["subCategory"]) == "Children in Conflict with the Law (9 to < 18 yrs. old)") ? "selected" : "" ?>>Children in Conflict with the Law (9 to < 18 yrs. old)</option>
+                                                    <option value="Out of School Youth" <?php echo (($client["subCategory"]) == "Out of School Youth") ? "selected" : "" ?>>Out of School Youth</option>
+                                                    <option value="Pre-delinquent Youth" <?php echo (($client["subCategory"]) == "Pre-delinquent Youth") ? "selected" : "" ?>>Pre-delinquent Youth</option>
+                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
+                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
+                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
+                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
+                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
+                                                    <option value="Student" <?php echo (($client["subCategory"]) == "Student") ? "selected" : "" ?>>Student</option>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php } elseif ($client["category"] == "Senior Citizens" || ($client["category"] == "Senior Citizens (no subcategories)")){?>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php } elseif ($client["category"] == "Persons with Disabilities"){?>
+                                                    <option value="Orthopedically handicapped" <?php echo (($client["subCategory"]) == "Orthopedically handicapped") ? "selected" : "" ?>>Orthopedically handicapped</option>
+                                                    <option value="Hearing/Speech impaired" <?php echo (($client["subCategory"]) == "Hearing/Speech impaired") ? "selected" : "" ?>>Hearing/Speech impaired</option>
+                                                    <option value="Visually impaired" <?php echo (($client["subCategory"]) == "Visually impaired") ? "selected" : "" ?>>Visually impaired</option>
+                                                    <option value="Mentally challenged" <?php echo (($client["subCategory"]) == "Mentally challenged") ? "selected" : "" ?>>Mentally challenged</option>
+                                                    <option value="Others specify" <?php echo (($client["subCategory"]) == "Others specify") ? "selected" : "" ?>>Others specify</option>
+                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
+                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
+                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
+                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
+                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
+                                                    <option value="Mental Disabilities" <?php echo (($client["subCategory"]) == "Mental Disabilities") ? "selected" : "" ?>>Mental Disabilities</option>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php } elseif ($client["category"] == "Persons Living with HIV/AIDS"){?>
+                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
+                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
+                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
+                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
+                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
+                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
+                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
+                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
+                                                    <?php }?>
+                                                    <option value="NONE OF THE ABOVE" <?php echo (($client["subCategory"]) == "NONE OF THE ABOVE") ? "selected" : "" ?>>NONE OF THE ABOVE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
                     <div class=col-6>
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
@@ -822,6 +965,7 @@ if (!$_SESSION['login']) {
         if (isset($_POST['update'])) {
             $empid = $_SESSION['userId']; // id sa social worker
             $trans_id = $_GET['id'];
+            $csubcat = $_POST['c_subcat'];
             //FAMILY DATA's
             $p1="";$p2="";$p3="";$e1="";$e2="";$e3="";$t1="";$t2="";$t3="";$b1="";$b2="";$b3=""; //blank sa una 
 
@@ -879,7 +1023,7 @@ if (!$_SESSION['login']) {
             $m1 = $_POST["m1"];
             $f1 = "";
             if (empty($_POST['fsof1'])) {
-                echo $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
+                $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
             }
             if ($_POST['type2'] == "") {
                 $type2 = "";
@@ -978,7 +1122,7 @@ if (!$_SESSION['login']) {
             if(isset($_POST['devices'])){$material = 4;}
 
             //once save the data of new -> client
-            $user->updateGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+            $user->updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
             $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
             $fund1, $fund2, $fund3, $fund4, $fund5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
@@ -986,19 +1130,19 @@ if (!$_SESSION['login']) {
             //UPDATE CLIENT
         if (isset($_POST['c_update'])) {
                 //Client name
-            echo $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
-            echo $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
-            echo $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
-            echo $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
-            echo $bday = $_POST['bday'];
+            $lname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['lname'])));
+            $mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['mname'])));
+            $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
+            $bday = $_POST['bday'];
+            $fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['fname'])));
             
-            echo $region = mysqli_real_escape_string($user->db, ($_POST['region']));
-            echo $province = mysqli_real_escape_string($user->db, ($_POST['province']));
-            echo $municipality = mysqli_real_escape_string($user->db, ($_POST['municipality']));
-            echo $barangay = mysqli_real_escape_string($user->db, ($_POST['barangay']));
-            echo $street = mysqli_real_escape_string($user->db, ($_POST['street']));
-            echo $district = mysqli_real_escape_string($user->db, ($_POST['district']));
-            echo $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
+            $region = mysqli_real_escape_string($user->db, ($_POST['region']));
+            $province = mysqli_real_escape_string($user->db, ($_POST['province']));
+            $municipality = mysqli_real_escape_string($user->db, ($_POST['municipality']));
+            $barangay = mysqli_real_escape_string($user->db, ($_POST['barangay']));
+            $street = mysqli_real_escape_string($user->db, ($_POST['street']));
+            $district = mysqli_real_escape_string($user->db, ($_POST['district']));
+            $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
             
 
             $user->updateClient($id, $lname, $mname, $fname, $exname, $bday, $sex, 

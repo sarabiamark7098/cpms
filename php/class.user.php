@@ -404,7 +404,7 @@
 					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
 					$result = mysqli_query($this->db, $query);
 
-					echo $query = "INSERT INTO cpms_account(empid, position, status, office_id) VALUES 
+					$query = "INSERT INTO cpms_account(empid, position, status, office_id) VALUES 
 							('{$id}','{$position}','Activated', '{$office}')";
 					$result = mysqli_query($this->db2, $query);
 
@@ -764,7 +764,7 @@
 				$company_name = mysqli_escape_string($this->db,$company_name);
 				$company_address = mysqli_escape_string($this->db,$company_address);
 
-				echo $query = "INSERT INTO provider(addressee_name, addressee_position, company_name, to_mention, company_address, action_executed_by) 
+				$query = "INSERT INTO provider(addressee_name, addressee_position, company_name, to_mention, company_address, action_executed_by) 
 				VALUES ('{$addressee_name}','{$addressee_position}','{$company_name}','{$addresseetomention}','{$company_address}','{$fullname}');";
 
 				$result = mysqli_query($this->db,$query);
@@ -1932,7 +1932,7 @@
 		}
 
 		//All information in GIS
-		public function insertGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+		public function insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
 									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
 									$fs1, $fs2, $fs3, $fs4, $fs5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
 										
@@ -1941,6 +1941,14 @@
 				$rl2 = "";
 				$rl3 = "";
 			}
+			$query = "SELECT client_id FROM tbl_transaction WHERE trans_id = '{$trans_id}';";
+			$result = mysqli_query($this->db, $query);
+			$data = mysqli_fetch_assoc($result);
+
+
+			$query = "UPDATE client_data SET subCategory = '{$csubcat}' WHERE client_id = '{$data['client_id']}';";
+			$result = mysqli_query($this->db, $query);
+
 		$query = "";
 			if(!empty($p1)){
 				$query = "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ('{$trans_id}','{$p1}','{$rb1}', '{$e1}', '{$t1}', '{$b1}')";
@@ -2035,7 +2043,7 @@
 			
 		}
 
-		public function updateGIS($empid, $trans_id, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+		public function updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, 
 			$targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
 				
@@ -2044,7 +2052,14 @@
 				$rl2 = "";
 				$rl3 = "";
 			}
-				
+			$query = "SELECT client_id FROM tbl_transaction WHERE trans_id = '{$trans_id}';";
+			$result = mysqli_query($this->db, $query);
+			$data = mysqli_fetch_assoc($result);
+
+
+			$query = "UPDATE client_data SET subCategory = '{$csubcat}' WHERE client_id = '{$data['client_id']}';";
+			$result = mysqli_query($this->db, $query);
+
 			$query ="";
 			$query .= "DELETE FROM family where trans_id='{$trans_id}';"; //delete first fmily then update 
 			if(!empty($p1)){
@@ -2514,7 +2529,7 @@
 			
 			if (!empty($sd_officer)) {
 				$query .= "DELETE FROM cash WHERE trans_id = '{$id}';";
-				echo $query .= "INSERT INTO cash (trans_id, sd_officer) 
+				$query .= "INSERT INTO cash (trans_id, sd_officer) 
 							VALUES 
 							('{$id}', '{$sd_officer}');";
 			}

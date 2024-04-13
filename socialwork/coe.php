@@ -145,73 +145,16 @@
 
                 window.onafterprint = afterPrint;
             });
+                $(document).ready(function() {
+                    var totaldist = parseFloat("<?php echo $am; ?>");
+                    var amount1 = parseFloat(0.00);
+                    var amount2 = parseFloat(0.00);
+                    var amount3 = parseFloat(0.00);
+                    var amount4 = parseFloat(0.00);
+                    var amount5 = parseFloat(0.00);
 
-            $(document).ready(function() {
-                var totaldist = parseFloat("<?php echo $am; ?>");
-                var amount1 = parseFloat(0.00);
-                var amount2 = parseFloat(0.00);
-                var amount3 = parseFloat(0.00);
-                var amount4 = parseFloat(0.00);
-                var amount5 = parseFloat(0.00);
-                
-                if(document.getElementById("amountf1").value.length > 0){
-                    amount1 = document.getElementById("amountf1").value;
-                    amount1 = parseFloat(amount1.replace(",",""));
-                }
-                if($("#amountf11").val() != undefined){
-                    if(document.getElementById("amountf11").value.length > 0){
-                        amount2 = document.getElementById("amountf11").value;
-                        amount2 = parseFloat(amount2.replace(",",""));
-                    }
-                }
-                if($("#amountf111").val() != undefined){
-                    if(document.getElementById("amountf111").value.length > 0){
-                        amount3 = document.getElementById("amountf111").value;
-                        amount3 = parseFloat(amount3.replace(",",""));
-                    }
-                }
-                if($("#amountf1111").val() != undefined){
-                    if(document.getElementById("amountf1111").value.length > 0){
-                        amount4 = document.getElementById("amountf1111").value;
-                        amount4 = parseFloat(amount4.replace(",",""));
-                    }
-                }
-                if($("#amountf11111").val() != undefined){
-                    if(document.getElementById("amountf11111").value.length > 0){
-                        amount5 = document.getElementById("amountf11111").value;
-                        amount5 = parseFloat(amount5.replace(",",""));
-                    }
-                }
-                
-                
-                var total = Number(0.00);
-                var total2 = Number(0.00);
-                $("#totalamount").val(CurrencyFormat(totaldist));
-                $("#dtotalamount").val(0.00);
-                
-                if(document.getElementById("amountf1").value.length > 0){
-                    total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
-                    total = parseFloat(totaldist - total);
-                    
-                    // total = parseFloat(Number(total).toFixed(2))
-                    $("#totalamount").val(CurrencyFormat(total));
-                    total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
-                    // total2 = parseFloat(Number(total2).toFixed(2));
-                    $("#dtotalamount").val(CurrencyFormat(total2));
-                }
-
-                $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
-                    amount1 = parseFloat(0);
-                    // console.log(amount1);
-                    amount2 = parseFloat(0);
-                    // console.log(amount2);
-                    amount3 = parseFloat(0);
-                    // console.log(amount3);
-                    amount4 = parseFloat(0);
-                    // console.log(amount4);
-                    amount5 = parseFloat(0);
-                    // console.log(amount5);
-                    if(document.getElementById("amountf1").value.length > 0){
+                    var amountf1 = document.getElementById("amountf1");
+                    if(amountf1 !== null && document.getElementById("amountf1").value.length > 0){
                         amount1 = document.getElementById("amountf1").value;
                         amount1 = parseFloat(amount1.replace(",",""));
                     }
@@ -239,75 +182,117 @@
                             amount5 = parseFloat(amount5.replace(",",""));
                         }
                     }
-                    total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
-                    total = parseFloat(totaldist - total);
-                    // total = parseFloat(Number(total).toFixed(2))
-                    // console.log(amount1);console.log(amount2);
-                    $("#totalamount").val(CurrencyFormat(total));
-                });
+                    
+                    
+                    var total = Number(0.00);
+                    var total2 = Number(0.00);
+                    $("#totalamount").val(CurrencyFormat(totaldist));
+                    $("#dtotalamount").val(0.00);
+                    
+                    var amountf1 = document.getElementById("amountf1");
+                    if(amountf1 !== null && document.getElementById("amountf1").value.length > 0){
+                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        total = parseFloat(totaldist - total);
+                        
+                        // total = parseFloat(Number(total).toFixed(2))
+                        $("#totalamount").val(CurrencyFormat(total));
+                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        // total2 = parseFloat(Number(total2).toFixed(2));
+                        $("#dtotalamount").val(CurrencyFormat(total2));
+                    }
 
-                $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
-                    total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
-                    // total2 = parseF-loat(Number(total2).toFixed(2));
-                    $("#dtotalamount").val(CurrencyFormat(total2));
+                    $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
+                        amount1 = parseFloat(0);
+                        // console.log(amount1);
+                        amount2 = parseFloat(0);
+                        // console.log(amount2);
+                        amount3 = parseFloat(0);
+                        // console.log(amount3);
+                        amount4 = parseFloat(0);
+                        // console.log(amount4);
+                        amount5 = parseFloat(0);
+                        // console.log(amount5);
+                        if(document.getElementById("amountf1").value.length > 0){
+                            amount1 = document.getElementById("amountf1").value;
+                            amount1 = parseFloat(amount1.replace(",",""));
+                        }
+                        if($("#amountf11").val() != undefined){
+                            if(document.getElementById("amountf11").value.length > 0){
+                                amount2 = document.getElementById("amountf11").value;
+                                amount2 = parseFloat(amount2.replace(",",""));
+                            }
+                        }
+                        if($("#amountf111").val() != undefined){
+                            if(document.getElementById("amountf111").value.length > 0){
+                                amount3 = document.getElementById("amountf111").value;
+                                amount3 = parseFloat(amount3.replace(",",""));
+                            }
+                        }
+                        if($("#amountf1111").val() != undefined){
+                            if(document.getElementById("amountf1111").value.length > 0){
+                                amount4 = document.getElementById("amountf1111").value;
+                                amount4 = parseFloat(amount4.replace(",",""));
+                            }
+                        }
+                        if($("#amountf11111").val() != undefined){
+                            if(document.getElementById("amountf11111").value.length > 0){
+                                amount5 = document.getElementById("amountf11111").value;
+                                amount5 = parseFloat(amount5.replace(",",""));
+                            }
+                        }
+                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        total = parseFloat(totaldist - total);
+                        // total = parseFloat(Number(total).toFixed(2))
+                        // console.log(amount1);console.log(amount2);
+                        $("#totalamount").val(CurrencyFormat(total));
+                    });
+
+                    $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
+                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        // total2 = parseF-loat(Number(total2).toFixed(2));
+                        $("#dtotalamount").val(CurrencyFormat(total2));
+                    });
+                    
                 });
+                $('.salary_monthly').mask("#,000,000,000", {reverse: true});
+                $('.money').mask("#,000,000.00", {reverse: true,});
                 
-            });
-            $('.salary_monthly').mask("#,000,000,000", {reverse: true});
-            $('.money').mask("#,000,000.00", {reverse: true,});
-            
-            function CurrencyFormat(number)
-            {
-                var decimalplaces = 2;
-                var decimalcharacter = ".";
-                var thousandseparater = ",";
-                number = parseFloat(number);
-                var sign = number < 0 ? "-" : "";
-                var formatted = new String(number.toFixed(decimalplaces));
-                if( decimalcharacter.length && decimalcharacter != "." ) { formatted = formatted.replace(/\./,decimalcharacter); }
-                var integer = "";
-                var fraction = "";
-                var strnumber = new String(formatted);
-                var dotpos = decimalcharacter.length ? strnumber.indexOf(decimalcharacter) : -1;
-                if( dotpos > -1 )
+                function CurrencyFormat(number)
                 {
-                    if( dotpos ) { integer = strnumber.substr(0,dotpos); }
-                    fraction = strnumber.substr(dotpos+1);
+                    var decimalplaces = 2;
+                    var decimalcharacter = ".";
+                    var thousandseparater = ",";
+                    number = parseFloat(number);
+                    var sign = number < 0 ? "-" : "";
+                    var formatted = new String(number.toFixed(decimalplaces));
+                    if( decimalcharacter.length && decimalcharacter != "." ) { formatted = formatted.replace(/\./,decimalcharacter); }
+                    var integer = "";
+                    var fraction = "";
+                    var strnumber = new String(formatted);
+                    var dotpos = decimalcharacter.length ? strnumber.indexOf(decimalcharacter) : -1;
+                    if( dotpos > -1 )
+                    {
+                        if( dotpos ) { integer = strnumber.substr(0,dotpos); }
+                        fraction = strnumber.substr(dotpos+1);
+                    }
+                    else { integer = strnumber; }
+                    if( integer ) { integer = String(Math.abs(integer)); }
+                    while( fraction.length < decimalplaces ) { fraction += "0"; }
+                    temparray = new Array();
+                    while( integer.length > 3 )
+                    {
+                        temparray.unshift(integer.substr(-3));
+                        integer = integer.substr(0,integer.length-3);
+                    }
+                    temparray.unshift(integer);
+                    integer = temparray.join(thousandseparater);
+                    return sign + integer + decimalcharacter + fraction;
                 }
-                else { integer = strnumber; }
-                if( integer ) { integer = String(Math.abs(integer)); }
-                while( fraction.length < decimalplaces ) { fraction += "0"; }
-                temparray = new Array();
-                while( integer.length > 3 )
-                {
-                    temparray.unshift(integer.substr(-3));
-                    integer = integer.substr(0,integer.length-3);
-                }
-                temparray.unshift(integer);
-                integer = temparray.join(thousandseparater);
-                return sign + integer + decimalcharacter + fraction;
-            }
-            $(document).ready(function() {
-                if(document.getElementById("totalamount").value != 0.00){
-                    // console.log("dri ra");
-                    $('#update').attr('disabled','disabled');
-                    $('#save').attr('disabled','disabled');
-                    $('#save').removeClass('btn-primary').addClass('btn-dark ');
-                    $(this).addClass('btn-default').removeClass('btn-primary ');
-                    $('#update').removeClass('btn-primary').addClass('btn-dark ');
-                    $(this).addClass('btn-default').removeClass('btn-primary ');
-                } else {
-                    // console.log("dd2 ra");
-                    $('#update').removeAttr('disabled');
-                    $('#save').removeAttr('disabled');
-                    $('#save').removeClass('btn-dark').addClass('btn-primary ');
-                    $(this).addClass('btn-default').removeClass('btn-dark ');
-                    $('#update').removeClass('btn-dark').addClass('btn-primary ');
-                    $(this).addClass('btn-default').removeClass('btn-dark ');
-                }
-                $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
-                    if(document.getElementById("totalamount").value != 0.00){
-                        // console.log("dri");
+                
+                $(document).ready(function() { 
+                    var totalamount = document.getElementById("totalamount");
+                    if(totalamount !== null && document.getElementById("totalamount").value !== 0.00){
+                        // console.log("dri ra");
                         $('#update').attr('disabled','disabled');
                         $('#save').attr('disabled','disabled');
                         $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -315,16 +300,59 @@
                         $('#update').removeClass('btn-primary').addClass('btn-dark ');
                         $(this).addClass('btn-default').removeClass('btn-primary ');
                     } else {
-                        // console.log("dd2");
+                        // console.log("dd2 ra");
                         $('#update').removeAttr('disabled');
                         $('#save').removeAttr('disabled');
-                        $('#save').removeClass('btn-dark').addClass('btn-primary ');
-                        $(this).addClass('btn-default').removeClass('btn-dark ');
-                        $('#update').removeClass('btn-dark').addClass('btn-primary ');
-                        $(this).addClass('btn-default').removeClass('btn-dark ');
+                        $('#save').removeClass('btn-dark').addClass('btn-primary');
+                        $(this).addClass('btn-default').removeClass('btn-dark');
+                        $('#update').removeClass('btn-dark').addClass('btn-primary');
+                        $(this).addClass('btn-default').removeClass('btn-dark');
                     }
+                    $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
+                        if(document.getElementById("totalamount").value != 0.00){
+                            // console.log("dri");
+                            $('#update').attr('disabled','disabled');
+                            $('#save').attr('disabled','disabled');
+                            $('#save').removeClass('btn-primary').addClass('btn-dark ');
+                            $(this).addClass('btn-default').removeClass('btn-primary ');
+                            $('#update').removeClass('btn-primary').addClass('btn-dark ');
+                            $(this).addClass('btn-default').removeClass('btn-primary ');
+                        } else {
+                            // console.log("dd2");
+                            $('#update').removeAttr('disabled');
+                            $('#save').removeAttr('disabled');
+                            $('#save').removeClass('btn-dark').addClass('btn-primary ');
+                            $(this).addClass('btn-default').removeClass('btn-dark ');
+                            $('#update').removeClass('btn-dark').addClass('btn-primary ');
+                            $(this).addClass('btn-default').removeClass('btn-dark ');
+                        }
+                    });
                 });
-            });
+                $(document).ready(function() { 
+                    $("#coesignatoryid1").keyup(function() {
+
+                        var inputValue = document.getElementById("coesignatoryid").value.trim();
+
+                        if (/^\d*\.?\d+$/.test(inputValue)) {
+                            var numericValue = parseFloat(inputValue);
+                            
+                            $('#update').removeAttr('disabled');
+                            $('#save').removeAttr('disabled');
+                            $('#save').removeClass('btn-dark').addClass('btn-primary ');
+                            $(this).addClass('btn-default').removeClass('btn-dark ');
+                            $('#update').removeClass('btn-dark').addClass('btn-primary ');
+                            $(this).addClass('btn-default').removeClass('btn-dark ');
+                        }else{
+                            $('#update').attr('disabled','disabled');
+                            $('#save').attr('disabled','disabled');
+                            $('#save').removeClass('btn-primary').addClass('btn-dark ');
+                            $(this).addClass('btn-default').removeClass('btn-primary ');
+                            $('#update').removeClass('btn-primary').addClass('btn-dark ');
+                            $(this).addClass('btn-default').removeClass('btn-primary ');
+                        }
+                    });
+                });
+            
             $("#coesignatoryid").ready(function() {
                 if(document.getElementById("coesignatoryid").value == ""){
                     // console.log("dri sa");
@@ -362,14 +390,14 @@
                         $(this).addClass('btn-default').removeClass('btn-dark ');
                     }
                 });
-                document.getElementById("coesignatoryid1").addEventListener('input', function(e) {
+                
+                document.getElementById("coesignatoryid1").addEventListener('input', function(e) { 
                     var input = e.target,
                         list = input.getAttribute('list'),
                         options = document.querySelectorAll('#' + list + ' option'),
                         hiddenInput = document.getElementById('coesignatoryid'),
                         inputValue = input.value;
                     hiddenInput.value = inputValue;
-
                     for(var i = 0; i < options.length; i++) {
                         var option = options[i];
 
@@ -417,7 +445,6 @@
                             <div class="card-body">
                                 Amount is more than Twenty Thousand Pesos (Php 50,000).
                                 <div>
-                                    
                                 <label> Approved By : </label>&nbsp&nbsp&nbsp
                                     <input style="text-transform: uppercase; width:50%" id="coesignatoryid1" list="coesign" name="coesignName1" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullnameCOE($client['signatory_GL']) ?>" required>
                                     <datalist id="coesign">

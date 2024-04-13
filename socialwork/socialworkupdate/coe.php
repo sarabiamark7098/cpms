@@ -794,6 +794,30 @@
                 }
             });
         });
+        $(document).ready(function() { 
+            $("#coesignatoryid1").keyup(function() {
+
+                var inputValue = document.getElementById("coesignatoryid").value.trim();
+
+                if (/^\d*\.?\d+$/.test(inputValue)) {
+                    var numericValue = parseFloat(inputValue);
+                    
+                    $('#update').removeAttr('disabled');
+                    $('#save').removeAttr('disabled');
+                    $('#save').removeClass('btn-dark').addClass('btn-primary ');
+                    $(this).addClass('btn-default').removeClass('btn-dark ');
+                    $('#update').removeClass('btn-dark').addClass('btn-primary ');
+                    $(this).addClass('btn-default').removeClass('btn-dark ');
+                }else{
+                    $('#update').attr('disabled','disabled');
+                    $('#save').attr('disabled','disabled');
+                    $('#save').removeClass('btn-primary').addClass('btn-dark ');
+                    $(this).addClass('btn-default').removeClass('btn-primary ');
+                    $('#update').removeClass('btn-primary').addClass('btn-dark ');
+                    $(this).addClass('btn-default').removeClass('btn-primary ');
+                }
+            });
+        });
         $("#coesignatoryid").ready(function() {
             if(document.getElementById("coesignatoryid").value == ""){
                 // console.log("dri sa");
