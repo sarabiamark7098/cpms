@@ -104,17 +104,17 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input list="categories" class="form-control mr-sm-2 b" type="text" name="category" placeholder="Category" name="category" required>
-                        <datalist id="categories">
-                            <option>Children in Need of Special Protection</option>
-                            <option>Persons Living with HIV/AIDS</option>
-                            <option>Youth</option>
-                            <option>Men/Women in Specially Difficult Circumstances</option>
-                            <option>Persons with Disabilities</option>
-                            <option>Senior Citizens (no subcategories)</option>
-                            <option>Family Heads and Other Needy Adult</option>
-                            <option>None of the Above</option>
-                        </datalist>
+                        <select list="categories" class="form-control mr-sm-2 b" type="text" name="category" placeholder="Category" name="category" required>
+                            <option value="" disabled selected>Category</option>
+                            <option  value="Children in Need of Special Protection">Children in Need of Special Protection</option>
+                            <option value="Persons Living with HIV/AIDS">Persons Living with HIV/AIDS</option>
+                            <option value="Youth">Youth</option>
+                            <option  value="Men/Women in Specially Difficult Circumstances">Men/Women in Specially Difficult Circumstances</option>
+                            <option value="Persons with Disabilities">Persons with Disabilities</option>
+                            <option value="Senior Citizens (no subcategories)">Senior Citizens (no subcategories)</option>
+                            <option  value="Family Heads and Other Needy Adult">Family Heads and Other Needy Adult</option>
+                            <option value="None of the Above" >None of the Above</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
