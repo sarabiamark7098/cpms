@@ -1837,349 +1837,195 @@ if (!$_SESSION['login']) {
 
         $(function () {
             $("#fhona").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#wedc").removeAttr("checked");
-                    $("#pwd").removeAttr("checked");
-                    $("#youth").removeAttr("checked");
-                    $("#sc").removeAttr("checked");
-                    $("#plwhiv").removeAttr("checked");
-                    $("#cnsp").removeAttr("checked");
-                }
-            });
-            $("#wedc").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#fhona").removeAttr("checked");
-                    $("#pwd").removeAttr("checked");
-                    $("#youth").removeAttr("checked");
-                    $("#sc").removeAttr("checked");
-                    $("#plwhiv").removeAttr("checked");
-                    $("#cnsp").removeAttr("checked");
-                }
-            });
-            $("#pwd").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#wedc").removeAttr("checked");
-                    $("#fhona").removeAttr("checked");
-                    $("#youth").removeAttr("checked");
-                    $("#sc").removeAttr("checked");
-                    $("#plwhiv").removeAttr("checked");
-                    $("#cnsp").removeAttr("checked");
-                }
-            });
-            $("#youth").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#wedc").removeAttr("checked");
-                    $("#pwd").removeAttr("checked");
-                    $("#fhona").removeAttr("checked");
-                    $("#sc").removeAttr("checked");
-                    $("#plwhiv").removeAttr("checked");
-                    $("#cnsp").removeAttr("checked");
-                }
-            });
-            $("#sc").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#wedc").removeAttr("checked");
-                    $("#pwd").removeAttr("checked");
-                    $("#youth").removeAttr("checked");
-                    $("#fhona").removeAttr("checked");
-                    $("#plwhiv").removeAttr("checked");
-                    $("#cnsp").removeAttr("checked");
-                }
-            });
-            $("#plwhiv").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#wedc").removeAttr("checked");
-                    $("#pwd").removeAttr("checked");
-                    $("#youth").removeAttr("checked");
-                    $("#sc").removeAttr("checked");
-                    $("#fhona").removeAttr("checked");
-                    $("#cnsp").removeAttr("checked");
-                }
-            });
-            $("#cnsp").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#wedc").removeAttr("checked");
-                    $("#pwd").removeAttr("checked");
-                    $("#youth").removeAttr("checked");
-                    $("#sc").removeAttr("checked");
-                    $("#fhona").removeAttr("checked");
-                    $("#plwhiv").removeAttr("checked");
-                }
-            });
+	        	if ($(this).prop("checked")) {
+    	     		$("#wedc, #pwd, #youth, #sc, #plwhiv, #cnsp").prop("checked", false);
+        		}
+		    });
+        	$("#wedc").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#fhona, #pwd, #youth, #sc, #plwhiv, #cnsp").prop("checked", false);
+        		}
+		    });
+        	$("#pwd").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#wedc, #fhona, #youth, #sc, #plwhiv, #cnsp").prop("checked", false);
+        		}
+		    });
+        	$("#youth").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#wedc, #pwd, #fhona, #sc, #plwhiv, #cnsp").prop("checked", false);
+        		}
+		    });
+        	$("#sc").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#wedc, #pwd, #youth, #fhona, #plwhiv, #cnsp").prop("checked", false);
+        		}
+		    });
+        	$("#plwhiv").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#wedc, #pwd, #youth, #sc, #fhona, #cnsp").prop("checked", false);
+        		}
+		    });
+        	$("#cnsp").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#wedc, #pwd, #youth, #sc, #plwhiv, #fhona").prop("checked", false);
+        		}
+		    });
         });
         
         $(function () {
-            $("#solo").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#ip").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#solo").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#drug").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#solo").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#4ps").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#solo").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#dwell").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#solo").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#mental").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#solo").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#asylum").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#solo").removeAttr("checked");
-                    $("#osc").removeAttr("checked");
-                }
-            });
-            $("#osc").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#ip").removeAttr("checked");
-                    $("#drug").removeAttr("checked");
-                    $("#4ps").removeAttr("checked");
-                    $("#dwell").removeAttr("checked");
-                    $("#mental").removeAttr("checked");
-                    $("#asylum").removeAttr("checked");
-                    $("#solo").removeAttr("checked");
-                }
-            });
+        	$("#solo").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#ip").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#solo, #drug, #4ps, #dwell, #mental, #asylum, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#drug").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #solo, #4ps, #dwell, #mental, #asylum, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#4ps").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #solo, #dwell, #mental, #asylum, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#dwell").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #solo, #mental, #asylum, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#mental").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #dwell, #solo, #asylum, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#asylum").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #solo, #osc").prop("checked", false);
+        		}
+		    });
+        	$("#osc").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #solo").prop("checked", false);
+        		}
+		    });
         });
 
         $(function () {
-            $("#hb").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medicine").removeAttr("checked");
-                    $("#chemo").removeAttr("checked");
-                    $("#dia").removeAttr("checked");
-                    $("#procedure").removeAttr("checked");
-                    $("#laboratory").removeAttr("checked");
-                    $("#implant").removeAttr("checked");
-                }
-            });
-            $("#medicine").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#hb").removeAttr("checked");
-                    $("#chemo").removeAttr("checked");
-                    $("#dia").removeAttr("checked");
-                    $("#procedure").removeAttr("checked");
-                    $("#laboratory").removeAttr("checked");
-                    $("#implant").removeAttr("checked");
-                }
-            });
-            $("#chemo").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medicine").removeAttr("checked");
-                    $("#hb").removeAttr("checked");
-                    $("#dia").removeAttr("checked");
-                    $("#procedure").removeAttr("checked");
-                    $("#laboratory").removeAttr("checked");
-                    $("#implant").removeAttr("checked");
-                }
-            });
-            $("#dia").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medicine").removeAttr("checked");
-                    $("#chemo").removeAttr("checked");
-                    $("#hb").removeAttr("checked");
-                    $("#procedure").removeAttr("checked");
-                    $("#laboratory").removeAttr("checked");
-                    $("#implant").removeAttr("checked");
-                }
-            });
-            $("#procedure").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medicine").removeAttr("checked");
-                    $("#chemo").removeAttr("checked");
-                    $("#dia").removeAttr("checked");
-                    $("#hb").removeAttr("checked");
-                    $("#laboratory").removeAttr("checked");
-                    $("#implant").removeAttr("checked");
-                }
-            });
-            $("#laboratory").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medicine").removeAttr("checked");
-                    $("#chemo").removeAttr("checked");
-                    $("#dia").removeAttr("checked");
-                    $("#procedure").removeAttr("checked");
-                    $("#hb").removeAttr("checked");
-                    $("#implant").removeAttr("checked");
-                }
-            });
-            $("#implant").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medicine").removeAttr("checked");
-                    $("#chemo").removeAttr("checked");
-                    $("#dia").removeAttr("checked");
-                    $("#procedure").removeAttr("checked");
-                    $("#laboratory").removeAttr("checked");
-                    $("#hb").removeAttr("checked");
-                }
-            });
+        	$("#hb").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medicine, #chemo, #dia, #procedure, #laboratory, #implant").prop("checked", false);
+        		}
+		    });
+        	$("#medicine").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#hb, #chemo, #dia, #procedure, #laboratory, #implant").prop("checked", false);
+        		}
+		    });
+        	$("#chemo").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medicine, #hb, #dia, #procedure, #laboratory, #implant").prop("checked", false);
+        		}
+		    });
+        	$("#dia").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medicine, #chemo, #hb, #procedure, #laboratory, #implant").prop("checked", false);
+        		}
+		    });
+        	$("#procedure").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medicine, #chemo, #dia, #hb, #laboratory, #implant").prop("checked", false);
+        		}
+		    });
+        	$("#laboratory").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medicine, #chemo, #dia, #procedure, #hb, #implant").prop("checked", false);
+        		}
+		    });
+        	$("#implant").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medicine, #chemo, #dia, #procedure, #laboratory, #hb").prop("checked", false);
+        		}
+		    });
         });
 
         $(function () {
-            $("#fb").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#toc").removeAttr("checked");
-                    $("#interment").removeAttr("checked");
-                }
-            });
-            $("#toc").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#fb").removeAttr("checked");
-                    $("#interment").removeAttr("checked");
-					
-                }
-            });
-            $("#interment").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#fb").removeAttr("checked");
-                    $("#toc").removeAttr("checked");
-                }
-            });
+        	$("#fb").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#toc, #interment").prop("checked", false);
+        		}
+		    });
+        	$("#toc").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#fb, #interment").prop("checked", false);
+        		}
+		    });
+        	$("#interment").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#toc, #fb").prop("checked", false);
+        		}
+		    });
         });
 
         $(function () {
-            $("#medical").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#transportation").removeAttr("checked");
-                    $("#food").removeAttr("checked");
-                    $("#fassist").removeAttr("checked");
-                    $("#educational").removeAttr("checked");
-                    $("#casha").removeAttr("checked");
-                }
-            });
-            $("#transportation").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#medical").removeAttr("checked");
-                    $("#food").removeAttr("checked");
-                    $("#fassist").removeAttr("checked");
-                    $("#educational").removeAttr("checked");
-                    $("#casha").removeAttr("checked");
-                }
-            });
-            $("#food").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#transportation").removeAttr("checked");
-                    $("#medical").removeAttr("checked");
-                    $("#fassist").removeAttr("checked");
-                    $("#educational").removeAttr("checked");
-                    $("#casha").removeAttr("checked");
-                }
-            });
-            $("#fassist").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#transportation").removeAttr("checked");
-                    $("#food").removeAttr("checked");
-                    $("#medical").removeAttr("checked");
-                    $("#educational").removeAttr("checked");
-                    $("#casha").removeAttr("checked");
-                }
-            });
-            $("#educational").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#transportation").removeAttr("checked");
-                    $("#food").removeAttr("checked");
-                    $("#fassist").removeAttr("checked");
-                    $("#medical").removeAttr("checked");
-                    $("#casha").removeAttr("checked");
-                }
-            });
-            $("#casha").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#transportation").removeAttr("checked");
-                    $("#food").removeAttr("checked");
-                    $("#fassist").removeAttr("checked");
-                    $("#educational").removeAttr("checked");
-                    $("#medical").removeAttr("checked");
-                }
-            });
+        	$("#medical").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#transportation, #food, #fassist, #educational, #casha").prop("checked", false);
+        		}
+		    });
+        	$("#transportation").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#medical, #food, #fassist, #educational, #casha").prop("checked", false);
+        		}
+		    });
+        	$("#food").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#transportation, #medical, #fassist, #educational, #casha").prop("checked", false);
+        		}
+		    });
+        	$("#fassist").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#transportation, #food, #medical, #educational, #casha").prop("checked", false);
+        		}
+		    });
+        	$("#educational").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#transportation, #food, #fassist, #medical, #casha").prop("checked", false);
+        		}
+		    });
+        	$("#casha").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#transportation, #food, #fassist, #educational, #medical").prop("checked", false);
+        		}
+		    });
         });
 		
         $(function () {
-            $("#packs").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#items").removeAttr("checked");
-                    $("#kits").removeAttr("checked");
-                    $("#devices").removeAttr("checked");
-                }
-            });
-            $("#items").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#packs").removeAttr("checked");
-                    $("#kits").removeAttr("checked");
-                    $("#devices").removeAttr("checked");
-                }
-            });
-            $("#kits").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#items").removeAttr("checked");
-                    $("#packs").removeAttr("checked");
-                    $("#devices").removeAttr("checked");
-                }
-            });
-            $("#devices").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#items").removeAttr("checked");
-                    $("#kits").removeAttr("checked");
-                    $("#packs").removeAttr("checked");
-                }
-            });
+        	$("#packs").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#items, #kits, #devices").prop("checked", false);
+        		}
+		    });
+        	$("#items").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#packs, #kits, #devices").prop("checked", false);
+        		}
+		    });
+        	$("#kits").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#items, #packs, #devices").prop("checked", false);
+        		}
+		    });
+        	$("#devices").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#items, #kits, #packs").prop("checked", false);
+        		}
+		    });
         });
     </script>
 </html>
