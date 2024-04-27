@@ -1659,8 +1659,9 @@
 					if($row0['client_municipality']!=$c){$query .= "client_municipality = '{$c}',";}
 					if($row0['client_barangay']!=$brgy){$query .= "client_barangay = '{$brgy}',";}
 					if($row0['client_district']!=$d){$query .= "client_district = '{$d}',";}
-					if($row0['client_street']!=$street){$query .= "client_street = '{$street}' ";}
-					$query .= "WHERE client_id = '{$client_id}'";
+					if($row0['client_street']!=$street){$query .= "client_street = '{$street}',";}
+					$query = substr($query, 0, -1);
+					$query .= " WHERE client_id = '{$client_id}'";
 					$result = mysqli_query($this->db,$query);
 				}
 			}
@@ -1688,7 +1689,6 @@
 		$occupation, $salary, $pantawid, $category, $cstatus, $contact, $r, $p, $c, $brgy, $d, $street, 
 		$relationship, $bf, $bm, $bl, $be, $b_bday, $b_sex, $b_cstatus, $b_contact, $b_category,
 		 $b_region, $b_province, $b_city, $b_district, $b_barangay, $b_street, $note, $clientonly, $samebene, $clientbene){
-			
 			$datenow = date("Y-m-d H:i:s"); //serve as date_entered
 			$encoder = $_SESSION['userId'];
 			$office_id = $_SESSION['f_office'];
@@ -1703,7 +1703,7 @@
 			$datetoid = date_format($now, 'YmdHisu');
 			$newtransid = $office_id.'-'.$datetoid;
 
-			$query = "SELECT * FROM tbl_transaction WHERE trans_id = '{$transid}'";
+			$query = "SELECT client_id, bene_id FROM tbl_transaction WHERE trans_id = '{$transid}'";
 			$result = mysqli_query($this->db,$query);
 			$row = mysqli_fetch_assoc($result);
 
@@ -1713,7 +1713,6 @@
 			$query ="SELECT * FROM client_data WHERE client_id = '{$client_id}'";
 			$result = mysqli_query($this->db, $query);
 			$row0 = mysqli_fetch_assoc($result);
-			
 			
 			if($clientbene > 0){
 				$query = "INSERT INTO `client_data`(`lastname`, `firstname`, `middlename`, `extraname`, `sex`, 
@@ -1737,6 +1736,7 @@
 				if($row0['firstname']!=$f||$row0['middlename']!=$m||$row0['lastname']!=$l||$row0['extraname']!=$e||$row0['sex']!=$sex||$row0['date_birth']!=$bday||$row0['occupation']!=$occupation||$row0['salary']!=$salary||
 				$row0['category']!=$category||$row0['civil_status']!=$cstatus||$row0['contact']!=$contact||$row0['client_region']!=$r||$row0['client_province']!=$p||$row0['client_municipality']!=$c||
 				$row0['client_barangay']!=$brgy||$row0['client_district']!=$d||$row0['client_street']!=$street){
+					echo "in";
 					$query = "UPDATE client_data SET ";
 					if($row0['firstname']!=$f){$query .= "firstname = '{$f}',";}
 					if($row0['middlename']!=$m){$query .= "middlename = '{$m}',";}
@@ -1754,8 +1754,9 @@
 					if($row0['client_municipality']!=$c){$query .= "client_municipality = '{$c}',";}
 					if($row0['client_barangay']!=$brgy){$query .= "client_barangay = '{$brgy}',";}
 					if($row0['client_district']!=$d){$query .= "client_district = '{$d}',";}
-					if($row0['client_street']!=$street){$query .= "client_street = '{$street}' ";}
-					$query .= "WHERE client_id = '{$client_id}'";
+					if($row0['client_street']!=$street){$query .= "client_street = '{$street}',";}
+					$query = substr($query, 0, -1);
+					$query .= " WHERE client_id = '{$client_id}'";
 					$result = mysqli_query($this->db,$query);
 				}
 			}
@@ -1763,7 +1764,7 @@
 			$query ="SELECT * FROM beneficiary_data WHERE bene_id = '{$bene_id}'";
 			$result = mysqli_query($this->db, $query);
 			$row1 = mysqli_fetch_assoc($result);
-			
+
 			if($samebene > 0){
 				if($row1['b_fname']!=$bf||$row1['b_mname']!=$bm||$row1['b_lname']!=$bl||$row1['b_exname']!=$be||$row1['b_sex']!=$b_sex||$row1['b_bday']!=$b_bday||
 				$row1['b_category']!=$b_category||$row1['b_civilStatus']!=$b_cstatus||$row1['b_contact']!=$b_contact||$row1['b_region']!=$b_region||
@@ -1783,8 +1784,9 @@
 					if($row1['b_municipality']!=$b_city){$query .= "b_municipality = '{$b_city}',";}
 					if($row1['b_barangay']!=$b_barangay){$query .= "b_barangay = '{$b_barangay}',";}
 					if($row1['b_district']!=$b_district){$query .= "b_district = '{$b_district}',";}
-					if($row1['b_street']!=$b_street){$query .= "b_street = '{$b_street}' ";}
-					$query .= "WHERE bene_id = '{$bene_id}'";
+					if($row1['b_street']!=$b_street){$query .= "b_street = '{$b_street}',";}
+					$query = substr($query, 0, -1);
+					$query .= " WHERE bene_id = '{$bene_id}'";
 					$result = mysqli_query($this->db,$query);
 				}
 			}else{
@@ -1817,7 +1819,6 @@
 				$query = "UPDATE tbl_transaction SET benetoclient = 0 WHERE trans_id = '{$transid}'";
 			}
 			$result = mysqli_query($this->db,$query);
-			
 			if($result){
 				return $newtransid;
 			}
@@ -1936,7 +1937,7 @@
 		//All information in GIS
 		public function insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
 									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
-									$fs1, $fs2, $fs3, $fs4, $fs5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
+									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
 										
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
@@ -1970,6 +1971,13 @@
 					if(!empty($fs3)){$query .= ",('{$trans_id}', '{$fs3}')";}
 					if(!empty($fs4)){$query .= ",('{$trans_id}', '{$fs4}')";}
 					if(!empty($fs5)){$query .= ",('{$trans_id}', '{$fs5}')";}
+					if(!empty($fs6)){$query .= ",('{$trans_id}', '{$fs6}')";}
+					if(!empty($fs7)){$query .= ",('{$trans_id}', '{$fs7}')";}
+					if(!empty($fs8)){$query .= ",('{$trans_id}', '{$fs8}')";}
+					if(!empty($fs9)){$query .= ",('{$trans_id}', '{$fs9}')";}
+					if(!empty($fs10)){$query .= ",('{$trans_id}', '{$fs10}')";}
+					if(!empty($fs11)){$query .= ",('{$trans_id}', '{$fs11}')";}
+					if(!empty($fs12)){$query .= ",('{$trans_id}', '{$fs12}')";}
 				$query .= ";";
 			}else{
 				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
@@ -2046,7 +2054,7 @@
 		}
 
 		public function updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
-			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, 
+			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
 			$targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
 				
 			if(strtolower($mode_ad) == "walk-in"){
@@ -2110,6 +2118,27 @@
 				}
 				if (!empty($fs5)) {
 					$query .= ",('{$trans_id}', '{$fs5}', '')";
+				}
+				if (!empty($fs6)) {
+					$query .= ",('{$trans_id}', '{$fs6}', '')";
+				}
+				if (!empty($fs7)) {
+					$query .= ",('{$trans_id}', '{$fs7}', '')";
+				}
+				if (!empty($fs8)) {
+					$query .= ",('{$trans_id}', '{$fs8}', '')";
+				}
+				if (!empty($fs9)) {
+					$query .= ",('{$trans_id}', '{$fs9}', '')";
+				}
+				if (!empty($fs10)) {
+					$query .= ",('{$trans_id}', '{$fs10}', '')";
+				}
+				if (!empty($fs11)) {
+					$query .= ",('{$trans_id}', '{$fs11}', '')";
+				}
+				if (!empty($fs12)) {
+					$query .= ",('{$trans_id}', '{$fs12}', '')";
 				}
 			} else {
 				$query .= "VALUES ('{$trans_id}', '{$f1}', '{$a1}')";
@@ -2498,7 +2527,8 @@
 			}
 		}
 		
-		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $mode, $id_sign, $sd_officer){
+		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
+		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			
@@ -2524,6 +2554,13 @@
 				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
 				if (!empty($data[4]['fundsource'])) {$query .= ",('{$id}', '{$data[4]['fundsource']}', '{$amount4}')";}
 				if (!empty($data[5]['fundsource'])) {$query .= ",('{$id}', '{$data[5]['fundsource']}', '{$amount5}')";}
+				if (!empty($data[6]['fundsource'])) {$query .= ",('{$id}', '{$data[6]['fundsource']}', '{$amount6}')";}
+				if (!empty($data[7]['fundsource'])) {$query .= ",('{$id}', '{$data[7]['fundsource']}', '{$amount7}')";}
+				if (!empty($data[8]['fundsource'])) {$query .= ",('{$id}', '{$data[8]['fundsource']}', '{$amount8}')";}
+				if (!empty($data[9]['fundsource'])) {$query .= ",('{$id}', '{$data[9]['fundsource']}', '{$amount9}')";}
+				if (!empty($data[10]['fundsource'])) {$query .= ",('{$id}', '{$data[10]['fundsource']}', '{$amount10}')";}
+				if (!empty($data[11]['fundsource'])) {$query .= ",('{$id}', '{$data[11]['fundsource']}', '{$amount11}')";}
+				if (!empty($data[12]['fundsource'])) {$query .= ",('{$id}', '{$data[12]['fundsource']}', '{$amount12}')";}
 				$query .= ";";
 			}
 			// echo $query;
@@ -2547,7 +2584,8 @@
 			}
 		}
 
-		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $mode, $id_sign, $sd_officer){
+		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
+		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			if(!empty($signName)){
@@ -2577,6 +2615,13 @@
 				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
 				if (!empty($data[4]['fundsource'])) {$query .= ",('{$id}', '{$data[4]['fundsource']}', '{$amount4}')";}
 				if (!empty($data[5]['fundsource'])) {$query .= ",('{$id}', '{$data[5]['fundsource']}', '{$amount5}')";}
+				if (!empty($data[6]['fundsource'])) {$query .= ",('{$id}', '{$data[6]['fundsource']}', '{$amount6}')";}
+				if (!empty($data[7]['fundsource'])) {$query .= ",('{$id}', '{$data[7]['fundsource']}', '{$amount7}')";}
+				if (!empty($data[8]['fundsource'])) {$query .= ",('{$id}', '{$data[8]['fundsource']}', '{$amount8}')";}
+				if (!empty($data[9]['fundsource'])) {$query .= ",('{$id}', '{$data[9]['fundsource']}', '{$amount9}')";}
+				if (!empty($data[10]['fundsource'])) {$query .= ",('{$id}', '{$data[10]['fundsource']}', '{$amount10}')";}
+				if (!empty($data[11]['fundsource'])) {$query .= ",('{$id}', '{$data[11]['fundsource']}', '{$amount11}')";}
+				if (!empty($data[12]['fundsource'])) {$query .= ",('{$id}', '{$data[12]['fundsource']}', '{$amount12}')";}
 				$query .= ";";
             }
 			

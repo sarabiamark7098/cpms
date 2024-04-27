@@ -11,7 +11,7 @@
 		}
 	}
 </style>
-<div id="GL" style="font-family: Arial;font-size: 24px; width:100%; margin-left: 118px; padding-right: 1100px; margin-top: 10px;">
+<div id="GL" style="font-family: Arial;font-size: 24px; width:100%; margin-left: 118px; padding-right: 1100px; margin-top: 20px;">
     <br>
 	
     <div style="">

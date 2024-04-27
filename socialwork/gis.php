@@ -654,8 +654,14 @@ if (!$_SESSION['login']) {
                                     <input list="chargings" class="form-control fs3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fsof3" name="fsof3" type="text" hidden />
                                     <input list="chargings" class="form-control fs4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fsof4" name="fsof4" type="text" hidden />
                                     <input list="chargings" class="form-control fs5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fsof5" name="fsof5" type="text" hidden />
+                                    <input list="chargings" class="form-control fs6" value="<?php echo (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']:'') ?>" id="fsof6" name="fsof6" type="text" hidden />
+                                    <input list="chargings" class="form-control fs7" value="<?php echo (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']:'') ?>" id="fsof7" name="fsof7" type="text" hidden />
+                                    <input list="chargings" class="form-control fs8" value="<?php echo (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']:'') ?>" id="fsof8" name="fsof8" type="text" hidden />
+                                    <input list="chargings" class="form-control fs9" value="<?php echo (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']:'') ?>" id="fsof9" name="fsof9" type="text" hidden />
+                                    <input list="chargings" class="form-control fs10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fsof10" name="fsof10" type="text" hidden />
+                                    <input list="chargings" class="form-control fs11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fsof11" name="fsof11" type="text" hidden />
+                                    <input list="chargings" class="form-control fs12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fsof12" name="fsof12" type="text" hidden />
                                     <?php echo $user->chargings(); ?>
-
                                 </div> 
                                 <div class="col-1"> <!--Source of Fund-->
                                     <input class="form-group btn btn-outline-primary" type="button" value="+" id="addfundsource" name="fsadditional" data-target="#additionalFundSource" data-toggle="modal" >
@@ -1067,6 +1073,27 @@ if (!$_SESSION['login']) {
             if(!empty($_POST['fsof5'])) {
                 $fund5 = strtoupper($_POST['fsof5']);
             }
+            if(!empty($_POST['fsof6'])) {
+                $fund6 = strtoupper($_POST['fsof6']);
+            }
+            if(!empty($_POST['fsof7'])) {
+                $fund7 = strtoupper($_POST['fsof7']);
+            }
+            if(!empty($_POST['fsof8'])) {
+                $fund8 = strtoupper($_POST['fsof8']);
+            }
+            if(!empty($_POST['fsof9'])) {
+                $fund9 = strtoupper($_POST['fsof9']);
+            }
+            if(!empty($_POST['fsof10'])) {
+                $fund10 = strtoupper($_POST['fsof10']);
+            }
+            if(!empty($_POST['fsof11'])) {
+                $fund11 = strtoupper($_POST['fsof11']);
+            }
+            if(!empty($_POST['fsof12'])) {
+                $fund12 = strtoupper($_POST['fsof12']);
+            }
 
             // new data
             if(isset($_POST['fhona'])){$targets = 1;}
@@ -1126,7 +1153,7 @@ if (!$_SESSION['login']) {
             // once save the data of new -> client
             $user->insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
                                 $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
-                                $fund1, $fund2, $fund3, $fund4, $fund5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
+                                $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
 
         if (isset($_POST['update'])) {
@@ -1236,6 +1263,27 @@ if (!$_SESSION['login']) {
             if(!empty($_POST['fsof5'])) {
                 $fund5 = strtoupper($_POST['fsof5']);
             }
+            if(!empty($_POST['fsof6'])) {
+                $fund6 = strtoupper($_POST['fsof6']);
+            }
+            if(!empty($_POST['fsof7'])) {
+                $fund7 = strtoupper($_POST['fsof7']);
+            }
+            if(!empty($_POST['fsof8'])) {
+                $fund8 = strtoupper($_POST['fsof8']);
+            }
+            if(!empty($_POST['fsof9'])) {
+                $fund9 = strtoupper($_POST['fsof9']);
+            }
+            if(!empty($_POST['fsof10'])) {
+                $fund10 = strtoupper($_POST['fsof10']);
+            }
+            if(!empty($_POST['fsof11'])) {
+                $fund11 = strtoupper($_POST['fsof11']);
+            }
+            if(!empty($_POST['fsof12'])) {
+                $fund12 = strtoupper($_POST['fsof12']);
+            }
             
             // new data
             if(isset($_POST['fhona'])){$targets = 1;}
@@ -1293,7 +1341,7 @@ if (!$_SESSION['login']) {
             //once save the data of new -> client
             $user->updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
             $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
-            $fund1, $fund2, $fund3, $fund4, $fund5, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
+            $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
 
             //UPDATE CLIENT
@@ -1514,13 +1562,37 @@ if (!$_SESSION['login']) {
                                 <input list="chargings" placeholder="Fund Source 4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fs4" name="fs4" type="text" class="form-control" required disabled>
                                 <label class="active" for="fs4">Fund Source</label>
                             </div>
-                            <div class="form-group col-lg-3">
-                            </div>
                             <div class="form-group col-lg-6">
                                 <input list="chargings" placeholder="Fund Source 5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fs5" name="fs5" type text class="form-control " required disabled>
                                 <label class="active" for="fs5">Fund Source</label>
                             </div>
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 6" value="<?php echo (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']:'') ?>" id="fs6" name="fs6" type text class="form-control " required disabled>
+                                <label class="active" for="fs6">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 7" value="<?php echo (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']:'') ?>" id="fs7" name="fs7" type text class="form-control " required disabled>
+                                <label class="active" for="fs7">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 8" value="<?php echo (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']:'') ?>" id="fs8" name="fs8" type text class="form-control " required disabled>
+                                <label class="active" for="fs8">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 9" value="<?php echo (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']:'') ?>" id="fs9" name="fs9" type text class="form-control " required disabled>
+                                <label class="active" for="fs9">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fs10" name="fs10" type text class="form-control " required disabled>
+                                <label class="active" for="fs10">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fs11" name="fs11" type text class="form-control " required disabled>
+                                <label class="active" for="fs11">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fs12" name="fs12" type text class="form-control " required disabled>
+                                <label class="active" for="fs12">Fund Source</label>
                             </div>
                         </div>
                                 
@@ -1617,15 +1689,107 @@ if (!$_SESSION['login']) {
                 $("#fs5").attr('disabled', false);
             });
         });
+        
         $(document).ready(function(){
             if(document.getElementById("fs5").value != ''){
                 f5 = document.getElementById("fs5").value;
                 document.getElementById('fsof5').value = f5;
+                $("#fs6").attr('disabled', false);
             }
             $("#fs5").keyup(function(){
                 f5 = document.getElementById("fs5").value;
                 // console.log(f5);
 			    document.getElementById('fsof5').value = f5;
+                $("#fs6").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs6").value != ''){
+                f6 = document.getElementById("fs6").value;
+                document.getElementById('fsof6').value = f6;
+                $("#fs7").attr('disabled', false);
+            }
+            $("#fs6").keyup(function(){
+                f6 = document.getElementById("fs6").value;
+                // console.log(f6);
+			    document.getElementById('fsof6').value = f6;
+                $("#fs7").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs7").value != ''){
+                f7 = document.getElementById("fs7").value;
+                document.getElementById('fsof7').value = f7;
+                $("#fs8").attr('disabled', false);
+            }
+            $("#fs7").keyup(function(){
+                f7 = document.getElementById("fs7").value;
+                // console.log(f7);
+			    document.getElementById('fsof7').value = f7;
+                $("#fs8").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs8").value != ''){
+                f8 = document.getElementById("fs8").value;
+                document.getElementById('fsof8').value = f8;
+                $("#fs9").attr('disabled', false);
+            }
+            $("#fs8").keyup(function(){
+                f8 = document.getElementById("fs8").value;
+                // console.log(f8);
+			    document.getElementById('fsof8').value = f8;
+                $("#fs9").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs9").value != ''){
+                f9 = document.getElementById("fs9").value;
+                document.getElementById('fsof9').value = f9;
+                $("#fs10").attr('disabled', false);
+            }
+            $("#fs9").keyup(function(){
+                f9 = document.getElementById("fs9").value;
+                // console.log(f9);
+			    document.getElementById('fsof9').value = f9;
+                $("#fs10").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs10").value != ''){
+                f10 = document.getElementById("fs10").value;
+                document.getElementById('fsof10').value = f10;
+                $("#fs11").attr('disabled', false);
+            }
+            $("#fs10").keyup(function(){
+                f10 = document.getElementById("fs10").value;
+                // console.log(f10);
+			    document.getElementById('fsof10').value = f10;
+                $("#fs11").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs11").value != ''){
+                f11 = document.getElementById("fs11").value;
+                document.getElementById('fsof11').value = f11;
+                $("#fs12").attr('disabled', false);
+            }
+            $("#fs11").keyup(function(){
+                f11 = document.getElementById("fs11").value;
+                // console.log(f4);
+			    document.getElementById('fsof11').value = f11;
+                $("#fs12").attr('disabled', false);
+            });
+        });
+        $(document).ready(function(){
+            if(document.getElementById("fs12").value != ''){
+                f12 = document.getElementById("fs12").value;
+                document.getElementById('fsof12').value = f12;
+            }
+            $("#fs12").keyup(function(){
+                f12 = document.getElementById("fs12").value;
+                // console.log(f12);
+			    document.getElementById('fsof12').value = f12;
             });
         });
 
@@ -1823,6 +1987,8 @@ if (!$_SESSION['login']) {
         $(document).ready(function(){
             if(document.getElementById("refer2").value != ''){
                 $("#refer3").attr('disabled', false);
+            }else{
+				$("#refer3").attr('disabled', true);
             }
             $("#refer2").keyup(function(){
 				if(document.getElementById("refer2").value != ''){

@@ -482,25 +482,17 @@
                 }
             });
         });
-        
         $(function () {
-            $("#radiobutton2").change(function () {
-                if ($(this).is(":checked")) {
-                    $("#radiobutton").not($(this)).each(function () {
-                        $(this).removeAttr("checked");
-                    });
-                }
-            });
-        });
-
-        $(function () {
-            $("#radiobutton").change(function () {
-                if ($(this).is(":checked")) {
-                    $("#radiobutton2").not($(this)).each(function () {
-                        $(this).removeAttr("checked");
-                    })
-                }
-            });
+        	$("#radiobutton2").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#radiobutton").prop("checked", false);
+        		}
+		    });
+        	$("#radiobutton").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#radiobutton2").prop("checked", false);
+        		}
+		    });
         });
 
         $(function () {
@@ -555,23 +547,16 @@
 		}
 
         $(function () {
-            $("#radiobutton-n").change(function () {
-                if ($(this).is(":checked")) {
-                    $("#radiobutton-y").not($(this)).each(function () {
-                        $(this).removeAttr("checked");
-                    });
-                }
-            });
-        });
-
-        $(function () {
-            $("#radiobutton-y").change(function () {
-                if ($(this).is(":checked")) {
-                    $("#radiobutton-n").not($(this)).each(function () {
-                        $(this).removeAttr("checked");
-                    })
-                }
-            });
+        	$("#radiobutton-y").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#radiobutton-n").prop("checked", false);
+        		}
+		    });
+        	$("#radiobutton-n").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#radiobutton-y").prop("checked", false);
+        		}
+		    });
         });
 
         $(function () {

@@ -47,7 +47,7 @@
   
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
-  
+        
         if($record){
             $COEsignatory= $user->getsignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
             $COEsignatoryName = (!empty($COEsignatory['name_title'])?$COEsignatory['name_title'] ." ":""). strtoupper($COEsignatory['first_name'] ." ". (!empty($COEsignatory['middle_I'])?$COEsignatory['middle_I'] .". ":""). $COEsignatory['last_name']);
@@ -152,34 +152,83 @@
                     var amount3 = parseFloat(0.00);
                     var amount4 = parseFloat(0.00);
                     var amount5 = parseFloat(0.00);
+                    var amount6 = parseFloat(0.00);
+                    var amount7 = parseFloat(0.00);
+                    var amount8 = parseFloat(0.00);
+                    var amount9 = parseFloat(0.00);
+                    var amount10 = parseFloat(0.00);
+                    var amount11 = parseFloat(0.00);
+                    var amount12 = parseFloat(0.00);
 
                     var amountf1 = document.getElementById("amountf1");
                     if(amountf1 !== null && document.getElementById("amountf1").value.length > 0){
                         amount1 = document.getElementById("amountf1").value;
                         amount1 = parseFloat(amount1.replace(",",""));
                     }
-                    if($("#amountf11").val() != undefined){
-                        if(document.getElementById("amountf11").value.length > 0){
-                            amount2 = document.getElementById("amountf11").value;
+                    if($("#amountf2").val() != undefined){
+                        if(document.getElementById("amountf2").value.length > 0){
+                            amount2 = document.getElementById("amountf2").value;
                             amount2 = parseFloat(amount2.replace(",",""));
                         }
                     }
-                    if($("#amountf111").val() != undefined){
-                        if(document.getElementById("amountf111").value.length > 0){
-                            amount3 = document.getElementById("amountf111").value;
+                    if($("#amountf3").val() != undefined){
+                        if(document.getElementById("amountf3").value.length > 0){
+                            amount3 = document.getElementById("amountf3").value;
                             amount3 = parseFloat(amount3.replace(",",""));
                         }
                     }
-                    if($("#amountf1111").val() != undefined){
-                        if(document.getElementById("amountf1111").value.length > 0){
-                            amount4 = document.getElementById("amountf1111").value;
+                    if($("#amountf4").val() != undefined){
+                        if(document.getElementById("amountf4").value.length > 0){
+                            amount4 = document.getElementById("amountf4").value;
                             amount4 = parseFloat(amount4.replace(",",""));
                         }
                     }
-                    if($("#amountf11111").val() != undefined){
-                        if(document.getElementById("amountf11111").value.length > 0){
-                            amount5 = document.getElementById("amountf11111").value;
+                    if($("#amountf5").val() != undefined){
+                        if(document.getElementById("amountf5").value.length > 0){
+                            amount5 = document.getElementById("amountf5").value;
                             amount5 = parseFloat(amount5.replace(",",""));
+                        }
+                    }
+                    if($("#amountf6").val() != undefined){
+                        if(document.getElementById("amountf6").value.length > 0){
+                            amount6 = document.getElementById("amountf6").value;
+                            amount6 = parseFloat(amount6.replace(",",""));
+                        }
+                    }
+                    if($("#amountf7").val() != undefined){
+                        if(document.getElementById("amountf7").value.length > 0){
+                            amount7 = document.getElementById("amountf7").value;
+                            amount7 = parseFloat(amount7.replace(",",""));
+                        }
+                    }
+                    if($("#amountf8").val() != undefined){
+                        if(document.getElementById("amountf8").value.length > 0){
+                            amount8 = document.getElementById("amountf8").value;
+                            amount8 = parseFloat(amount8.replace(",",""));
+                        }
+                    }
+                    if($("#amountf9").val() != undefined){
+                        if(document.getElementById("amountf9").value.length > 0){
+                            amount9 = document.getElementById("amountf9").value;
+                            amount9 = parseFloat(amount9.replace(",",""));
+                        }
+                    }
+                    if($("#amountf10").val() != undefined){
+                        if(document.getElementById("amountf10").value.length > 0){
+                            amount10 = document.getElementById("amountf10").value;
+                            amount10 = parseFloat(amount10.replace(",",""));
+                        }
+                    }
+                    if($("#amountf11").val() != undefined){
+                        if(document.getElementById("amountf11").value.length > 0){
+                            amount11 = document.getElementById("amountf11").value;
+                            amount11 = parseFloat(amount11.replace(",",""));
+                        }
+                    }
+                    if($("#amountf12").val() != undefined){
+                        if(document.getElementById("amountf12").value.length > 0){
+                            amount12 = document.getElementById("amountf12").value;
+                            amount12 = parseFloat(amount12.replace(",",""));
                         }
                     }
                     
@@ -191,17 +240,17 @@
                     
                     var amountf1 = document.getElementById("amountf1");
                     if(amountf1 !== null && document.getElementById("amountf1").value.length > 0){
-                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
                         total = parseFloat(totaldist - total);
                         
                         // total = parseFloat(Number(total).toFixed(2))
                         $("#totalamount").val(CurrencyFormat(total));
-                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
                         // total2 = parseFloat(Number(total2).toFixed(2));
                         $("#dtotalamount").val(CurrencyFormat(total2));
                     }
 
-                    $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
+                    $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
                         amount1 = parseFloat(0);
                         // console.log(amount1);
                         amount2 = parseFloat(0);
@@ -212,43 +261,99 @@
                         // console.log(amount4);
                         amount5 = parseFloat(0);
                         // console.log(amount5);
+                        amount6 = parseFloat(0);
+                        // console.log(amount5);
+                        amount7 = parseFloat(0);
+                        // console.log(amount5);
+                        amount8 = parseFloat(0);
+                        // console.log(amount3);
+                        amount9 = parseFloat(0);
+                        // console.log(amount4);
+                        amount10 = parseFloat(0);
+                        // console.log(amount5);
+                        amount11 = parseFloat(0);
+                        // console.log(amount5);
+                        amount12 = parseFloat(0);
+                        // console.log(amount5);
                         if(document.getElementById("amountf1").value.length > 0){
                             amount1 = document.getElementById("amountf1").value;
                             amount1 = parseFloat(amount1.replace(",",""));
                         }
-                        if($("#amountf11").val() != undefined){
-                            if(document.getElementById("amountf11").value.length > 0){
-                                amount2 = document.getElementById("amountf11").value;
+                        if($("#amountf2").val() != undefined){
+                            if(document.getElementById("amountf2").value.length > 0){
+                                amount2 = document.getElementById("amountf2").value;
                                 amount2 = parseFloat(amount2.replace(",",""));
                             }
                         }
-                        if($("#amountf111").val() != undefined){
-                            if(document.getElementById("amountf111").value.length > 0){
-                                amount3 = document.getElementById("amountf111").value;
+                        if($("#amountf3").val() != undefined){
+                            if(document.getElementById("amountf3").value.length > 0){
+                                amount3 = document.getElementById("amountf3").value;
                                 amount3 = parseFloat(amount3.replace(",",""));
                             }
                         }
-                        if($("#amountf1111").val() != undefined){
-                            if(document.getElementById("amountf1111").value.length > 0){
-                                amount4 = document.getElementById("amountf1111").value;
+                        if($("#amountf4").val() != undefined){
+                            if(document.getElementById("amountf4").value.length > 0){
+                                amount4 = document.getElementById("amountf4").value;
                                 amount4 = parseFloat(amount4.replace(",",""));
                             }
                         }
-                        if($("#amountf11111").val() != undefined){
-                            if(document.getElementById("amountf11111").value.length > 0){
-                                amount5 = document.getElementById("amountf11111").value;
+                        if($("#amountf5").val() != undefined){
+                            if(document.getElementById("amountf5").value.length > 0){
+                                amount5 = document.getElementById("amountf5").value;
                                 amount5 = parseFloat(amount5.replace(",",""));
                             }
                         }
-                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                        if($("#amountf6").val() != undefined){
+                            if(document.getElementById("amountf6").value.length > 0){
+                                amount6 = document.getElementById("amountf6").value;
+                                amount6 = parseFloat(amount6.replace(",",""));
+                            }
+                        }
+                        if($("#amountf7").val() != undefined){
+                            if(document.getElementById("amountf7").value.length > 0){
+                                amount7 = document.getElementById("amountf7").value;
+                                amount7 = parseFloat(amount7.replace(",",""));
+                            }
+                        }
+                        if($("#amountf8").val() != undefined){
+                            if(document.getElementById("amountf8").value.length > 0){
+                                amount8 = document.getElementById("amountf8").value;
+                                amount8 = parseFloat(amount8.replace(",",""));
+                            }
+                        }
+                        if($("#amountf9").val() != undefined){
+                            if(document.getElementById("amountf9").value.length > 0){
+                                amount9 = document.getElementById("amountf9").value;
+                                amount9 = parseFloat(amount9.replace(",",""));
+                            }
+                        }
+                        if($("#amountf10").val() != undefined){
+                            if(document.getElementById("amountf10").value.length > 0){
+                                amount10 = document.getElementById("amountf10").value;
+                                amount10 = parseFloat(amount10.replace(",",""));
+                            }
+                        }
+                        if($("#amountf11").val() != undefined){
+                            if(document.getElementById("amountf11").value.length > 0){
+                                amount11 = document.getElementById("amountf11").value;
+                                amount11 = parseFloat(amount11.replace(",",""));
+                            }
+                        }
+                        if($("#amountf12").val() != undefined){
+                            if(document.getElementById("amountf12").value.length > 0){
+                                amount12 = document.getElementById("amountf12").value;
+                                amount12 = parseFloat(amount12.replace(",",""));
+                            }
+                        }
+                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
                         total = parseFloat(totaldist - total);
                         // total = parseFloat(Number(total).toFixed(2))
                         // console.log(amount1);console.log(amount2);
                         $("#totalamount").val(CurrencyFormat(total));
                     });
 
-                    $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
-                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5);
+                    $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
+                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
                         // total2 = parseF-loat(Number(total2).toFixed(2));
                         $("#dtotalamount").val(CurrencyFormat(total2));
                     });
@@ -308,7 +413,7 @@
                         $('#update').removeClass('btn-dark').addClass('btn-primary');
                         $(this).addClass('btn-default').removeClass('btn-dark');
                     }
-                    $("#amountf1, #amountf11, #amountf111, #amountf1111, #amountf11111").keyup(function() {
+                    $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
                         if(document.getElementById("totalamount").value != 0.00){
                             // console.log("dri");
                             $('#update').attr('disabled','disabled');
@@ -630,7 +735,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[2]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf2" name="amountf2" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -640,7 +745,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[3]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf111" name="amountf111" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf3" name="amountf3" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -652,18 +757,102 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[4]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf1111" name="amountf1111" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf4" name="amountf4" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
-                                                <?php } 
+                                                <?php }
+                                                
                                                 if(!empty($fundsourcedata[5]['fundsource'])) { ?>
                                                 <div class="row">
                                                     <div class="input-group input-group-md">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[5]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11111" name="amountf11111" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf5" name="amountf5" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                
+                                                if(!empty($fundsourcedata[6]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[6]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf6" name="amountf6" value="<?php echo !empty($fundsourcedata[6]['fs_amount'])?$fundsourcedata[6]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                
+                                                if(!empty($fundsourcedata[7]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[7]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf7" name="amountf7" value="<?php echo !empty($fundsourcedata[7]['fs_amount'])?$fundsourcedata[7]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                
+                                                if(!empty($fundsourcedata[8]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[8]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf8" name="amountf8" value="<?php echo !empty($fundsourcedata[8]['fs_amount'])?$fundsourcedata[8]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                                                                
+                                                if(!empty($fundsourcedata[9]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[9]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf9" name="amountf9" value="<?php echo !empty($fundsourcedata[9]['fs_amount'])?$fundsourcedata[9]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                                                                                                                                                                
+                                                if(!empty($fundsourcedata[10]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[10]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf10" name="amountf10" value="<?php echo !empty($fundsourcedata[10]['fs_amount'])?$fundsourcedata[10]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                                                                                                                                                                                                                                                                                                                                                                
+                                                if(!empty($fundsourcedata[11]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[11]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[11]['fs_amount'])?$fundsourcedata[11]['fs_amount']:''?>" placeholder="Amount" required>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <?php } 
+                                                if(!empty($fundsourcedata[12]['fundsource'])) { ?>
+                                                <div class="row">
+                                                    <div class="input-group input-group-md">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[12]['fundsource']." = " ?></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf12" name="amountf12" value="<?php echo !empty($fundsourcedata[12]['fs_amount'])?$fundsourcedata[12]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -755,8 +944,15 @@
         $amount2 = "";
         $amount3 = "";
         $amount4 = "";
+        $amount5 = "";
+        $amount6 = "";
+        $amount7 = "";
+        $amount8 = "";
+        $amount9 = "";
+        $amount10 = "";
+        $amount11 = "";
+        $amount12 = "";
 		$sdo = "";
-            $amount5 = "";
             $id_sign = $client['signatory_id'];
         if(isset($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);
@@ -788,25 +984,54 @@
             $amount1 = $_POST['amountf1'];
         }
 
-        if(isset($_POST['amountf11'])){
-            $amount2 = $_POST['amountf11'];
+        if(isset($_POST['amountf2'])){
+            $amount2 = $_POST['amountf2'];
         }
         
-        if(isset($_POST['amountf111'])){
-            $amount3 = $_POST['amountf111'];
+        if(isset($_POST['amountf3'])){
+            $amount3 = $_POST['amountf3'];
         }
 
-        if(isset($_POST['amountf1111'])){
-            $amount4 = $_POST['amountf1111'];
+        if(isset($_POST['amountf4'])){
+            $amount4 = $_POST['amountf4'];
         }
 
-        if(isset($_POST['amountf11111'])){
-            $amount5 = $_POST['amountf11111'];
+        if(isset($_POST['amountf5'])){
+            $amount5 = $_POST['amountf5'];
+        }
+
+        if(isset($_POST['amountf6'])){
+            $amount6 = $_POST['amountf6'];
+        }
+
+        if(isset($_POST['amountf7'])){
+            $amount7 = $_POST['amountf7'];
+        }
+
+        if(isset($_POST['amountf8'])){
+            $amount8 = $_POST['amountf8'];
+        }
+
+        if(isset($_POST['amountf9'])){
+            $amount9 = $_POST['amountf9'];
+        }
+
+        if(isset($_POST['amountf10'])){
+            $amount10 = $_POST['amountf10'];
+        }
+
+        if(isset($_POST['amountf11'])){
+            $amount11 = $_POST['amountf11'];
+        }
+
+        if(isset($_POST['amountf12'])){
+            $amount12 = $_POST['amountf12'];
         }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
-        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $modecon, $id_sign, $sdo);
+        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, $amount9, 
+        $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo);
     }
 
 
@@ -829,6 +1054,13 @@
 		$amount3 = "";
         $amount4 = "";
         $amount5 = "";
+        $amount6 = "";
+        $amount7 = "";
+        $amount8 = "";
+        $amount9 = "";
+        $amount10 = "";
+        $amount11 = "";
+        $amount12 = "";
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }
@@ -854,25 +1086,54 @@
             $amount1 = $_POST['amountf1'];
         }
 
-        if(isset($_POST['amountf11'])){
-            $amount2 = $_POST['amountf11'];
+        if(isset($_POST['amountf2'])){
+            $amount2 = $_POST['amountf2'];
         }
         
-        if(isset($_POST['amountf111'])){
-            $amount3 = $_POST['amountf111'];
+        if(isset($_POST['amountf3'])){
+            $amount3 = $_POST['amountf3'];
         }
 
-        if(isset($_POST['amountf1111'])){
-            $amount4 = $_POST['amountf1111'];
+        if(isset($_POST['amountf4'])){
+            $amount4 = $_POST['amountf4'];
         }
 
-        if(isset($_POST['amountf11111'])){
-            $amount5 = $_POST['amountf11111'];
+        if(isset($_POST['amountf5'])){
+            $amount5 = $_POST['amountf5'];
+        }
+
+        if(isset($_POST['amountf6'])){
+            $amount6 = $_POST['amountf6'];
+        }
+
+        if(isset($_POST['amountf7'])){
+            $amount7 = $_POST['amountf7'];
+        }
+
+        if(isset($_POST['amountf8'])){
+            $amount8 = $_POST['amountf8'];
+        }
+
+        if(isset($_POST['amountf9'])){
+            $amount9 = $_POST['amountf9'];
+        }
+
+        if(isset($_POST['amountf10'])){
+            $amount10 = $_POST['amountf10'];
+        }
+
+        if(isset($_POST['amountf11'])){
+            $amount11 = $_POST['amountf11'];
+        }
+
+        if(isset($_POST['amountf12'])){
+            $amount12 = $_POST['amountf12'];
         }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         // echo $signName;
-        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $am, $modecon, $id_sign, $sdo);
+        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
+        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo);
     }
 ?>
    

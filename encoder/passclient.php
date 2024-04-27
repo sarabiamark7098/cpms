@@ -5,7 +5,7 @@ $user = new User();
 	$clientid = $_GET['id'];
 		if(!isset($_POST['beneficiary'])){
 			if(isset($_POST['pass'])){
-		print_r($_POST);
+		// print_r($_POST);
 				$trans = $_GET['trans_id'];
 				//client the one that process the transaction
 				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
@@ -37,9 +37,9 @@ $user = new User();
 				$street= mysqli_real_escape_string($user->db,$_POST['Cstreet']);
 				$note = mysqli_real_escape_string($user->db,$_POST['note']);
 				
-				$execute = $user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $pantawid, $category, 
+				$user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $pantawid, $category, 
 				$civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $note, 1, 0);
-				
+				// print_r($execute);
 				if($execute){
 					echo "<script>alert('Client Successfully Passed!');</script>";
 					echo "<script>window.location='picture.php?id=".$execute."';</script>";
@@ -55,7 +55,7 @@ $user = new User();
 		}
 		else{
 			if(isset($_POST['pass'])){
-		print_r($_POST);
+		// print_r($_POST);
 				$trans = $_GET['trans_id'];
 				//client the one that process the transaction
 				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
@@ -114,7 +114,7 @@ $user = new User();
 				$city_mun, $barangay, $district, $street, $relationship, $b_fname, $b_mname, $b_lname, $b_exname, 
 				$b_bday, $b_sex, $b_civilStatus, $b_contact, $b_category, $b_region, $b_province, 
 				$b_city_mun, $b_district, $b_barangay, $b_street, $note, 1, 0, 0);
-			
+
 				if($execute){
 					echo "<script>alert('Client Successfully Passed!');</script>";
 					echo "<script>window.location='picture.php?id=".$execute."';</script>";
@@ -703,22 +703,16 @@ $user = new User();
 		get_b_Municipality_sw(muni);
 		get_b_Barangay_sw(brgy);
 	}
-	$(function () {
-		$("#radiobutton-n").change(function () {
-			if ($(this).is(":checked")) {
-				$("#radiobutton-y").not($(this)).each(function () {
-					$(this).removeAttr("checked");
-				});
-			}
-		});
-	});
 
 	$(function () {
-		$("#radiobutton-y").change(function () {
-			if ($(this).is(":checked")) {
-				$("#radiobutton-n").not($(this)).each(function () {
-					$(this).removeAttr("checked");
-				})
+		$("#radiobutton-y").click(function () {
+			if ($(this).prop("checked")) {
+				$("#radiobutton-n").prop("checked", false);
+			}
+		});
+		$("#radiobutton-n").click(function () {
+			if ($(this).prop("checked")) {
+				$("#radiobutton-y").prop("checked", false);
 			}
 		});
 	});
