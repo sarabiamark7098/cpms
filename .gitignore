@@ -1,3 +1,8 @@
 php/db_config.php
 php/db_config2.php
+<<<<<<< HEAD
+=======
+php/db_config3.php
+php/cleardup.php
+>>>>>>> 7c9d5dddb997815599d9bc679ffe0fea20a1a9e4
 php/logout.php

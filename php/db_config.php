@@ -4,9 +4,8 @@
     //define('DB_PASSWORD', 'DSWD@123');
     //define('DB_DATABASE', 'cpmsdatabase');
 	
-    define('DB_SERVER', 'localhost');
-    define('DB_USERNAME', 'root');
-    define('DB_PASSWORD', '');
-    define('DB_DATABASE', 'cpmsdatabase');
-
+	define('DB_SERVER', '172.31.176.27:3306');
+    define('DB_USERNAME', 'dev');
+    define('DB_PASSWORD', 'QZ!K;(,?SDG2zY@mLatRNj');
+    define('DB_DATABASE', 'dev_cpms');
 ?>

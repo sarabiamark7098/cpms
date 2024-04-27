@@ -1,5 +1,6 @@
 <?php
 	require('php/class.user.php');
+	
 	$user = new User();
 
 	if (isset($_GET['confirm_id'])) {
