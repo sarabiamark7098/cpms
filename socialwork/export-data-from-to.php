@@ -33,7 +33,8 @@
                     "City/Municipality"."\t"."Barangay"."\t"."District"."\t"."LastName"."\t"."FirstName"."\t"."MiddleName"."\t".
                     "ExtraName"."\t"."Sex"."\t"."CivilStatus"."\t"."DOB"."\t"."Age"."\t"."ModeOfAdmission"."\t"."Type of Assistance1"."\t".
                     "Amount1"."\t"."Source of Fund1"."\t"."Type of Assistance2"."\t"."Amount2"."\t". "Source of Fund2"."\t"."ClientCategory".
-                    "\t"."CHARGING1"."\t"."CHARGING2"."\t"."CHARGING3"."\t"."CHARGING4"."\t"."CHARGING5"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
+                    "\t"."CHARGING1"."\t"."CHARGING2"."\t"."CHARGING3"."\t"."CHARGING4"."\t"."CHARGING5"."\t"."CHARGING6"."\t"."CHARGING7"."\t".
+                    "CHARGING8"."\t"."CHARGING9"."\t"."CHARGING10"."\t"."CHARGING11"."\t"."CHARGING12"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
                     ."B. EXT."."\t"."Sub Category"."\t"."Pantawid Beneficiary";
     $setData='';
 
@@ -122,6 +123,55 @@
                 if(!empty($fund[5]['fundsource'])){               	
 				$rowData .= 
 					$fund[5]['fundsource']." - ".$fund[5]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[6]['fundsource'])){               	
+				$rowData .= 
+					$fund[6]['fundsource']." - ".$fund[6]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[7]['fundsource'])){               	
+				$rowData .= 
+					$fund[7]['fundsource']." - ".$fund[7]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[8]['fundsource'])){               	
+				$rowData .= 
+					$fund[8]['fundsource']." - ".$fund[8]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[9]['fundsource'])){               	
+				$rowData .= 
+					$fund[9]['fundsource']." - ".$fund[9]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[10]['fundsource'])){               	
+				$rowData .= 
+					$fund[10]['fundsource']." - ".$fund[10]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[11]['fundsource'])){               	
+				$rowData .= 
+					$fund[11]['fundsource']." - ".$fund[11]['fs_amount']                     ."\t";
+                }else{
+                $rowData .= 
+					"\t";
+                }
+                if(!empty($fund[12]['fundsource'])){               	
+				$rowData .= 
+					$fund[12]['fundsource']." - ".$fund[12]['fs_amount']                     ."\t";
                 }else{
                 $rowData .= 
 					"\t";
