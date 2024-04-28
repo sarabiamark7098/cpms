@@ -1030,8 +1030,8 @@
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
-        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, $amount9, 
-        $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo);
+        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
+        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo);
     }
 
 

@@ -38,15 +38,14 @@
             $signatoryGLNamePos = (!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position']);
         }
 		
+		$today = date("Y-m-d");
+        $diff = date_diff(date_create($client['date_birth']), date_create($today));
+        $age_client = $diff->format('%y');
 		if(!empty($client["b_lname"])){
 			$today = date("Y-m-d");
 			$diff = date_diff(date_create($client['b_bday']), date_create($today));
 			$age_bene = $diff->format('%y');
-		}elseif(!empty($client["lastname"])){
-			$today = date("Y-m-d");
-			$diff = date_diff(date_create($client['date_birth']), date_create($today));
-			$age_client = $diff->format('%y');
-		}else{
+        }else{
 			$age_bene = "";
 		}
         
@@ -332,13 +331,13 @@
                     }  
                 ?>
                 <div class="row">
-                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash))?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash))?"":"disabled" ?> ></div>
-					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash))?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash))?"":"disabled" ?> ></div>
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1!="DS" || $mode2!="DS")?"":"disabled" ?> ></div>
+					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1!="DS" || $mode2!="DS")?"":"disabled" ?> ></div>
 					<div class="col">
-                        <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()"<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
+                        <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
                     </div>
                     <div class="col">
-                        <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()"<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
+                        <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()" <?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
                     </div>
                 </div><br>
 				<div class="row">
@@ -348,10 +347,12 @@
                         <div class="col"><a href="coe.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> COE</a></div>
                     <?php } ?>
                         <?php 
-                            if($cash || $gl){
-                                echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Update" name="update"></div>';
-                            }else{
-                                echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Save" name="save" ></div>';
+                            if($mode1 == "GL" || $mode1 == "CAV"){
+                                if($cash || $gl){
+                                    echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Update" name="update"></div>';
+                                }else{
+                                    echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Save" name="save"></div>';
+                                }
                             }
                         ?>
                     <div class="col"><input type="button" class="btn btn-success btn-block no-print" id="done" value="Done" onclick="confirmdone(<?php echo "'".$id."','".$_GET['id']."'" ?>)"/></div>

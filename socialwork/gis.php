@@ -1248,6 +1248,13 @@ if (!$_SESSION['login']) {
             $fund3 = "";
             $fund4 = "";
             $fund5 = "";
+            $fund6 = "";
+            $fund7 = "";
+            $fund8 = "";
+            $fund9 = "";
+            $fund10 = "";
+            $fund11 = "";
+            $fund12 = "";
             if(!empty($_POST['fsof1'])){
                 $fund1 = strtoupper($_POST['fsof1']);
             }

@@ -2543,12 +2543,15 @@
 			$query = "INSERT INTO coe (trans_id, document, id_presented, others_input, others_medical, others_burial) 
 						VALUES 
 						('{$id}','{$docu}','{$id_pres}','{$others_input}','{$others_medical}','{$others_burial}');";
+			$result = mysqli_query($this->db, $query);
 			if($am >= 50001 && $mode == "GL"){
-				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}';";
+				$query = "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}';";
+				$result = mysqli_query($this->db, $query);
 			}
 			if (!empty($data[2]['fundsource'])) {
-				$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}';";
-				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) 
+				$query = "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}'; ";
+				$result = mysqli_query($this->db, $query);
+				$query = "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) 
 						VALUES ('{$id}', '{$data[1]['fundsource']}', '{$amount1}')";
 				if (!empty($data[2]['fundsource'])) {$query .= ",('{$id}', '{$data[2]['fundsource']}', '{$amount2}')";}
 				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
@@ -2562,20 +2565,20 @@
 				if (!empty($data[11]['fundsource'])) {$query .= ",('{$id}', '{$data[11]['fundsource']}', '{$amount11}')";}
 				if (!empty($data[12]['fundsource'])) {$query .= ",('{$id}', '{$data[12]['fundsource']}', '{$amount12}')";}
 				$query .= ";";
+				$result = mysqli_query($this->db, $query);
 			}
 			// echo $query;
 			// $query .= "UPDATE tbl_coe_fund SET fs_amount1 = '{$amount1}', fs_amount2 = '{$amount2}', fs_amount3 = '{$amount3}', fs_amount4 = '{$amount4}', fs_amount5 = '{$amount5}' WHERE trans_id = '{$id}'";
 			
 			if (!empty($sd_officer)) {
-				$query .= "DELETE FROM cash WHERE trans_id = '{$id}';";
-				$query .= "INSERT INTO cash (trans_id, sd_officer) 
+				$query = "DELETE FROM cash WHERE trans_id = '{$id}'; ";
+				$result = mysqli_query($this->db, $query);
+				$query = "INSERT INTO cash (trans_id, sd_officer) 
 							VALUES 
 							('{$id}', '{$sd_officer}');";
+				$result = mysqli_query($this->db, $query);
 			}
 		
-			$result = mysqli_multi_query($this->db, $query);
-			
-			// $query;
 			if($result){
 				echo "<script>alert('Successfully Saved!');</script>";
 				echo "<meta http-equiv='refresh' content='0'>";

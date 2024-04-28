@@ -12,7 +12,6 @@
         $client = $user->clientData($_GET['id']); ; //kuha sa mga data sa bene/client data
         $client_assistance = $user->getGISAssistance($_GET['id']); //kuha sa data sa assistance table
         $signatoryGL = $user->getsignatory($client['signatory_GL']); 
-        
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
@@ -280,7 +279,6 @@
                                             <h3>Providers Info</h3>
                                             <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            
                                             <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
                                             <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
                                             <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
@@ -333,8 +331,8 @@
                     }  
                 ?>
                 <div class="row">
-                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash))?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash))?"":"disabled" ?> ></div>
-					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash))?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash))?"":"disabled" ?> ></div>
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1!="DS" || $mode2!="DS")?"":"disabled" ?> ></div>
+					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1!="DS" || $mode2!="DS")?"":"disabled" ?> ></div>
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
                     </div>
@@ -349,10 +347,12 @@
                         <div class="col"><a href="coe.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> COE</a></div>
                     <?php } ?>
                         <?php 
-                            if($cash || $gl){
-                                echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Update" name="update"></div>';
-                            }else{
-                                echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Save" name="save" ></div>';
+                            if($mode1 == "GL" || $mode1 == "CAV"){
+                                if($cash || $gl){
+                                    echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Update" name="update"></div>';
+                                }else{
+                                    echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Save" name="save"></div>';
+                                }
                             }
                         ?>
                     <div class="col"><input type="button" class="btn btn-success btn-block no-print" id="done" value="Done" onclick="confirmdone(<?php echo "'".$id."','".$_GET['id']."'" ?>)"/></div>
@@ -617,10 +617,6 @@
                         $user->updateGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
                     }
                 }
-                
-            
-        
-
             }     
         }
         
