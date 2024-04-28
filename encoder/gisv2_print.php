@@ -16,7 +16,7 @@
     <div class="container" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial: sans-serif;">
         
         <!--HEADER-->
-        <div class="row" style="margin-top:20px">
+        <div class="row" style="margin-top:0px">
             <div class="col-6">
                 <img src="../images/dswd_olog.png" alt="" width="230px" height="60px">
                 <img src="../images/AICS.png" alt="" width="70px" height="60px">
@@ -85,9 +85,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-10">
-                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client['date_accomplished'])) ?>'>
-                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client['date_accomplished'])) ?>'>
-                        <input class="" style="width: 70px; font-size: 14px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client['date_accomplished'])) ?>'>
+                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo date("m") ?>'>
+                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo date("d") ?>'>
+                        <input class="" style="width: 70px; font-size: 14px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo date("Y") ?>'>
                     </div>
                 </div>
             </div>
@@ -417,7 +417,7 @@
                 <b>Buwanang Kita</b><p style="font-size: smaller; margin-top: -5px;">(Monthly Salary)</p>
             </div>
         </div>
-        <div class="row text-center" style="border: 1px solid black; padding:0px; font-size:14px; min-height: 65px; max-height: 1000px; line-height: 15px;">
+        <div class="row text-center" style="border: 1px solid black; padding:0px; padding-top: 5px; font-size:14px; min-height: 65px; max-height: 1000px; line-height: 15px;">
             <div class="col-4" style="padding:0px; height: 20px;">
                 <p><?php echo (!empty($client_fam)?(!empty($client_fam[1])?$client_fam[1]["name"]:""):"") ?></p>
             </div>
@@ -703,36 +703,43 @@
         
         <!-- Assistance Amount and Allocation of Referrals -->
         <div class="row" style="margin-top: 0px; font-size:14px;">
-            <div class="col-7 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
+            <div class="col-4 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
                 <!-- <b>Purpose</b> -->
                 <b>Provided</b>
             </div>
-            <div class="col-3 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
+            <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
                 <b>Amount of Assistance</b>
             </div>
             <!-- <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
                 <b>Mode of Assistance</b>
             </div> -->
-            <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
+            <div class="col-6 text-center" style="border: 1px solid black; background-color: #bfbfbf;">
                 <b>Fund Source</b>
             </div>
         </div>
         <div class="row">
-            <div class="col-7 text-center" style="border: 1px solid black; font-size: 13px;">
+            <div class="col-4 text-center" style="border: 1px solid black; font-size: 13px;">
                 <a><?php echo $client_assistance[1]['purpose']; ?></a>
             </div>
-            <div class="col-3 text-center" style="border: 1px solid black; font-size: 13px;">
+            <div class="col-2 text-center" style="border: 1px solid black; font-size: 13px;">
                 <a><?php echo $client_assistance[1]['amount']; ?></a>
             </div>
             <!-- <div class="col-2 text-center" style="border: 1px solid black; font-size: 13px;">
                 <a><?php //echo $client_assistance[1]['mode']; ?></a>
             </div> -->
-            <div class="col-2 text-center" style="border: 1px solid black; font-size: 13px; line-height:0px">
-                <a><?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']."=".(!empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:$client_assistance[1]['amount']):""); ?></a>
-                <a><?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']."=".$fundsourcedata[2]['fs_amount']:""); ?></a>
-                <a><?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']."=".$fundsourcedata[3]['fs_amount']:""); ?></a>
-                <a><?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']."=".$fundsourcedata[4]['fs_amount']:""); ?></a>
-                <a><?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']."=".$fundsourcedata[5]['fs_amount']:""); ?></a>
+            <div class="col-6 text-center" style="border: 1px solid black; font-size: 13px; line-height:15px; padding-top: 2px;">
+                <p><?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']."=".(!empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:$client_assistance[1]['amount']).", ":"").
+                (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']."=".$fundsourcedata[3]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']."=".$fundsourcedata[2]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']."=".$fundsourcedata[4]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']."=".$fundsourcedata[5]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']."=".$fundsourcedata[6]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']."=".$fundsourcedata[7]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']."=".$fundsourcedata[8]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']."=".$fundsourcedata[9]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']."=".$fundsourcedata[10]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']."=".$fundsourcedata[11]['fs_amount'].", ":"").
+                (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']."=".$fundsourcedata[12]['fs_amount']:""); ?></p>
             </div>
             <div class="col-7 text-center" style="border: 1px solid black; font-size: 13px;">
                 <a><?php echo $client_assistance[2]['purpose']; ?></a>

@@ -11,7 +11,7 @@
 		}
 	}
 </style>
-<div id="GL" style="font-family: Arial;font-size: 24px; width:100%; margin-left: 118px; padding-right: 1100px; margin-top: 20px;">
+<div id="GL" style="font-family: Arial;font-size: 24px; width:100%; margin-left: 118px; padding-right: 1100px; margin-top: 35px;">
     <br>
 	
     <div style="">
@@ -139,7 +139,7 @@
 					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>"><br>
 					<br>
-					<p class="">Valid within 30 days upon receipt.</p><br>
+					<p class="">Valid within 30 days upon receipt.</p>
 					<p class="cn " style="font-size:18Opx ">
 						<?php 
 							echo $user->initials_gl($signatoryGL['signatory_tree'],$client['encoded_socialWork'],$client['encoded_encoder'],$signatoryGL['special_ini']);
@@ -163,7 +163,7 @@
 
                 </div>
             </div><br>
-			<p class="">Valid within 30 days upon receipt.</p><br>
+			<p class="">Valid within 30 days upon receipt.</p>
             <p class="cn " style="font-size:18Opx ">
                 <?php 
                 //Mga initial ni diri buset

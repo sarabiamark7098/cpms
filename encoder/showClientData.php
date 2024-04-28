@@ -170,27 +170,51 @@ include('../php/class.user.php');
 					</div>
 					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[1]['fundsource'])?"hidden":"" ?> >
 						<input value="<?php echo empty($fundsourcedata[1]['fundsource'])? "" : $fundsourcedata[1]['fundsource'].'-'.$fundsourcedata[1]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
-					  <label class="active" for="sourceoffund">Source of Fund </label>
+					  <label class="active" for="sourceoffund">Source of Fund 1 </label>
 					</div>
 					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[2]['fundsource'])?"hidden":"" ?> >
 						<input value="<?php echo empty($fundsourcedata[2]['fundsource'])? "" : $fundsourcedata[2]['fundsource'].'-'.$fundsourcedata[2]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
-					  <label class="active" for="sourceoffund">Source of Fund </label>
+					  <label class="active" for="sourceoffund">Source of Fund 2 </label>
 					</div>
 					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[3]['fundsource'])?"hidden":"" ?> >
 						<input value="<?php echo empty($fundsourcedata[3]['fundsource'])? "" : $fundsourcedata[3]['fundsource'].'-'.$fundsourcedata[3]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
-					  <label class="active" for="sourceoffund">Source of Fund </label>
+					  <label class="active" for="sourceoffund">Source of Fund 3 </label>
 					</div>
 					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[4]['fundsource'])?"hidden":"" ?> >
 						<input value="<?php echo empty($fundsourcedata[4]['fundsource'])? "" : $fundsourcedata[4]['fundsource'].'-'.$fundsourcedata[4]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
-					  <label class="active" for="sourceoffund">Source of Fund </label>
-					</div>
-					<div class="form-group col-lg-3">
+					  <label class="active" for="sourceoffund">Source of Fund 4 </label>
 					</div>
 					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[5]['fundsource'])?"hidden":"" ?> >
 					  <input value="<?php echo empty($fundsourcedata[5]['fundsource'])? "" : $fundsourcedata[5]['fundsource'].'-'.$fundsourcedata[5]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
-					  <label class="active" for="sourceoffund">Source of Fund </label>
+					  <label class="active" for="sourceoffund">Source of Fund 5 </label>
 					</div>
-					<div class="form-group col-lg-3">
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[6]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[6]['fundsource'])? "" : $fundsourcedata[6]['fundsource'].'-'.$fundsourcedata[6]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 6 </label>
+					</div>
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[7]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[7]['fundsource'])? "" : $fundsourcedata[7]['fundsource'].'-'.$fundsourcedata[7]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 7 </label>
+					</div>
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[8]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[8]['fundsource'])? "" : $fundsourcedata[8]['fundsource'].'-'.$fundsourcedata[8]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 8 </label>
+					</div>
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[9]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[9]['fundsource'])? "" : $fundsourcedata[9]['fundsource'].'-'.$fundsourcedata[9]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 9 </label>
+					</div>
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[10]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[10]['fundsource'])? "" : $fundsourcedata[10]['fundsource'].'-'.$fundsourcedata[10]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 10 </label>
+					</div>
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[11]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[11]['fundsource'])? "" : $fundsourcedata[11]['fundsource'].'-'.$fundsourcedata[11]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 11 </label>
+					</div>
+					<div class="form-group col-lg-6" <?php echo empty($fundsourcedata[12]['fundsource'])?"hidden":"" ?> >
+					  <input value="<?php echo empty($fundsourcedata[12]['fundsource'])? "" : $fundsourcedata[12]['fundsource'].'-'.$fundsourcedata[12]['fs_amount']?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
+					  <label class="active" for="sourceoffund">Source of Fund 12 </label>
 					</div><br><br>
 				
 					<label class="col-lg-12" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -231,7 +255,7 @@ include('../php/class.user.php');
 					  <label class="active" for="sourceoffund">Relationship to Client</label>
 					</div>
 					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_lname'].", ".$getClient['b_fname'].", ".$getClient['b_mname']." ". $getClient['b_exname'];?>" id="fullname" name="fullname" type="text" class="form-control" readonly>
+					  <input value="<?php echo $getClient["b_fname"]." ". (!empty($getClient["b_mname"][0])?($getClient["b_mname"][0] != " "?strtoupper($getClient["b_mname"][0]) .". ":""):""). $getClient["b_lname"]."". strtoupper($getClient['b_exname'] != ""? " ".$getClient['b_exname'].".": "")?>" id="fullname" name="fullname" type="text" class="form-control" readonly>
 					  <label class="active" for="fullname">Fullname</label>
 					</div>
 					<div class="form-group col-lg-6 beneshowdata">
@@ -254,42 +278,9 @@ include('../php/class.user.php');
 					  <input value="<?php echo $getClient['b_sex']; ?>" id="sex" name="sex" type="text" class="form-control" readonly>
 					  <label class="active" for="sex">Sex</label>
 					</div>
-				
-					<label class="col-lg-12 beneshowdata" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-						<h5><small>&emsp;Beneficiary's Address&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</small></h5>
-					</label>
-				
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_region']; ?>" id="region" name="region" type="text" class="form-control" readonly>
-					  <label class="active" for="region">region</label>
-					</div>
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_province']; ?>" id="pro" name="pro" type="text" class="form-control" readonly>
-					  <label class="active" for="province">Province</label>
-					</div>
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_municipality']; ?>" id="subcategory" name="subcategory" type="text" class="form-control" readonly>
-					  <label class="active" for="city">Municipality/City</label>
-					</div>
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_barangay']; ?>" id="brgy" name="brgy" type="text" class="form-control" readonly>
-					  <label class="active" for="barangay">Barangay</label>
-					</div>
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_street']; ?>" id="st" name="st" type="text" class="form-control" readonly>
-					  <label class="active" for="street">Street/Purok</label>
-					</div>
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_district']; ?>" id="b_d" name="b_d" type="text" class="form-control" readonly>
-					  <label class="active" for="category">District</label>
-					</div>
 					<div class="form-group col-lg-6 beneshowdata">
 					  <input value="<?php echo $getClient['b_category']; ?>" id="cat" name="cat" type="text" class="form-control" readonly>
 					  <label class="active" for="category">Category</label>
-					</div>
-					<div class="form-group col-lg-6 beneshowdata">
-					  <input value="<?php echo $getClient['b_subCategory'];?>" id="subcat" name="subcat" type="text" class="form-control" readonly>
-					  <label class="active" for="subcategory">Subcategory</label>
 					</div>
 				</div>
 			</div>

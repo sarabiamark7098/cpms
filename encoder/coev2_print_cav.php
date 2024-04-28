@@ -79,9 +79,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-9">
-                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client['date_accomplished'])) ?>'>
-                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client['date_accomplished'])) ?>'>
-                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client['date_accomplished'])) ?>'>
+                        <input class="text-center" style="width: 62px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="text-center" style="width: 65px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="text-center" style="width: 90px; font-size: 15px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client["date_accomplished"])) ?>'>
                     </div>
                 </div>
             </div>
@@ -162,11 +162,11 @@
             <div class="col " style="border: 1px solid black;margin-top: 3px; padding: 0px 0px 4px 0px;">
                 <p class="text-center" style="font-size: 15px; border: 1px solid black; background-color: #bfbfbf; font-size:15px; padding:0%; margin-bottom:2%;">RECORDS OF THE CASE SUCH AS THE FOLLOWING ARE CONFIDENTIALLY FILED AT THE CRISIS INTERVENTION SECTION</p>
                 <div class="row" style="font-size: 15px;margin:0px 2px 0px 2px">
-                    <div class="col" style="padding-top: 0px; margin-top: -8px;">
+                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;General Intake Sheet<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('valid id', $record['document'])?>" />&emsp;Valid I.D. Presented:<br>
-                        <input class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value="<?php echo $record['id_presented']?>"><br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border:1px solid black;" value="<?php echo $user->coe_check('4ps', $record['document'])?>" />&emsp;4PS DSWD I.D.<br>
+                        <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;"><?php echo $record['id_presented']?></p>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('4ps', $record['document'])?>" />&emsp;4PS DSWD I.D.<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;margin-bottom:7px;border:1px solid black;" value="<?php echo $user->coe_check('justification', $record['document'])?>" />&emsp;Justification
                     </div>
                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
@@ -189,7 +189,7 @@
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('social case study', $record['document'])?>" />&emsp;Social Case Study Report<br>
                         <?php if(!empty($user->coe_check('Others', $record['document']))){ ?>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('Others', $record['document'])?>" />&emsp;Others:<br>
-                        <input class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value="<?php echo $record['others_input']?>">
+                        <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;"><?php echo $record['others_input']?></p>
                         <?php } else {?>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="" />&emsp;Others:<br>
                         <input class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value="">
@@ -206,7 +206,7 @@
             The client is hereby recommended to receive <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 25%;" value="<?php echo strtoupper($client_assistance[1]['type']); ?>" /> assistance for <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 35%; text-transform: capitalize;" value="<?php echo $client_assistance[1]['purpose']; ?>" /><br> 
 			in the amount of <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 55%;" value="<?php echo $amountToWord; ?>"
             /> PHP <input class="text-center money" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 8%;" value="<?php echo $client_assistance[1]['amount']; ?>" />CHARGABLE AGAINST: PSP 
-			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="AICS Fund <?php echo Date('Y', strtotime($client['date_accomplished']))?>" />
+			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="AICS Fund <?php echo Date('Y', strtotime($client["date_accomplished"]))?>" />
         </div>
 <br><br>
         <!-- Signatory -->
@@ -250,9 +250,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-10">
-                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("m", strtotime($client['date_accomplished'])) ?>'>
-                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("d", strtotime($client['date_accomplished'])) ?>'>
-                        <input class="" style="width: 70px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("Y", strtotime($client['date_accomplished'])) ?>'>
+                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("m", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="" style="width: 50px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("d", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="" style="width: 70px; font-size: 14px; padding:0; text-indent: 8px; border:1px solid black;" type="text" height="30px" width="100px" value='<?php echo date("Y", strtotime($client["date_accomplished"])) ?>'>
                     </div>
                 </div>
             </div>
