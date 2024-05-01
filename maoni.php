@@ -10,12 +10,16 @@
         <script type="text/javascript" src="js/main.js"></script>
         <script type="text/javascript" src="js/PSGC.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.inputmask.bundle.js"></script>
 
 </head>
 <body>
 
 	<form action="maoni.php" method="post">
         <div class="form-group row">
+            <div class="col-sm-6">
+                <input type="text" class="form-control mr-sm-2" id="fund1" name="fund1" placeholder="Fund1" required>
+            </div>
             <label class="col-sm-2 label" style="font-size: 20px">Birth Date: </label>
             <div class="col-sm-6">
                 <input type="date" class="form-control mr-sm-2" id="birthday" name="birthday" placeholder="Birth Date" max='<?php echo date("Y-m-d") ?>' required>
@@ -60,33 +64,34 @@
 
 ?>
 <script>
+    $("#fund1").inputmask('currency');
     function calculateage(dob) {
-            var diff_ms = Date.now() - dob.getTime(); // Get difference in milliseconds
-            var age_dt = new Date(diff_ms); // Create a new Date object representing the difference
-            
-            var years = age_dt.getUTCFullYear() - 1970; // Calculate the number of years
-            var months = age_dt.getUTCMonth() + 1; // Get the number of months
-            var days = age_dt.getUTCDate() - 1; // Get the number of days
-            // console.log("Age: "+ years+ " years, "+ months + " months, and " + days + " days");
-            if (years >= 0 && months > 11 && days > 0 ) {
-                years += 1;
-            }
-            if (years < 0 ) {
-                years = 0;
-            }
-            return years;
-        }
+        var diff_ms = Date.now() - dob.getTime(); // Get difference in milliseconds
+        var age_dt = new Date(diff_ms); // Create a new Date object representing the difference
         
-        $(function () {
-            $("#birthday").on("change", function () {
-                var bd = $("#birthday").val();
-                explodebd = bd.split("-");
-                age = calculateage(new Date(explodebd[0],explodebd[1],explodebd[2]))
-                
-                var age1 = age.toString();
+        var years = age_dt.getUTCFullYear() - 1970; // Calculate the number of years
+        var months = age_dt.getUTCMonth() + 1; // Get the number of months
+        var days = age_dt.getUTCDate() - 1; // Get the number of days
+        // console.log("Age: "+ years+ " years, "+ months + " months, and " + days + " days");
+        if (years >= 0 && months > 11 && days > 0 ) {
+            years += 1;
+        }
+        if (years < 0 ) {
+            years = 0;
+        }
+        return years;
+    }
+    
+    $(function () {
+        $("#birthday").on("change", function () {
+            var bd = $("#birthday").val();
+            explodebd = bd.split("-");
+            age = calculateage(new Date(explodebd[0],explodebd[1],explodebd[2]))
+            
+            var age1 = age.toString();
 
-                document.getElementById("age").value = age1;
-                document.getElementById("hidden_age").value = age1;
-            }); 
-        });
+            document.getElementById("age").value = age1;
+            document.getElementById("hidden_age").value = age1;
+        }); 
+    });
 </script>
