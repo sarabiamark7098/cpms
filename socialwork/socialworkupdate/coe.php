@@ -624,8 +624,17 @@
                                         </div> 
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
+                                        <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck($record['document'], "", "Contract of Employment") ?>> Contract of Employment</div>
                                     </div>
+                                    <div class="row">
+                                        <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck($record['document'], "", "Certificate of Employment") ?>> Certificate of Employment</div>
+                                    </div>
+                                    <div class="row">
+                                        <div><input type="checkbox" class="lg" name="itr" value="Income Tax Return" <?php echo $user->checkCheck($record['document'], "", "Income Tax Return") ?>> Income Tax Return</div>
+                                    </div>
+                                    <!-- <div class="row">
+                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
+                                    </div> -->
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck($record['document'], "", "Others") ?>> Others: 
                                             <input type="text" class="text-left center-input" name="others_input" value=" <?php echo $record['others_input'] ?>">
@@ -646,7 +655,7 @@
                                     if(substr_count(strval($type), "Medic") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate</div>
+                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate/Abstract</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
@@ -661,16 +670,16 @@
                                             <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck($record['document'], "", "LAB REQUEST").'> Laboratory Request</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="charge" id="charge" value="CHARGE SLIP" '.$user->checkCheck($record['document'], "", "CHARGE SLIP").'> Charge Slip</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck($record['document'], "", "QUOTATION").'> Quotation</div>
+                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck($record['document'], "", "QUOTATION").'> Quotation/Chargeslip</div>
                                         </div>  
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck($record['document'], "", "PRESCRIPTION").'> Prescription</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck($record['document'], "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
+                                        </div>
+                                                                                <div class="row">
+                                            <div><input type="checkbox" class="lg" name="promissory" id="promissory" value="PROMISSORY NOTE" '.$user->checkCheck($record['document'], "", "PROMISSORY NOTE").'> Promissory Note</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Trans") > 0){
@@ -684,6 +693,9 @@
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Food") > 0){

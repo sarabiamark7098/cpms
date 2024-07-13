@@ -37,4 +37,13 @@ CREATE TABLE `client_info` (
   PRIMARY KEY (`client_num`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
-3
+June 30, 2024
+database
+1. add column for type_of_disability(varchar[20]) @assessment
+
+July 13, 2024
+database
+1. add column for program_type(varchar[50]) @tbl_transaction
+2. add column for type_of_client(varchar[50]) @tbl_transaction
+
+
