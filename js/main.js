@@ -357,6 +357,27 @@ function printCOE() {
     //setInputCOE(arr); //gi pang butang sa input ang mga input sa user
 }
 
+ 
+function printAttestation() {
+    // var arr = getGLvalue(); //hold ang mga value sa input text
+    console.log("gg");
+    // setContentGL(arr);
+    //If isa lng xa, kani nga div iyang e print
+    var divElements = document.getElementById('attestation').innerHTML;
+    //set una para pag set sa div na e print naa nay value
+    //pag naa xay beneficiary ~ kani e prin
+    //Get the HTML of whole page
+    var oldPage = document.body.innerHTML;
+    //Reset the page's HTML with div's HTML only
+    document.body.innerHTML =
+        "<html><head><title></title></head><body>" +
+        divElements + "</body>";
+    //Print Page
+    window.print();
+    //Restore orignal HTML
+    document.body.innerHTML = oldPage;
+}
+
 //LAST PART IS HERE
 function printGLNow() {
     var arr = getGLvalue(); //hold ang mga value sa input text
