@@ -163,7 +163,7 @@
 			}
 
 			public function getuserInfo($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id 
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id, e.emp_position, c.sw_license_no, c.sw_license_expiry  
 				FROM employee_info i
 				LEFT JOIN tbl_employment e USING (empnum)
 				LEFT JOIN cpms_account c USING (empid)
@@ -316,9 +316,9 @@
 				
 				return $result;
 			}
-
+			// , i.empuser, i.emppass
 			public function getEmpData($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id, i.empuser, i.emppass
 				FROM tbl_employment e
 				LEFT JOIN employee_info i using (empnum)
 				LEFT JOIN cpms_account c using (empid)
@@ -401,13 +401,12 @@
 				$result = mysqli_query($this->db2, $query);
 				$rows = mysqli_fetch_assoc($result);
 				$row = mysqli_num_rows($result);
-				
 				if($row <= 0){
 					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
 					$result = mysqli_query($this->db, $query);
 
-					$query = "INSERT INTO cpms_account(empid, position, status, office_id) VALUES 
-							('{$id}','{$position}','Activated', '{$office}')";
+					$query = "INSERT INTO cpms_account(empid, position, status, office, office_id) VALUES 
+							('{$id}','{$position}','Activated', '-', '{$office}')";
 					$result = mysqli_query($this->db2, $query);
 
 					if($result){
@@ -622,6 +621,19 @@
 				('{$id}', '{$fullname}', '{$position}', '{$username}', '{$password}', '{$initials}')";
 				
 				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+
+			public function updatesw($id, $position, $license, $expiry){
+				$query = "UPDATE tbl_employment SET emp_position = '{$position}' WHERE empid = '{$id}';";
+				$query .= "UPDATE cpms_account SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
+
+				$result = mysqli_multi_query($this->db2, $query);
 				if($result){
 					return true;
 				}
@@ -1509,8 +1521,8 @@
 				$newclientid = "C-".$row['auto_increment_4_id'];
 				$query = "UPDATE client_data SET client_id = '{$newclientid}' WHERE auto_increment_4_id = '{$row['auto_increment_4_id']}'";
 				$result = mysqli_query($this->db,$query);
-				$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, pantawid_bene, date_entered, encoded_encoder, note, status_client, clientonly) VALUES 
-				('{$newtransid}','{$newclientid}', '{$relation}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1)";
+				$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, pantawid_bene, type_of_client, date_entered, encoded_encoder, note, status_client, clientonly) VALUES 
+				('{$newtransid}','{$newclientid}', '{$relation}', '{$pantawid}', 'New', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1)";
 				$result = mysqli_query($this->db,$query);
 				
 				if($result){
@@ -1575,8 +1587,8 @@
 			$query = "UPDATE beneficiary_data SET bene_id = '{$newbeneid}' WHERE auto_increment_id_bene = '{$row['auto_increment_id_bene']}';";
 			$result = mysqli_query($this->db,$query);
 			
-			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, pantawid_bene, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) VALUES 
-			('{$newtransid}', '{$newclientid}', '{$newbeneid}', '{$relationship}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1,1,1);";
+			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, pantawid_bene, type_of_client, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) VALUES 
+			('{$newtransid}', '{$newclientid}', '{$newbeneid}', '{$relationship}', '{$pantawid}', 'New', '{$datenow}', '{$encoder}', '{$note}','{$status_client}',1,1,1);";
 			$result = mysqli_query($this->db,$query);
 
 			if($result){
@@ -1616,11 +1628,11 @@
 			$client_id = $row['client_id'];
 
 
-			$query ="SELECT * FROM client_data WHERE client_id = '{$client_id}'";
-			$result = mysqli_query($this->db, $query);
-			$row0 = mysqli_fetch_assoc($result);
+			// $query ="SELECT * FROM client_data WHERE client_id = '{$client_id}'";
+			// $result = mysqli_query($this->db, $query);
+			// $row0 = mysqli_fetch_assoc($result);
 			
-			if($clientbene > 0){
+			// if($clientbene > 0){
 				$query = "INSERT INTO `client_data`(`lastname`, `firstname`, `middlename`, `extraname`, `sex`, 
 				`civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, 
 				`client_region`, `client_province`, `client_municipality`, 
@@ -1638,35 +1650,35 @@
 
 				$query = "UPDATE client_data SET client_id = '{$client_id}' WHERE auto_increment_4_id = '{$row1['auto_increment_4_id']}'";
 				$result = mysqli_query($this->db,$query);
-			}else{
-				if($row0['firstname']!=$f||$row0['middlename']!=$m||$row0['lastname']!=$l||$row0['extraname']!=$e||$row0['sex']!=$sex||$row0['date_birth']!=$bday||$row0['occupation']!=$occupation||$row0['salary']!=$salary||
-				$row0['category']!=$category||$row0['civil_status']!=$cstatus||$row0['contact']!=$contact||$row0['client_region']!=$r||$row0['client_province']!=$p||$row0['client_municipality']!=$c||
-				$row0['client_barangay']!=$brgy||$row0['client_district']!=$d||$row0['client_street']!=$street){
-					$query = "UPDATE client_data SET ";
-					if($row0['firstname']!=$f){$query .= "firstname = '{$f}',";}
-					if($row0['middlename']!=$m){$query .= "middlename = '{$m}',";}
-					if($row0['lastname']!=$l){$query .= "lastname = '{$l}',";}
-					if($row0['extraname']!=$e){$query .= "extraname = '{$e}',";}
-					if($row0['sex']!=$sex){$query .= "sex = '{$sex}',";}
-					if($row0['date_birth']!=$bday){$query .= "date_birth = '{$bday}',";}
-					if($row0['occupation']!=$occupation){$query .= "occupation = '{$occupation}',";}
-					if($row0['salary']!=$salary){$query .= "salary = '{$salary}',";}
-					if($row0['category']!=$category){$query .= "category = '{$category}',";}
-					if($row0['civil_status']!=$cstatus){$query .= "civil_status = '{$cstatus}',";}
-					if($row0['contact']!=$contact){$query .= "contact = '{$contact}',";}
-					if($row0['client_region']!=$r){$query .= "client_region = '{$r}',";}
-					if($row0['client_province']!=$p){$query .= "client_province = '{$p}',";}
-					if($row0['client_municipality']!=$c){$query .= "client_municipality = '{$c}',";}
-					if($row0['client_barangay']!=$brgy){$query .= "client_barangay = '{$brgy}',";}
-					if($row0['client_district']!=$d){$query .= "client_district = '{$d}',";}
-					if($row0['client_street']!=$street){$query .= "client_street = '{$street}',";}
-					$query = substr($query, 0, -1);
-					$query .= " WHERE client_id = '{$client_id}'";
-					$result = mysqli_query($this->db,$query);
-				}
-			}
-			$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, pantawid_bene, date_entered, encoded_encoder, note, status_client, clientonly) 
-			VALUES ('{$newtransid}', '{$client_id}', '{$relation}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}', 1)";
+			// }else{
+			// 	if($row0['firstname']!=$f||$row0['middlename']!=$m||$row0['lastname']!=$l||$row0['extraname']!=$e||$row0['sex']!=$sex||$row0['date_birth']!=$bday||$row0['occupation']!=$occupation||$row0['salary']!=$salary||
+			// 	$row0['category']!=$category||$row0['civil_status']!=$cstatus||$row0['contact']!=$contact||$row0['client_region']!=$r||$row0['client_province']!=$p||$row0['client_municipality']!=$c||
+			// 	$row0['client_barangay']!=$brgy||$row0['client_district']!=$d||$row0['client_street']!=$street){
+			// 		$query = "UPDATE client_data SET ";
+			// 		if($row0['firstname']!=$f){$query .= "firstname = '{$f}',";}
+			// 		if($row0['middlename']!=$m){$query .= "middlename = '{$m}',";}
+			// 		if($row0['lastname']!=$l){$query .= "lastname = '{$l}',";}
+			// 		if($row0['extraname']!=$e){$query .= "extraname = '{$e}',";}
+			// 		if($row0['sex']!=$sex){$query .= "sex = '{$sex}',";}
+			// 		if($row0['date_birth']!=$bday){$query .= "date_birth = '{$bday}',";}
+			// 		if($row0['occupation']!=$occupation){$query .= "occupation = '{$occupation}',";}
+			// 		if($row0['salary']!=$salary){$query .= "salary = '{$salary}',";}
+			// 		if($row0['category']!=$category){$query .= "category = '{$category}',";}
+			// 		if($row0['civil_status']!=$cstatus){$query .= "civil_status = '{$cstatus}',";}
+			// 		if($row0['contact']!=$contact){$query .= "contact = '{$contact}',";}
+			// 		if($row0['client_region']!=$r){$query .= "client_region = '{$r}',";}
+			// 		if($row0['client_province']!=$p){$query .= "client_province = '{$p}',";}
+			// 		if($row0['client_municipality']!=$c){$query .= "client_municipality = '{$c}',";}
+			// 		if($row0['client_barangay']!=$brgy){$query .= "client_barangay = '{$brgy}',";}
+			// 		if($row0['client_district']!=$d){$query .= "client_district = '{$d}',";}
+			// 		if($row0['client_street']!=$street){$query .= "client_street = '{$street}',";}
+			// 		$query = substr($query, 0, -1);
+			// 		$query .= " WHERE client_id = '{$client_id}'";
+			// 		$result = mysqli_query($this->db,$query);
+			// 	}
+			// }
+			$query = "INSERT INTO tbl_transaction (trans_id, client_id, relation, pantawid_bene, type_of_client, date_entered, encoded_encoder, note, status_client, clientonly) 
+			VALUES ('{$newtransid}', '{$client_id}', '{$relation}', '{$pantawid}', 'Returning', '{$datenow}', '{$encoder}', '{$note}','{$status_client}', 1)";
 			$result = mysqli_query($this->db,$query);
 
 			if($clientonly > 0){
@@ -1710,11 +1722,11 @@
 			$client_id = $row['client_id'];
 			$bene_id = $row['bene_id'];
 			
-			$query ="SELECT * FROM client_data WHERE client_id = '{$client_id}'";
-			$result = mysqli_query($this->db, $query);
-			$row0 = mysqli_fetch_assoc($result);
+			// $query ="SELECT * FROM client_data WHERE client_id = '{$client_id}'";
+			// $result = mysqli_query($this->db, $query);
+			// $row0 = mysqli_fetch_assoc($result);
 			
-			if($clientbene > 0){
+			// if($clientbene > 0){
 				$query = "INSERT INTO `client_data`(`lastname`, `firstname`, `middlename`, `extraname`, `sex`, 
 				`civil_status`, `date_birth`, `occupation`, `salary`, `contact`, `category`, 
 				`client_region`, `client_province`, `client_municipality`, 
@@ -1732,64 +1744,64 @@
 
 				$query = "UPDATE client_data SET client_id = '{$client_id}' WHERE auto_increment_4_id = '{$row1['auto_increment_4_id']}'";
 				$result = mysqli_query($this->db,$query);				
-			}else{
-				if($row0['firstname']!=$f||$row0['middlename']!=$m||$row0['lastname']!=$l||$row0['extraname']!=$e||$row0['sex']!=$sex||$row0['date_birth']!=$bday||$row0['occupation']!=$occupation||$row0['salary']!=$salary||
-				$row0['category']!=$category||$row0['civil_status']!=$cstatus||$row0['contact']!=$contact||$row0['client_region']!=$r||$row0['client_province']!=$p||$row0['client_municipality']!=$c||
-				$row0['client_barangay']!=$brgy||$row0['client_district']!=$d||$row0['client_street']!=$street){
-					echo "in";
-					$query = "UPDATE client_data SET ";
-					if($row0['firstname']!=$f){$query .= "firstname = '{$f}',";}
-					if($row0['middlename']!=$m){$query .= "middlename = '{$m}',";}
-					if($row0['lastname']!=$l){$query .= "lastname = '{$l}',";}
-					if($row0['extraname']!=$e){$query .= "extraname = '{$e}',";}
-					if($row0['sex']!=$sex){$query .= "sex = '{$sex}',";}
-					if($row0['date_birth']!=$bday){$query .= "date_birth = '{$bday}',";}
-					if($row0['occupation']!=$occupation){$query .= "occupation = '{$occupation}',";}
-					if($row0['salary']!=$salary){$query .= "salary = '{$salary}',";}
-					if($row0['category']!=$category){$query .= "category = '{$category}',";}
-					if($row0['civil_status']!=$cstatus){$query .= "civil_status = '{$cstatus}',";}
-					if($row0['contact']!=$contact){$query .= "contact = '{$contact}',";}
-					if($row0['client_region']!=$r){$query .= "client_region = '{$r}',";}
-					if($row0['client_province']!=$p){$query .= "client_province = '{$p}',";}
-					if($row0['client_municipality']!=$c){$query .= "client_municipality = '{$c}',";}
-					if($row0['client_barangay']!=$brgy){$query .= "client_barangay = '{$brgy}',";}
-					if($row0['client_district']!=$d){$query .= "client_district = '{$d}',";}
-					if($row0['client_street']!=$street){$query .= "client_street = '{$street}',";}
-					$query = substr($query, 0, -1);
-					$query .= " WHERE client_id = '{$client_id}'";
-					$result = mysqli_query($this->db,$query);
-				}
-			}
+			// }else{
+			// 	if($row0['firstname']!=$f||$row0['middlename']!=$m||$row0['lastname']!=$l||$row0['extraname']!=$e||$row0['sex']!=$sex||$row0['date_birth']!=$bday||$row0['occupation']!=$occupation||$row0['salary']!=$salary||
+			// 	$row0['category']!=$category||$row0['civil_status']!=$cstatus||$row0['contact']!=$contact||$row0['client_region']!=$r||$row0['client_province']!=$p||$row0['client_municipality']!=$c||
+			// 	$row0['client_barangay']!=$brgy||$row0['client_district']!=$d||$row0['client_street']!=$street){
+			// 		echo "in";
+			// 		$query = "UPDATE client_data SET ";
+			// 		if($row0['firstname']!=$f){$query .= "firstname = '{$f}',";}
+			// 		if($row0['middlename']!=$m){$query .= "middlename = '{$m}',";}
+			// 		if($row0['lastname']!=$l){$query .= "lastname = '{$l}',";}
+			// 		if($row0['extraname']!=$e){$query .= "extraname = '{$e}',";}
+			// 		if($row0['sex']!=$sex){$query .= "sex = '{$sex}',";}
+			// 		if($row0['date_birth']!=$bday){$query .= "date_birth = '{$bday}',";}
+			// 		if($row0['occupation']!=$occupation){$query .= "occupation = '{$occupation}',";}
+			// 		if($row0['salary']!=$salary){$query .= "salary = '{$salary}',";}
+			// 		if($row0['category']!=$category){$query .= "category = '{$category}',";}
+			// 		if($row0['civil_status']!=$cstatus){$query .= "civil_status = '{$cstatus}',";}
+			// 		if($row0['contact']!=$contact){$query .= "contact = '{$contact}',";}
+			// 		if($row0['client_region']!=$r){$query .= "client_region = '{$r}',";}
+			// 		if($row0['client_province']!=$p){$query .= "client_province = '{$p}',";}
+			// 		if($row0['client_municipality']!=$c){$query .= "client_municipality = '{$c}',";}
+			// 		if($row0['client_barangay']!=$brgy){$query .= "client_barangay = '{$brgy}',";}
+			// 		if($row0['client_district']!=$d){$query .= "client_district = '{$d}',";}
+			// 		if($row0['client_street']!=$street){$query .= "client_street = '{$street}',";}
+			// 		$query = substr($query, 0, -1);
+			// 		$query .= " WHERE client_id = '{$client_id}'";
+			// 		$result = mysqli_query($this->db,$query);
+			// 	}
+			// }
 
-			$query ="SELECT * FROM beneficiary_data WHERE bene_id = '{$bene_id}'";
-			$result = mysqli_query($this->db, $query);
-			$row1 = mysqli_fetch_assoc($result);
+			// $query ="SELECT * FROM beneficiary_data WHERE bene_id = '{$bene_id}'";
+			// $result = mysqli_query($this->db, $query);
+			// $row1 = mysqli_fetch_assoc($result);
 
-			if($samebene > 0){
-				if($row1['b_fname']!=$bf||$row1['b_mname']!=$bm||$row1['b_lname']!=$bl||$row1['b_exname']!=$be||$row1['b_sex']!=$b_sex||$row1['b_bday']!=$b_bday||
-				$row1['b_category']!=$b_category||$row1['b_civilStatus']!=$b_cstatus||$row1['b_contact']!=$b_contact||$row1['b_region']!=$b_region||
-				$row1['b_province']!=$b_province||$row1['b_municipality']!=$b_city||$row1['b_barangay']!=$b_barangay||$row1['b_district']!=$b_district||$row1['b_street']!=$b_street){
-					$query = "UPDATE beneficiary_data SET ";
-					if($row1['b_fname']!=$bf){$query .= "b_fname = '{$bf}',";}
-					if($row1['b_mname']!=$bm){$query .= "b_mname = '{$bm}',";}
-					if($row1['b_lname']!=$bl){$query .= "b_lname = '{$bl}',";}
-					if($row1['b_exname']!=$be){$query .= "b_exname = '{$be}',";}
-					if($row1['b_sex']!=$b_sex){$query .= "b_sex = '{$b_sex}',";}
-					if($row1['b_bday']!=$b_bday){$query .= "b_bday = '{$b_bday}',";}
-					if($row1['b_category']!=$b_category){$query .= "b_category = '{$b_category}',";}
-					if($row1['b_civilStatus']!=$b_cstatus){$query .= "b_civilStatus = '{$b_cstatus}',";}
-					if($row1['b_contact']!=$b_contact){$query .= "b_contact = '{$b_contact}',";}
-					if($row1['b_region']!=$b_region){$query .= "b_region = '{$b_region}',";}
-					if($row1['b_province']!=$b_province){$query .= "b_province = '{$b_province}',";}
-					if($row1['b_municipality']!=$b_city){$query .= "b_municipality = '{$b_city}',";}
-					if($row1['b_barangay']!=$b_barangay){$query .= "b_barangay = '{$b_barangay}',";}
-					if($row1['b_district']!=$b_district){$query .= "b_district = '{$b_district}',";}
-					if($row1['b_street']!=$b_street){$query .= "b_street = '{$b_street}',";}
-					$query = substr($query, 0, -1);
-					$query .= " WHERE bene_id = '{$bene_id}'";
-					$result = mysqli_query($this->db,$query);
-				}
-			}else{
+			// if($samebene > 0){
+			// 	if($row1['b_fname']!=$bf||$row1['b_mname']!=$bm||$row1['b_lname']!=$bl||$row1['b_exname']!=$be||$row1['b_sex']!=$b_sex||$row1['b_bday']!=$b_bday||
+			// 	$row1['b_category']!=$b_category||$row1['b_civilStatus']!=$b_cstatus||$row1['b_contact']!=$b_contact||$row1['b_region']!=$b_region||
+			// 	$row1['b_province']!=$b_province||$row1['b_municipality']!=$b_city||$row1['b_barangay']!=$b_barangay||$row1['b_district']!=$b_district||$row1['b_street']!=$b_street){
+			// 		$query = "UPDATE beneficiary_data SET ";
+			// 		if($row1['b_fname']!=$bf){$query .= "b_fname = '{$bf}',";}
+			// 		if($row1['b_mname']!=$bm){$query .= "b_mname = '{$bm}',";}
+			// 		if($row1['b_lname']!=$bl){$query .= "b_lname = '{$bl}',";}
+			// 		if($row1['b_exname']!=$be){$query .= "b_exname = '{$be}',";}
+			// 		if($row1['b_sex']!=$b_sex){$query .= "b_sex = '{$b_sex}',";}
+			// 		if($row1['b_bday']!=$b_bday){$query .= "b_bday = '{$b_bday}',";}
+			// 		if($row1['b_category']!=$b_category){$query .= "b_category = '{$b_category}',";}
+			// 		if($row1['b_civilStatus']!=$b_cstatus){$query .= "b_civilStatus = '{$b_cstatus}',";}
+			// 		if($row1['b_contact']!=$b_contact){$query .= "b_contact = '{$b_contact}',";}
+			// 		if($row1['b_region']!=$b_region){$query .= "b_region = '{$b_region}',";}
+			// 		if($row1['b_province']!=$b_province){$query .= "b_province = '{$b_province}',";}
+			// 		if($row1['b_municipality']!=$b_city){$query .= "b_municipality = '{$b_city}',";}
+			// 		if($row1['b_barangay']!=$b_barangay){$query .= "b_barangay = '{$b_barangay}',";}
+			// 		if($row1['b_district']!=$b_district){$query .= "b_district = '{$b_district}',";}
+			// 		if($row1['b_street']!=$b_street){$query .= "b_street = '{$b_street}',";}
+			// 		$query = substr($query, 0, -1);
+			// 		$query .= " WHERE bene_id = '{$bene_id}'";
+			// 		$result = mysqli_query($this->db,$query);
+			// 	}
+			// }else{
 				$query = "INSERT INTO `beneficiary_data`(`b_fname`, `b_mname`, `b_lname`, `b_exname`, 
 				`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_category`, `b_region`, 
 				`b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, b_date_inserted) VALUES ('{$bf}','{$bm}',
@@ -1805,10 +1817,10 @@
 				
 				$query = "UPDATE beneficiary_data SET bene_id = '{$bene_id}' WHERE auto_increment_id_bene = '{$row['auto_increment_id_bene']}'";
 				$result = mysqli_query($this->db,$query);
-			}
+			// }
 
-			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, pantawid_bene, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) 
-			VALUES ('{$newtransid}', '{$client_id}', '{$bene_id}', '{$relationship}', '{$pantawid}', '{$datenow}', '{$encoder}', '{$note}','{$status_client}', 1, 1, 1)";
+			$query = "INSERT INTO tbl_transaction (trans_id, client_id, bene_id, relation, pantawid_bene, type_of_client, date_entered, encoded_encoder, note, status_client, clientonly, clientsamebene, benetoclient) 
+			VALUES ('{$newtransid}', '{$client_id}', '{$bene_id}', '{$relationship}', '{$pantawid}', 'Returning', '{$datenow}', '{$encoder}', '{$note}','{$status_client}', 1, 1, 1)";
 			$result = mysqli_query($this->db,$query);
 			
 			if($clientonly > 0){
@@ -1935,9 +1947,9 @@
 		}
 
 		//All information in GIS
-		public function insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+		public function insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
-									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
+									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material){
 										
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
@@ -1992,13 +2004,13 @@
 			$query .= ";";
 			
 			//INSERT TO ASSESSMENT
-			$query .= "INSERT INTO assessment (trans_id, target_sector, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
-			VALUES ('{$trans_id}', '{$targets}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
+			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
 
 			//update the tbl_transaction table
 			// $sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
 			$sign_id = $signatoryGIS;
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}'";
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', program_type = '{$program}'";
 			if($m1 == "GL"){ 
 				$amountcon = str_replace(",","", $a1);
 				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
@@ -2015,6 +2027,7 @@
 				echo "<meta http-equiv='refresh' content='0'>";
 			}else{
 				echo "<script>alert('Something Went Wrong!');</script>";
+				echo "<meta http-equiv='refresh' content='0'>";
 			}
 			
 		}
@@ -2053,9 +2066,9 @@
 			
 		}
 
-		public function updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+		public function updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
-			$targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material){
+			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material){
 				
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
@@ -2088,8 +2101,8 @@
 			
 			//UPDATE assessment need by client/ 1 or 2 lng iyang ma cater na assistance 
 			$query .= "DELETE FROM assessment WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assessment (trans_id, target_sector, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
-			VALUES ('{$trans_id}', '{$targets}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
+			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
 
 			/*$query .= " UPDATE assessment SET problem = '{$prob}', soc_ass='{$ass}', mode_admission='{$mode_ad}', client_num='{$num}'
 						WHERE trans_id='{$trans_id}';";*/
@@ -2157,7 +2170,7 @@
 
 			// $sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
 			$sign_id = $signatoryGIS;
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', encoded_socialWork='{$empid}'";
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', program_type = '{$program}', encoded_socialWork='{$empid}'";
 			if($m1 == "GL"){ 
 				$amountcon = str_replace(",","", $a1);
 				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
@@ -2527,8 +2540,8 @@
 			}
 		}
 		
-		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
-		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer){
+		public function insertCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
+		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			
@@ -2578,6 +2591,13 @@
 							('{$id}', '{$sd_officer}');";
 				$result = mysqli_query($this->db, $query);
 			}
+
+			$client_salary = str_replace(',','',$client_salary);
+
+			if (!empty($client_work) && !empty($client_salary) && !empty($client_agency)) {
+				$query = "UPDATE client_data SET occupation = '{$client_work}', salary = '{$client_salary}', agency = '{$client_agency}' WHERE client_id = '{$client_id}';";
+				$result = mysqli_query($this->db, $query);
+			}
 		
 			if($result){
 				echo "<script>alert('Successfully Saved!');</script>";
@@ -2587,8 +2607,8 @@
 			}
 		}
 
-		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
-		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer){
+		public function updateCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
+		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			if(!empty($signName)){
@@ -2637,7 +2657,13 @@
 			// echo $query;
 			// $query .= "UPDATE tbl_coe_fund SET fs_amount1 = '{$amount1}', fs_amount2 = '{$amount2}', fs_amount3 = '{$amount3}', fs_amount4 = '{$amount4}', fs_amount5 = '{$amount5}' WHERE trans_id = '{$id}';";
 			$result = mysqli_multi_query($this->db, $query);
-			
+
+			$client_salary = str_replace(',','',$client_salary);
+			if (!empty($client_work) || !empty($client_salary) || !empty($client_agency)) {
+				$query = "UPDATE client_data SET occupation = '{$client_work}', salary = '{$client_salary}', agency = '{$client_agency}' WHERE client_id = '{$client_id}';";
+				$result = mysqli_query($this->db, $query);
+			}
+
 			if($result){
 				echo "<script>alert('Successfully Updated!');</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
@@ -3186,8 +3212,8 @@
 		}
 	
 		public function getGISData($id){
-			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6
-								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, others_subcat, pantawid_bene from assessment 
+			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6,
+								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, type_of_disability, others_subcat, pantawid_bene, program_type from assessment 
 						LEFT JOIN service USING (trans_id) 
 						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
 						

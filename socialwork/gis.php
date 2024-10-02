@@ -290,45 +290,51 @@ if (!$_SESSION['login']) {
                     </div>
                 </div><br>
                 <div class="row">
-                    <div class=col-6>
+                    <div class=col-12>
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
                                 <h5 class="card-header text-success">TARGET SECTOR</h5>
                                 <div class="card-body">
-                                    <div class="container" style="font-size: 15px;">
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fhona" id="fhona" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
-                                            <div class="col-11"> FAMILY HEADS, AND OTHER NEEDY ADULTS (FHONA)</div>
+                                    <div class="row">
+                                        <div class="col-6 container" style="font-size: 15px;">
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fhona" id="fhona" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> FAMILY HEADS, AND OTHER NEEDY ADULTS (FHONA)</div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="wedc" id="wedc" value="2" <?php echo $gis['target_sector']==2? "checked": ""; ?>></div>
+                                                <div class="col-11"> WOMEN IN ESPECIALLY DIFFICULT CIRCUMSTRANCES (WEDC)</div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="pwd" id="pwd" value="3" <?php echo $gis['target_sector']==3? "checked": ""; ?>></div>
+                                                <div class="col-11"> PERSON WITH DISABILITIES (PWD)</div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="youth" id="youth" value="4" <?php echo $gis['target_sector']==4? "checked": ""; ?>></div>
+                                                <div class="col-11"> YOUTH IN NEED OF SPECIAL PROTECTION (YNSP)</div>
+                                            </div>
                                         </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="wedc" id="wedc" value="2" <?php echo $gis['target_sector']==2? "checked": ""; ?>></div>
-                                            <div class="col-11"> WOMEN IN ESPECIALLY DIFFICULT CIRCUMSTRANCES (WEDC)</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="pwd" id="pwd" value="3" <?php echo $gis['target_sector']==3? "checked": ""; ?>></div>
-                                            <div class="col-11"> PERSON WITH DISABILITIES (PWD)</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="youth" id="youth" value="4" <?php echo $gis['target_sector']==4? "checked": ""; ?>></div>
-                                            <div class="col-11"> YOUTH IN NEED OF SPECIAL PROTECTION (YNSP)</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="sc" id="sc" value="5" <?php echo $gis['target_sector']==5? "checked": ""; ?>></div>
-                                            <div class="col-11"> SENIOR CITIZEN (SC)</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plwhiv" id="plwhiv" value="6" <?php echo $gis['target_sector']==6? "checked": ""; ?>></div>
-                                            <div class="col-11"> PERSON LIVING WITH HIV(PLWHIV)</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo $gis['target_sector']==7? "checked": ""; ?>></div>
-                                            <div class="col-11"> CHILDREN IN NEED OF SPECIAL PROTECTION (CNSP)</div>
+                                        <div class="col-6 container" style="font-size: 15px;">
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="sc" id="sc" value="5" <?php echo $gis['target_sector']==5? "checked": ""; ?>></div>
+                                                <div class="col-11"> SENIOR CITIZEN (SC)</div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plwhiv" id="plwhiv" value="6" <?php echo $gis['target_sector']==6? "checked": ""; ?>></div>
+                                                <div class="col-11"> PERSON LIVING WITH HIV(PLWHIV)</div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo $gis['target_sector']==7? "checked": ""; ?>></div>
+                                                <div class="col-11"> CHILDREN IN NEED OF SPECIAL PROTECTION (CNSP)</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div> 
                         </div>
                     </div>
+                </div><br>
+                <div class="row">
                     <div class=col-6>
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
@@ -348,6 +354,10 @@ if (!$_SESSION['login']) {
                                             <div class="col-11"> RECOVERING PERSON WHO USED DRUGS</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="kia_wia" id="kia_wia" value="9" <?php echo $gis['subcat_ass']==9? "checked": ""; ?>></div>
+                                            <div class="col-11"> KIA/WIA</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
                                             <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="4ps" id="4ps" value="4" <?php echo $gis['subcat_ass']==4? "checked": ""; ?>></div>
                                             <div class="col-11"> 4PS DSWD BENEFICIARY</div>
                                         </div>
@@ -363,6 +373,10 @@ if (!$_SESSION['login']) {
                                             <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="asylum" id="asylum" value="7" <?php echo $gis['subcat_ass']==7? "checked": ""; ?>></div>
                                             <div class="col-11"> STATELESS PERSONS/ASYLUM SEEKERS/REFUGEES</div>
                                         </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="10" <?php echo $gis['subcat_ass']==10? "checked": ""; ?>></div>
+                                            <div class="col-11"> MINIMUM WAGE EARNER</div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-1" style="margin-top:5px;"><input type="checkbox" style="padding" class="lg" name="osc" id="osc" value="8" <?php echo $gis['subcat_ass']==8? "checked": ""; ?>></div>
                                             <div class="col-11"> OTHERS: <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
@@ -372,8 +386,58 @@ if (!$_SESSION['login']) {
                             </div> 
                         </div>
                     </div>
+                    <div class=col-6>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">TYPE OF DISABILITY <small>(Note: do not check if not applicable)</small></h5>
+                                <div class="card-body">
+                                    <div class="container">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_speech" id="d_speech" value="1" <?php echo $gis['type_of_disability']==1? "checked": ""; ?>></div>
+                                            <div class="col-11"> SPEECH IMPAIRMENT</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_learning" id="d_learning" value="2" <?php echo $gis['type_of_disability']==2? "checked": ""; ?>></div>
+                                            <div class="col-11"> LEARNING DISABILITY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_psychosocial" id="d_psychosocial" value="3" <?php echo $gis['type_of_disability']==3? "checked": ""; ?>></div>
+                                            <div class="col-11">PSYCHOSOCIAL DISABILITY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_deaf" id="d_deaf" value="4" <?php echo $gis['type_of_disability']==4? "checked": ""; ?>></div>
+                                            <div class="col-11"> DEAF/HARD-OF-HEARING</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg"  name="d_cancer" id="d_cancer" value="5" <?php echo $gis['type_of_disability']==5? "checked": ""; ?>></div>
+                                            <div class="col-11"> CANCER</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_mental" id="d_mental" value="6" <?php echo $gis['type_of_disability']==6? "checked": ""; ?>></div>
+                                            <div class="col-11"> MENTAL DISABILITY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_visual" id="d_visual" value="7" <?php echo $gis['type_of_disability']==7? "checked": ""; ?>></div>
+                                            <div class="col-11"> VISUAL DISABILITY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_intellectual" id="d_intellectual" value="8" <?php echo $gis['type_of_disability']==8? "checked": ""; ?>></div>
+                                            <div class="col-11"> INTELLECTUAL DISABILITY</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_physical" id="d_physical" value="9" <?php echo $gis['type_of_disability']==9? "checked": ""; ?>></div>
+                                            <div class="col-11"> PHYSICAL DISABILITY</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_rare" id="d_rare" value="10" <?php echo $gis['type_of_disability']==10? "checked": ""; ?>></div>
+                                            <div class="col-11"> RARE DISABILITY</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
                 </div><br>
-
 
                 <!-- Family Composition -->
                 <div class="row">
@@ -440,6 +504,7 @@ if (!$_SESSION['login']) {
                                                     <option value="Educational Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "educational assistance") ? "selected" : "" ?>>Educational Assistance</option>
                                                     <option value="Other Cash Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "other cash assistance") ? "selected" : "" ?>>Other Cash Assistance</option>
                                                     <option value="Material Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "material assistance") ? "selected" : "" ?>>Material Assistance</option>
+                                                    <option value="Cash Relief Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "cash relief assistance") ? "selected" : "" ?>>Cash Relief Assistance</option>
                                                 </select>
 												
                                             </div>
@@ -549,7 +614,7 @@ if (!$_SESSION['login']) {
                                         </div>
                                         <div class="row">
                                             <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="casha" id="casha" value="6" <?php echo ($client_assistance[1]['financial']==6 ? "checked": "") ?>></div>
-                                            <div class="col-11"> Cash Assistance or Other Support Technologies</div>
+                                            <div class="col-11"> Cash Relief Assistance</div>
                                         </div>
                                     </div>
                                 </div>
@@ -578,6 +643,10 @@ if (!$_SESSION['login']) {
                                             <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="devices" id="devices" value="4" <?php echo ($client_assistance[1]['material']==4 ? "checked": "") ?>></div>
                                             <div class="col-11"> Assistive Devices and Technologies</div>
                                         </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="rice" id="rice" value="5" <?php echo ($client_assistance[1]['material']==5 ? "checked": "") ?>></div>
+                                            <div class="col-11"> Rice</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div> 
@@ -605,13 +674,23 @@ if (!$_SESSION['login']) {
                                 </div>
                             </div><br>
                             <div class="row">
-								<label class="col-sm-3 label text-left" style="font-size: 17px">PSYCHOSOCIAL SUPPORT:</label>
+								<label class="col-sm-3 label text-left" style="font-size: 17px">PROGRAM INTERVENTION :</label>
                                 <div class="col-3">
-									<input type="checkbox" id="group" class="col-lg-1" name="pfa" value="pfa" <?php echo $gis['service5']==0? "": "checked"; ?> required> &nbsp; Psychological First Aid (PFA)
+									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
 								</div>&nbsp;
                                 <div class="col-1"></div>
                                 <div class="col-3">
-									<input type="checkbox" id="group" class="col-lg-1" name="counseling" value="Counseling" <?php echo $gis['service6']==0? "": "checked";; ?> required> &nbsp; Social Work Counseling
+									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo ((($client['program_type'])==1)? "checked": ""); ?> required> &nbsp; AKAP Program
+								</div>
+                            </div><br>
+							<div class="row">
+								<label class="col-sm-3 label text-left" style="font-size: 17px">PSYCHOSOCIAL SUPPORT:</label>
+                                <div class="col-3">
+									<input type="checkbox" id="group" class="col-lg-1" name="pfa" value="pfa" <?php echo (($gis['service5']==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
+								</div>&nbsp;
+                                <div class="col-1"></div>
+                                <div class="col-3">
+									<input type="checkbox" id="group" class="col-lg-1" name="counseling" value="Counseling" <?php echo (($gis['service6']==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
 								</div>
                             </div><br>
 							<div class="row">
@@ -729,7 +808,6 @@ if (!$_SESSION['login']) {
         </div>
         <!--File na e print--> 
         
-        <!--Mga Potang inang script-->
         <?php 
             if (!empty($gis)) {
                 echo "<script>document.getElementById('toCOE').style.visibility='visible';</script>";
@@ -1030,6 +1108,13 @@ if (!$_SESSION['login']) {
             if (empty($_POST['fsof1'])) {
                 $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
             }
+
+            if (isset($_POST['aics'])) {
+                $program = 0;
+            } elseif (isset($_POST['akap'])) {
+                $program = 1;
+            }
+
             if ($_POST['type2'] == "") {
                 $type2 = "";
                 $pur2 = "";
@@ -1112,10 +1197,23 @@ if (!$_SESSION['login']) {
             if(isset($_POST['mental'])){$subcat = 6;}
             if(isset($_POST['asylum'])){$subcat = 7;}
             if(isset($_POST['osc'])){$subcat = 8;}
+            if(isset($_POST['kia_wia'])){$subcat = 9;}
+            if(isset($_POST['min_wage'])){$subcat = 10;}
             
             $others_subcat = "";
             if (!empty($_POST['osc_val'])){$others_subcat = trim($_POST['osc_val']);}
 
+            $c_disability = "";
+            if(isset($_POST['d_speech'])){$c_disability = 1;}
+            if(isset($_POST['d_learning'])){$c_disability = 2;}
+            if(isset($_POST['d_psychosocial'])){$c_disability = 3;}
+            if(isset($_POST['d_deaf'])){$c_disability = 4;}
+            if(isset($_POST['d_cancer'])){$c_disability = 5;}
+            if(isset($_POST['d_mental'])){$c_disability = 6;}
+            if(isset($_POST['d_visual'])){$c_disability = 7;}
+            if(isset($_POST['d_intellectual'])){$c_disability = 8;}
+            if(isset($_POST['d_physical'])){$c_disability = 9;}
+            if(isset($_POST['d_rare'])){$c_disability = 10;}
             
 			if(strtolower($type1) == "medical assistance"){
 				if(isset($_POST['hb'])){$if_medical = 1;}
@@ -1148,12 +1246,13 @@ if (!$_SESSION['login']) {
             if(isset($_POST['items'])){$material = 2;}
             if(isset($_POST['kits'])){$material = 3;}
             if(isset($_POST['devices'])){$material = 4;}
+            if(isset($_POST['rice'])){$material = 5;}
 
             // print_r($_POST);
             // once save the data of new -> client
-            $user->insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+            $user->insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
                                 $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
-                                $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
+                                $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
 
         if (isset($_POST['update'])) {
@@ -1218,8 +1317,15 @@ if (!$_SESSION['login']) {
             $m1 = $_POST["m1"];
             $f1 = "";
             if (empty($_POST['fsof1'])) {
-                echo $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
+                $f1 = mysqli_real_escape_string($user->db, strtoupper($_POST["f1"]));
             }
+
+            if (isset($_POST['aics'])) {
+                $program = 0;
+            } elseif (isset($_POST['akap'])) {
+                $program = 1;
+            }
+
             if ($_POST['type2'] == "") {
                 $type2 = "";
                 $pur2 = "";
@@ -1309,9 +1415,23 @@ if (!$_SESSION['login']) {
             if(isset($_POST['mental'])){$subcat = 6;}
             if(isset($_POST['asylum'])){$subcat = 7;}
             if(isset($_POST['osc'])){$subcat = 8;}
+            if(isset($_POST['kia_wia'])){$subcat = 9;}
+            if(isset($_POST['min_wage'])){$subcat = 10;}
             
             $others_subcat = "";
             if (!empty($_POST['osc_val'])){$others_subcat = trim($_POST['osc_val']);}
+
+            $c_disability = "";
+            if(isset($_POST['d_speech'])){$c_disability = 1;}
+            if(isset($_POST['d_learning'])){$c_disability = 2;}
+            if(isset($_POST['d_psychosocial'])){$c_disability = 3;}
+            if(isset($_POST['d_deaf'])){$c_disability = 4;}
+            if(isset($_POST['d_cancer'])){$c_disability = 5;}
+            if(isset($_POST['d_mental'])){$c_disability = 6;}
+            if(isset($_POST['d_visual'])){$c_disability = 7;}
+            if(isset($_POST['d_intellectual'])){$c_disability = 8;}
+            if(isset($_POST['d_physical'])){$c_disability = 9;}
+            if(isset($_POST['d_rare'])){$c_disability = 10;}
 
 			if(strtolower($type1) == "medical assistance"){
 				if(isset($_POST['hb'])){$if_medical = 1;}
@@ -1344,11 +1464,12 @@ if (!$_SESSION['login']) {
             if(isset($_POST['items'])){$material = 2;}
             if(isset($_POST['kits'])){$material = 3;}
             if(isset($_POST['devices'])){$material = 4;}
+            if(isset($_POST['rice'])){$material = 5;}
 
             //once save the data of new -> client
-            $user->updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $rl1, $rl2, $rl3, $ref_name,
+            $user->updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
             $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
-            $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $others_subcat, $if_medical, $if_burial, $financial, $material);
+            $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material);
         }
 
             //UPDATE CLIENT
@@ -2049,42 +2170,52 @@ if (!$_SESSION['login']) {
         $(function () {
         	$("#solo").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #osc").prop("checked", false);
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#ip").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#solo, #drug, #4ps, #dwell, #mental, #asylum, #osc").prop("checked", false);
+    	     		$("#solo, #drug, #4ps, #dwell, #mental, #asylum, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#drug").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #solo, #4ps, #dwell, #mental, #asylum, #osc").prop("checked", false);
+    	     		$("#ip, #solo, #4ps, #dwell, #mental, #asylum, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#4ps").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #drug, #solo, #dwell, #mental, #asylum, #osc").prop("checked", false);
+    	     		$("#ip, #drug, #solo, #dwell, #mental, #asylum, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#dwell").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #drug, #4ps, #solo, #mental, #asylum, #osc").prop("checked", false);
+    	     		$("#ip, #drug, #4ps, #solo, #mental, #asylum, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#mental").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #drug, #4ps, #dwell, #solo, #asylum, #osc").prop("checked", false);
+    	     		$("#ip, #drug, #4ps, #dwell, #solo, #asylum, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#asylum").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #drug, #4ps, #dwell, #mental, #solo, #osc").prop("checked", false);
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #solo, #osc, #kia_wia, #min_wage").prop("checked", false);
         		}
 		    });
         	$("#osc").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #solo").prop("checked", false);
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #solo, #kia_wia, #min_wage").prop("checked", false);
+        		}
+		    });
+        	$("#kia_wia").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #osc, #solo, #min_wage").prop("checked", false);
+        		}
+		    });
+        	$("#min_wage").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#ip, #drug, #4ps, #dwell, #mental, #asylum, #osc, #kia_wia, #solo").prop("checked", false);
         		}
 		    });
         });
@@ -2146,6 +2277,27 @@ if (!$_SESSION['login']) {
         });
 
         $(function () {
+            aics = $('#aics').val();
+            akap = $('#akap').val();
+            if(aics != "" || akap != ""){
+                $("#aics").removeAttr('required');
+                $("#akap").removeAttr('required');
+            }
+        	$("#aics").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#akap").prop("checked", false);
+                    $("#akap").removeAttr('required');
+        		}
+		    });
+        	$("#akap").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#aics").prop("checked", false);
+                     $("#aics").removeAttr('required');
+        		}
+		    });
+        });
+
+        $(function () {
         	$("#medical").click(function () {
 	        	if ($(this).prop("checked")) {
     	     		$("#transportation, #food, #fassist, #educational, #casha").prop("checked", false);
@@ -2181,24 +2333,83 @@ if (!$_SESSION['login']) {
         $(function () {
         	$("#packs").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#items, #kits, #devices").prop("checked", false);
+    	     		$("#items, #kits, #devices, #rice").prop("checked", false);
         		}
 		    });
         	$("#items").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#packs, #kits, #devices").prop("checked", false);
+    	     		$("#packs, #kits, #devices, #rice").prop("checked", false);
         		}
 		    });
         	$("#kits").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#items, #packs, #devices").prop("checked", false);
+    	     		$("#items, #packs, #devices, #rice").prop("checked", false);
         		}
 		    });
         	$("#devices").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#items, #kits, #packs").prop("checked", false);
+    	     		$("#items, #kits, #packs, #rice").prop("checked", false);
+        		}
+		    });
+        	$("#rice").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#items, #kits, #devices, #packs").prop("checked", false);
         		}
 		    });
         });
+
+        $(function () {
+        	$("#d_speech").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_learning").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_speech, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_psychosocial").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_speech, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_deaf").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_speech, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_cancer").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_speech, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_mental").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_speech, #d_visual, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_visual").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_speech, #d_intellectual, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_intellectual").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_speech, #d_physical, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_physical").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_speech, #d_rare").prop("checked", false);
+        		}
+		    });
+        	$("#d_rare").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_speech").prop("checked", false);
+        		}
+		    });
+        });
+
     </script>
 </html>

@@ -1,12 +1,20 @@
-<style>
+<html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <header>
+    <style>
+    
+    @page {
+		size: A4 landscape;
+	}
+
 	@media print{
-		@page {size: Letter landscape;}
-		#container{
-			margin: 0 auto;
-     		width: 100px; 
+		html, body {
+			width: 297mm;
+			height: 210mm;
 		}
 	}
-	
+    
 	</style>
     <?php 
     
@@ -15,7 +23,11 @@
             $COEsignatoryName = strtoupper($COEsignatory['first_name'] ." ". $COEsignatory['middle_I'] .". ". $COEsignatory['last_name']);
         }
     ?>
-	<div class="container" style="font-size: 12px;margin-left:5%;">
+    </header>
+    
+    <body>
+
+	<div class="container" id="cash_print" style="font-size: 12px;margin-left:5%;">
             <div class="row">
                 <!--LEFT-->
                 <div class="col" style="border: solid 2px;height: 680px">
@@ -226,3 +238,5 @@
             
             <!--CONTAINER-->
     </div>
+    </body>
+</html>

@@ -22,7 +22,7 @@
             <div class="col-6 ml-md-auto" style="color: #000000; ">
                 <p class="text-center" style="font-size: 30px; font-family: arial, sans-serif; font-weight: bold;">CRISIS INTERVENTION SECTION</p><br>
                 <p class="text-center" style="font-size: 17px; font-family: arial, sans-serif; margin-top: -45px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p><br>
-                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-11 | REV 02 | 08 JAN 2024</p>
+                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-13 | REV 03 | 14 MAY 2024</p>
             </div>
         </div>
         <div class="row">
@@ -32,7 +32,7 @@
                     <div class="col-3"></div>
                     <div class="col-6">
                         <p style="font-size: 18px; margin-top: -10px;">(Cash Outright)</p>
-                    </div>n
+                    </div>
                     <div class="col-3"></div>
                 </div>
             </div>
@@ -87,48 +87,86 @@
             </div>
         </div>
         <!--Second Row-->
-        <div class="row">
-            <div class="col-2"></div>
-			<div class="col-3" style="margin-top: -5px; ">
-				<div style="width: 100%; font-size: 16px;">
-					<a style="margin-right: 5px"></a>
-					<input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])==""? "checked" : "") ?>> New
-					<a style="margin-left: 5px"></a>
-					<input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])==""? "checked" : "") ?>> Returning
-				</div>
-            </div>
-            <div class="col-7">
-                <div class="row" style="font-size: 16px; margin-top: -5px; margin-right: -15px">
-                    <div class="col-sm-2" style="margin-left:-55px; margin-top: -1px;">
-                        <p class="text-center">On-site:</p>
-                    </div>  
-                    <div class="col-sm-1" style="margin-left:-25px; margin-top: -2px;">
-                        <a></a>
-                        <input class="text-center fas fa-check" style="font-size:18px;margin-left:-5; width: 25px; height: 25px; padding:0; text-indent: 3px; border: 1px solid black;" type="text" value=''>
-
+        <div class="row" style="margin-bottom: 15px;">
+            <div class="col-2">
+                <div class="row" style="font-size: 14px; padding:0; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
                     </div>
-                    <div class="col-sm-1"">
+                    <div class="col-sm-3 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;AICS</b>
                     </div>
-                    <div class="col-sm-6" style="margin-left:-30px;font-size: 16px;">
-                        <div style="width: 100%">
-                            <a style=" margin-right: 10px"></a>
-                            <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])=="walk-in"? "checked" : "") ?>> Walk-in
-                            <a style="margin-left: 5px"></a>
-                            <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (strtolower($gis['mode_admission'])=="referral"? "checked" : "") ?>> Referral
-                        </div>
+                    <div class="col-sm-1 center">
+                        <input class="check-box" style="width: 30px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($client['program_type']==1)? "&#x2714;" : "") ?>'>
                     </div>
-                    <div class="col-sm-2" style="margin-top: -1px; margin-left:-10px;">
-                        <p class="text-center">Off-site:</p>
-                    </div>
-                    <div class="col-sm-1" style="margin-left:-25px; margin-top: -2px;">
-                        <a></a>
-                        <input class="text-center" style="font-size:18px;margin-left:-5; width: 25px; height: 25px; padding:0; text-indent: 3px; border: 1px solid black;" type="text" value=''>
-                    </div>
-                    <div class="col-sm-1"">
+                    <div class="col-sm-3 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;AKAP</b>
                     </div>
                 </div>
             </div>
-        </div><br>
+            <div class="col-2">
+                <div class="row" style="font-size: 14px; padding:0; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($client['type_of_client'])=="new"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-3 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;New</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($client['type_of_client'])=="returning"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-4 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Returning</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="row" style="font-size: 14px; padding:0; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black; border-radius: 30px;" type="text" value='&#x2714;'>
+                    </div>
+                    <div class="col-sm-7 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;On-site</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row" style="font-size: 14px; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($gis['mode_admission'])=="walk-in"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-4 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Walk-in</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($gis['mode_admission'])=="referral"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-4 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Referral</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row" style="font-size: 14px; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black; border-radius: 30px;" type="text" value=''>
+                    </div>
+                    <div class="col-sm-4 center" style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Off-site</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black; border-radius: 30px;" type="text" value=''>
+                    </div>
+                    <div class="col-sm-4 center" style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Malasakit</b>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
 		
         <!--Assistance-->
         <div style="margin-top: 5px; font-size: 15px; text-transform: justify">
@@ -164,38 +202,39 @@
                 <div class="row" style="font-size: 15px;margin:0px 2px 0px 2px">
                      <div class="col" style="padding-top: 0px; margin-top: -8px;">
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;General Intake Sheet<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;margin-bottom:7px;border:1px solid black;" value="<?php echo $user->coe_check('justification', $record['document'])?>" />&emsp;Justification<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('valid id', $record['document'])?>" />&emsp;Valid I.D. Presented:<br>
                         <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;"><?php echo $record['id_presented']?></p>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('4ps', $record['document'])?>" />&emsp;4PS DSWD I.D.<br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;margin-bottom:7px;border:1px solid black;" value="<?php echo $user->coe_check('justification', $record['document'])?>" />&emsp;Justification
+                        <!-- <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('4ps', $record['document'])?>" />&emsp;4PS DSWD I.D.<br> -->
                     </div>
                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('medical certificate', $record['document'])?>" />&emsp;Medical Certificate/Abstract<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('prescription', $record['document'])?>" />&emsp;Prescriptions<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('statement', $record['document'])?>" />&emsp;Statement of Account<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('treatment', $record['document'])?>" />&emsp;Treatment Protocol<br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('quotation', $record['document'])?>" />&emsp;Quotation
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('quotation', $record['document'])?>" />&emsp;Quotation/Chargeslip<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('discharge', $record['document'])?>" />&emsp;Discharge Summary
                     </div>
                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('discharge', $record['document'])?>" />&emsp;Discharge Summary<br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('laboratory', $record['document'])?>" />&emsp;Laboratory Request<br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('charge slip', $record['document'])?>" />&emsp;Charge Slip<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('lab request', $record['document'])?>" />&emsp;Laboratory Request<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('promissory note', $record['document'])?>" />&emsp;Promissory Note<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('funeral', $record['document'])?>" />&emsp;Funeral Contract<br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('death certificate', $record['document'])?>" />&emsp;Death Certificate
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('death certificate', $record['document'])?>" />&emsp;Death Certificate<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('death summary', $record['document'])?>" />&emsp;Death Summary<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('referral', $record['document'])?>" />&emsp;Referral Letter
                     </div>
                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('death summary', $record['document'])?>" />&emsp;Death Summary<br>
-                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('referral', $record['document'])?>" />&emsp;Referral Letter<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('social case study', $record['document'])?>" />&emsp;Social Case Study Report<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('contract of employment', $record['document'])?>" />&emsp;Contract of Employment<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('certificate of employment', $record['document'])?>" />&emsp;Certificate of Employment<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('income tax return', $record['document'])?>" />&emsp;Income Tax Return<br>
                         <?php if(!empty($user->coe_check('Others', $record['document']))){ ?>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('Others', $record['document'])?>" />&emsp;Others:<br>
-                        <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;"><?php echo $record['others_input']?></p>
+                        <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 0%;"><?php echo $record['others_input']?></p>
                         <?php } else {?>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="" />&emsp;Others:<br>
-                        <input class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value="">
+                        <input class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 0%;" type="text" height="30px" value="">
                         <?php } ?>
-                        
-                        
                     </div>
                 </div>
             </div>
@@ -206,7 +245,7 @@
             The client is hereby recommended to receive <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 25%;" value="<?php echo strtoupper($client_assistance[1]['type']); ?>" /> assistance for <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 35%; text-transform: capitalize;" value="<?php echo $client_assistance[1]['purpose']; ?>" /><br> 
 			in the amount of <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 55%;" value="<?php echo $amountToWord; ?>"
             /> PHP <input class="text-center money" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 8%;" value="<?php echo $client_assistance[1]['amount']; ?>" />CHARGABLE AGAINST: PSP 
-			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="AICS Fund <?php echo Date('Y', strtotime($client["date_accomplished"]))?>" />
+			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="<?php echo (($client['program_type']==1)? 'AKAP' : 'AICS') ?> Fund <?php echo Date('Y', strtotime($client["date_accomplished"]))?>" />
         </div>
 <br><br>
         <!-- Signatory -->
@@ -289,7 +328,7 @@
 						</div>
 						<div class="col-4">
 							<a style=""></a>
-							<input style="margin-left:0; width: 20px; padding:0; text-indent: 2px;" type="radio" height="30px" width="100px" value='1 ' <?php echo ($client_assistance[1]['financial'] == 6?"checked":"")?>> Cash Assistance or Other Support
+							<input style="margin-left:0; width: 20px; padding:0; text-indent: 2px;" type="radio" height="30px" width="100px" value='1 ' <?php echo ($client_assistance[1]['financial'] == 6?"checked":"")?>> Cash Relief Assistance
 						</div>
 					</div>
 				</div>

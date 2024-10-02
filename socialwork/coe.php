@@ -533,13 +533,35 @@
 			 </div>
 			</div>
     </nav>
-        <br><br><br><br>
-        <div>
-            <h2 class="text-center"><b><u>Certificate of Eligibility</u></b></h2><br>
-        </div>
-        <br> 
+    <br><br><br><br>
         <form action="coe.php?id=<?php echo $_GET['id']?>" method="post">
             <div class="container">
+                <?php if($gis['program_type'] == '1'){?>
+                
+                <div class="card border-info mb3" style="width:100%;">
+                    <h4 class="card-header text-success">Certificate of Attestation</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="text" class="form-control mr-sm-2 b" style="border: none;" value="Occupation : "><br>
+                                <input type="text" class="form-control mr-sm-2 b" style="border: none;" value="Salary : "><br>
+                                <input type="text" class="form-control mr-sm-2 b" style="border: none;" value="Agency : ">
+                            </div>
+                            <div class="col-10">
+                                <input type="text" class="form-control mr-sm-2 b" id="client_work"     name="client_work" value="<?php echo $client['occupation']?>" placeholder="Client Current Work" required><br>
+                                <input type="text" class="form-control mr-sm-2 b" name="client_salary" id="client_salary" value="<?php echo number_format($client['salary'])?>" placeholder="Monthly Salary"><br>
+                                <input type="text" class="form-control mr-sm-2 b" id="client_agency"      name="client_agency" value="<?php echo $client['agency']?>" placeholder="Agency/Company" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <?php }?>
+
+                <div>
+                    <h2 class="text-center"><b><u>Certificate of Eligibility</u></b></h2><br>
+                </div>
+                <br> 
                 <?php if($am >= $rec_amount || $am2 >= $rec_amount){?>
                     <div class="row">
                         <div class="container">
@@ -624,8 +646,17 @@
                                         </div> 
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
+                                        <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck($record['document'], "", "Contract of Employment") ?>> Contract of Employment</div>
                                     </div>
+                                    <div class="row">
+                                        <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck($record['document'], "", "Certificate of Employment") ?>> Certificate of Employment</div>
+                                    </div>
+                                    <div class="row">
+                                        <div><input type="checkbox" class="lg" name="itr" value="Income Tax Return" <?php echo $user->checkCheck($record['document'], "", "Income Tax Return") ?>> Income Tax Return</div>
+                                    </div>
+                                    <!-- <div class="row">
+                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
+                                    </div> -->
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck($record['document'], "", "Others") ?>> Others: 
                                             <input type="text" class="text-left center-input" name="others_input" value=" <?php echo $record['others_input'] ?>">
@@ -646,7 +677,7 @@
                                     if(substr_count(strval($type), "Medic") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate</div>
+                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate/Abstract</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
@@ -661,16 +692,16 @@
                                             <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck($record['document'], "", "LAB REQUEST").'> Laboratory Request</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="charge" id="charge" value="CHARGE SLIP" '.$user->checkCheck($record['document'], "", "CHARGE SLIP").'> Charge Slip</div>
-                                        </div>
-                                        <div class="row">
-                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck($record['document'], "", "QUOTATION").'> Quotation</div>
+                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck($record['document'], "", "QUOTATION").'> Quotation/Chargeslip</div>
                                         </div>  
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck($record['document'], "", "PRESCRIPTION").'> Prescription</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck($record['document'], "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="promissory" id="promissory" value="PROMISSORY NOTE" '.$user->checkCheck($record['document'], "", "PROMISSORY NOTE").'> Promissory Note</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Trans") > 0){
@@ -684,6 +715,9 @@
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Food") > 0){
@@ -934,6 +968,7 @@
     </body>
     <?php 
     if(isset($_POST["save"])){
+        $client_id = $id;
         $docu = "";
         $id_pres = "";
         $others_input = "";
@@ -959,6 +994,16 @@
         }
 		if(isset($_POST['sd_officer'])){
             $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
+        }
+        
+		if(isset($_POST['client_work'])){
+            $client_work = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_work'])));
+        }
+		if(isset($_POST['client_salary'])){
+            $client_salary = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_salary'])));
+        }
+		if(isset($_POST['client_agency'])){
+            $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
@@ -1030,12 +1075,13 @@
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
-        $user->insertCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
-        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo);
+        $user->insertCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
+        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
     }
 
 
     if(isset($_POST['update'])){
+        $client_id = $id;
         $docu = "";
         $id_pres = "";
         $others_input = "";
@@ -1065,7 +1111,17 @@
                 $docu .=   $value . '-';
         }
 
-       
+		if(isset($_POST['client_work'])){
+            $client_work = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_work'])));
+        }
+		if(isset($_POST['client_salary'])){
+            $client_salary = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_salary'])));
+        }
+        
+		if(isset($_POST['client_agency'])){
+            $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
+        }
+
         if(isset($_POST['val_id'])){
             $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
         }
@@ -1129,11 +1185,12 @@
         if(isset($_POST['amountf12'])){
             $amount12 = $_POST['amountf12'];
         }
+        // print_r($_POST);
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         // echo $signName;
-        $user->updateCOE($_GET['id'], $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
-        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo);
+        $user->updateCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
+        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
     }
 ?>
    

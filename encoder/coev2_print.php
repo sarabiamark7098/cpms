@@ -206,7 +206,7 @@
             The client is hereby recommended to receive <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 25%;" value="<?php echo strtoupper($client_assistance[1]['type']); ?>" /> assistance for <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 35%; text-transform: capitalize;" value="<?php echo $client_assistance[1]['purpose']; ?>" /><br> 
 			in the amount of <input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 55%;" value="<?php echo $amountToWord; ?>"
             /> PHP <input class="text-center money" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 8%;" value="<?php echo $client_assistance[1]['amount']; ?>" />CHARGABLE AGAINST: PSP 
-			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="AICS Fund <?php echo Date('Y', strtotime($client['date_accomplished']))?>" />
+			<input class="text-center" style="border: none; border-bottom: 1px solid black; padding:0px; margin:0px; height: 20px; width: 13%;" value="<?php echo (($client['program_type']==1)? 'AKAP' : 'AICS') ?> Fund <?php echo Date('Y', strtotime($client['date_accomplished']))?>" />
         </div>
 <br><br>
         <!-- Signatory -->

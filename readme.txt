@@ -37,4 +37,18 @@ CREATE TABLE `client_info` (
   PRIMARY KEY (`client_num`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
-3
+June 30, 2024
+database
+1. add column for type_of_disability(varchar[20]) @assessment
+
+July 13, 2024
+database
+1. add column for program_type(varchar[50]) @tbl_transaction
+2. add column for type_of_client(varchar[50]) @tbl_transaction
+
+
+August 30, 2024
+database
+1. add column for agency(varchar[50]) @client_data
+2. add column for sw_license_no(varchar[50]) @cpms_account
+3. add column for sw_license_expiry(Date) @cpms_account

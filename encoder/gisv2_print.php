@@ -13,7 +13,7 @@
 
 	
  </style>
-    <div class="container" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial: sans-serif;">
+    <div class="container" id="gisv2_print" style="font-size:12px; margin-top:20px; padding:0%; font-family: Arial: sans-serif;">
         
         <!--HEADER-->
         <div class="row" style="margin-top:0px">
@@ -25,25 +25,22 @@
             <div class="col-6 ml-md-auto" style="color: #000000; ">
                 <p class="text-center" style="font-size: 30px; font-family: arial, sans-serif; font-weight: bold;">CRISIS INTERVENTION SECTION</p><br>
                 <p class="text-center" style="font-size: 17px; font-family: arial, sans-serif; margin-top: -45px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p><br>
-                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-11 | REV 02 | 08 JAN 2024</p>
+                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-11 | REV 03 | 14 MAY 2024</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-12" style="text-align: center; margin-top: -10px">
+            <div class="col-12" style="text-align: center; margin-top: -15px">
                 <b style="font-size: 30px">GENERAL INTAKE SHEET</b>
                 <div class="row">
-                    <div class="col-3"></div>
-                    <div class="col-6">
-                        <p class="header" style="margin-top: -10px; margin-left:-25px;border-radius: 30px 30px 30px 30px;"><b>MAAARING MAGPATULONG SUMAGOT SA DSWD PERSONNEL</b></p>
+                    <div class="col-12">
+                        <p class="header" style="margin-top: -7px; margin-left:-15px; margin-right:-15px;"><b>MAAARING MAGPATULONG SUMAGOT SA DSWD PERSONNEL</b></p>
                     </div>
-                    <div class="col-3"></div>
                 </div>
-                
             </div>
         </div>
         <div class="row">
             <div class="col-2">
-                <div class="row" style="font-size: 14px; margin-top: -5px">
+                <div class="row" style="font-size: 14px; margin-top: -8px">
                     <div class="col-sm-1 center">
                         <p class="text-center">QN:</p>
                     </div>
@@ -53,7 +50,7 @@
                 </div>
             </div>
             <div class="col-5">
-                <div class="row" style="font-size: 14px; margin-top: -5px">
+                <div class="row" style="font-size: 14px; margin-top: -8px">
                     <div class="col-sm-1 center" style="margin-right: 5px;">
                         <p class="text-center">PCN:</p>
                     </div>
@@ -80,7 +77,7 @@
             <div class="col-2">
             </div>
             <div class="col-3">
-                <div class="row" style="font-size: 14px; margin-top: -5px">
+                <div class="row" style="font-size: 14px; margin-top: -8px">
                     <div class="col-sm-2 center">
                         <p class="text-center">Date:</p>
                     </div>
@@ -93,6 +90,85 @@
             </div>
         </div>
         
+        <div class="row" style="margin-top: -5px; margin-bottom: 15px;">
+            <div class="col-2">
+                <div class="row" style="font-size: 14px; padding:0; margin-top: -5px">
+                <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-3 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;AICS</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="check-box" style="width: 30px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($client['program_type']==1)? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-3 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;AKAP</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="row" style="font-size: 14px; padding:0; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($client['type_of_client'])=="new"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-3 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;New</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($client['type_of_client'])=="returning"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-4 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Returning</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="row" style="font-size: 14px; padding:0; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black; border-radius: 30px;" type="text" value='&#x2714;'>
+                    </div>
+                    <div class="col-sm-7 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;On-site</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row" style="font-size: 14px; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($gis['mode_admission'])=="walk-in"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-4 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Walk-in</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black;" type="text" value='<?php echo (strtolower($gis['mode_admission'])=="referral"? "&#x2714;" : "") ?>'>
+                    </div>
+                    <div class="col-sm-4 center"  style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Referral</b>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row" style="font-size: 14px; margin-top: -5px">
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black; border-radius: 30px;" type="text" value=''>
+                    </div>
+                    <div class="col-sm-4 center" style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Off-site</b>
+                    </div>
+                    <div class="col-sm-1 center">
+                        <input class="text-center" style="width: 30px; padding:0; border: 1px solid black; border-radius: 30px;" type="text" value=''>
+                    </div>
+                    <div class="col-sm-4 center" style="padding-top: 3px;">
+                        <b class="text-center">&nbsp;Malasakit</b>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
 
         <!--Assistance-->
         <!-- <p class="header" style="margin-top: -5px; margin-left:-15px; font-size: 15px;"><b>&emsp; NAIS HINGIIN NA TULONG </b>(Assistance Requested)</p>
@@ -150,7 +226,7 @@
         <p class="header" style="margin-top: -10px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; Part I. To be filled out by client</b></p>
         <p class="header" style="margin-top: -20px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG KINATAWAN</b> (Representative's Identifying Information)</p>
 
-        <div class="row" style="margin-top: -5px;">
+        <div class="row" style="margin-top: -8px;">
             <div class="col-4">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["lastname"])?$client["lastname"]:"" ?>'>
             </div>
@@ -178,7 +254,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> (Sr.,Jr.)</p>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px;">
+        <div class="row" style="margin-top: -8px;">
             <div class="col-3">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_street"])?$client["client_street"]:"" ?>'>
             </div>
@@ -212,7 +288,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Region</b> (XI)</p>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px;">
+        <div class="row" style="margin-top: -8px;">
             <div class="col-2">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["contact"])?$client["contact"]:"" ?>'>
             </div>
@@ -258,7 +334,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 7px; "><b>Buwanang Kita</b></p>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px;">
+        <div class="row" style="margin-top: -8px;">
             <div class="col-4">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["relation"])?$client["relation"]:"Self" ?>'>
             </div>
@@ -288,7 +364,7 @@
         <!--BENEFICIARY INFO-->
         <p class="header" style="margin-top: -5px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG BENEPISYARYO</b> (Beneficiary's Identifying Information)</p>
 
-        <div class="row" style="margin-top:-5px; ">
+        <div class="row" style="margin-top:-8px; ">
             <div class="col-4">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo !empty($client["b_lname"])?$client["b_lname"]:"" ?>'>
             </div>
@@ -316,7 +392,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> (Sr.,Jr.)</p>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px;">
+        <div class="row" style="margin-top: -8px;">
             <div class="col-3">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_street"])?$client["b_street"]:"" ?>'>
             </div>
@@ -350,7 +426,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Region</b> (XI)</p>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px;">
+        <div class="row" style="margin-top: -8px;">
             <div class="col-2">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_contact"])?$client["b_contact"]:"" ?>'>
             </div>
@@ -398,23 +474,23 @@
         </div>
         
         <!--FAMILY COMPOSITION INFO-->
-        <p class="header" style="margin-top: 5px; margin-left: -20px; margin-right: -15px; font-size: 15px;"><b>&emsp; KOMPOSISYON NG PAMILYA</b> (Family Composition) &emsp;&emsp;&emsp;&emsp;&emsp;Note: Gamitin ang Likurang bahagi ng papel kung kinakailangan </p>
+        <p class="header" style="margin-top: 2px; margin-left: -14px; margin-right: -15px; font-size: 15px;"><b>&emsp; KOMPOSISYON NG PAMILYA</b> (Family Composition) &emsp;&emsp;&emsp;&emsp;&emsp;Note: Gamitin ang Likurang bahagi ng papel kung kinakailangan </p>
         
-        <div class="row" style="margin-top: -8px;">
-            <div class="col-4 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px; ">
-                <b>Buong Pangalan</b><p style="font-size: smaller; margin-top: -5px; border solid 1px black;">(Complete Name)</p>
+        <div class="row" style="margin-top: -15px; padding: 0%;">
+            <div class="col-4 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px; padding: 0%;">
+                <b>Buong Pangalan</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;">(Complete Name)</p>
             </div>
-            <div class="col-3 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
-                <b>Relasyon sa Benepisyaryo</b><p style="font-size: smaller; margin-top: -5px;">(Relationship to the Beneficiary)</p>
+            <div class="col-3 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px; padding: 0%;">
+                <b>Relasyon sa Benepisyaryo</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;">(Relationship to the Beneficiary)</p>
             </div>
-            <div class="col-1 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
-                <b>Edad</b><p style="font-size: smaller; margin-top: -5px;">(Age)</p>
+            <div class="col-1 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px; padding: 0%;">
+                <b>Edad</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;">(Age)</p>
             </div>
-            <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
-                <b>Trabaho</b><p style="font-size: smaller; margin-top: -5px;">(Occupation)</p>
+            <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px; padding: 0%;">
+                <b>Trabaho</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;">(Occupation)</p>
             </div>
-            <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
-                <b>Buwanang Kita</b><p style="font-size: smaller; margin-top: -5px;">(Monthly Salary)</p>
+            <div class="col-2 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px; padding: 0%;">
+                <b>Buwanang Kita</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;">(Monthly Salary)</p>
             </div>
         </div>
         <div class="row text-center" style="border: 1px solid black; padding:0px; padding-top: 5px; font-size:14px; min-height: 65px; max-height: 1000px; line-height: 15px;">
@@ -483,40 +559,78 @@
             </div>
         </div><br> -->
         
-        <p class="header text-center" style="margin-top: 12px; margin-left: -15px; margin-right:-15px;margin-bottom: 5px;  font-size: 16px;"><b>&emsp; HUWAG SUSULATAN, ANG DSWD LAMANG ANG PWEDE GUMAMIT</b> (Do not write below this part for DSWD'S use only.)</p>
+        <!-- <p class="header text-center" style="margin-top: 12px; margin-left: -15px; margin-right:-15px;margin-bottom: 5px;  font-size: 16px;"><b>&emsp; HUWAG SUSULATAN, ANG DSWD LAMANG ANG PWEDE GUMAMIT</b> (Do not write below this part for DSWD'S use only.)</p> -->
+        <p class="header" style="margin-top: 0px; margin-left: -15px; margin-right:-15px;margin-bottom: 0px;  font-size: 16px;"><b>&emsp; Part II: To be Filled out by DSWD Personnel</b></p>
         <!--Assessment-->
         <div class="row">
-            <div class="col-5 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
-                <b>Client Category</b>
-            </div>
-            <div class="col-7 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
-                <b>Social Worker's Assessment</b>
+            <div class="col-12" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
+                &emsp;&emsp;<b>Client Sector</b>
             </div>
         </div>
         <div class="row">
             <div class="col-2" style="border: 1px solid black; font-size:11px;">
-                <b> &emsp; TARGET SECTOR</b><br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 1? '&#x2714;':'') ?>" /> &emsp; FHONA<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 2? '&#x2714;':'') ?>" /> &emsp; WEDC<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 3? '&#x2714;':'') ?>" /> &emsp; PWD<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 4? '&#x2714;':'') ?>" /> &emsp; YNSP<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 5? '&#x2714;':'') ?>" /> &emsp; SC<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 6? '&#x2714;':'') ?>" /> &emsp; PLHHIV<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 7? '&#x2714;':'') ?>" /> &emsp; CNSP
+                <div class="row">
+                    <b> &emsp; TARGET SECTOR</b><br>
+                    <div class="col-6" style="font-size:11px;padding:0%;padding-left:10px;padding-top:5px; margin:0%;">
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 1? '&#x2714;':'') ?>" /> &nbsp; FHONA<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 2? '&#x2714;':'') ?>" /> &nbsp; WEDC<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 3? '&#x2714;':'') ?>" /> &nbsp; PWD<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 4? '&#x2714;':'') ?>" /> &nbsp; YNSP<br>
+                    </div>
+                    <div class="col-6" style="font-size:11px;padding:0%;padding-top:5px; margin:0%;">
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 5? '&#x2714;':'') ?>" /> &nbsp; SC<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 6? '&#x2714;':'') ?>" /> &nbsp; PLHHIV<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['target_sector'] == 7? '&#x2714;':'') ?>" /> &nbsp; CNSP
+                    </div>
+                </div>
             </div>
-            <div class="col-3" style="border: 1px solid black; font-size:11px; padding: 0; padding-left: 2px; padding-bottom: 5px;">
+            <div class="col-5" style="border: 1px solid black; font-size:11px;">    
                 <b> &emsp; SPECIFY SUB-CATEGORY</b><br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 1? '&#x2714;':'') ?>" />&nbsp;Solo Parents<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 2? '&#x2714;':'') ?>" />&nbsp;Indigenous People<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 3? '&#x2714;':'') ?>" />&nbsp;Recovering Person who used Drugs<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 4? '&#x2714;': ($gis['pantawid_bene'] == 'Yes'? '&#x2714;':'')) ?>" />&nbsp;4PS DSWD Beneficiary<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 5? '&#x2714;':'') ?>" />&nbsp;Street Dwellers<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 6? '&#x2714;':'') ?>" />&nbsp;Psychosocial/Mental/Learning Disability<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 7? '&#x2714;':'') ?>" />&nbsp;Stateless Persons/Asylum Seekers/Refugees<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 8? '&#x2714;':'') ?>" />&nbsp;Others:
-                <input class="text-center" style="width: 70%; height: 15 	px; font-size: 12px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo (($gis['subcat_ass'] == 8)&&!empty($gis['others_subcat'])? $gis["others_subcat"]:'') ?>'>
+                <div class="row">
+                    <div class="col-5" style="font-size:11px; margin:0%; padding:0%;padding-left:5px;padding-top:5px;">
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 1? '&#x2714;':'') ?>" />&nbsp;Solo Parents<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 2? '&#x2714;':'') ?>" />&nbsp;Indigenous People<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 5? '&#x2714;':'') ?>" />&nbsp;Street Dwellers<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 9? '&#x2714;':'') ?>" />&nbsp;KIA/WIA<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 4? '&#x2714;': ($gis['pantawid_bene'] == 'Yes'? '&#x2714;':'')) ?>" />&nbsp;4PS DSWD Beneficiary<br>
+                    </div>
+                    <div class="col-7" style="font-size:11px; margin:0%; padding:0%;padding-top:5px;">
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 3? '&#x2714;':'') ?>" />&nbsp;Recovering Person who used Drugs<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 6? '&#x2714;':'') ?>" />&nbsp;Psychosocial/Mental/Learning Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 7? '&#x2714;':'') ?>" />&nbsp;Stateless Persons/Asylum Seekers/Refugees<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 10? '&#x2714;':'') ?>" />&nbsp;Minimum Wage Earner<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['subcat_ass'] == 8? '&#x2714;':'') ?>" />&nbsp;Others:
+                        <input class="text-center" style="width: 70%; height: 15px; font-size: 12px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo (($gis['subcat_ass'] == 8)&&!empty($gis['others_subcat'])? $gis["others_subcat"]:'') ?>'>
+                    </div>
+                </div>
             </div>
-            <div class="col-7 text-center" style="border: 1px solid black; font-size:14px;line-height: 13px;"> <br>
+            <div class="col-5" style="border: 1px solid black; font-size:11px;">
+            <b> &emsp; Type of Disability</b><br>
+                <div class="row">
+                    <div class="col-6" style="font-size:11px; margin:0%; padding:0%;padding-left:5px;padding-top:5px;">
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 1? '&#x2714;':'') ?>" />&nbsp;Speech Impairment<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 2? '&#x2714;':'') ?>" />&nbsp;Learning Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 3? '&#x2714;':'') ?>" />&nbsp;Psychosocial Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 4? '&#x2714;':'') ?>" />&nbsp;Deaf/Hard-of-Hearning<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 5? '&#x2714;':'') ?>" />&nbsp;Cancer<br>
+                    </div>
+                    <div class="col-6" style="font-size:11px; margin:0%; padding:0%;padding-top:5px;">
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:3px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 6? '&#x2714;':'') ?>" />&nbsp;Mental Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 7? '&#x2714;':'') ?>" />&nbsp;Visual Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 8? '&#x2714;':'') ?>" />&nbsp;Intellectual Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;" value="<?php echo ($gis['type_of_disability'] == 9? '&#x2714;':'') ?>" />&nbsp;Physical Disability<br>
+                        <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:2px;border: 1px solid black;margin-bottom: 5px;" value="<?php echo ($gis['subcat_ass'] == 10? '&#x2714;':'') ?>" />&nbsp;Rare Disease
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center" style="border: 1px solid black; background-color: #bfbfbf; font-size:14px;">
+                <b>Social Worker's Assessment</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center" style="border: 1px solid black; font-size:14px;line-height: 13px;"> <br>
                 <p><?php echo $gis["soc_ass"]; ?></p>
             </div>
         </div>
@@ -635,16 +749,16 @@
             <div class="col">
                 <div class="row">
                     <div class="col-4" style="font-size: 14px;">
-                        <b class="text-center" style="font-size: 13;">FINANCIAL ASSISTANCE</b>
+                        <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (!empty($client_assistance[1]['financial'])?"checked":"")?>>&nbsp;<b class="text-center" style="font-size: 12;">FINANCIAL ASSISTANCE</b>
                     </div>
                     <div class="col-3" style="font-size: 14px;">
-                        <b class="text-center" style="font-size: 13;">MATERIAL ASSISTANCE</b>
+                        <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (!empty($client_assistance[1]['material'])?"checked":"")?>>&nbsp;<b class="text-center" style="font-size: 12;">MATERIAL ASSISTANCE</b>
                     </div>
                     <div class="col-3" style="font-size: 14px;padding-left:60px;">
-                        <b class="text-center" style="font-size: 13;">PSYCHOSOCIAL SUPPORT</b>
+                        <input style="width: 10px; margin-left:-10; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (!empty($gis["service5"])||!empty($gis["service6"])?"checked":"")?>>&nbsp;<b class="text-center" style="font-size: 12;">PSYCHOSOCIAL SUPPORT</b>
                     </div>
                     <div class="col-2" style="font-size: 14px;">
-                        <b class="text-center" style="font-size: 13;">REFERRAL</b>
+                    <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo (!empty($gis["refer1"])?"checked":"")?>>&nbsp;<b class="text-center" style="font-size: 12;">REFERRAL</b>
                     </div>
                 </div>
                 <div class="row">
@@ -665,13 +779,13 @@
                             <a style="margin-left: 0px"></a>
                             <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo ($client_assistance[1]['financial'] == 3?"checked":"")?>>Food Assistance<br>
                             <a style="margin-left: 0px"></a>
-                            <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo ($client_assistance[1]['financial'] == 6?"checked":"")?>>Cash Assistance for Other Support Services<br>
+                            <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo ($client_assistance[1]['financial'] == 6?"checked":"")?>>Cash Relief Assistance<br>
                         </div>
                     </div>
                     <div class="col-4" style="margin-left:-30px; margin-bottom:5px; font-size:14px;">
                         <div>
                             <a style="margin-left: 0px"></a>
-                            <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo ($client_assistance[1]['material'] == 1?"checked":"")?>>Family Food Packs<br>
+                            <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo ($client_assistance[1]['material'] == 1?"checked":"")?>>Family Food Packs &emsp;<input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='5' <?php echo ($client_assistance[1]['material'] == 5?"checked":"")?>>Rice<br>
                             <a style="margin-left: 0px"></a>
                             <input style="width: 10px; margin-left:-5; width: 20px;padding:0; text-indent: 2px;" type="radio" value='1' <?php echo ($client_assistance[1]['material'] == 2?"checked":"")?>>Other Food Items<br>
                             <a style="margin-left: 0px"></a>
@@ -759,7 +873,7 @@
         <div class="row">
             <div class="col-6">
                 <div class="row">
-                    <div class="col-9 text-center" style="border: 1px solid black; font-size:12px;">
+                    <div class="col-10 text-center" style="border: 1px solid black; font-size:12px;">
                         <!--Sa aking pagpirma, ako ay pumapayag na gamitin, ipaskil, at ibahagi ng DSWD ang aking personal na impormasyon na nakalagay sa dokumentong ito, pati na rin ang mga dokumentaryo na ipinasa upang makakuha ng tulong, alinsunod sa Republic Act No. 10173, mga
                         tuntunin at regulasyon nito, at anumang batas o regulasyon na naaayon. *-->
                         We are committed to protect and respect the privacy of our clients and beneficiaries and we will only collect, 
@@ -771,9 +885,9 @@
                         <b>Buong Pangalan at Pirma</b>
                         <p>Signature Over Printed Name</p>
                     </div>
-                    <div class="col-3 text-center" style="border: 1px solid black;">
+                    <div class="col-2 text-center" style="border: 1px solid black;">
 
-                        <p style="margin-top: 180px; font-size:12px;">Thumbmark</p>
+                        <p style="margin-top: 180px; margin-left: -5px; font-size:12px;">Thumbmark</p>
                     </div>
                 </div>
             </div>
@@ -781,7 +895,7 @@
                 <br><br>
                 <br>
                 <b>Interviewed by:</b>
-                <br><br><br><br><br>
+                <br><br><br><br>
                 <input class="text-center" style="width: 100%; font-size: 13.5px; padding:0; border:none; border-bottom: 1px solid black; text-transform: uppercase;" type="text" height="30px" value='<?php echo strtoupper($soc_workFullname); ?>'>
                 <b>Social Worker</b>
                 <p>Signature Over Printed Name</p>
@@ -790,7 +904,7 @@
                 <br><br>
                 <br>
                 <b>Reviewed & Approved by:</b>
-                <br><br><br><br><br>
+                <br><br><br><br>
                 <input class="text-center" style="width: 100%; font-size: 13.5px; padding:0; border:none; border-bottom: 1px solid black; text-transform: uppercase;" type="text" height="30px" value='<?php echo strtoupper($GISsignatoryName) ?>'>
                 <!-- <b>Crisis Intervention Section Division Chief</b> -->
                 <b><?php echo $GISsignatoryPosition ?></b>
