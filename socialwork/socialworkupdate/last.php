@@ -331,6 +331,7 @@
                     }  
                 ?>
                 <div class="row">
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printa" onclick="printAttest()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col">
@@ -375,6 +376,11 @@
                     if($mode1 == "CAV" || !empty($mode2) == "CAV"){
                         include('cash.php');
                     }
+                ?>
+            </div>
+            <div id="attest" hidden>
+                <?php
+                        include('attestation.php');
                 ?>
             </div>
 			<div id="gisce" hidden>
@@ -498,6 +504,22 @@
                         }  
                     }
                 });
+            }
+            function printAttest() {
+                 //unsa na div iyang e print
+                var divElements = document.getElementById('attest').innerHTML;;
+                //nag gunit sa whole page 
+                var oldPage = document.body.innerHTML;
+
+                //gi set ang div as a whole page
+                document.body.innerHTML =
+                    "<html><head><title></title></head><body>" +
+                    divElements + "</body>";
+                //Print Page
+                window.print();
+                //gi balik ang old page
+                document.body.innerHTML = oldPage;
+
             }
     </script>
 

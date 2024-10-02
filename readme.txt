@@ -47,3 +47,8 @@ database
 2. add column for type_of_client(varchar[50]) @tbl_transaction
 
 
+August 30, 2024
+database
+1. add column for agency(varchar[50]) @client_data
+2. add column for sw_license_no(varchar[50]) @cpms_account
+3. add column for sw_license_expiry(Date) @cpms_account

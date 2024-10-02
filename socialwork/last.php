@@ -331,9 +331,11 @@
                     }  
                 ?>
                 <div class="row">
+                    <?php if ($gis['program_type'] == '1'){ ?> 
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printa" onclick="printAttest()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
+                    <?php } ?>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
-					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printattestation" onclick="printAttestation()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
                     </div>
@@ -378,12 +380,12 @@
                     }
                 ?>
             </div>
-            <div id="attestation" class="printable" hidden>
+            <div id="attest" hidden><br>
                 <?php
                         include('attestation.php');
                 ?>
             </div>
-			<div id="gisce" hidden>
+			<div id="gisce" hidden><br>
 			<?php 
 				 include("gisv2_print.php"); 
 			?>
@@ -504,6 +506,22 @@
                         }  
                     }
                 });
+            }
+            function printAttest() {
+                 //unsa na div iyang e print
+                var divElements = document.getElementById('attest').innerHTML;;
+                //nag gunit sa whole page 
+                var oldPage = document.body.innerHTML;
+
+                //gi set ang div as a whole page
+                document.body.innerHTML =
+                    "<html><head><title></title></head><body>" +
+                    divElements + "</body>";
+                //Print Page
+                window.print();
+                //gi balik ang old page
+                document.body.innerHTML = oldPage;
+
             }
     </script>
 

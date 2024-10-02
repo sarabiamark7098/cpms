@@ -163,7 +163,7 @@
 			}
 
 			public function getuserInfo($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id 
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id, e.emp_position, c.sw_license_no, c.sw_license_expiry  
 				FROM employee_info i
 				LEFT JOIN tbl_employment e USING (empnum)
 				LEFT JOIN cpms_account c USING (empid)
@@ -316,9 +316,9 @@
 				
 				return $result;
 			}
-
+			// , i.empuser, i.emppass
 			public function getEmpData($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id
+				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id, i.empuser, i.emppass
 				FROM tbl_employment e
 				LEFT JOIN employee_info i using (empnum)
 				LEFT JOIN cpms_account c using (empid)
@@ -401,13 +401,12 @@
 				$result = mysqli_query($this->db2, $query);
 				$rows = mysqli_fetch_assoc($result);
 				$row = mysqli_num_rows($result);
-				
 				if($row <= 0){
 					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
 					$result = mysqli_query($this->db, $query);
 
-					$query = "INSERT INTO cpms_account(empid, position, status, office_id) VALUES 
-							('{$id}','{$position}','Activated', '{$office}')";
+					$query = "INSERT INTO cpms_account(empid, position, status, office, office_id) VALUES 
+							('{$id}','{$position}','Activated', '-', '{$office}')";
 					$result = mysqli_query($this->db2, $query);
 
 					if($result){
@@ -622,6 +621,19 @@
 				('{$id}', '{$fullname}', '{$position}', '{$username}', '{$password}', '{$initials}')";
 				
 				$result = mysqli_query($this->db,$query);
+				if($result){
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+
+			public function updatesw($id, $position, $license, $expiry){
+				$query = "UPDATE tbl_employment SET emp_position = '{$position}' WHERE empid = '{$id}';";
+				$query .= "UPDATE cpms_account SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
+
+				$result = mysqli_multi_query($this->db2, $query);
 				if($result){
 					return true;
 				}
@@ -2007,7 +2019,7 @@
 				$amountcon2 = str_replace(",","", $a2);
 				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
 			} 
-			echo $query .= " WHERE trans_id = '{$trans_id}';";
+			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);
 		
 			if($result){
@@ -2528,8 +2540,8 @@
 			}
 		}
 		
-		public function insertCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
-		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer){
+		public function insertCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
+		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			
@@ -2579,6 +2591,13 @@
 							('{$id}', '{$sd_officer}');";
 				$result = mysqli_query($this->db, $query);
 			}
+
+			$client_salary = str_replace(',','',$client_salary);
+
+			if (!empty($client_work) && !empty($client_salary) && !empty($client_agency)) {
+				$query = "UPDATE client_data SET occupation = '{$client_work}', salary = '{$client_salary}', agency = '{$client_agency}' WHERE client_id = '{$client_id}';";
+				$result = mysqli_query($this->db, $query);
+			}
 		
 			if($result){
 				echo "<script>alert('Successfully Saved!');</script>";
@@ -2588,8 +2607,8 @@
 			}
 		}
 
-		public function updateCOE($id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
-		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer){
+		public function updateCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
+		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
 			$signid = 0;
 			if(!empty($signName)){
@@ -2638,7 +2657,13 @@
 			// echo $query;
 			// $query .= "UPDATE tbl_coe_fund SET fs_amount1 = '{$amount1}', fs_amount2 = '{$amount2}', fs_amount3 = '{$amount3}', fs_amount4 = '{$amount4}', fs_amount5 = '{$amount5}' WHERE trans_id = '{$id}';";
 			$result = mysqli_multi_query($this->db, $query);
-			
+
+			$client_salary = str_replace(',','',$client_salary);
+			if (!empty($client_work) || !empty($client_salary) || !empty($client_agency)) {
+				$query = "UPDATE client_data SET occupation = '{$client_work}', salary = '{$client_salary}', agency = '{$client_agency}' WHERE client_id = '{$client_id}';";
+				$result = mysqli_query($this->db, $query);
+			}
+
 			if($result){
 				echo "<script>alert('Successfully Updated!');</script>";
 				echo "<meta http-equiv='refresh' content='0'>";
@@ -3188,7 +3213,7 @@
 	
 		public function getGISData($id){
 			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6,
-								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, type_of_disability, others_subcat, pantawid_bene from assessment 
+								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, type_of_disability, others_subcat, pantawid_bene, program_type from assessment 
 						LEFT JOIN service USING (trans_id) 
 						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
 						

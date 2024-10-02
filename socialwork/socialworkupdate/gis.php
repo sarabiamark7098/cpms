@@ -502,6 +502,7 @@ if (!$_SESSION['login']) {
                                                     <option value="Educational Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "educational assistance") ? "selected" : "" ?>>Educational Assistance</option>
                                                     <option value="Other Cash Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "other cash assistance") ? "selected" : "" ?>>Other Cash Assistance</option>
                                                     <option value="Material Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "material assistance") ? "selected" : "" ?>>Material Assistance</option>
+                                                    <option value="Cash Relief Assistance" <?php echo (strtolower($client_assistance[1]['type']) == "cash relief assistance") ? "selected" : "" ?>>Cash Relief Assistance</option>
                                                 </select>
 												
                                             </div>

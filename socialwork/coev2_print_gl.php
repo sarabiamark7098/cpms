@@ -258,7 +258,7 @@
                 <input class="text-left" style="height: 100%; width: 100%; font-size: 15px; border:none;" value="Chargable Against : "></input><br>
             </div>
             <div class="col-2" style="margin-left: -80px;">
-                <input class="text-center" style="height: 100%; width: 100%; font-size: 15px; border-bottom: 1px solid black;" value="AICS Fund"></input><br>
+                <input class="text-center" style="height: 100%; width: 100%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo (($client['program_type']==1)? 'AKAP' : 'AICS') ?> Fund"></input><br>
             </div>
             <div class="col-2" style="font-size: 14px; padding: 0%; margin: 0%; color: black;">
                 CLIENTELE CATEGORY:

@@ -123,7 +123,7 @@
                     <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" style="margin-left: 10px;" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
                     </a>
-                    <a class="nav-link toggle tohover" data-target="#license" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add/Update User License</a>
+                    <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#license" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add/Update User License</a>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
@@ -215,6 +215,21 @@
             </div>
         </div>
     </div>
+    <div class="modal fade in" id="license" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Position and License</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+				<div class="swlicense"> 
+				
+				</div>
+			</div>	
+		</div>
+    </div>
     
 	<script type="text/javascript">
         //userAccount   
@@ -279,6 +294,29 @@
                 }
             });  
         })
+
+        //Social Worker license 
+        $('#license').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var userid = button.data('id') // Extract info from data-* attributes
+            var modal = $(this);
+            var dataString = 'id=' + userid;
+            //console.log(dataString);
+                $.ajax({
+                    type: "GET",
+                    url: "socialwork_license.php",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        //console.log(data);
+                        modal.find('.swlicense').html(data);
+                    },
+                    error: function(err) {
+                        //console.log(err);
+                    }
+                });  
+        })
+
                			$(document).ready(function () {
                             const debouncedSearch = debounce(function () {
                                 var txt = $('#search_client').val();
