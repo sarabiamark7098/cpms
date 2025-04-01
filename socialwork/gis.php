@@ -377,6 +377,15 @@ if (!$_SESSION['login']) {
                                             <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="10" <?php echo $gis['subcat_ass']==10? "checked": ""; ?>></div>
                                             <div class="col-11"> MINIMUM WAGE EARNER</div>
                                         </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="11" <?php echo $gis['subcat_ass']==11? "checked": ""; ?>></div>
+                                            <div class="col-11"> BELOW MINIMUM WAGE EARNER</div>
+                                            <div class="col-11"> Specify Approximate Monthly Income Php <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 29%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="11" <?php echo $gis['subcat_ass']==12? "checked": ""; ?>></div>
+                                            <div class="col-11"> No Regular Income</div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-1" style="margin-top:5px;"><input type="checkbox" style="padding" class="lg" name="osc" id="osc" value="8" <?php echo $gis['subcat_ass']==8? "checked": ""; ?>></div>
                                             <div class="col-11"> OTHERS: <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
@@ -438,7 +447,52 @@ if (!$_SESSION['login']) {
                         </div>
                     </div>
                 </div><br>
-
+                <div class="row">
+                    <div class=col-12>
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success">Source of Income</h5>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6 container" style="font-size: 15px;">
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fhona" id="fhona" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> SALARIES/WAGES FROM EMPLOYMENT <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="wedc" id="wedc" value="2" <?php echo $gis['target_sector']==2? "checked": ""; ?>></div>
+                                                <div class="col-11"> INTREPRENEURIAL INCOME/PROFIT <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="pwd" id="pwd" value="3" <?php echo $gis['target_sector']==3? "checked": ""; ?>></div>
+                                                <div class="col-11"> CASH ASSISTANCE FROM DOMESTIC SOURCES <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="youth" id="youth" value="4" <?php echo $gis['target_sector']==4? "checked": ""; ?>></div>
+                                                <div class="col-11"> CASH ASSISTANCE FROM ABROAD <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 container" style="font-size: 15px;">
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="sc" id="sc" value="5" <?php echo $gis['target_sector']==5? "checked": ""; ?>></div>
+                                                <div class="col-11"> TRANSFER FROM THE GOVERNMENT (E.G. 4PS) <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-11">  </div>
+                                            </div>
+                                            <div class="row" style="margin-bottom:7px;">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plwhiv" id="plwhiv" value="6" <?php echo $gis['target_sector']==6? "checked": ""; ?>></div>
+                                                <div class="col-11"> PENSION <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo $gis['target_sector']==7? "checked": ""; ?>></div>
+                                                <div class="col-11"> OTHER INCOME <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div><br>
                 <!-- Family Composition -->
                 <div class="row">
                     <div class="col-12">
@@ -677,10 +731,13 @@ if (!$_SESSION['login']) {
 								<label class="col-sm-3 label text-left" style="font-size: 17px">PROGRAM INTERVENTION :</label>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
-								</div>&nbsp;
-                                <div class="col-1"></div>
+								</div> 
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo ((($client['program_type'])==1)? "checked": ""); ?> required> &nbsp; AKAP Program
+								</div>
+                                <div class="col-3">
+									<input type="checkbox" class="col-lg-1" id="otherProgram" name="otherProgram" value="other" <?php echo ((($client['program_type'])=="other")? "checked": ""); ?> required> &nbsp; Other Program
+                                    <input type="text" class="form-control" id="otherProgramItem" name="otherProgramItem">
 								</div>
                             </div><br>
 							<div class="row">
@@ -705,6 +762,177 @@ if (!$_SESSION['login']) {
 									<input type="text" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Refer Office" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
 								</div>
                                 
+                            </div><br>
+                            <!-- AKAP only -->
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">INCOME AND FINANCIAL RESOURCES</label>
+                            </div>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">Occupations of Family Member</label>
+                                <div class="col-6">
+									<input type="number" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Number of Employed" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
+								</div>
+                                <div class="col-6">
+									<input type="number" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Number of Seasonal Employee" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
+								</div>
+								<label class="col-sm-6 label text-left" style="font-size: 17px">Number of Employed</label>
+                                <label class="col-sm-6 label text-left" style="font-size: 17px">Number of Seasonal Employee</label>
+                                
+                                <div class="col-6">
+									<input type="text" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Family Income" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
+								</div>
+                                <div class="col-3">
+									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Insurance Coverage
+								</div> 
+                                <div class="col-3">
+									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo ((($client['program_type'])==1)? "checked": ""); ?> required> &nbsp; Savings
+								</div>
+                                <label class="col-sm-12 label text-left" style="font-size: 17px">Combined Family Income</label>
+                                
+                            </div><br>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">BUDGET AND EXPENSES</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+									<input type="number" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Monthly Expense" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
+								</div>
+                                <div class="col-1">
+                                </div> 
+                                <div class="col-4">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Availability of Emergency Fund 
+								</div> 
+                                <div class="col-3">
+                                </div> 
+                                <label class="col-sm-12 label text-left" style="font-size: 17px">Monthly Expenses of the Family</label>
+                            </div><br>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">SEVERITY OF THE CRISIS</label>
+                            </div>
+                            <div class="row">
+                                <label class="col-sm-12 label text-left" style="font-size: 17px">How long does the patient suffer from the disease?</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Recently Diagnosed (3 months & below) 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; 3 Months to a Year 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Chronic or Lifelong 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 12px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Not Applicable 
+								</div>
+                                <label class="col-sm-12 label text-left" style="font-size: 17px">In the past three (3) months, did the family experience at least one crisis?</label>
+                                <div class="col-1"></div>
+                                <div class="col-2" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-2" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; YES
+								</div>
+                                <div class="col-2" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-2" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; NO
+								</div>
+                                <div class="col-7"></div>
+                                <label class="col-sm-12 label text-left" style="font-size: 17px">If yes, which among the following crises did the family experience in the past three (3) months (check all that apply):</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Recently Diagnosed (3 months & below) 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Hospitalization
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Death of a family member
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Catastrophic Event (fire, earthquake, flooding, etc.)
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Disablement
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Loss of Livelihood
+								</div> 
+                                <div class="col-12">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Others, specify
+                                    <input type="text" class="col-lg-5" style="border-radius: 4px; width: 100%;" id="aics" name="aics" value="0" required>
+                                </div>
+                            </div><br>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">AVAILABILITY OF SUPPORT SYSTEMS</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Family 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Relatives
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Friend/s
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Employer
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Church/Community Organization
+								</div> 
+                            </div><br>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">EXTERNAL RESOURCES TAPPED BY THE FAMILY</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Philhealth
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Health Card
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Guarantee Letter from other agencies
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; MSS Discount
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Senior Citizen Discount
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; PWD Discount
+                                    <input type="text" class="col-lg-5" style="border-radius: 4px; width: 100%;" id="aics" name="aics" value="0" required>
+								</div> 
+                                <div class="col-12">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Others, specify
+                                    <input type="text" class="col-lg-5" style="border-radius: 4px; width: 100%;" id="aics" name="aics" value="0" required>
+                                </div>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Not Applicable
+								</div> 
+                            </div><br>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">SELF HELP AND CLIENT EFFORTS</label>
+                                <div class="col-1">
+                                </div>
+                                <div class="col-1">
+                                    <input type="checkbox" class="col-lg-12" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required>
+								</div> 
+                                <div class="col-4">
+								    <label class="col-lg-12 label text-left" style="font-size: 17px">Successfully sought employment opportunities or explored additional income sources</label>
+                                </div> 
+                                <div class="col-1">
+                                </div>
+                                <div class="col-1">
+                                    <input type="checkbox" class="col-lg-12" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required>
+								</div> 
+                                <div class="col-4">
+								    <label class="col-lg-12 label text-left" style="font-size: 17px">Successfully reached out to relevant organizations or agencies for financial assistance or support</label>
+                                </div> 
+                            </div><br>
+                            <div class="row">
+								<label class="col-sm-12 label text-left" style="font-size: 17px">VULNERABILITY AND RISK FACTORS</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; There are elderly/ Child in need/ PWD/ Pregnant in the household
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; A member is physically or mentally incapacitated to work
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Inability to secure stable employment
+								</div> 
                             </div><br>
                             <h5 class="text-dark">Assistance: </h5>
                             <div class="row"> 
