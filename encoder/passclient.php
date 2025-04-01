@@ -37,7 +37,7 @@ $user = new User();
 				$street= mysqli_real_escape_string($user->db,$_POST['Cstreet']);
 				$note = mysqli_real_escape_string($user->db,$_POST['note']);
 				
-				$user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $pantawid, $category, 
+				$execute = $user->insertClientPassed($trans, $fname, $mname, $lname, $exname, $sex, $bday, $occupation, $salary, $pantawid, $category, 
 				$civilStatus, $contact, $region, $province, $city_mun, $barangay, $district, $street, $note, 1, 0);
 				// print_r($execute);
 				if($execute){

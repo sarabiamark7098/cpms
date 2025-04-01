@@ -8,6 +8,5 @@
     define('DB_USERNAME2', 'root');
     define('DB_PASSWORD2', '');
     define('DB_DATABASE2', 'onse_employee');
-    
 
 ?>
