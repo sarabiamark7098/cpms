@@ -75,6 +75,7 @@ if (!$_SESSION['login']) {
         <script type="text/javascript" src="../js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../js/jquery.mask.min.js"></script>
         <script type="text/javascript" src="../js/PSGC.js"></script>
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
         <title>GIS</title>
     </head>
     <body>
@@ -378,12 +379,12 @@ if (!$_SESSION['login']) {
                                             <div class="col-11"> MINIMUM WAGE EARNER</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="11" <?php echo $gis['subcat_ass']==11? "checked": ""; ?>></div>
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="below_min_wage" id="below_min_wage" value="11" <?php echo $gis['subcat_ass']==11? "checked": ""; ?>></div>
                                             <div class="col-11"> BELOW MINIMUM WAGE EARNER</div>
-                                            <div class="col-11"> Specify Approximate Monthly Income Php <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 29%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                            <div class="col-11"> Specify Approximate Monthly Income Php <input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 29%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="11" <?php echo $gis['subcat_ass']==12? "checked": ""; ?>></div>
+                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="no_regular_income" id="no_regular_income" value="12" <?php echo $gis['subcat_ass']==12? "checked": ""; ?>></div>
                                             <div class="col-11"> No Regular Income</div>
                                         </div>
                                         <div class="row">
@@ -456,35 +457,35 @@ if (!$_SESSION['login']) {
                                     <div class="row">
                                         <div class="col-6 container" style="font-size: 15px;">
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fhona" id="fhona" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
-                                                <div class="col-11"> SALARIES/WAGES FROM EMPLOYMENT <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> SALARIES/WAGES FROM EMPLOYMENT <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                             </div>
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="wedc" id="wedc" value="2" <?php echo $gis['target_sector']==2? "checked": ""; ?>></div>
-                                                <div class="col-11"> INTREPRENEURIAL INCOME/PROFIT <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> INTREPRENEURIAL INCOME/PROFIT <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                             </div>
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="pwd" id="pwd" value="3" <?php echo $gis['target_sector']==3? "checked": ""; ?>></div>
-                                                <div class="col-11"> CASH ASSISTANCE FROM DOMESTIC SOURCES <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> CASH ASSISTANCE FROM DOMESTIC SOURCES <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                             </div>
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="youth" id="youth" value="4" <?php echo $gis['target_sector']==4? "checked": ""; ?>></div>
-                                                <div class="col-11"> CASH ASSISTANCE FROM ABROAD <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> CASH ASSISTANCE FROM ABROAD <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                             </div>
                                         </div>
                                         <div class="col-6 container" style="font-size: 15px;">
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="sc" id="sc" value="5" <?php echo $gis['target_sector']==5? "checked": ""; ?>></div>
-                                                <div class="col-11"> TRANSFER FROM THE GOVERNMENT (E.G. 4PS) <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> TRANSFER FROM THE GOVERNMENT (E.G. 4PS) <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                                 <div class="col-11">  </div>
                                             </div>
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plwhiv" id="plwhiv" value="6" <?php echo $gis['target_sector']==6? "checked": ""; ?>></div>
-                                                <div class="col-11"> PENSION <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> PENSION <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo $gis['target_sector']==7? "checked": ""; ?>></div>
-                                                <div class="col-11"> OTHER INCOME <br><input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="" id="" value="1" <?php echo $gis['target_sector']==1? "checked": ""; ?>></div>
+                                                <div class="col-11"> OTHER INCOME <br><input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="" id="" value=" <?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -779,7 +780,7 @@ if (!$_SESSION['login']) {
                                 <label class="col-sm-6 label text-left" style="font-size: 17px">Number of Seasonal Employee</label>
                                 
                                 <div class="col-6">
-									<input type="text" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Family Income" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
+									<input type="text" id="refer3" class="col-lg-12 form-control currencyMaskedInput" style="width: 100%;" name="rl3" placeholder="Family Income" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
 								</div>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; Insurance Coverage
@@ -944,7 +945,7 @@ if (!$_SESSION['login']) {
                             </div>
                             <div class="row"> 
                                 <div class="col"><input class="form-control" id="pur1" name="pur1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['purpose']; ?>"></div>
-                                <div class="col-2"><input class="form-control money" id="a1" name="a1" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['amount']; ?>"></div>
+                                <div class="col-2"><input class="form-control currencyMaskedInput" id="a1" name="a1" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['amount']; ?>"></div>
                                 <div class="col-2">
                                     <select class="form-control" id="m1" name="m1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required>
                                         <option selected="selected"><?php echo empty($client_assistance[1])? "" : $client_assistance[1]['mode']; ?></option>
@@ -2637,6 +2638,18 @@ if (!$_SESSION['login']) {
     	     		$("#d_learning, #d_psychosocial, #d_deaf, #d_cancer, #d_mental, #d_visual, #d_intellectual, #d_physical, #d_speech").prop("checked", false);
         		}
 		    });
+        });
+
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "₱",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
         });
 
     </script>
