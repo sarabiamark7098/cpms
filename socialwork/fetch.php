@@ -134,9 +134,9 @@
     if(isset($_POST['soc_work'])){
         $output = '';
         
-        $sql= "SELECT * FROM client_data 
-        LEFT JOIN tbl_transaction USING (client_id)
-        LEFT JOIN beneficiary_data USING (bene_id)
+        $sql= "SELECT a.trans_id, a.date_entered, b.lastname, b.firstname, b.middlename, b.extraname, c.b_fname, c.b_mname, c.b_lname, c.b_exname  FROM client_data as b
+        LEFT JOIN tbl_transaction as a USING (client_id)
+        LEFT JOIN beneficiary_data as c USING (bene_id)
         WHERE status_client = 'Pending' order by date_entered asc;";
         $result2 = mysqli_query($user->db, $sql);
         

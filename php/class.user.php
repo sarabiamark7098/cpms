@@ -1949,7 +1949,9 @@
 		//All information in GIS
 		public function insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
-									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material){
+									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
+									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+									$SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
 										
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
@@ -1996,16 +1998,24 @@
 					('{$trans_id}', '{$f1}', '{$a1}');";
 			}
 			//insert Assistance need by client, 1 or 2 lng iyang ma cater na assistance 
-			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, financial, material, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
+			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, financial, material, amount, mode, fund, purpose, type_description) 
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
 					if($type2 !=""){
 						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 					}
 			$query .= ";";
 			
 			//INSERT TO ASSESSMENT
-			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
-			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, below_monthly_income, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
+			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$belowMonthly}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			
+			//INSERT TO OTHER CLIENT INFORMATION
+			$query .= "INSERT INTO other_client_information (trans_id, otherClientInformation, crisisSeverityQuestion1, crisisSeverityQuestion2, crisisSeverityQuestion3, supportSystemAvailability, externalResources, selfHelp, vulnerability_riskFactor) 
+			VALUES ('{$trans_id}', '{$docu_otherinfo}', '{$severity}', '{$crisis}', '{$crisis1}', '{$support}', '{$external}', '{$selfhelp}', '{$vulnerability}');"; 
+
+			//INSERT TO SOURCE OF INCOME
+			$query .= "INSERT INTO source_of_income (trans_id, wage, profit, domestic_source, abroad, gpvernment_transfer, pension, other_income) 
+			VALUES ('{$trans_id}', '{$SOI_wage}', '{$SOI_profit}', '{$SOI_domesticsource}', '{$SOI_abroad}', '{$SOI_governmenttransfer}', '{$SOI_pension}', '{$SOI_otherincome}');"; 
 
 			//update the tbl_transaction table
 			// $sign_id = $this->getsignatureid($signatoryGIS);//get the id of signaturory using fullname
@@ -2018,6 +2028,9 @@
 			if($m2 == "GL"){ 
 				$amountcon2 = str_replace(",","", $a2);
 				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
+			} 
+			if(strtolower($program) == "other"){ 
+				$query .= ", other_program = '{$otherProgram}'"; 
 			} 
 			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);

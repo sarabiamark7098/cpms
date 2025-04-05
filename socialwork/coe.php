@@ -536,7 +536,7 @@
     <br><br><br><br>
         <form action="coe.php?id=<?php echo $_GET['id']?>" method="post">
             <div class="container">
-                <?php if($gis['program_type'] == '1'){?>
+                <?php if($gis['program_type'] ==f '1'){?>
                 
                 <div class="card border-info mb3" style="width:100%;">
                     <h4 class="card-header text-success">Certificate of Attestation</h4>
