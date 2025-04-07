@@ -49,13 +49,17 @@
     <div class="container page1" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif;">
         
         <!--HEADER-->
-        <div class="row" style="margin-top:0px; margin-bottom: 2%;">
+        <div class="row" style="margin-top:0%; margin-bottom: 3%;">
             <div class="col-6">
                 <img src="../images/dswd_olog.png" alt="" width="230px" height="60px">
                 <img src="../images/AICS.png" alt="" width="70px" height="60px">
                 <img src="../images/BP.png" alt="" width="70px" height="60px">
             </div>
-            <div class="col-6 ml-md-auto" style="color: #000000; ">
+            <div class="col-3 ml-md-auto" style="color: #000000; ">
+            </div>
+            <div class="col-3 ml-md-auto" style="color: #000000; ">
+                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="" />&emsp;CENTRAL OFFICE<br>
+                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;FIELD OFFICE <input class="text-center" style="width: 40%; height:30%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="20px" value='XI'>
             </div>
         </div>
         
@@ -64,73 +68,39 @@
                 
                 <div class="row">
                     <div class="col-12">
-                        <p class="header" style="margin-top: -7px; margin-left:-15px; margin-right:-15px;"><b style="font-size: 24px">GENERAL INTAKE SHEET</b></p>
+                        <p style="margin-top: -7px; margin-left:-15px; margin-right:-15px;"><b style="font-size: 24px">INFORMATION SHEET</b></p>
                     </div>
                 </div>                
             </div>
         </div>
-        <div class="row" style="margin-top: -18px; padding: 0%;">
-            <div class="col-2" style="border: 1px solid black; font-size:14px; padding: 0%;">
-                <div class="row" style="font-size: 14px; padding:0; margin-top: 10px; margin-left:12px; margin-bottom: 5px;">
-                    <div class="col-12">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
-                        <b class="text-center">&nbsp;AICS</b>
+        <div class="row" style="padding: 0%; margin-bottom: 3%;">
+            <div class="col-9" style="font-size:14px; padding: 0%;">
+                <div class="row">
+                    <div class="col-sm-1 center" style="margin-right: 5px;">
+                        <p class="text-center">PCN:</p>
                     </div>
-                    <div class="col-12"  style="padding-top: 3px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($client['program_type']==1)? "&#x2714;" : "") ?>'>
-                        <b class="">&nbsp;AKAP</b>
-                    </div>
-                    <div class="col-12"  style="padding-top: 3px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($client['program_type']=="other")? "&#x2714;" : "") ?>'>
-                        <b class="">&nbsp;Others:</b>
-                    </div>
-                    <div class="col-12"  style="padding-top: 5px;">
-                        <input class="text-center" style="width: 80%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["other_program"])?$client["other_program"]:"" ?>'>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2" style="border: 1px solid black; font-size:14px; padding: 0%;">
-                <div class="row" style="font-size: 14px; padding:0; margin-top: 10px; margin-left:12px; margin-bottom: 5px;">
-                    <div class="col-12">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; border-radius: 50%;" type="text" value='<?php echo (strtolower($client['type_of_client'])=="new"? "&#x2714;" : "") ?>'>
-                        <b class="text-center">&nbsp;New</b>
-                    </div>
-                    <div class="col-12"  style="padding-top: 3px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; border-radius: 50%;" type="text" value='<?php echo (strtolower($client['type_of_client'])=="returning"? "&#x2714;" : "") ?>'>
-                        <b class="">&nbsp;Returning</b>
+                    <div class="col-sm-10">
+                        <input class="text-center" style="width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
+                        <input class="text-center" style="margin-left:-5; width: 18px; font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
                     </div>
                 </div>
             </div>
-            <div class="col-3" style="border: 1px solid black; font-size:14px; padding: 0%;">
-                <div class="row" style="font-size: 14px; padding:0; margin-top: 10px; margin-left:12px; margin-bottom: 5px;">
-                    <div class="col-12">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($user->getTransactionProcessed($_GET['id']))? "" : "&#x2714;") ?>'>
-                        <b class="text-center">&nbsp;Onsite</b>
-                    </div>
-                    <div class="col-12"  style="padding-top: 3px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($user->getTransactionProcessed($_GET['id']))? "&#x2714;" : "") ?>'>
-                        <b class="">&nbsp;Malasakit Center</b>
-                    </div>
-                    <div class="col-12"  style="padding-top: 3px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value=''>
-                        <b class="">&nbsp;Offsite</b>
-                    </div>
-                </div>
-            </div>
-            <div class="col-2" style="border: 1px solid black; border-right: none; font-size:14px; padding: 0%;">
-                <div class="row" style="font-size: 14px; padding:0; margin-top: 10px; margin-left:12px; margin-bottom: 5px;">
-                    <div class="col-12">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; border-radius: 50%;" type="text" value='<?php echo (strtolower($gis['mode_admission'])=="walk-in"? "&#x2714;" : "") ?>'>
-                        <b class="text-center">&nbsp;Walk-in</b>
-                    </div>
-                    <div class="col-12"  style="padding-top: 3px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; border-radius: 50%;" type="text" value='<?php echo (strtolower($gis['mode_admission'])=="referral"? "&#x2714;" : "") ?>'>
-                        <b class="">&nbsp;Referral</b>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3 text-center" style="border: 1px solid black; border-left: none; font-size:14px; padding: 0%;">
-                <div class="row" style="font-size: 14px; margin-top:20%;">
+            <div class="col-3 text-center" style="font-size:14px; padding: 0%;">
+                <div class="row">
                     <div class="col-sm-2 center">
                         <p class="text-center">Date:</p>
                     </div>
@@ -149,74 +119,252 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="padding-top: 8px; border: solid 1px black;">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12" style="margin-bottom: 8px;">
-                        <b style="font-size: 18px">Client's Name</b>
-                    </div>
-                    <div class="col-4">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["lastname"])?$client["lastname"]:"" ?>'>
-                    </div>
-                    <div class="col-4">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["firstname"])?$client["firstname"]:"" ?>'>
-                    </div>
-                    <div class="col-3">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["middlename"])?$client["middlename"]:"" ?>'>
-                    </div>
-                    <div class="col-1">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["extraname"])?$client["extraname"]:"" ?>'>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: -5px;">
-                    <div class="col-4">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Apelyido</b> (Last Name)</p>
-                    </div>
-                    <div class="col-4">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Unang Pangalan</b> (First Name)</p>
-                    </div>
-                    <div class="col-3">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Gitnang Pangalan</b> (Middle Name)</p>
-                    </div>
-                    <div class="col-1">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> (Sr.,Jr.)</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-3" style="margin-bottom: 8px;">
-                        <b style="font-size: 18px">Beneficiary's Name</b>
-                    </div>
-                    <div class="col-9" style="margin-bottom: 8px;">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (strtolower($client['relation'])=="self"? "&#x2714;" : "") ?>'>
-                        <b>&nbsp;SAME AS ABOVE</b>
-                    </div>
-                    <div class="col-4">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_lname"])?$client["b_lname"]:"" ?>'>
-                    </div>
-                    <div class="col-4">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_fname"])?$client["b_fname"]:"" ?>'>
-                    </div>
-                    <div class="col-3">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_mname"])?$client["b_mname"]:"" ?>'>
-                    </div>
-                    <div class="col-1">
-                        <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_exname"])?$client["b_exname"]:"" ?>'>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: -5px;">
-                    <div class="col-4">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Apelyido</b> (Last Name)</p>
-                    </div>
-                    <div class="col-4">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Unang Pangalan</b> (First Name)</p>
-                    </div>
-                    <div class="col-3">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Gitnang Pangalan</b> (Middle Name)</p>
-                    </div>
-                    <div class="col-1">
-                        <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> (Sr.,Jr.)</p>
-                    </div>
-                </div>
+        <p class="header" style="margin-top: -20px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG KINATAWAN</b> (Representative's Identifying Information)</p>
+
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-4">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["lastname"])?$client["lastname"]:"" ?>'>
+            </div>
+            <div class="col-4">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["firstname"])?$client["firstname"]:"" ?>'>
+            </div>
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["middlename"])?$client["middlename"]:"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["extraname"])?$client["extraname"]:"" ?>'>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -5px;">
+            <div class="col-4">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Apelyido</b> (Last Name)</p>
+            </div>
+            <div class="col-4">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Unang Pangalan</b> (First Name)</p>
+            </div>
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Gitnang Pangalan</b> (Middle Name)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> (Sr.,Jr.)</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_street"])?$client["client_street"]:"" ?>'>
+            </div>
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_barangay"])?explode("/",$client["client_barangay"])[0]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_municipality"])?explode("/",$client["client_municipality"])[0]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_province"])?explode("/",$client["client_province"])[0]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_region"])?explode("(",$client["client_region"])[0]:"" ?>'>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -5px;">
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Numbero ng Bahay/Kalye</b> (Street Address)</p>
+            </div>
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Barangay</b> (Ex. 23-C)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Lungsod/Bayan</b> (City/Municipality)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 9px; "><b>Lalawigan/Distrito</b> (Province/District)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Rehiyon</b> (Region)</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["contact"])?$client["contact"]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["date_birth"])?date("m-d-Y" ,strtotime($client["date_birth"])):"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["date_birth"])?$age_client:"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["sex"])?$client["sex"]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["civil_status"])?$client["civil_status"]:"" ?>'>
+            </div>
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["occupation"])?$client["occupation"]:"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["salary"])?$client["salary"]:"" ?>'>
+            </div>
+        </div>
+        <div class="row" style="height: 35px; margin-top: -5px;">
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 8px; "><b>Numero ng Mobile</b> (Mobile No.)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; line-height:10px;"><b>Petsa ng Kapanganakan</b> (Birthdate MM-DD-YYYY)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Edad</b> (Age)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Kasarian</b></p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Katayuang Sibil</b> (Civil Status)</p>
+            </div>
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Hanapbuhay</b> (Occupation)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 7px; "><b>Buwanang Kita</b> (Monhtly Income)</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-4">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["relation"])?$client["relation"]:"Self" ?>'>
+            </div>
+            <div class="col-2">
+            </div>
+            <div class="col-3">
+            </div>
+            <div class="col-2">
+            </div>
+            <div class="col-1">
+            </div>
+        </div>
+        <div class="row" style="height: 25px; margin-top: -5px;">
+            <div class="col-4">
+                <p class="text-center" style="width: 100%; font-size: 10px; "><b>Relasyon sa Benepisyaryo</b> (Relationship to the Beneficiary)</p>
+            </div>
+            <div class="col-2">
+            </div>
+            <div class="col-3">
+            </div>
+            <div class="col-1">
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+
+        <!--BENEFICIARY INFO-->
+        <p class="header" style="margin-top: -5px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG BENEPISYARYO</b> (Beneficiary's Identifying Information)</p>
+
+        <div class="row" style="margin-top:-8px; ">
+            <div class="col-4">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo !empty($client["b_lname"])?$client["b_lname"]:"" ?>'>
+            </div>
+            <div class="col-4">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo !empty($client["b_fname"])?$client["b_fname"]:"" ?>'>
+            </div>
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo !empty($client["b_mname"])?$client["b_mname"]:"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo !empty($client["b_exname"])?$client["b_exname"]:"" ?>'>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -5px;">
+            <div class="col-4">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Apelyido</b> (Last Name)</p>
+            </div>
+            <div class="col-4">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Unang Pangalan</b> (First Name)</p>
+            </div>
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Gitnang Pangalan</b> (Middle Name)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> (Sr.,Jr.)</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_street"])?$client["b_street"]:"" ?>'>
+            </div>
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_barangay"])?explode("/",$client["b_barangay"])[0]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_municipality"])?explode("/",$client["b_municipality"])[0]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_province"])?explode("/",$client["b_province"])[0]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_region"])?explode("(",$client["b_region"])[0]:"" ?>'>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -5px;">
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Numbero ng Bahay/Kalye</b> (Street Address)</p>
+            </div>
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Barangay</b> (Ex. 23-C)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Lungsod/Bayan</b> (City/Municipality)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 9px; "><b>Lalawigan/Distrito</b> (Province/District)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Rehiyon</b> (Region)</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -8px;">
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_contact"])?$client["b_contact"]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_bday"])?date("m, d, Y" ,strtotime($client["b_bday"])):"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_bday"])?$age_bene:"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_sex"])?$client["b_sex"]:"" ?>'>
+            </div>
+            <div class="col-2">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_civilStatus"])?$client["b_civilStatus"]:"" ?>'>
+            </div>
+            <div class="col-3">
+                <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_occupation"])?$client["b_occupation"]:"" ?>'>
+            </div>
+            <div class="col-1">
+                <input class="text-center salary_monthly" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_salary"])?$client["b_salary"]:"" ?>'>
+            </div>
+        </div>
+        <div class="row" style="margin-top: -5px; margin-bottom: -15px">
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 8px; "><b>Numero ng Telepono</b> (Mobile No.)</p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Kapanganakan</b> (Birthdate)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Edad</b> (Age)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Kasarian</b></p>
+            </div>
+            <div class="col-2">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Civil Status</b> (Katayuang Sibil)</p>
+            </div>
+            <div class="col-3">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Trabaho</b> (Occupation)</p>
+            </div>
+            <div class="col-1">
+                <p class="text-center" style="width: 100%; height:80%; font-size: 7px; "><b>Buwanang Kita</b></p>
             </div>
         </div>
         <div class="row" style="padding: 8px 0px 5px; border: solid 1px black; border-bottom: none;">
@@ -888,7 +1036,7 @@
                     <div class="col-12">
                         <div class="row" style="height: 220px">
                             <div class="col-6 text-center" style="font-size:14px; line-height: 16px; padding-top: 30px;">
-                                <b>Interviewed by:</b>
+                                <b>Interviewed by:</b><br>
                                 <input class="text-center" style="width: 80%; border-bottom: 1px solid black; margin-top: 40px;" type="text" value='<?php echo strtoupper($soc_workFullname); ?>'><br>
                                 <label>Social Worker</label><br>
                                 <label style="margin-top: -10px;">(Signature over Printed Name)</label><br>
