@@ -2014,7 +2014,7 @@
 			VALUES ('{$trans_id}', '{$docu_otherinfo}', '{$severity}', '{$crisis}', '{$crisis1}', '{$support}', '{$external}', '{$selfhelp}', '{$vulnerability}');"; 
 
 			//INSERT TO SOURCE OF INCOME
-			$query .= "INSERT INTO source_of_income (trans_id, wage, profit, domestic_source, abroad, gpvernment_transfer, pension, other_income) 
+			$query .= "INSERT INTO source_of_income (trans_id, wage, profit, domestic_source, abroad, government_transfer, pension, other_income) 
 			VALUES ('{$trans_id}', '{$SOI_wage}', '{$SOI_profit}', '{$SOI_domesticsource}', '{$SOI_abroad}', '{$SOI_governmenttransfer}', '{$SOI_pension}', '{$SOI_otherincome}');"; 
 
 			//update the tbl_transaction table
@@ -2081,7 +2081,9 @@
 
 		public function updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
-			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material){
+			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
+			$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+            $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
 				
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
@@ -2114,20 +2116,31 @@
 			
 			//UPDATE assessment need by client/ 1 or 2 lng iyang ma cater na assistance 
 			$query .= "DELETE FROM assessment WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
-			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
-
+			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, below_monthly_income, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
+			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$belowMonthly}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			
 			/*$query .= " UPDATE assessment SET problem = '{$prob}', soc_ass='{$ass}', mode_admission='{$mode_ad}', client_num='{$num}'
 						WHERE trans_id='{$trans_id}';";*/
 		
-			//UPDATE assissstance
+			//UPDATE assisstance
 			$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, financial, material, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
+			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, financial, material, amount, mode, fund, purpose, type_description) 
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
 					if($type2 !=""){
 						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 					}
 			$query .= ";";
+
+			//INSERT TO OTHER CLIENT INFORMATION
+			$query .= "DELETE FROM other_client_information WHERE trans_id = '{$trans_id}';";
+			$query .= "INSERT INTO other_client_information (trans_id, otherClientInformation, crisisSeverityQuestion1, crisisSeverityQuestion2, crisisSeverityQuestion3, supportSystemAvailability, externalResources, selfHelp, vulnerability_riskFactor) 
+			VALUES ('{$trans_id}', '{$docu_otherinfo}', '{$severity}', '{$crisis}', '{$crisis1}', '{$support}', '{$external}', '{$selfhelp}', '{$vulnerability}');"; 
+
+			//INSERT TO SOURCE OF INCOME
+			$query .= "DELETE FROM source_of_income WHERE trans_id = '{$trans_id}';";
+			$query .= "INSERT INTO source_of_income (trans_id, wage, profit, domestic_source, abroad, government_transfer, pension, other_income) 
+			VALUES ('{$trans_id}', '{$SOI_wage}', '{$SOI_profit}', '{$SOI_domesticsource}', '{$SOI_abroad}', '{$SOI_governmenttransfer}', '{$SOI_pension}', '{$SOI_otherincome}');"; 
+
 
 			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
 			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
@@ -2194,6 +2207,9 @@
 				if($amountcon2 < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
 				elseif($amountcon2 >= 50001){ $query .= ", signatory_GL = ''"; }
 			}
+			if(strtolower($program) == "other"){ 
+				$query .= ", other_program = '{$otherProgram}'"; 
+			} 
 			$query .= " WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_multi_query($this->db, $query);
 			
@@ -2849,6 +2865,26 @@
 		return $cid."-".$glid." ".$office;
 	}
 
+	public function getTransactionProcessed($id){
+
+		$query="SELECT LEFT('{$id}', 9) AS office";
+		$result = mysqli_query($this->db, $query);
+		$row = mysqli_fetch_assoc($result);
+
+		$office = $row['office'];
+		
+		$query="SELECT office_accronym FROM field_office WHERE office_id = '{$office}';";
+		$result = mysqli_query($this->db, $query);
+		$row = mysqli_fetch_assoc($result);
+		$officeaccronym = $row['office_accronym'];
+		
+		if($officeaccronym == "SPMC" || $officeaccronym == "DRMC"){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	
     //INSERT INTO GL
     public function insertGL($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
@@ -3187,7 +3223,7 @@
 		}
 
 		public function getGISAssistance($id){
-			$query = "SELECT type, if_medical, if_burial, financial, material, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
+			$query = "SELECT type, if_medical, if_burial, cause_of_death, financial, material, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
 			$result = mysqli_query($this->db, $query);
 			$num = 0;
 			//$data = mysqli_fetch_row($result);
@@ -3226,7 +3262,7 @@
 	
 		public function getGISData($id){
 			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6,
-								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, type_of_disability, others_subcat, pantawid_bene, program_type from assessment 
+								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, below_monthly_income, target_sector, type_of_disability, others_subcat, pantawid_bene, program_type from assessment 
 						LEFT JOIN service USING (trans_id) 
 						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
 						
@@ -3254,6 +3290,67 @@
 			}else{
 				return $data;
 			}
+		}
+
+		public function getOtherInformations($id){
+			$query =  " SELECT source_of_income.*, other_client_information.* from source_of_income 
+						LEFT JOIN other_client_information USING (trans_id) 
+						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
+						
+			$result = mysqli_query($this->db, $query);
+			
+			$data = mysqli_fetch_assoc($result);
+			if(empty($data)){
+				return null; 
+			}else{
+				return $data;
+			}
+
+		}
+		public function totalSourceOfIncome($id){
+			$query =  " SELECT source_of_income.* from source_of_income WHERE trans_id='{$id}'"; 
+						
+			$result = mysqli_query($this->db, $query);
+			$row = mysqli_fetch_assoc($result);
+			$wage = floatval(str_replace(',','',$row['wage']));
+			$profit = floatval(str_replace(',','',$row['profit']));
+			$domestic = floatval(str_replace(',','',$row['domestic_source']));
+			$abroad = floatval(str_replace(',','',$row['abroad']));
+			$transfer = floatval(str_replace(',','',$row['government_transfer']));
+			$pension = floatval(str_replace(',','',$row['pension']));
+			$other_income = floatval(str_replace(',','',$row['other_income']));
+			$total = $wage + $profit + $domestic + $abroad + $transfer + $pension + $other_income;
+
+			$data = number_format($total, 2);
+
+			if(empty($data)){
+				return null; 
+			}else{
+				return $data;
+			}
+
+		}
+
+		function ParseInputs($inputString) {
+			// Remove commas in numbers
+			$cleaned = preg_replace('/(?<=\d)(?=\d)/', '', $inputString);
+		
+			// Split into key-value segments
+			$segments = explode('-', $cleaned);
+		
+			$results = [];
+		
+			foreach ($segments as $segment) {
+				if (strpos($segment, '=') !== false) {
+					list($key, $value) = explode('=', $segment, 2);
+					$results[$key] = $value;
+				} else {
+					// No equal sign means it's a checkbox (flag)
+					$results[$segment] = true;
+				}
+			}
+		
+			return $results;
 		}
 
 		public function updateClient($id, $lname, $mname, $fname, $exname, $bday, $sex, 

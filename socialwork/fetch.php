@@ -183,9 +183,10 @@
         
     }
     
-    if(isset($_POST['putangina'])){
-        $gago = $_POST['putangina'];
-        $query = "SELECT * FROM gisassessment WHERE ass_opt = '".$gago."';";
+    if(isset($_POST['assessmentoption'])){
+        $assessment = $_POST['assessmentoption'];
+        $query = "SELECT * FROM gisassessment WHERE ass_opt = '".$assessment."';";
+        // echo "<script>console.log(".$query.")</script>";
         $result = mysqli_query($user->db,$query);
         if(mysqli_num_rows($result) > 0){
             $row = mysqli_fetch_array($result);
@@ -193,7 +194,7 @@
             $sw_assessment = $row["ass_socwork"];
 
             $json = array('problem_presented' => $sw_problem_presented, 'sw_assessment' => $sw_assessment);
-            print_r (json_encode($json));
+            print_r(json_encode($json));
             
         }
     }

@@ -12,17 +12,17 @@
  </style>
     <div class="container" id="coev2_print" style="font-size:15px; padding:0%;">
         <br>
-        <div class="row" style="margin-top:0%; margin-bottom: 3%;">
+        <!--HEADER-->
+        <div class="row" style="margin-top:0%">
             <div class="col-6">
                 <img src="../images/dswd_olog.png" alt="" width="230px" height="60px">
                 <img src="../images/AICS.png" alt="" width="70px" height="60px">
                 <img src="../images/BP.png" alt="" width="70px" height="60px">
             </div>
-            <div class="col-3 ml-md-auto" style="color: #000000; ">
-            </div>
-            <div class="col-3 ml-md-auto" style="color: #000000; ">
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;CENTRAL OFFICE<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;FIELD OFFICE XI<br>
+            <div class="col-6 ml-md-auto" style="color: #000000; ">
+                <p class="text-center" style="font-size: 30px; font-family: arial, sans-serif; font-weight: bold;">CRISIS INTERVENTION SECTION</p><br>
+                <p class="text-center" style="font-size: 17px; font-family: arial, sans-serif; margin-top: -45px;">Cor. Suazo St. R. Magsaysay Ave. Davao City</p><br>
+                <p class="text-center" style="font-size: 14px; font-family: arial, sans-serif; margin-top: -40px;">DSWD-PMB-GF-13 | REV 03 | 14 MAY 2024</p>
             </div>
         </div>
         <div class="row">
@@ -211,6 +211,7 @@
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;margin-bottom:7px;border:1px solid black;" value="<?php echo $user->coe_check('justification', $record['document'])?>" />&emsp;Justification<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('valid id', $record['document'])?>" />&emsp;Valid I.D. Presented:<br>
                         <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;"><?php echo $record['id_presented']?></p>
+                        <!-- <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('4ps', $record['document'])?>" />&emsp;4PS DSWD I.D.<br> -->
                     </div>
                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('medical certificate', $record['document'])?>" />&emsp;Medical Certificate/Abstract<br>
@@ -274,8 +275,10 @@
             <div class="col" style="margin-left: -80px;">
                 <input class="text-center" style="height: 52%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $gl["cname"]; ?>"></input><br>
                 <input class="text-center" style="height: 52%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $gl["caddress"]; ?>"></input>
+                <!-- <input class="text-center" style="height: 22%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo strtoupper((strtolower($gis["mode_admission"]) == "referral")?"R":"W")?>"></input> -->
             </div>
         </div><br><br>
+        <!-- Signatory -->
         <div class="row text-center" style="font-size: 16px;">
             <div class="col">
                 <b>Conforme:</b>
@@ -332,6 +335,7 @@
             <div class="col"></div>
             <div class="col-6 text-center">
                 <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo $GLsignatoryName ?>'>
+                <!-- <b>CID/CIU/CIS/SWTL</b> -->
                 <b><?php echo $GLsignatoryPosition ?></b>
                 <p>Signature Over Printed Name</p>
             </div>
@@ -363,6 +367,7 @@
                 <img src="../images/dswd-ISO.png" alt="" width="110px" height="60px">
             </div>
         </div>
+                        <!--Container-->
 	</div>
 </body>
 

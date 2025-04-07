@@ -16,7 +16,15 @@
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
-    
+        $otherinfo = $user->getOtherInformations($_GET['id']);
+        $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+        $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+        $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
+        
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 			
         $am = str_replace(",","",$client_assistance[1]['amount']);
@@ -385,7 +393,7 @@
                         include('attestation.php');
                 ?>
             </div>
-			<div id="gisce" hidden><br>
+			<div id="gisce" ><br>
 			<?php 
 				 include("gisv2_print.php"); 
 			?>
