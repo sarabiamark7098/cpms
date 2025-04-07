@@ -393,9 +393,14 @@
                         include('attestation.php');
                 ?>
             </div>
-			<div id="gisce" ><br>
+			<div id="gisce" hidden><br>
 			<?php 
 				 include("gisv2_print.php"); 
+			?>
+			</div>
+            <div id="informationsheet"><br>
+			<?php 
+				 include("informationSheet_print.php"); 
 			?>
 			</div>
 			<div id="coe" class="printable" hidden>
