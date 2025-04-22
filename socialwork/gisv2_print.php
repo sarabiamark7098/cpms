@@ -46,7 +46,7 @@
 	
  </style>
      <!-- Page 1 -->
-    <div class="container page1" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif;">
+    <div class="container page1" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif; border: solid 1px black; padding: 15px">
         
         <!--HEADER-->
         <div class="row" style="margin-top:0px; margin-bottom: 2%;">
@@ -501,7 +501,7 @@
     </div>
     <div class="page-break"></div>
     <!-- Page 2 -->
-    <div class="container page2" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif; margin-top: 24px;">
+    <div class="container page2" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif; margin-top: 24px; border: solid 1px black; padding: 0px 15px;">
         <div class="row" style="margin-bottom: 15px;">
             <div class="col-12">
                 <div class="row" style="border: solid 1px black; border-bottom: none;">
@@ -578,7 +578,7 @@
                                                         <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 3? '&#x2714;':'') ?>'>
                                                     </div>
                                                     <div class="col-10">
-                                                        <label style="font-size: 14px; margin-left: 10px;">Recovering Person Who Used Drugs</label>
+                                                        <label style="font-size: 12px; margin-left: 10px;">Recovering Person Who Used Drugs</label>
                                                     </div>
                                                     <div class="col-2">
                                                         <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 10? '&#x2714;':'') ?>'>
@@ -601,13 +601,13 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 1? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Speech Impairment</label><br>
+                                                <label style="font-size: 11px; margin-left: 10px;">Speech Impairment</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 2? '&#x2714;':'') ?>'>
                                                 <label style="font-size: 14px; margin-left: 10px;">Learning Disability</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 3? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 12px; margin-left: 10px;">Psychosocial Disability</label><br>
+                                                <label style="font-size: 11px; margin-left: 10px;">Psychosocial Disability</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 4? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Deaf/Hard-of-Hearing</label><br>
+                                                <label style="font-size: 11px; margin-left: 10px;">Deaf/Hard-of-Hearing</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 5? '&#x2714;':'') ?>'>
                                                 <label style="font-size: 14px; margin-left: 10px;">Cancer</label>
                                             </div>
@@ -617,7 +617,7 @@
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 7? '&#x2714;':'') ?>'>
                                                 <label style="font-size: 14px; margin-left: 10px;">Visual Disability</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 8? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Intellectual Disability</label><br>
+                                                <label style="font-size: 11px; margin-left: 10px;">Intellectual Disability</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 9? '&#x2714;':'') ?>'>
                                                 <label style="font-size: 14px; margin-left: 10px;">Physical Disability</label><br>
                                                 <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 10? '&#x2714;':'') ?>'>

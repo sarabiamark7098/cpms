@@ -12,7 +12,7 @@
 		-webkit-print-color-adjust: exact; 
 		font-size: 14px;
 	}
-    #gisv2_print input{
+    #informationSheet_print input{
         text-transform:uppercase;
     }
     .page1 {
@@ -46,7 +46,7 @@
 	
  </style>
      <!-- Page 1 -->
-    <div class="container page1" id="informationSheet_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif;">
+    <div class="container page1" id="informationSheet_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif; border:solid 1px black; padding: 15px">
         
         <!--HEADER-->
         <div class="row" style="margin-top:0%; margin-bottom: 3%;">
@@ -68,7 +68,7 @@
                 
                 <div class="row">
                     <div class="col-12">
-                        <p style="margin-top: -7px; margin-left:-15px; margin-right:-15px;"><b style="font-size: 24px">INFORMATION SHEET</b></p>
+                        <p style="margin-top: -7px; margin-left:-15px; margin-right:-15px;"><b style="font-size: 32px">INFORMATION SHEET</b></p>
                     </div>
                 </div>                
             </div>
@@ -121,7 +121,7 @@
         </div>
         <p class="header" style="margin-top: -20px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG KINATAWAN</b> <span style="font-style: italic;">(Representative's Identifying Information)</span></p>
 
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: -2px;">
             <div class="col-4">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["lastname"])?$client["lastname"]:"" ?>'>
             </div>
@@ -149,7 +149,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> <span style="color: #777777;">(Sr.,Jr.)</span></p>
             </div>
         </div>
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: -2px;">
             <div class="col-3">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["client_street"])?$client["client_street"]:"" ?>'>
             </div>
@@ -183,7 +183,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Rehiyon</b> <span style="color: #777777;">(Region)</span></p>
             </div>
         </div>
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: -2px;">
             <div class="col-2">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["contact"])?$client["contact"]:"" ?>'>
             </div>
@@ -229,7 +229,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 7px; line-height: 10px;"><b>Buwanang Kita</b> <span style="color: #777777;">(Monthly Income)</span></p>
             </div>
         </div>
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: -2px;">
             <div class="col-4">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["relation"])?$client["relation"]:"Self" ?>'>
             </div>
@@ -257,9 +257,9 @@
         </div>
 
         <!--BENEFICIARY INFO-->
-        <p class="header" style="margin-top: -5px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG BENEPISYARYO</b> <span style="font-style: italic;">(Beneficiary's Identifying Information)</span> <span style="float:right; font-size: 13px; margin-right: 20px;"><input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; background-color: #ffffff;" type="text" value="<?php echo (strtolower($client["relation"])=="self")?"&#x2714;":"" ?>"></input> KATULAD NG NASA ITAAS</span></p>
+        <p class="header" style="margin-top: 0px; margin-left: -15px; margin-right: -15px; font-size: 15px;"><b>&emsp; IMPORMASYON NG BENEPISYARYO</b> <span style="font-style: italic;">(Beneficiary's Identifying Information)</span> <span style="float:right; font-size: 13px; margin-right: 20px;"><input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; background-color: #ffffff;" type="text" value="<?php echo (strtolower($client["relation"])=="self")?"&#x2714;":"" ?>"></input> KATULAD NG NASA ITAAS</span></p>
 
-        <div class="row" style="margin-top:-8px; ">
+        <div class="row" style="margin-top: -2px; ">
             <div class="col-4">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" value='<?php echo !empty($client["b_lname"])?$client["b_lname"]:"" ?>'>
             </div>
@@ -287,7 +287,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Ext.</b> <span style="color: #777777;">(Sr.,Jr.)</span></p>
             </div>
         </div>
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: -2px;">
             <div class="col-3">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_street"])?$client["b_street"]:"" ?>'>
             </div>
@@ -321,7 +321,7 @@
                 <p class="text-center" style="width: 100%; height:80%; font-size: 10px; "><b>Rehiyon</b> (Region)</p>
             </div>
         </div>
-        <div class="row" style="margin-top: -8px;">
+        <div class="row" style="margin-top: -2px;">
             <div class="col-2">
                 <input class="text-center" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_contact"])?$client["b_contact"]:"" ?>'>
             </div>
@@ -344,7 +344,7 @@
                 <input class="text-center salary_monthly" style="width: 100%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client["b_salary"])?$client["b_salary"]:"" ?>'>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px; margin-bottom: -15px">
+        <div class="row" style="margin-top: -5px; margin-bottom: 0px">
             <div class="col-2">
                 <p class="text-center" style="width: 100%; height:80%; font-size: 8px; "><b>Numero ng Mobile</b>  <span style="color: #777777">(Mobile No.)</span></p>
             </div>
@@ -369,19 +369,19 @@
         </div>
         <div class="row" style="padding: 0px; border: solid 1px black;">
             <div class="col-4" style="border-right: solid 1px #000000;">
-                <div class="row" style="padding: 5px;">
+                <div class="row" style="padding: 10px 0px 10px 5px;">
                     <div class="col-12"> 
                         <p style="line-height: 14px; font-size: 10px;">Ikaw ba ay nakakuha na ng tulong mula sa DSWD?<br>
                         <span style="color: #777777">(Have you received any assistance from the DSWD?)</span></p>
                     </div>
                     <div class="col-3">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; float:right" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; float:right" type="text" value=''>
                     </div>
                     <div class="col-9">
                         Oo
                     </div>
                     <div class="col-3">
-                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; float:right" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; float:right" type="text" value=''>
                     </div>
                     <div class="col-9">
                         Hindi
@@ -389,78 +389,85 @@
                 </div>
             </div>
             <div class="col-4" style="border-right: solid 1px #000000;">
-                <div class="row" style="padding: 5px;">
+                <div class="row" style="padding: 10px 0px;">
                     <div class="col-12">   
                         <p style="line-height: 14px; font-size: 10px; margin:0%;">Natanggap na tulong sa DSWD 
                         <span style="color: #777777">(Assistance received from DSWD)<br>
                         Gamitin ang likurang bahagi ng papel kung kinakailangan</span></p>
                     </div>
                     <div class="col-12">
-                        1. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        1. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        2. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        2. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        3. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        3. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        4. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        4. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        5. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        5. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="row" style="padding: 5px;">
+                <div class="row" style="padding: 10px 5px;;">
                     <div class="col-12">
                         <p style="line-height: 14px; font-size: 10px; margin:0%;">Petsa ng tulong 
                         <span style="color: #777777">(Date of assistance received)</span><br>.</p>
                     </div>
                     <div class="col-12">
-                        1. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        1. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        2. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        2. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        3. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        3. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        4. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        4. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                     <div class="col-12">
-                        5. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value='<?php echo (isset($otherClientInformation['emergencyfund'])? "&#x2714;" : "") ?>'>
+                        5. &nbsp; <input class="text-center" style="width: 90%; font-size: 14px; padding:0; text-indent: 1px; border-bottom: 1px solid black;" type="text" value=''>
                     </div>
                 </div>
             </div>
             <div class="col-12">
                 <div class="row" style="border: solid 1px black;">
                     <div class="col-12" style="margin: 5px 0px;">
-                        <p class="header" style="margin-top: -7px; margin-left:-15px; margin-right:-15px; text-indent: 14px; font-size: 16px; margin-bottom: 0%;"><b>KOMPOSISYON NG PAMILYA</b> <span style="font-style: italic;">(Family Composition)</span> <span style="float:right; font-size: 13px; margin-right: 20px;">Paalala: Gamitin ang likurang bahagi ng papel kung kinakailangan.</span></p>
+                        <p class="header" style="margin: -5px -17px 0px -15px; text-indent: 14px; font-size: 16px; margin-bottom: 0%;"><b>KOMPOSISYON NG PAMILYA</b> <span style="font-style: italic;">(Family Composition)</span> <span style="float:right; font-size: 13px; margin-right: 20px;">Paalala: Gamitin ang likurang bahagi ng papel kung kinakailangan.</span></p>
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-4 text-center" style="border: 1px solid black; font-size:14px; padding: 0%;">
+                                    <div class="col-4 text-center" style="font-size:14px; padding: 0%;">
                                         <b>Buong Pangalan</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Full Name)</span></p>
                                     </div>
-                                    <div class="col-3 text-center" style="border: 1px solid black; font-size:14px; padding: 0%;">
+                                    <div class="col-3 text-center" style="font-size:14px; padding: 0%;">
                                         <b>Relasyon sa Benepisyaryo</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Relationship to the Beneficiary)</span></p>
                                     </div>
-                                    <div class="col-1 text-center" style="border: 1px solid black; font-size:14px; padding: 0%;">
+                                    <div class="col-1 text-center" style="font-size:14px; padding: 0%;">
                                         <b>Edad</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Age)</span></p>
                                     </div>
-                                    <div class="col-2 text-center" style="border: 1px solid black; font-size:14px; padding: 0%;">
-                                        <b>Trabaho</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Occupation)</span></p>
+                                    <div class="col-2 text-center" style="font-size:14px; padding: 0%;">
+                                        <b>Hanapbuhay</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Occupation)</span></p>
                                     </div>
-                                    <div class="col-2 text-center" style="border: 1px solid black; font-size:14px; padding: 0%;">
+                                    <div class="col-2 text-center" style="font-size:14px; padding: 0%;">
                                         <b>Buwanang Kita</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Monthly Salary)</p>
                                     </div>
                                 </div>
-                                <div class="row text-center" style="border: 1px solid black; padding:0px; padding-top: 0px; font-size:14px; min-height: 65px; max-height: 1000px; line-height: 15px;">
+                                <div class="row text-center" style="border: 1px solid black; padding:0px; font-size:14px; line-height: 15px;">
                                     <div class="col-4" style="padding:0px; height: 28px; border: solid 1px">
-                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[1])?$client_fam[1]["name"]:""):"") ?></p>
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 28px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">1.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 28px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[1])?$client_fam[1]["name"]:""):"") ?></p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 28px; border: solid 1px black;">
                                         <p><?php echo (!empty($client_fam)?(!empty($client_fam[1])?$client_fam[1]["relation_bene"]:""):"") ?></p>
@@ -474,8 +481,15 @@
                                     <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
                                         <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[1])?$client_fam[1]["salary"]:""):"") ?>'>
                                     </div>
-                                    <div class="col-4" style="padding:0px; height: 28px; border: solid 1px black;">
-                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[2])?$client_fam[2]["name"]:""):"") ?></p>
+                                    <div class="col-4" style="padding:0px; height: 28px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 28px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">2.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 28px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[2])?$client_fam[2]["name"]:""):"") ?></p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 28px; border: solid 1px black;">
                                         <p><?php echo (!empty($client_fam)?(!empty($client_fam[2])?$client_fam[2]["relation_bene"]:""):"") ?></p>
@@ -489,8 +503,15 @@
                                     <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
                                         <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[2])?$client_fam[2]["salary"]:""):"") ?>'>
                                     </div>
-                                    <div class="col-4" style="padding:0px; height: 28px; border: solid 1px black;">
-                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[3])?$client_fam[3]["name"]:""):"") ?></p>
+                                    <div class="col-4" style="padding:0px; height: 28px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 28px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">3.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 28px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[3])?$client_fam[3]["name"]:""):"") ?></p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 28px; border: solid 1px black;">
                                         <p><?php echo (!empty($client_fam)?(!empty($client_fam[3])?$client_fam[3]["relation_bene"]:""):"") ?></p>
@@ -504,10 +525,88 @@
                                     <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
                                         <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[3])?$client_fam[3]["salary"]:""):"") ?>'>
                                     </div>
+                                    <div class="col-4" style="padding:0px; height: 28px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 28px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">4.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 28px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[4])?$client_fam[4]["name"]:""):"") ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[4])?$client_fam[4]["relation_bene"]:""):"") ?></p>
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[4])?$client_fam[4]["age"]:""):"") ?></p>
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[4])?$client_fam[4]["occupation"]:""):"") ?></p>
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[4])?$client_fam[4]["salary"]:""):"") ?>'>
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 28px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 28px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">5.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 28px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[5])?$client_fam[5]["name"]:""):"") ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[5])?$client_fam[5]["relation_bene"]:""):"") ?></p>
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[5])?$client_fam[5]["age"]:""):"") ?></p>
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[5])?$client_fam[5]["occupation"]:""):"") ?></p>
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 28px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[5])?$client_fam[5]["salary"]:""):"") ?>'>
+                                    </div>
 
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12" style="margin: 5px 0px;">
+                        <p class="header" style="margin: -5px -17px 0px -15px; text-indent: 14px; font-size: 16px; margin-bottom: 0%;"><b>DEKLARASYON NG PAHINTULOT</b> <span style="font-style: italic;">(Consent Form)</span></p>
+                        <div class="row">
+                            <div class="col-12" style="padding: 15px 42px 0px 42px;">
+                                <p style="text-align:justify; text-indent: 16px;">Ako ay nagdedeklara sa ilalim ng parusa ng pagsisinungaling (perjury), na ang lahat ng impormasyon sa aplikasyon na ito ay totoo at tama batay sa aking personal na kaalaman at mga autentikong rekord na isinumite sa Department of Social Welfare and Development (DSWD). Anumang mali o mapanlinlang na impormasyon na ibinigay, o paggawa ng pekeng/pinagwaglit na mga dokumento ay magiging sanhi ng nararapat na hakbang na legal laban sa akin at awtomatikong magpawalang-bisa sa anumang tulong na ibibigay kaugnay ng aplikasyon na ito.</p><br>
+                                <p style="text-align:justify; text-indent: 16px;">Ako ay sumasang-ayon na ang lahat ng personal na datos (ayon sa depinisyon sa ilalim ng Republic Act 10173 o Data Privacy Law ng 2012 at mga patnubay nito) at impormasyon o mga rekord ng mga transaksyon sa account sa DSWD ay maaaring iproseso, i-profile, o ibahagi sa mga humihiling na partido o para sa layunin ng anumang hukuman, proseso ng batas, pagsusuri, inquiry, audit, o imbestigasyon ng anumang awtoridad.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8 text-center">
+                <div style="position: relative; height: 200px;">
+                    <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 60%; text-align: center;">
+                        <input class="text-center"
+                            style="width: 100%; font-size: 13.5px; padding: 0; border: none; border-bottom: 1px solid black; text-transform: uppercase;"
+                            type="text" value='<?php echo ((!empty($client["firstname"])?$client["firstname"]." ":"") . (!empty($client["middlename"])?$client["middlename"][0].". ":""). (!empty($client["lastname"])?$client["lastname"]." ":"") . (!empty($client["extraname"])?$client["extraname"]." ":"")) ?>'>
+                        <br>
+                        <b>Lagda sa ibabaw ng Buong Pangalan ng Kinatawan/Kliyente</b>
+                        <p style="color: #777777; font-style: italic; margin: 0;">
+                            (Signature Over Printed Name of the Authorized Representative/Client)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div style="height: 170px; width: 150px; border: solid 1px #000000; margin: 10px 50px; text-align: center; position: relative;">
+                    <div style="position: absolute; bottom: 10; left: 50%; transform: translateX(-50%);">
+                        Thumbmark
                     </div>
                 </div>
             </div>
@@ -527,406 +626,533 @@
     </div>
     <div class="page-break"></div>
     <!-- Page 2 -->
-    <div class="container page2" id="gisv2_print" style="font-size:12px; padding:0%; font-family: Arial, sans-serif; margin-top: 24px;">
+    <div class="container page2" id="gisv2_print" style="font-size:12px; font-family: Arial, sans-serif; margin-top: 24px; border:solid 1px black; padding: 15px; padding-top: 0px;">
         <div class="row" style="margin-bottom: 15px;">
             <div class="col-12">
-                <div class="row" style="border: solid 1px black; border-bottom: none;">
+                <div class="row" style="border: solid 1px black;">
+                    <div class="col-12" style="margin: 5px 0px 0px 0px;">
+                        <p class="header" style="margin: -5px -17px 0px -15px; text-indent: 14px; font-size: 16px;"><b>NATANGGAP NA TULONG MULA SA DSWD</b> <span style="font-style: italic;">(Assistance Received from DSWD)</span></p>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row" style="padding: 5px 0px;">
+                                    <div class="col-7 text-center" style="font-size:14px; padding: 0%;">
+                                        <p style="margin: 0%; margin-top: 5px; padding: 0%;"><b>Natanggap na tulong</b><span style="color: #777777"> (Assistance received)</span></p>
+                                    </div>
+                                    <div class="col-5 text-center" style="font-size:14px; padding: 0%;">
+                                        <p style="margin: 0%; margin-top: 5px; padding: 0%;"><b>Petsa ng tulong</b><span style="color: #777777"> (Date of assistance received)</span></p>
+                                    </div>
+                                </div>
+                                <div class="row text-center" style="border: 1px solid black; padding:0px; font-size:14px; line-height: 15px;">
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">6.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">7.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">8.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">9.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">10.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">11.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">12.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">13.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">14.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">15.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">16.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">17.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">18.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">19.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">20.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">21.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-7" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-1" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">22.</label>
+                                            </div>
+                                            <div class="col-11" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="row" style="border: solid 1px black;">
                     <div class="col-12" style="margin: 5px 0px;">
-                        <p class="header" style="margin-top: -7px; margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 16px"> I. INCOME AND FINANCIAL RESOURCES</b></p>
-                        <div class="row" style="margin-top:-16px;">
-                            <div class="col-3" style="border: solid 1px black; border-bottom: none;">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <label style="margin-top: 12px; text-indent: 3px;"><b style="font-size: 16px"> Target Sector: </b></label>                        
-                                    </div>
-                                    <div class="col-6" style="margin-top: 3px;">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 1? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">FHONA</label>
-                                    </div>
-                                    <div class="col-6">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 2? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">SC</label>
-                                    </div>
-                                    <div class="col-6" style="margin-top: 3px;">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 3? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">WEDC</label>
-                                    </div>
-                                    <div class="col-6">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 4? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">YNSP</label>
-                                    </div>
-                                    <div class="col-6" style="margin-top: 3px;">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 5? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">PWD</label>
-                                    </div>
-                                    <div class="col-6">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 6? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">PLHIV</label>
-                                    </div>
-                                    <div class="col-6" style="margin-top: 3px;">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 7? '&#x2714;':'') ?>'>
-                                        <label style="font-size: 14px; margin-left: 10px;">CNSP</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label style="margin-top: 12px; text-indent: 30px;"><b style="font-size: 16px">Specify Sub-category:</b></label>                        
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 1? '&#x2714;':'') ?>'>
-                                                        <label style="font-size: 14px; margin-left: 10px;">Solo Parent</label>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 2? '&#x2714;':'') ?>'>
-                                                        <label style="font-size: 14px; margin-left: 10px;">Indigenous People</label>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 5? '&#x2714;':'') ?>'>
-                                                        <label style="font-size: 14px; margin-left: 10px;">Street Dwellers</label>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 9? '&#x2714;':'') ?>'>
-                                                        <label style="font-size: 14px; margin-left: 10px;">KIA/WIA</label>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 4? '&#x2714;':'') ?>'>
-                                                        <label style="font-size: 14px; margin-left: 10px;">4PS Beneficiary</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="row">
-                                                    <div class="col-2">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 3? '&#x2714;':'') ?>'>
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <label style="font-size: 14px; margin-left: 10px;">Recovering Person Who Used Drugs</label>
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 10? '&#x2714;':'') ?>'>
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <label style="font-size: 14px; margin-left: 10px;">Minimum Wage Earner</label>
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 11? '&#x2714;':'') ?>'>
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <label style="font-size: 14px; margin-left: 10px;">Below Minimum Wage Earner</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6" style="border: solid 1px #000000; position: absolute; right: 0; top: 0;">
-                                        <label style="margin-top: 12px; text-indent: 30px;"><b style="font-size: 16px">Type of Disability:</b></label>                        
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 1? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Speech Impairment</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 2? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Learning Disability</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 3? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 12px; margin-left: 10px;">Psychosocial Disability</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 4? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Deaf/Hard-of-Hearing</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 5? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Cancer</label>
-                                            </div>
-                                            <div class="col-6">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 6? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Mental Disability</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 7? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Visual Disability</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 8? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Intellectual Disability</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 9? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Physical Disability</label><br>
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['type_of_disability'] == 10? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Rare Disease</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3" style="border: solid 1px black; border-top: none; border-bottom: none;">
-                                <div class="row">
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 13? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Stateless Person</label>
-                                            </div>
-                                            <div class="col-12">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 14? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Asylum Seeker</label>
-                                            </div>
-                                            <div class="col-12">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 15? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Refugees</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <label style="font-size: 14px; margin-left: 10px;">(specify approximate</label>
-                                            </div>
-                                            <div class="col-12" style="margin-top: -10px;">
-                                                <label style="font-size: 14px; margin-left: 10px;">monthly income)</label>
-                                                &emsp;Php<input style="text-indent: 10px; width: 30%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($gis['below_monthly_income'])? $gis['below_monthly_income']: ""; ?>'>
-                                            </div>
-                                            <div class="col-12" style="margin-top: 5px;">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 12? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">No Regular Income</label>
-                                            </div>
-                                            <div class="col-12">
-                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['subcat_ass'] == 8? '&#x2714;':'') ?>'>
-                                                <label style="font-size: 14px; margin-left: 10px;">Others:</label>
-                                                <input style="text-indent: 10px; width: 50%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>'>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3" style="border: solid 1px black; border-top: none;">
-                                <div class="row">
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="row">
-                                    <div class="col-3">
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="row">
-                                                    <div class="col-7" style="margin-top: 8px;">
-                                                        <p style="font-size: 16px; text-indent: 48px;"><b>Source of Income:</b></p>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['wage'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Salaries/Wages from Employment</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['profit'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Entrepreneurial income/profits</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['domestic_source'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Cash assistance from domestic source</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['abroad'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Cash assistance from abroad</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['government_transfer'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Transfers from the government (e.g. 4Ps)</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['pension'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Pension</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo !empty($otherinfo['other_income'])? '&#x2714;': ""; ?>'>
-                                                                <label style="font-size: 14px; margin-left: 10px;">Other income</label>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <p style="font-size: 15px; margin-left: 10px; text-align: right;"><b>Total income in the last 6 months</b></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-5" style="margin-top: 8px;">
-                                                        <p style="font-size: 16px; text-indent: 48px;">.</p>
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 8px;" type="text" height="30px" value='<?php echo !empty($otherinfo['wage'])? $otherinfo['wage']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 8px;" type="text" height="30px" value='<?php echo !empty($otherinfo['profit'])? $otherinfo['profit']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 9px;" type="text" height="30px" value='<?php echo !empty($otherinfo['domestic_source'])? $otherinfo['domestic_source']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 9px;" type="text" height="30px" value='<?php echo !empty($otherinfo['abroad'])? $otherinfo['abroad']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 10px;" type="text" height="30px" value='<?php echo !empty($otherinfo['government_transfer'])? $otherinfo['government_transfer']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 10px;" type="text" height="30px" value='<?php echo !empty($otherinfo['pension'])? $otherinfo['pension']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 10px;" type="text" height="30px" value='<?php echo !empty($otherinfo['other_income'])? $otherinfo['other_income']: ""; ?>'>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                Php&emsp;<input style="text-indent: 10px; width: 60%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black; margin-bottom: 5px;" type="text" height="30px" value='<?php echo !empty($totalSourceofIncome)? $totalSourceofIncome: ""; ?>'>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <p class="header" style="margin-top: -7px; margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 16px"> IX. PROBLEM PRESENTED</b></p>
-                        <div class="row" style="height: 100px">
-                            <div class="col-12 text-center" style="font-size:14px;line-height: 16px; margin-top: -15px;"> <br>
-                                <p><?php echo $gis["problem"]; ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <p class="header" style="margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 16px"> X. SOCIAL WORKER'S ASSESSMENT</b></p>
-                        <div class="row" style="height: 150px">
-                            <div class="col-12 text-center" style="font-size:14px; line-height: 16px; margin-top: -15px;"> <br>
-                                <p><?php echo $gis["soc_ass"]; ?></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row" style="border-left: 1px solid black; border-right: 1px solid black;">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-12">
-                                    <p class="header" style="margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 15px">
-                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; background-color: #ffffff;" type="text" value='<?php echo !empty($client_assistance[1]['financial'])? '&#x2714;': ""; ?>'>&nbsp;FINANCIAL ASSISTANCE<span style="margin-right: 100px"></span>
-                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; background-color: #ffffff;" type="text" value='<?php echo !empty($client_assistance[1]['material'])? '&#x2714;': ""; ?>'>&nbsp;MATERIAL ASSISTANCE<span style="margin-right: 40px"></span>
-                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; background-color: #ffffff;" type="text" value='<?php echo !empty($gis["service5"])||!empty($gis["service6"])? '&#x2714;': ""; ?>'>&nbsp;PSYCHOSOCIAL SUPPORT<span style="margin-right: 40px"></span>
-                                        <input class="check-box text-center" style="width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black; background-color: #ffffff;" type="text" value='<?php echo !empty($gis["refer1"])? '&#x2714;': ""; ?>'>&nbsp;REFERRAL :
-                                    </b></p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2" style="margin-left:0px; margin-bottom:5px; font-size:14px;">
-                                        <div>
-                                            <a style="margin-left: 15px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['financial'] == 1)? '&#x2714;': ""; ?>'>&nbsp;Medical<br>
-                                            <a style="margin-left: 15px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['financial'] == 4)? '&#x2714;': ""; ?>'>&nbsp;Funeral<br>
-                                            <a style="margin-left: 15px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['financial'] == 2)? '&#x2714;': ""; ?>'>&nbsp;Transportation<br>
-                                            <a style="margin-left: 15px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['financial'] == 5)? '&#x2714;': ""; ?>'>&nbsp;Educational<br>
-                                            </div>
-                                    </div>
-                                    <div class="col-3" style="margin-left:-40px; margin-bottom:5px; font-size:14px;">
-                                        <div>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['financial'] == 3)? '&#x2714;': ""; ?>'>&nbsp;Food Assistance<br>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['financial'] == 6)? '&#x2714;': ""; ?>'>&nbsp;Cash Relief Assistance<br>
-                                        </div>
-                                    </div>
-                                    <div class="col-4" style="margin-left:-60px; margin-bottom:5px; font-size:14px;">
-                                        <div>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['material'] == 1)? '&#x2714;': ""; ?>'>&nbsp;Family Food Packs<br>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['material'] == 2)? '&#x2714;': ""; ?>'>&nbsp;Other Food Items<br>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['material'] == 3)? '&#x2714;': ""; ?>'>&nbsp;Hygiene or Sleeping Kits<br>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['material'] == 4)? '&#x2714;': ""; ?>'>&nbsp;Assistive Devices and Technologies<br>
-                                            <a style="margin-left: 0px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($client_assistance[1]['material'] == 5)? '&#x2714;': ""; ?>'>&nbsp;Rice
-                                        </div>
-                                    </div>
-                                    <div class="col-3" style="margin-left:-70px; font-size:13px;">
-                                        <div>
-                                            <a style="margin-left: -20px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis["service5"] == 1)? '&#x2714;': ""; ?>'>&nbsp;Psychological FIrst Aid (PFA)<br>
-                                            <a style="margin-left: -20px"></a>
-                                            <input class="check-box text-center" style="width: 15px; height: 15px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis["service6"] == 1)? '&#x2714;': ""; ?>'>&nbsp;Social Work Counseling<br>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="col-2" style="margin-left:-30px; margin-bottom:5px; font-size:12px;">
-                                        <div>
-                                            <input style="width: 10px; margin-left:-5; width: 120px;padding:0; text-indent: 2px; border-bottom: 1px solid black;" type="text" value='<?php echo ($gis["refer1"] != ""?$gis["refer1"]:"")?>'><br>
-                                            <input style="width: 10px; margin-left:-5; width: 120px;padding:0; text-indent: 2px; border-bottom: 1px solid black;" type="text" value='<?php echo ($gis["refer2"] != ""?$gis["refer2"]:"")?>'><br>
-                                            <input style="width: 10px; margin-left:-5; width: 120px;padding:0; text-indent: 2px; border-bottom: 1px solid black;" type="text" value='<?php echo ($gis["refer3"] != ""?$gis["refer3"]:"")?>'><br>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
+                        <p class="header" style="margin: -5px -17px 0px -15px; text-indent: 14px; font-size: 16px; margin-bottom: 0%;"><b>KOMPOSISYON NG PAMILYA</b> <span style="font-style: italic;">(Family Composition)</span></p>
                         <div class="row">
-                            <div class="col-5 text-center">
-                            <p class="header" style="margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 16px"> Purpose of Assistance</b></p>
-                            </div>
-                            <div class="col-2 text-center">
-                            <p class="header" style="margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 16px"> Amount</b></p>
-                            </div>
-                            <div class="col-5 text-center">
-                            <p class="header" style="margin-left:-15px; margin-right:-15px; text-indent: 14px;"><b style="font-size: 16px"> Fund Source</b></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-5 text-center" style="font-size:14px; margin-top: -18px; border: solid 1px #000000;">
-                                <div class="row">
-                                    <div class="col-1 text-center" style="font-size:14px; border: solid 1px #000000;">
-                                        1
+                            <div class="col-12">
+                                <div class="row" style="padding: 10px 0px;">
+                                    <div class="col-4 text-center" style="font-size:14px; padding: 0%;">
+                                        <b>Buong Pangalan</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Full Name)</span></p>
                                     </div>
-                                    <div class="col-11 text-center">
-                                        <span><?php echo $client_assistance[1]['purpose']; ?></span>
+                                    <div class="col-3 text-center" style="font-size:14px; padding: 0%;">
+                                        <b>Relasyon sa Benepisyaryo</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Relationship to the Beneficiary)</span></p>
+                                    </div>
+                                    <div class="col-1 text-center" style="font-size:14px; padding: 0%;">
+                                        <b>Edad</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Age)</span></p>
+                                    </div>
+                                    <div class="col-2 text-center" style="font-size:14px; padding: 0%;">
+                                        <b>Hanapbuhay</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Occupation)</span></p>
+                                    </div>
+                                    <div class="col-2 text-center" style="font-size:14px; padding: 0%;">
+                                        <b>Buwanang Kita</b><p style="font-size: smaller; margin: 0%; margin-top: -5px; padding: 0%;"><span style="color: #777777">(Monthly Salary)</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-2 text-center" style="font-size:14px; margin-top: -18px; border: solid 1px #000000;">
-                                <span><?php echo $client_assistance[1]['amount']; ?></span>
-                            </div>
-                            <div class="col-5 text-center" style="font-size:14px; margin-top: -18px; border: solid 1px #000000;">
-                                <span><?php
-                                    for ($i = 1; $i <= 12; $i++) {
-                                        if (!empty($fundsourcedata[$i]['fundsource'])) {
-                                            echo $fundsourcedata[$i]['fundsource'] . "=" . 
-                                                (!empty($fundsourcedata[$i]['fs_amount']) ? $fundsourcedata[$i]['fs_amount'] : $client_assistance[1]['amount']) . ", ";
-                                        }
-                                    }
-                                ?></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row" style="height: 220px">
-                            <div class="col-6 text-center" style="font-size:14px; line-height: 16px; padding-top: 30px;">
-                                <b>Interviewed by:</b><br>
-                                <input class="text-center" style="width: 80%; border-bottom: 1px solid black; margin-top: 40px;" type="text" value='<?php echo strtoupper($soc_workFullname); ?>'><br>
-                                <label>Social Worker</label><br>
-                                <label style="margin-top: -10px;">(Signature over Printed Name)</label><br>
-                                <div style="margin-top: -10px;">
-                                <label>License no.:</label><input class="text-center" style="width: 20%; border-bottom: 1px solid black;" type="text" value='<?php echo $soc_worker['sw_license_no']; ?>'><br>
+                                <div class="row text-center" style="border: 1px solid black; padding:0px; font-size:14px; line-height: 15px;">
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">6.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">7.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">8.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">9.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">10.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">11.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">12.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">13.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">14.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">15.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">16.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">17.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">18.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">19.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">20.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">21.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
+                                        <div class="row">
+                                            <div class="col-2" style="border-right: solid 1px black; height: 36px; text-align: center; padding: 5px;">
+                                                <label style="display: absolute;  position: center;">22.</label>
+                                            </div>
+                                            <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                    </div>
+                                    
+
                                 </div>
-                            </div>
-                            <div class="col-6 text-center" style="font-size:14px; line-height: 16px; padding-top: 30px;">
-                                <b>Reviewed & Approved by:</b>
-                                <input class="text-center" style="width: 80%; border-bottom: 1px solid black; margin-top: 40px;" type="text" value='<?php echo strtoupper($GISsignatoryName) ?>'><br>
-                                <label>Approving Authority</label><br>
-                                <label style="margin-top: -10px;">(Signature over Printed Name)</label><br>
                             </div>
                         </div>
                     </div>
