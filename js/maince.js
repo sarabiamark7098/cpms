@@ -18,9 +18,9 @@ function printGISinCE() {
 }
 
 function printInformationSheet() {
-
+    console.log("asd");
     //unsa na div iyang e print
-    var divElements = document.getElementById('informationsheet').innerHTML;;
+    var divElements = document.getElementById('isheet').innerHTML;;
     //nag gunit sa whole page 
     var oldPage = document.body.innerHTML;
 

@@ -343,7 +343,7 @@
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printa" onclick="printAttest()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
                     <?php } ?>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
-                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print IS" name="printgis" onclick="printInformationSheet()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print IS" name="printis" onclick="printInformationSheet()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
@@ -394,26 +394,27 @@
                         include('attestation.php');
                 ?>
             </div>
-			<div id="gisce" ><br>
+			<div id="gisce" hidden><br>
 			<?php 
 				 include("gisv2_print.php"); 
 			?>
 			</div>
-            <div id="informationsheet" hidden><br>
+            <div id="isheet" hidden><br>
 			<?php 
 				 include("informationSheet_print.php"); 
 			?>
 			</div>
-			<div id="coe" class="printable" hidden>
+			<div id="coe" class="printable" hidden >
 			<?php 
-                if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-				    include("coev2_print_cav.php"); 
-                }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
-				    include("coev2_print_gl.php"); 
-                }else{
-				    include("coev2_print.php"); 
-                }
-				
+                // if($mode1 == "CAV" || !empty($mode2) == "CAV"){
+				//     include("coev2_print_cav.php"); 
+                // }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
+				//     include("coev2_print_gl.php"); 
+                // }else{
+				//     include("coev2_print.php"); 
+                // }
+				include("coev2_print_gl.php");
+                
 				?>
 			</div>
         </div>

@@ -662,6 +662,9 @@
                                         <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck($record['document'], "", "Contract of Employment") ?>> Contract of Employment</div>
                                     </div>
                                     <div class="row">
+                                        <div><input type="checkbox" class="lg" name="cert_attest" value="Certificate of Attestation" <?php echo $user->checkCheck($record['document'], "", "Certificate of Attestation") ?>> Certificate of Attestation</div>
+                                    </div>
+                                    <div class="row">
                                         <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck($record['document'], "", "Certificate of Employment") ?>> Certificate of Employment</div>
                                     </div>
                                     <div class="row">
@@ -710,6 +713,9 @@
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck($record['document'], "", "PRESCRIPTION").'> Prescription</div>
                                         </div>
+                                        <div class="row">   
+                                            <div><input type="checkbox" class="lg" name="cs_report" id="cs_report" value="CASE SUMMARY" '.$user->checkCheck($record['document'], "", "CASE SUMMARY").'> Case Summary Report</div>
+                                        </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck($record['document'], "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
                                         </div>
@@ -728,6 +734,9 @@
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="t_perm" id="t_perm" value="TRANSFER PERMIT" '.$user->checkCheck($record['document'], "", "TRANSFER PERMIT").'> Transfer Permit</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>

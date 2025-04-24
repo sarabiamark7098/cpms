@@ -134,7 +134,7 @@
     if(isset($_POST['soc_work'])){
         $output = '';
         
-        $sql= "SELECT a.trans_id, a.date_entered, b.lastname, b.firstname, b.middlename, b.extraname, c.b_fname, c.b_mname, c.b_lname, c.b_exname  FROM client_data as b
+        $sql= "SELECT a.trans_id, a.note, a.relation, a.date_entered, b.lastname, b.firstname, b.middlename, b.extraname, c.b_fname, c.b_mname, c.b_lname, c.b_exname  FROM client_data as b
         LEFT JOIN tbl_transaction as a USING (client_id)
         LEFT JOIN beneficiary_data as c USING (bene_id)
         WHERE status_client = 'Pending' order by date_entered asc;";
@@ -165,6 +165,7 @@
                                     <td>{$row['date_entered']}</td>
                                     <td>{$getEncoder}</td>
                                     <td>";
+                                    
                                     if($row['note'] == 'yes'){
                                         $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px;'> Serve</a>
                                         <button class='btn btn-primary deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px;'> Decline</button>";
@@ -254,7 +255,7 @@
                                 <td>{$row['date_entered']}</td>
                                 <td>{$getEncoder}</td>
                                 <td>";
-                                if($row['note'] == 'yes'){
+                                if($row['note'] == 'no'){
                                     $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
                                     <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X</button>";
                                 } else {
