@@ -1017,7 +1017,7 @@
 		if(isset($_POST['sd_officer'])){
             $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
         }
-        
+
 		if(isset($_POST['client_work'])){
             $client_work = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_work'])));
         }
@@ -1027,6 +1027,7 @@
 		if(isset($_POST['client_agency'])){
             $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
+        
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }

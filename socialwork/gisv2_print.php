@@ -15,6 +15,7 @@
     #gisv2_print input{
         text-transform:uppercase;
     }
+    
     .page1 {
             position: relative;
             height: 1492px; /* approx height for A4 at 96dpi */
@@ -61,7 +62,6 @@
         
         <div class="row">
             <div class="col-12" style="text-align: center; margin-top: -7px">
-                
                 <div class="row">
                     <div class="col-12">
                         <p class="header" style="margin-top: -7px; margin-left:-15px; margin-right:-15px;"><b style="font-size: 24px">GENERAL INTAKE SHEET</b></p>

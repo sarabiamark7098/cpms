@@ -106,6 +106,7 @@
         <script type="text/javascript" src="../../js/jquery.min.js"></script>
         <script type="text/javascript" src="../../js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../../js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="../../js/jquery.inputmask.min.js"></script>
         <title>COE</title>
         <style>
             input[type=checkbox]
@@ -362,6 +363,18 @@
                 $('.salary_monthly').mask("#,000,000,000", {reverse: true});
                 $('.money').mask("#,000,000.00", {reverse: true,});
                 
+                $(document).ready(function () {
+                    $(".currencyMaskedInput").inputmask({
+                        alias: "currency",
+                        prefix: "",
+                        rightAlign: false,
+                        groupSeparator: ",",
+                        autoGroup: true,
+                        digits: 2,
+                        allowMinus: false
+                    });
+                });
+
                 function CurrencyFormat(number)
                 {
                     var decimalplaces = 2;
@@ -536,7 +549,7 @@
         <br><br><br><br>
         <form action="coe.php?id=<?php echo $_GET['id']?>" method="post">
         <div class="container">
-                <?php if($gis['program_type'] = '1'){?>
+                <?php if($gis['program_type'] == '1'){?>
                 
                 <div class="card border-info mb3" style="width:100%;">
                     <h4 class="card-header text-success">Certificate of Attestation</h4>
@@ -649,6 +662,9 @@
                                         <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck($record['document'], "", "Contract of Employment") ?>> Contract of Employment</div>
                                     </div>
                                     <div class="row">
+                                        <div><input type="checkbox" class="lg" name="cert_attest" value="Certificate of Attestation" <?php echo $user->checkCheck($record['document'], "", "Certificate of Attestation") ?>> Certificate of Attestation</div>
+                                    </div>
+                                    <div class="row">
                                         <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck($record['document'], "", "Certificate of Employment") ?>> Certificate of Employment</div>
                                     </div>
                                     <div class="row">
@@ -697,6 +713,9 @@
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck($record['document'], "", "PRESCRIPTION").'> Prescription</div>
                                         </div>
+                                        <div class="row">   
+                                            <div><input type="checkbox" class="lg" name="cs_report" id="cs_report" value="CASE SUMMARY" '.$user->checkCheck($record['document'], "", "CASE SUMMARY").'> Case Summary Report</div>
+                                        </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck($record['document'], "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
                                         </div>
@@ -715,6 +734,9 @@
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="t_perm" id="t_perm" value="TRANSFER PERMIT" '.$user->checkCheck($record['document'], "", "TRANSFER PERMIT").'> Transfer Permit</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
@@ -751,7 +773,7 @@
                                                     <div class="col-12">
                                                         <h6 class="text-center">Amount to Be Distributed: </h6>
                                                         <h6 class="text-center">Php 
-                                                        <input type="text" class="money" id="totalamount" readonly /></h6>
+                                                        <input type="text" class="currencyMaskedInput" id="totalamount" readonly /></h6>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -760,7 +782,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[1]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf1" name="amountf1" value="<?php echo !empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf1" name="amountf1" value="<?php echo !empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -769,7 +791,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[2]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf2" name="amountf2" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf2" name="amountf2" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -779,7 +801,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[3]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf3" name="amountf3" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf3" name="amountf3" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -791,7 +813,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[4]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf4" name="amountf4" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf4" name="amountf4" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -803,7 +825,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[5]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf5" name="amountf5" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf5" name="amountf5" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -815,7 +837,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[6]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf6" name="amountf6" value="<?php echo !empty($fundsourcedata[6]['fs_amount'])?$fundsourcedata[6]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf6" name="amountf6" value="<?php echo !empty($fundsourcedata[6]['fs_amount'])?$fundsourcedata[6]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -827,7 +849,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[7]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf7" name="amountf7" value="<?php echo !empty($fundsourcedata[7]['fs_amount'])?$fundsourcedata[7]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf7" name="amountf7" value="<?php echo !empty($fundsourcedata[7]['fs_amount'])?$fundsourcedata[7]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -839,7 +861,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[8]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf8" name="amountf8" value="<?php echo !empty($fundsourcedata[8]['fs_amount'])?$fundsourcedata[8]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf8" name="amountf8" value="<?php echo !empty($fundsourcedata[8]['fs_amount'])?$fundsourcedata[8]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -851,7 +873,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[9]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf9" name="amountf9" value="<?php echo !empty($fundsourcedata[9]['fs_amount'])?$fundsourcedata[9]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf9" name="amountf9" value="<?php echo !empty($fundsourcedata[9]['fs_amount'])?$fundsourcedata[9]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -863,7 +885,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[10]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf10" name="amountf10" value="<?php echo !empty($fundsourcedata[10]['fs_amount'])?$fundsourcedata[10]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf10" name="amountf10" value="<?php echo !empty($fundsourcedata[10]['fs_amount'])?$fundsourcedata[10]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -875,7 +897,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[11]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[11]['fs_amount'])?$fundsourcedata[11]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[11]['fs_amount'])?$fundsourcedata[11]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -886,7 +908,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[12]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf12" name="amountf12" value="<?php echo !empty($fundsourcedata[12]['fs_amount'])?$fundsourcedata[12]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf12" name="amountf12" value="<?php echo !empty($fundsourcedata[12]['fs_amount'])?$fundsourcedata[12]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -895,7 +917,7 @@
                                                     <div class="col-12">
                                                         <h6 class="text-center">Amount Distributed: </h6>
                                                         <h6 class="text-center">Php 
-                                                        <input type="text" class="text-center money" id="dtotalamount" readonly/></h6></h6>
+                                                        <input type="text" class="text-center currencyMaskedInput" id="dtotalamount" readonly/></h6></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -995,9 +1017,6 @@
 		if(isset($_POST['sd_officer'])){
             $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
         }
-        foreach($_POST as $key => $value) {
-                $docu .=   $value . '-';
-        }
 
 		if(isset($_POST['client_work'])){
             $client_work = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_work'])));
@@ -1008,7 +1027,11 @@
 		if(isset($_POST['client_agency'])){
             $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
-   
+
+        foreach($_POST as $key => $value) {
+            $docu .=   $value . '-';
+        }
+
         if(isset($_POST['val_id'])){
             $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
         }
@@ -1117,10 +1140,10 @@
 		if(isset($_POST['client_salary'])){
             $client_salary = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_salary'])));
         }
+
 		if(isset($_POST['client_agency'])){
             $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
-
        
         if(isset($_POST['val_id'])){
             $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
@@ -1185,6 +1208,7 @@
         if(isset($_POST['amountf12'])){
             $amount12 = $_POST['amountf12'];
         }
+        // print_r($_POST);
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
         // echo $signName;

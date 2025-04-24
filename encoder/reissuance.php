@@ -37,8 +37,17 @@
     $_SESSION["client_id_assess"] = $_GET["id"];
     $dateentered = date("Y-m-d H:i:s");
     $timeentry = $user->theTime($dateentered);
-    $client_fam = $user->getGisDataFam($id);
+    $client_fam = $user->getclientFam($id);
     $gis = $user->getGISData($id);
+    $otherinfo = $user->getOtherInformations($_GET['id']);
+    $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+    $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+    $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+    $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+    $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+    $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+    $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
+        
     $soc_worker = $user->getuserInfo($client['encoded_socialWork']);
     $soc_workerFullname = $soc_worker['empfname'].' '.$soc_worker['empmname'][0].'. '.$soc_worker['emplname'].' '.$soc_worker['empext'];
     $encoder = $user->getuserInfo($client['encoded_encoder']);
@@ -56,12 +65,11 @@
 		$address['beneficiary'] .= $client['b_street'] .", ";
 	}
 	$address['beneficiary'] .= $Bbrgy[0] .", ". $Bcity[0].", ". $Bprovince[0];
-    $client_fam = $user->getGisDataFam($id);
     $amountToWord = $user->toWord($client["amount1"]);
     $signatoryName = strtoupper($signatory['first_name'] ." ". $signatory['middle_I'] .". ". $signatory['last_name']);
     $glsignatoryname = strtoupper($glsignatory['first_name'] ." ". $glsignatory['middle_I'] .". ". $glsignatory['last_name']);
-    $cash = $user->lastCash($id);
-    $gl = $user->lastGL($id);
+    $cash = $user->getCash($id);
+    $gl = $user->getGL($id);
     $coe = $user->getCOEData($id);
     $dateaccomplished = explode("-",$client['date_accomplished']);
     $dateenter = explode("-",$dateentered);

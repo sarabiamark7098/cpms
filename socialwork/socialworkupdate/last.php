@@ -16,7 +16,15 @@
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
-    
+        $otherinfo = $user->getOtherInformations($_GET['id']);
+        $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+        $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+        $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
+        
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 			
         $am = str_replace(",","",$client_assistance[1]['amount']);
@@ -331,8 +339,11 @@
                     }  
                 ?>
                 <div class="row">
+                    <?php if ($gis['program_type'] == '1'){ ?> 
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printa" onclick="printAttest()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
+                    <?php } ?>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print IS" name="printis" onclick="printInformationSheet()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
@@ -378,26 +389,32 @@
                     }
                 ?>
             </div>
-            <div id="attest" hidden>
+            <div id="attest" hidden><br>
                 <?php
                         include('attestation.php');
                 ?>
             </div>
-			<div id="gisce" hidden>
+			<div id="gisce" hidden><br>
 			<?php 
 				 include("gisv2_print.php"); 
 			?>
 			</div>
-			<div id="coe" class="printable" hidden>
+			<div id="isheet" hidden><br>
 			<?php 
-                if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-				    include("coev2_print_cav.php"); 
-                }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
-				    include("coev2_print_gl.php"); 
-                }else{
-				    include("coev2_print.php"); 
-                }
-				
+				 include("informationSheet_print.php"); 
+			?>
+			</div>
+			<div id="coe" class="printable" hidden >
+			<?php 
+                // if($mode1 == "CAV" || !empty($mode2) == "CAV"){
+				//     include("coev2_print_cav.php"); 
+                // }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
+				//     include("coev2_print_gl.php"); 
+                // }else{
+				//     include("coev2_print.php"); 
+                // }
+				include("coev2_print_gl.php");
+                
 				?>
 			</div>
         </div>

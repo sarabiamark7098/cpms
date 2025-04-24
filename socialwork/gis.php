@@ -468,6 +468,7 @@ if (!$_SESSION['login']) {
                         </div>
                     </div>
                 </div><br>
+
                 <div class="row">
                     <div class=col-12>
                         <div class="card">
@@ -756,7 +757,8 @@ if (!$_SESSION['login']) {
 								<label class="col-sm-3 label text-left" style="font-size: 17px">PROGRAM INTERVENTION :</label>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
-								</div> 
+								</div>&nbsp;
+                                <div class="col-1"></div>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo ((($client['program_type'])==1)? "checked": ""); ?> required> &nbsp; AKAP Program
 								</div>
