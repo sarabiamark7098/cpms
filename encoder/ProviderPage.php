@@ -96,7 +96,7 @@
         <!-- Sidebar Holder -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <img src="../images/logo.png" alt="dswd logo" width="100px" height="100px" s>
+                <img src="../images/logo.png" alt="dswd logo" width="100px" height="100px">
             </div>
 
             <ul class="list-unstyled components">
@@ -157,44 +157,23 @@
 						</thead>
 						<tbody>
 							<?php
-							if(!isset($_REQUEST['buttonSearch'])){
-								$getuser = $user->get_provider_to_admin_table();
-								if($getuser){
-									foreach($getuser as $index => $value){
-									echo "<tr>
-												<td scope='row' style='width: 15%'>" . $value["company_id"]. "</td> 
-												<td>" . $value["company_name"] . "</td>
-												<td style='width: 25%'>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#ProviderInfo'> View </button>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#UpdateProvider'> Update </button>
-												</td>
-												</tr>
-												
-											";		
-									}
-								} else {
-									echo "NO DATA";
-								}
-							} else {
-								$search = $_POST["searchdata"];
-								$getuser = $user->search_provider($search);
-								if($getuser){
-									foreach($getuser as $index => $value){
-									echo "<tr>
-												<td scope='row' style='width: 15%'>" . $value["company_id"]. "</td> 
-												<td>" . $value["company_name"] . "</td>
-												<td style='width: 25%'>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#ProviderInfo'> View </button>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#UpdateProvider'> Update </button>
-												</td>
-												</tr>
-												
-											";		
-									}
-								} else {
-									echo "NO DATA";
-								}
-							}
+                            $getuser = $user->get_provider_to_admin_table();
+                            if($getuser){
+                                foreach($getuser as $index => $value){
+                                echo "<tr>
+                                            <td scope='row' style='width: 15%'>" . $value["company_id"]. "</td> 
+                                            <td>" . $value["company_name"] . "</td>
+                                            <td style='width: 25%'>
+                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#ProviderInfo'> View </button>
+                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#UpdateProvider'> Update </button>
+                                            </td>
+                                            </tr>
+                                            
+                                        ";		
+                                }
+                            } else {
+                                echo "NO DATA";
+                            }
 							?>
 						</tbody>
 					</table>
