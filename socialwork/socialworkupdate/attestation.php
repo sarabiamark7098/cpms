@@ -71,7 +71,7 @@
             </div>
             <div class="col-6">
                 <input id="signatory" style="font-weight: bold; text-transform:uppercase; width:100%; border:none;" value="<?php echo ucwords(strtolower($soc_workFullname)) ?>"><br>
-                <input id="s_position" style="border: none;width:100%;" value="<?php echo ucwords(strtolower($soc_worker['emp_position'])) ?>">
+                <input id="s_position" style="border: none;width:100%;" value="Social Worker">
                 License no: &nbsp; <input id="license" style="border: none; width: 50%;" value="<?php echo $soc_worker['sw_license_no'] ?>">
             </div>
         </div>	
