@@ -230,16 +230,16 @@
                     </div>
                     <div class="col-12" style="margin: 3px 0px;">
                         <b style="font-size: 16px">MODE OF ASSISTANCE  :</b>
-                            <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
-                            <b class="text-center" style="margin-right: 10px;">&nbsp;Outright Cash</b>
-                            <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
-                            <b class="text-center" style="margin-right: 10px;">&nbsp;Guarantee Letter</b>
-                            <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
-                            <b class="text-center" style="margin-right: 10px;">&nbsp;Material Assistance</b>
-                            <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
-                            <b class="text-center" style="margin-right: 10px;">&nbsp;Psychosocial Support</b>
-                            <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((($client['program_type'])==0)||(empty($client['program_type']))? "&#x2714;" : "") ?>'>
-                            <b class="text-center">&nbsp;Referral Service</b>
+                        <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($client_assistance[1]['mode']) == "CAV"? "&#x2714;" : "") ?>'>
+                        <b class="text-center" style="margin-right: 10px;">&nbsp;Outright Cash</b>
+                        <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (($client_assistance[1]['mode']) == "GL"? "&#x2714;" : "") ?>'>
+                        <b class="text-center" style="margin-right: 10px;">&nbsp;Guarantee Letter</b>
+                        <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((!empty($client_assistance[1]['material']))? "&#x2714;" : "") ?>'>
+                        <b class="text-center" style="margin-right: 10px;">&nbsp;Material Assistance</b>
+                        <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ((!empty($gis["service5"]))||(!empty($gis["service6"]))? '&#x2714;': "") ?>'>
+                        <b class="text-center" style="margin-right: 10px;">&nbsp;Psychosocial Support</b>
+                        <input class="check-box text-center" style="margin-left: 10px; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo (((!empty($gis['refer1']))||(!empty($gis['refer2']))||(!empty($gis['refer3'])))? "&#x2714;" : "") ?>'>
+                        <b class="text-center">&nbsp;Referral Service</b>
                     </div>
                     <div class="col-12 text-center" style="margin: 3px 0px;">
                         <b style="font-size: 16px">AMOUNT NEEDED  :&emsp; Php </b><input style="text-indent: 20px; width: 60%; height:80%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo !empty($client_assistance[1]["amount"])?$client_assistance[1]["amount"]:"" ?>'>

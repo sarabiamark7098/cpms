@@ -755,8 +755,7 @@ if (!$_SESSION['login']) {
 								<label class="col-sm-3 label text-left" style="font-size: 17px">PROGRAM INTERVENTION :</label>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
-								</div>&nbsp;
-                                <div class="col-1"></div>
+								</div>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo ((($client['program_type'])==1)? "checked": ""); ?> required> &nbsp; AKAP Program
                                     </div>
@@ -768,11 +767,11 @@ if (!$_SESSION['login']) {
                             <div class="row">
 								<label class="col-sm-3 label text-left" style="font-size: 17px">PSYCHOSOCIAL SUPPORT:</label>
                                 <div class="col-3">
-									<input type="checkbox" id="group" class="col-lg-1" name="pfa" value="pfa" <?php echo (($gis['service5']==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
+									<input type="checkbox" id="pfa" class="col-lg-1" name="pfa" value="pfa" <?php echo (($gis['service5']==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
 								</div>&nbsp;
                                 <div class="col-1"></div>
                                 <div class="col-3">
-									<input type="checkbox" id="group" class="col-lg-1" name="counseling" value="Counseling" <?php echo (($gis['service6']==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
+									<input type="checkbox" id="counseling" class="col-lg-1" name="counseling" value="Counseling" <?php echo (($gis['service6']==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
 								</div>
                             </div><br>
 							<div class="row">
@@ -846,7 +845,7 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo (($otherinfo['crisisSeverityQuestion1']==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
 								</div> 
                                 <div class="col-12" style="margin-bottom: 12px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo (($otherinfo['crisisSeverityQuestion1']==0)?'checked':'') ?>> &nbsp; Not Applicable 
+                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==0)?'checked':'') ?>> &nbsp; Not Applicable 
 								</div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">In the past three (3) months, did the family experience at least one crisis?</label>
                                 <div class="col-1"></div>
@@ -854,7 +853,7 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo (($otherinfo['crisisSeverityQuestion2']==1)?'checked':'') ?>> &nbsp; YES
 								</div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo (($otherinfo['crisisSeverityQuestion2']==0)?'checked':'') ?>> &nbsp; NO
+                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2'])==0)?'checked':'') ?>> &nbsp; NO
 								</div>
                                 <div class="col-7"></div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">If yes, which among the following crises did the family experience in the past three (3) months (check all that apply):</label>
@@ -1269,23 +1268,29 @@ if (!$_SESSION['login']) {
             }
 
             /*************** CHECK BOX REQUIRED ATLEAST 1 *****************/
-            if(document.getElementById('update')){
-                var checkboxes = $('input[type="checkbox"][id="group"]');
-                checkboxes.removeAttr('required');
-                if(!checkboxes.is(':checked')) {
-                    checkboxes.attr('required', 'required'); //once naay ma checkan tangalun ang required attr.
+            $(document).ready(function(){
+                if(document.getElementById("counseling").value != ''){
+                    $("#counseling").attr('required', false);
+                    $("#pfa").attr('required', false);
+                }else{
+                    $("#counseling").attr('required', true);
+                    $("#pfa").attr('required', true);
                 }
-                
-            }
-            $('input[type="checkbox"][id="group"]').on('click', function(e) {
-                var n = $( "input:checked" ).length;
-                var checkboxes = $('input[type="checkbox"][id="group"]');
-                if((checkboxes.is(':checked') && n >= 1)) {
-                    checkboxes.removeAttr('required'); //once naay ma checkan tangalun ang required attr.
-                } else {
-                    checkboxes.attr('required', 'required'); //pag way na check. syempre required
+                if(document.getElementById("pfa").value != ''){
+                    $("#counseling").attr('required', false);
+                }else{
+                    $("#counseling").attr('required', true);
                 }
-            }); 
+                $("#refer2").keyup(function(){
+                    if(document.getElementById("refer2").value != ''){
+                        $("#refer3").attr('disabled', false);
+                    } else {
+                        $("#refer3").attr('disabled', true);
+                    }
+                });
+            });
+
+
             function typerequire() {
                     type2 = $('#type2').val();
                     if(type2 != ""){

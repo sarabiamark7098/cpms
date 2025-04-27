@@ -134,7 +134,7 @@
     if(isset($_POST['soc_work'])){
         $output = '';
         
-        $sql= "SELECT a.trans_id, a.note, a.relation, a.date_entered, b.lastname, b.firstname, b.middlename, b.extraname, c.b_fname, c.b_mname, c.b_lname, c.b_exname  FROM client_data as b
+        $sql= "SELECT a.trans_id, a.note, a.encoded_encoder, a.relation, a.date_entered, b.lastname, b.firstname, b.middlename, b.extraname, c.b_fname, c.b_mname, c.b_lname, c.b_exname  FROM client_data as b
         LEFT JOIN tbl_transaction as a USING (client_id)
         LEFT JOIN beneficiary_data as c USING (bene_id)
         WHERE status_client = 'Pending' order by date_entered asc;";

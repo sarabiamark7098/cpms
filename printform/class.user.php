@@ -1947,7 +1947,7 @@
 		}
 
 		//All information in GIS
-		public function insertGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
+		public function insertGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
 									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
 									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
@@ -1966,27 +1966,12 @@
 			$query = "UPDATE client_data SET subCategory = '{$csubcat}' WHERE client_id = '{$data['client_id']}';";
 			$result = mysqli_query($this->db, $query);
 
-			if (!empty($familyData)) {
-				// Start building the query
-				$query = "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ";
-			
-				// Loop through the family data and build the query
-				$family_values = [];
-				foreach ($familyData as $member) {
-					// Ensure each member's data is in uppercase
-					$membername = strtoupper($member['name']);
-					$memberrelation = strtoupper($member['relation']);
-					$memberage = $member['age'];
-					$memberoccupation = strtoupper($member['occupation']);
-					$membersalary = $member['salary'];
-
-					// Add the values as a string in the format "(name, relation, age, occupation, salary)"
-					$family_values[] = "('{$trans_id}', '{$membername}', '{$memberrelation}', '{$memberage}', '{$memberoccupation}', '{$membersalary}')";
-				}
-
-				// Join all values with commas
-				$query .= implode(', ', $family_values);
-				$query .= ";"; // Close the query
+		$query = "";
+			if(!empty($p1)){
+				$query = "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ('{$trans_id}','{$p1}','{$rb1}', '{$e1}', '{$t1}', '{$b1}')";
+				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}','{$rb2}', {$e2}, '{$t2}', '{$b2}')";}
+				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}','{$rb3}', {$e3}, '{$t3}', '{$b3}')";}
+				$query .= ";";
 			}
 			
 						
@@ -2094,7 +2079,7 @@
 			
 		}
 
-		public function updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
+		public function updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
 			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
 			$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
@@ -2115,27 +2100,11 @@
 
 			$query ="";
 			$query .= "DELETE FROM family where trans_id='{$trans_id}';"; //delete first fmily then update 
-			if (!empty($familyData)) {
-				// Start building the query
-				$query .= "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ";
-			
-				// Loop through the family data and build the query
-				$family_values = [];
-				foreach ($familyData as $member) {
-					// Ensure each member's data is in uppercase
-					$membername = strtoupper($member['name']);
-					$memberrelation = strtoupper($member['relation']);
-					$memberage = $member['age'];
-					$memberoccupation = strtoupper($member['occupation']);
-					$membersalary = $member['salary'];
-
-					// Add the values as a string in the format "(name, relation, age, occupation, salary)"
-					$family_values[] = "('{$trans_id}', '{$membername}', '{$memberrelation}', '{$memberage}', '{$memberoccupation}', '{$membersalary}')";
-				}
-
-				// Join all values with commas
-				$query .= implode(', ', $family_values);
-				$query .= ";"; // Close the query
+			if(!empty($p1)){
+				$query .= "INSERT INTO family (trans_id, name, relation_bene, age, occupation, salary) VALUES ('{$trans_id}','{$p1}', '{$rb1}', {$e1}, '{$t1}', '{$b1}')";
+				if(!empty($p2)){$query .= ",('{$trans_id}','{$p2}', '{$rb2}', {$e2}, '{$t2}', '{$b2}')";}
+				if(!empty($p3)){$query .= ",('{$trans_id}','{$p3}', '{$rb3}', {$e3}, '{$t3}', '{$b3}')";}
+				$query .= ";";
 			}
 			$assistance = $this-> getAssistanceData($trans_id);
 			//insert sa service 
@@ -3238,31 +3207,18 @@
 		}
 	
 		public function getclientFam($id){
-			// Define the query to fetch family members based on trans_id
 			$query = "SELECT name, relation_bene, age, occupation, salary FROM family WHERE trans_id = '{$id}'";
-			
-			// Execute the query
 			$result = mysqli_query($this->db, $query);
-			
-			// Initialize an empty array to hold family data
-			$data = [];
-		
-			// Fetch each row and add it to the data array
+			$num = 0;
+			//$data = mysqli_fetch_row($result);
 			while($row = mysqli_fetch_assoc($result)){
-				$data[] = [
-					'name' => $row['name'],
-					'relation' => $row['relation_bene'],
-					'age' => $row['age'],
-					'occupation' => $row['occupation'],
-					'salary' => $row['salary']
-				];
+				$num++; //array index start as 1
+				$data[$num] = $row;
 			}
-		
-			// Return the data array or an empty string if no data is found
 			if(empty($data)){
-				return ""; // No family members found, return empty string
-			} else {
-				return $data; // Return the array of family data
+				return ""; //pass as dimensional array
+			}else{
+				return $data;
 			}
 		}
 

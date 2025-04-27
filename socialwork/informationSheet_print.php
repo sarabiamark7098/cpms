@@ -867,16 +867,21 @@
                                                 <label style="display: absolute;  position: center;">6.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[6])?$client_fam[6]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[6])?$client_fam[6]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[6])?$client_fam[6]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[6])?$client_fam[6]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[6])?$client_fam[6]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -884,16 +889,21 @@
                                                 <label style="display: absolute;  position: center;">7.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[7])?$client_fam[7]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[7])?$client_fam[7]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[7])?$client_fam[7]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[7])?$client_fam[7]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[7])?$client_fam[7]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -901,16 +911,21 @@
                                                 <label style="display: absolute;  position: center;">8.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[8])?$client_fam[8]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[8])?$client_fam[8]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[8])?$client_fam[8]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[8])?$client_fam[8]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[8])?$client_fam[8]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -918,16 +933,21 @@
                                                 <label style="display: absolute;  position: center;">9.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[9])?$client_fam[9]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[9])?$client_fam[9]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[9])?$client_fam[9]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[9])?$client_fam[9]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[9])?$client_fam[9]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -935,16 +955,21 @@
                                                 <label style="display: absolute;  position: center;">10.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[10])?$client_fam[10]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[10])?$client_fam[10]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[10])?$client_fam[10]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[10])?$client_fam[10]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[10])?$client_fam[10]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -952,16 +977,21 @@
                                                 <label style="display: absolute;  position: center;">11.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[11])?$client_fam[11]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[11])?$client_fam[11]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[11])?$client_fam[11]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[11])?$client_fam[11]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[11])?$client_fam[11]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -969,16 +999,21 @@
                                                 <label style="display: absolute;  position: center;">12.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[12])?$client_fam[12]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[12])?$client_fam[12]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[12])?$client_fam[12]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[12])?$client_fam[12]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[12])?$client_fam[12]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -986,16 +1021,21 @@
                                                 <label style="display: absolute;  position: center;">13.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[13])?$client_fam[13]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[13])?$client_fam[13]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[13])?$client_fam[13]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[13])?$client_fam[13]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[13])?$client_fam[13]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1003,16 +1043,21 @@
                                                 <label style="display: absolute;  position: center;">14.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[14])?$client_fam[14]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[14])?$client_fam[14]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[14])?$client_fam[14]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[14])?$client_fam[14]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[14])?$client_fam[14]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1020,16 +1065,21 @@
                                                 <label style="display: absolute;  position: center;">15.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[15])?$client_fam[15]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[15])?$client_fam[15]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[15])?$client_fam[15]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[15])?$client_fam[15]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[15])?$client_fam[15]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1037,16 +1087,21 @@
                                                 <label style="display: absolute;  position: center;">16.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[16])?$client_fam[16]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[16])?$client_fam[16]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[16])?$client_fam[16]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[16])?$client_fam[16]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[16])?$client_fam[16]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1054,16 +1109,21 @@
                                                 <label style="display: absolute;  position: center;">17.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[17])?$client_fam[17]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[17])?$client_fam[17]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[17])?$client_fam[17]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[17])?$client_fam[17]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[17])?$client_fam[17]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1071,16 +1131,21 @@
                                                 <label style="display: absolute;  position: center;">18.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[18])?$client_fam[18]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[18])?$client_fam[18]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[18])?$client_fam[18]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[18])?$client_fam[18]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[18])?$client_fam[18]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1088,16 +1153,21 @@
                                                 <label style="display: absolute;  position: center;">19.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[19])?$client_fam[19]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[19])?$client_fam[19]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[19])?$client_fam[19]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[19])?$client_fam[19]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[19])?$client_fam[19]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1105,16 +1175,21 @@
                                                 <label style="display: absolute;  position: center;">20.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[20])?$client_fam[20]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[20])?$client_fam[20]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[20])?$client_fam[20]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[20])?$client_fam[20]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[20])?$client_fam[20]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1122,16 +1197,21 @@
                                                 <label style="display: absolute;  position: center;">21.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[21])?$client_fam[21]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[21])?$client_fam[21]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[21])?$client_fam[21]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[21])?$client_fam[21]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[21])?$client_fam[21]["salary"]:""):"") ?>'>
                                     </div>
                                     <div class="col-4" style="padding:0px; height: 36px; border: solid 1px">
                                         <div class="row">
@@ -1139,16 +1219,21 @@
                                                 <label style="display: absolute;  position: center;">22.</label>
                                             </div>
                                             <div class="col-10" style="border-left: solid 1px black; height: 36px;">
+                                                <p><?php echo (!empty($client_fam)?(!empty($client_fam[22])?$client_fam[22]["name"]:""):"") ?></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-3" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[22])?$client_fam[22]["relation_bene"]:""):"") ?></p>
                                     </div>
                                     <div class="col-1" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[22])?$client_fam[22]["age"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <p><?php echo (!empty($client_fam)?(!empty($client_fam[22])?$client_fam[22]["occupation"]:""):"") ?></p>
                                     </div>
                                     <div class="col-2" style="padding:0px; max-height: 36px; border: solid 1px black;">
+                                        <input class="text-center salary_monthly" style="width: 100%; height:70%; font-size: 13px; padding:0; border:none;" type="text" height="30px" value='<?php echo (!empty($client_fam)?(!empty($client_fam[22])?$client_fam[22]["salary"]:""):"") ?>'>
                                     </div>
                                     
 

@@ -81,6 +81,7 @@
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<style>
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
@@ -447,5 +448,17 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
 				
             });  
 	})
+    
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
 	</script>
 </html>

@@ -45,7 +45,7 @@
             </div>
             <div class="col-3 ml-md-auto" style="color: #000000; ">
                 <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="" />&emsp;CENTRAL OFFICE<br>
-                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;FIELD OFFICE <input class="text-center" style="width: 40%; height:30%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="20px" value='XI'>
+                <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="&#x2714;" />&emsp;FIELD OFFICE <input class="text-center" style="width: 20%; height:30%; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="20px" value='XI'>
             </div>
         </div>
         <div class="row">
@@ -288,12 +288,12 @@
                 <p class="text-center" style="font-size: 15px; border: 1px solid black; background-color: #bfbfbf; font-size:15px; padding:0%; margin-bottom:2%; font-weight: bold;">If Guarantee Letter</p>
                 <div style="padding: 10px 50px;">
                     <div class="row" style="font-size: 15px;">
-                        <div class="col-sm-4 center">
+                        <div class="col-sm-3 center">
                         </div>
                         <div class="col-sm-3 center">
                             <p class="text-center">GL No.:</p>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
                             <input class="text" style="width: 100%; font-size: 15px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo (($mode1 == "GL" || !empty($mode2) == "GL")?$GLid:"") ?>'>
                         </div>
                     </div>
