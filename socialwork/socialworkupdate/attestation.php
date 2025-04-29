@@ -38,7 +38,7 @@
                 <img src="../../images/BP.png" alt="" width="70px" height="60px">
             </div>
             <div class="col-6 ml-md-auto" style="color: #000000; ">
-                <p class="text-center" style="font-size: 14px; margin-top: 0px;">DSWD-PMB-GF-015 | REV 02 | 08 JAN 2024</p>
+                <!-- <p class="text-center" style="font-size: 14px; margin-top: 0px;">DSWD-PMB-GF-015 | REV 02 | 08 JAN 2024</p> -->
             </div>
         </div>
         <div class="row">
@@ -76,15 +76,15 @@
             </div>
         </div>	
         <div class="footer row">
-            <div class="col-10">
+            <div class="col-11">
                 <div style="border-bottom: solid 1px black;"></div>
                 <p class="text-center">Page 1 of 1<br>
                 DSWD Field Office XI, Ramon Magsaysay Avenue corner Damaso Suazo Street, Davao City, Philippines 8000<br>
                 Website: http://fo11.dswd.gov.ph Tel Nos.: (082)_227 1964 / (082) 227 8746 / (082)_227 1435 Telefax: (082) 226 2857</p>
             </div>
-            <div class="col-2">
+            <!-- <div class="col-2">
                 <img src="../images/dswd-ISO.png" alt="" width="110px" height="60px">
-            </div>
+            </div> -->
         </div>
         <!--Container-->
     </div>

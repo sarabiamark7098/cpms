@@ -51,9 +51,9 @@
         <!--HEADER-->
         <div class="row" style="margin-top:0%; margin-bottom: 3%;">
             <div class="col-6">
-                <img src="../images/dswd_olog.png" alt="" width="230px" height="60px">
-                <img src="../images/AICS.png" alt="" width="70px" height="60px">
-                <img src="../images/BP.png" alt="" width="70px" height="60px">
+                <img src="/cpms/images/dswd_olog.png" alt="" width="230px" height="60px">
+                <img src="/cpms/images/AICS.png" alt="" width="70px" height="60px">
+                <img src="/cpms/images/BP.png" alt="" width="70px" height="60px">
             </div>
             <div class="col-3 ml-md-auto" style="color: #000000; ">
             </div>

@@ -348,9 +348,9 @@
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
                     </div>
-                    <div class="col">
+                    <!-- <div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()" <?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
-                    </div>
+                    </div> -->
                 </div><br>
 				<div class="row">
                     <?php if(((strtolower(!empty($client_assistance[1]['type'])) == "cash assistance") && (!empty($client_assistance[2]['type']) == "")) || ((strtolower(!empty($client_assistance[1]['type'])) == "non-food items") && (!empty($client_assistance[2]['type']) == ""))){ ?>
@@ -370,53 +370,42 @@
                     <div class="col"><input type="button" class="btn btn-success btn-block no-print" id="done" value="Done" onclick="confirmdone(<?php echo "'".$id."','".$_GET['id']."'" ?>)"/></div>
                 </div>
             </form>
-            <div id="gl" class="printable" hidden><br>
-                <?php     
-                    if($mode1 == "GL"){
-                        include('gl_sheet.php');
-                    }
-                    if(!empty($mode2)){
-                        if($mode2 == "GL"){
-                            include('gl_sheet2.php');
-                        }
-                    }
-                ?>
-            </div>
-            <div id="cav" class="printable" hidden><br>
-                <?php
-                    if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-                        include('cash.php');
-                    }
-                ?>
-            </div>
-            <div id="attest" hidden><br>
-                <?php
-                        include('attestation.php');
-                ?>
-            </div>
-			<div id="gisce" hidden><br>
-			<?php 
-				 include("gisv2_print.php"); 
-			?>
-			</div>
-			<div id="isheet" hidden><br>
-			<?php 
-				 include("informationSheet_print.php"); 
-			?>
-			</div>
-			<div id="coe" class="printable" hidden >
-			<?php 
-                // if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-				//     include("coev2_print_cav.php"); 
-                // }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
-				//     include("coev2_print_gl.php"); 
-                // }else{
-				//     include("coev2_print.php"); 
-                // }
-				include("coev2_print_gl.php");
-                
-				?>
-			</div>
+            <?php  
+            $printables = [
+                'gl' => [
+                    'file' => 'gl_sheet.php',
+                    'condition' => ($mode1 == "GL")
+                ],
+                'cav' => [
+                    'file' => 'cash.php',
+                    'condition' => ($mode1 == "CAV")
+                ],
+                'attest' => [
+                    'file' => 'attestation.php',
+                    'condition' => true
+                ],
+                'gisce' => [
+                    'file' => 'gis_print.php',
+                    'condition' => true
+                ],
+                'isheet' => [
+                    'file' => 'informationSheet_print.php',
+                    'condition' => true
+                ],
+                'coe' => [
+                    'file' => 'coe_print.php',
+                    'condition' => true
+                ]
+            ];
+            
+            foreach ($printables as $id => $item) {
+                echo '<div id="' . $id . '" class="printable" hidden><br>';
+                if ($item['condition']) {
+                    include($item['file']);
+                }
+                echo '</div>';
+            }
+            ?>
         </div>
     </body>
     <?php 

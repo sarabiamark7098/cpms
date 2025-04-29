@@ -348,9 +348,9 @@
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
                     </div>
-                    <div class="col">
+                    <!-- <div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()" <?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
-                    </div>
+                    </div> -->
                 </div><br>
 				<div class="row">
                     <?php if(((strtolower(!empty($client_assistance[1]['type'])) == "cash assistance") && (!empty($client_assistance[2]['type']) == "")) || ((strtolower(!empty($client_assistance[1]['type'])) == "non-food items") && (!empty($client_assistance[2]['type']) == ""))){ ?>
@@ -375,11 +375,6 @@
                     if($mode1 == "GL"){
                         include('gl_sheet.php');
                     }
-                    if(!empty($mode2)){
-                        if($mode2 == "GL"){
-                            include('gl_sheet2.php');
-                        }
-                    }
                 ?>
             </div>
             <div id="cav" class="printable" hidden><br>
@@ -396,7 +391,7 @@
             </div>
 			<div id="gisce" hidden><br>
 			<?php 
-				 include("gisv2_print.php"); 
+				 include("gis_print.php"); 
 			?>
 			</div>
             <div id="isheet" hidden><br>
@@ -413,7 +408,7 @@
                 // }else{
 				//     include("coev2_print.php"); 
                 // }
-				include("coev2_print_gl.php");
+				include("coe_print.php");
                 
 				?>
 			</div>

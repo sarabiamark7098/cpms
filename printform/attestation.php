@@ -13,12 +13,12 @@
     <!--HEADER-->
     <div class="row" style="margin-top:40px;">
         <div class="col-6">
-            <img src="../images/dswd_olog.png" alt="" width="230px" height="60px">
-            <img src="../images/AICS.png" alt="" width="70px" height="60px">
-            <img src="../images/BP.png" alt="" width="70px" height="60px">
+            <img src="/cpms/images/dswd_olog.png" alt="" width="230px" height="60px">
+            <img src="/cpms/images/AICS.png" alt="" width="70px" height="60px">
+            <img src="/cpms/images/BP.png" alt="" width="70px" height="60px">
         </div>
         <div class="col-6 ml-md-auto" style="color: #000000; ">
-            <!-- <p class="text-center" style="font-size: 14px; margin-top: 0px;">DSWD-PMB-GF-015 | REV 02 | 08 JAN 2024</p> -->
+            <p class="text-center" style="font-size: 14px; margin-top: 0px;"></p>
         </div>
     </div>
     <div class="row">
@@ -56,7 +56,7 @@
         </div>
     </div>	
     <div class="attestfooter row">
-        <div class="col-11">
+        <div class="col-12">
             <div style="border-bottom: solid 1px black;"></div>
             <p class="text-center">Page 1 of 1<br>
             DSWD Field Office XI, Ramon Magsaysay Avenue corner Damaso Suazo Street, Davao City, Philippines 8000<br>

@@ -11,7 +11,15 @@ if (isset($_GET['id'])) {
        
     $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
     $client_assistance = $user->getGISAssistance($_GET['id']);
-    $client_fam = $user->getclientFam($_GET['id']);
+    $familyData = $user->getclientFam($_GET['id']);
+    if ($familyData === "") {
+        // If no data found, return an empty response
+        $familyDataJson = ""; // Set the family data to an empty string
+    } else {
+        // If data is found, process it as needed
+        $familyDataJson = json_encode($familyData); // Convert the family data to JSON format
+    }
+    
     $gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
     $otherinfo = $user->getOtherInformations($_GET['id']);
     $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
@@ -513,6 +521,7 @@ if (!$_SESSION['login']) {
                         </div>
                     </div>
                 </div><br>
+
                 <!-- Family Composition -->
                 <div class="row">
                     <div class="col-12">
@@ -520,43 +529,67 @@ if (!$_SESSION['login']) {
                             <div class="card border-info mb3" style="width:100%;">
                                 <h5 class="card-header text-success">FAMILY COMPOSITION</h5>
                                 <div class="card-body">
-                                    <div class="row text-center" style="margin-bottom: 5px;">
-                                        <div class="col-1"></div>
-                                        <div class="col-3">Pangalan</div>
-                                        <div class="col-2">Relasyon</div>
-                                        <div class="col-1">Edad</div>
-                                        <div class="col-3">Trabaho</div>
-                                        <div class="col-2">Buwanang Sahod</div> 
+                                    <!-- Family Composition Form (Single Row Input) -->
+                                    <div class="row text-center mb-2">
+                                        <div class="col-3">
+                                            <input class="form-control" id="inputName" type="text" placeholder="Pangalan">
+                                        </div>
+                                        <div class="col-2">
+                                            <input class="form-control" id="inputRelation" type="text" placeholder="Relasyon">
+                                        </div>
+                                        <div class="col-1">
+                                            <input class="form-control" id="inputAge" type="number" max="99" placeholder="Edad">
+                                        </div>
+                                        <div class="col-2">
+                                            <input class="form-control" id="inputOccupation" type="text" placeholder="Trabaho">
+                                        </div>
+                                        <div class="col-2">
+                                            <input class="form-control currencyMaskedInput" id="inputSalary" type="text" placeholder="Buwanang Sahod">
+                                        </div>
+                                        <div class="col-1">
+                                            <button type="button" class="btn btn-primary" onclick="addFamilyRow()">Add Family Member</button>
+                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-1 text-center">1:</div>
-                                        <div class="col-3"><input class="form-control" id="p1" name="p1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['name'] ?>"></div>
-                                        <div class="col-2"><input class="form-control" id="rb1" name="rb1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['relation_bene'] ?>"></div>
-                                        <div class="col-1"><input type= "number" class="form-control" id="e1" name="e1" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[1])||$client_fam[1]['age']==0? "" : $client_fam[1]['age'] ?>"></div>
-                                        <div class="col-3"><input class="form-control" id="t1" name="t1" type="text"    value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['occupation'] ?>"></div>
-                                        <div class="col-2"><input class="form-control currencyMaskedInput" onkeypress="return rangeKey(event)" id="b1" name="b1" value="<?php echo empty($client_fam[1]) ? "" : $client_fam[1]['salary'] ?>"></div>  
-                                    </div><br>
-                                    <div class="row">
-                                        <div class="col-1 text-center">2:</div>
-                                        <div class="col-3"><input class="form-control" id="p2" name="p2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['name'] ?>"></div>
-                                        <div class="col-2"><input class="form-control" id="rb2" name="rb2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['relation_bene'] ?>"></div>
-                                        <div class="col-1"><input type= "number" class="form-control" id="e2" name="e2" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[2])||$client_fam[2]['age']==0? "" : $client_fam[2]['age'] ?>"></div>
-                                        <div class="col-3"><input class="form-control" id="t2" name="t2" type="text"    value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['occupation'] ?>"></div>
-                                        <div class="col-2"><input class="form-control currencyMaskedInput" onkeypress="return rangeKey(event)" id="b2" name="b2" value="<?php echo empty($client_fam[2]) ? "" : $client_fam[2]['salary'] ?>"></div>  
-                                    </div><br>
-                                    <div class="row">
-                                        <div class="col-1 text-center">3:</div>
-                                        <div class="col-3"><input class="form-control" id="p3" name="p3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['name'] ?>"></div>
-                                        <div class="col-2"><input class="form-control" id="rb3" name="rb3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['relation_bene'] ?>"></div>
-                                        <div class="col-1"><input type= "number" class="form-control" id="e3" name="e3" max="99" onKeyPress="if(this.value.length==3) return false;" value="<?php echo empty($client_fam[3])||$client_fam[3]['age']==0? "" : $client_fam[3]['age'] ?>"></div>
-                                        <div class="col-3"><input class="form-control" id="t3" name="t3" type="text"    value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['occupation'] ?>"></div>
-                                        <div class="col-2"><input class="form-control currencyMaskedInput" onkeypress="return rangeKey(event)" id="b3" name="b3" value="<?php echo empty($client_fam[3]) ? "" : $client_fam[3]['salary'] ?>"></div>  
+
+                                    <!-- Table to Display All Added Family Members -->
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 20px; border: 1px solid black;">NO.</th>
+                                                    <th style="width: 240px; border: 1px solid black;">Pangalan</th>
+                                                    <th style="width: 240px; border: 1px solid black;">Relasyon</th>
+                                                    <th style="width: 30px; border: 1px solid black;">Edad</th>
+                                                    <th style="width: 240px; border: 1px solid black;">Trabaho</th>
+                                                    <th style="border: 1px solid black;">Buwanang Sahod</th>
+                                                    <th style="border: 1px solid black;">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="familyTable">
+                                                <?php if ($familyData !== ""): ?>
+                                                    <?php foreach ($familyData as $index => $member): ?>
+                                                        <tr>
+                                                            <td style="border: 1px solid black;"><?= $index + 1 ?></td>
+                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['name']) ?></td>
+                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['relation']) ?></td>
+                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['age']) ?></td>
+                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['occupation']) ?></td>
+                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['salary']) ?></td>
+                                                            <td style="border: 1px solid black;">
+                                                                <button class="btn btn-danger" onclick="removeFamilyRow(this)">X</button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div> 
                 </div><br>
+                <input type="hidden" name="family_data" id="familyDataInput" value='<?= $familyDataJson ?>' />
 
                 <!-- Type Assistance -->
                 <div class="row">
@@ -754,10 +787,10 @@ if (!$_SESSION['login']) {
                             <div class="row">
 								<label class="col-sm-3 label text-left" style="font-size: 17px">PROGRAM INTERVENTION :</label>
                                 <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo ((($client['program_type'])==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
+									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo (($client['program_type']==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
 								</div>
                                 <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo ((($client['program_type'])==1)? "checked": ""); ?> required> &nbsp; AKAP Program
+									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo (($client['program_type']==1)? "checked": ""); ?> required> &nbsp; AKAP Program
                                     </div>
                                 <div class="col-3">
 									<input type="checkbox" class="col-lg-1" id="otherProgram" name="otherProgram" value="other" <?php echo ((($client['program_type'])=="other")? "checked": ""); ?> required> &nbsp; Other Program
@@ -845,7 +878,7 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo (($otherinfo['crisisSeverityQuestion1']==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
 								</div> 
                                 <div class="col-12" style="margin-bottom: 12px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==0)?'checked':'') ?>> &nbsp; Not Applicable 
+                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo (($otherinfo['crisisSeverityQuestion1']==0)?'checked':'') ?>> &nbsp; Not Applicable 
 								</div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">In the past three (3) months, did the family experience at least one crisis?</label>
                                 <div class="col-1"></div>
@@ -853,7 +886,7 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo (($otherinfo['crisisSeverityQuestion2']==1)?'checked':'') ?>> &nbsp; YES
 								</div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2'])==0)?'checked':'') ?>> &nbsp; NO
+                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo (($otherinfo['crisisSeverityQuestion2']==0)?'checked':'') ?>> &nbsp; NO
 								</div>
                                 <div class="col-7"></div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">If yes, which among the following crises did the family experience in the past three (3) months (check all that apply):</label>
@@ -1269,27 +1302,31 @@ if (!$_SESSION['login']) {
 
             /*************** CHECK BOX REQUIRED ATLEAST 1 *****************/
             $(document).ready(function(){
-                if(document.getElementById("counseling").value != ''){
-                    $("#counseling").attr('required', false);
-                    $("#pfa").attr('required', false);
-                }else{
-                    $("#counseling").attr('required', true);
-                    $("#pfa").attr('required', true);
+                $("#counseling").prop('required');
+                $("#pfa").prop('required');
+                if($("#counseling").prop("checked") || $("#pfa").prop("checked") ){
+                    $("#counseling").removeAttr('required');
+                    $("#pfa").removeAttr('required');
                 }
-                if(document.getElementById("pfa").value != ''){
-                    $("#counseling").attr('required', false);
-                }else{
-                    $("#counseling").attr('required', true);
-                }
-                $("#refer2").keyup(function(){
-                    if(document.getElementById("refer2").value != ''){
-                        $("#refer3").attr('disabled', false);
-                    } else {
-                        $("#refer3").attr('disabled', true);
+                $("#counseling").click(function () {
+                    if ($(this).prop("checked")) {
+                        $("#pfa").removeAttr('required');
+                        $("#counseling").removeAttr('required');
+                    }else if(!$(this).prop("checked") && !$("#pfa").prop("checked")){
+                        $("#pfa").prop('required', true);
+                        $("#counseling").prop('required', true);
+                    }
+                });
+                $("#pfa").click(function () {
+                    if ($(this).prop("checked")) {
+                        $("#pfa").removeAttr('required');
+                        $("#counseling").removeAttr('required');
+                    }else if(!$(this).prop("checked") && !$("#counseling").prop("checked")){
+                        $("#counseling").prop('required', true);
+                        $("#pfa").prop('required', true);
                     }
                 });
             });
-
 
             function typerequire() {
                     type2 = $('#type2').val();
@@ -1315,32 +1352,9 @@ if (!$_SESSION['login']) {
             $trans_id = $_GET['id'];
             $csubcat = $_POST['c_subcat'];
 
-            //FAMILY DATA's
-            $p1="";$p2="";$p3="";$e1="";$e2="";$e3="";$t1="";$t2="";$t3="";$b1="";$b2="";$b3=""; //blank sa una 
-
-            if(isset($_POST['p1'])){
-                $p1 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['p1'])));
-                $rb1 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['rb1'])));
-                $e1 = $_POST['e1'];
-                $t1 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['t1'])));
-                $b1 = mysqli_real_escape_string($user->db, $_POST['b1']);
-            }
-
-            if(isset($_POST['p2'])){
-                $p2 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['p2'])));
-                $rb2 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['rb2'])));
-                $e2 = $_POST['e2'];
-                $t2 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['t2'])));
-                $b2 = mysqli_real_escape_string($user->db, $_POST['b2']);
-            }
-
-            if(isset($_POST['p3'])){
-                $p3 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['p3'])));
-                $rb3 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['rb3'])));
-                $e3 = $_POST['e3'];
-                $t3 = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['t3'])));
-                $b3 = mysqli_real_escape_string($user->db, $_POST['b3']);
-            }
+//FAMILY DATA's
+$familyData = json_decode($_POST['family_data'], true);
+            
             //SERVICE TABLE DATA's
             $ref_name = "";
             $s1 = (isset($_POST['psy'])? 1: 0 );
@@ -1586,7 +1600,7 @@ if (!$_SESSION['login']) {
             if(isset($_POST["SOI_pension"])){$SOI_pension=$_POST["SOI_pension"];}
             if(isset($_POST["SOI_otherincome"])){$SOI_otherincome=$_POST["SOI_otherincome"];}
             //once save the data of new -> client
-            $user->updateGIS($empid, $trans_id, $csubcat, $id, $p1, $p2, $p3, $rb1, $rb2, $rb3, $e1, $e2, $e3, $t1, $t2, $t3, $b1, $b2, $b3, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
+            $user->updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
             $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
             $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
             $docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
@@ -1673,6 +1687,78 @@ if (!$_SESSION['login']) {
 
         ?>
     </body>
+
+    <div class="modal hide fade" id="additionalFundSource" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Fund Source</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+				<div class="fundsourcebody">
+				    <div class="modal-body">
+                        <div class="row form-group" style="margin-top: 2%; height:10%;">
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fs1" name="fs1" type="text" class="form-control" required>
+                                <label class="active" for="fs1">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fs2" name="fs2" type="text" class="form-control" required disabled>
+                                <label class="active" for="fs2">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fs3" name="fs3" type="text" class="form-control" required disabled>
+                                <label class="active" for="fs3">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fs4" name="fs4" type="text" class="form-control" required disabled>
+                                <label class="active" for="fs4">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fs5" name="fs5" type text class="form-control " required disabled>
+                                <label class="active" for="fs5">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 6" value="<?php echo (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']:'') ?>" id="fs6" name="fs6" type text class="form-control " required disabled>
+                                <label class="active" for="fs6">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 7" value="<?php echo (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']:'') ?>" id="fs7" name="fs7" type text class="form-control " required disabled>
+                                <label class="active" for="fs7">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 8" value="<?php echo (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']:'') ?>" id="fs8" name="fs8" type text class="form-control " required disabled>
+                                <label class="active" for="fs8">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 9" value="<?php echo (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']:'') ?>" id="fs9" name="fs9" type text class="form-control " required disabled>
+                                <label class="active" for="fs9">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fs10" name="fs10" type text class="form-control " required disabled>
+                                <label class="active" for="fs10">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fs11" name="fs11" type text class="form-control " required disabled>
+                                <label class="active" for="fs11">Fund Source</label>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <input list="chargings" placeholder="Fund Source 12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fs12" name="fs12" type text class="form-control " required disabled>
+                                <label class="active" for="fs12">Fund Source</label>
+                            </div>
+                        </div>
+                                
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>    
+                    </div>
+                </div>
+			</div>	
+		</div>
+	</div>
+
     <script type="text/javascript">
         function verifyfirst(){
             t1 = '<?php echo $client_assistance[1]['type'] ?>';
@@ -1781,80 +1867,6 @@ if (!$_SESSION['login']) {
             }
         }
 
-    </script>
-
-    <div class="modal hide fade" id="additionalFundSource" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Fund Source</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-				<div class="fundsourcebody">
-				    <div class="modal-body">
-                        <div class="row form-group" style="margin-top: 2%; height:10%;">
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fs1" name="fs1" type="text" class="form-control" required>
-                                <label class="active" for="fs1">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fs2" name="fs2" type="text" class="form-control" required disabled>
-                                <label class="active" for="fs2">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fs3" name="fs3" type="text" class="form-control" required disabled>
-                                <label class="active" for="fs3">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fs4" name="fs4" type="text" class="form-control" required disabled>
-                                <label class="active" for="fs4">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fs5" name="fs5" type text class="form-control " required disabled>
-                                <label class="active" for="fs5">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 6" value="<?php echo (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']:'') ?>" id="fs6" name="fs6" type text class="form-control " required disabled>
-                                <label class="active" for="fs6">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 7" value="<?php echo (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']:'') ?>" id="fs7" name="fs7" type text class="form-control " required disabled>
-                                <label class="active" for="fs7">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 8" value="<?php echo (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']:'') ?>" id="fs8" name="fs8" type text class="form-control " required disabled>
-                                <label class="active" for="fs8">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 9" value="<?php echo (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']:'') ?>" id="fs9" name="fs9" type text class="form-control " required disabled>
-                                <label class="active" for="fs9">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fs10" name="fs10" type text class="form-control " required disabled>
-                                <label class="active" for="fs10">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fs11" name="fs11" type text class="form-control " required disabled>
-                                <label class="active" for="fs11">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fs12" name="fs12" type text class="form-control " required disabled>
-                                <label class="active" for="fs12">Fund Source</label>
-                            </div>
-                        </div>
-                                
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>    
-                    </div>
-                </div>
-			</div>	
-		</div>
-	</div>
-
-    <script type="text/javascript">
         
     	$(document).ready(function(){
 			$('#printgis').on('click', function() {
@@ -2480,25 +2492,62 @@ if (!$_SESSION['login']) {
             }else{
                 $("#crisis1_6others").prop("disabled", true);
             }
+            if($("#crisis2").prop("checked")) {
+                $("#crisis1_1, #crisis1_2, #crisis1_3, #crisis1_4, #crisis1_5, #crisis1_6").prop("disabled", true);
+                $("#crisis1_6others").prop("disabled", true);
+            }else{
+                $("#crisis1_1, #crisis1_2, #crisis1_3, #crisis1_4, #crisis1_5, #crisis1_6").prop("disabled", false);
+            }
         	$("#crisis1").click(function () {
 	        	if ($(this).prop("checked")) {
     	     		$("#crisis2").prop("checked", false);
+                    $("#crisis1_1, #crisis1_2, #crisis1_3, #crisis1_4, #crisis1_5, #crisis1_6").prop("disabled", false);
+                    $("#crisis1_6others").prop("disabled", true);
+                    $("#crisis1_6others").val("");
+                    $("#crisis1_6").prop("checked", false);
         		}
 		    });
             $("#crisis2").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#crisis1, #crisis1_1, #crisis1_2, #crisis1_3, #crisis1_4, #crisis1_5, #crisis1_6").prop("checked", false);
-                     $("#crisis1_6others").prop("disabled", !$(this).prop("checked")).prop("required", $(this).prop("checked")).val($(this).prop("checked") ? $("#crisis1_6others").val() : "");
+                        $("#crisis1_1, #crisis1_2, #crisis1_3, #crisis1_4, #crisis1_5, #crisis1_6, #crisis1_6others").prop("disabled", true);
+        	     		$("#crisis1, #crisis1_1, #crisis1_2, #crisis1_3, #crisis1_4, #crisis1_5, #crisis1_6").prop("checked", false);
+                        $("#crisis1_6others").prop("disabled", true);
+                        $("#crisis1_6others").val("");
+                        $("#crisis1_6").prop("checked", false);
                     }
 		    });
+            
             $("#crisis1_6").click(function () {
 	        	let isChecked = $(this).prop("checked");
-
                 $("#crisis1_6others").prop("disabled", !isChecked);
                 $("#crisis1_6others").prop("required", isChecked);
+                $("#crisis1_6others").val(isChecked ? $("#crisis1_6others").val() : "");
 		    });
         });
 
+        $(function () {
+            if ($("#external6").prop("checked")) {
+                $("#external6_discount").prop("disabled", false);
+                $("#external6_discount").prop("required", true);
+            }else{
+                $("#external6_discount").prop("disabled", true);
+                $("#external6_discount").prop("required", false);
+            }
+            if ($("#external7").prop("checked")) {
+                $("#external7_discount").prop("disabled", false);
+                $("#external7_discount").prop("required", true);
+            }else{
+                $("#external7_discount").prop("disabled", true);
+                $("#external7_discount").prop("required", false);
+            }
+            $("#external6").click(function () {
+                $("#external6_discount").prop("disabled", !$(this).prop("checked")).prop("required", $(this).prop("checked")).val($(this).prop("checked") ? $("#external6_discount").val() : "");
+		    });
+            $("#external7").click(function () {
+                $("#external7_discount").prop("disabled", !$(this).prop("checked")).prop("required", $(this).prop("checked")).val($(this).prop("checked") ? $("#external7_discount").val() : "");
+		    });
+        });
+        
         $(function () {
         	$("#hb").click(function () {
 	        	if ($(this).prop("checked")) {
@@ -2725,6 +2774,153 @@ if (!$_SESSION['login']) {
                 allowMinus: false
             });
         });
-        
+    
+        let familyData = [];
+
+        window.onload = function() {
+            // Get the family data from the hidden input field
+            const familyDataJson = document.getElementById('familyDataInput').value;
+            if (familyDataJson) {
+                familyData = JSON.parse(familyDataJson); // Parse the JSON data into the array
+                renderFamilyTable();  // Render the table with the fetched data
+            }
+        };
+        function renderFamilyTable() {
+            const table = document.getElementById('familyTable');
+            table.innerHTML = ''; // Clear the table before rendering new rows
+
+            familyData.forEach((member, index) => {
+                const row = table.insertRow();
+
+                row.innerHTML = `
+                    <td style="border: 1px solid black;">${index + 1}</td>
+                    <td style="border: 1px solid black;">${member.name}</td>
+                    <td style="border: 1px solid black;">${member.relation}</td>
+                    <td style="border: 1px solid black;">${member.age}</td>
+                    <td style="border: 1px solid black;">${member.occupation}</td>
+                    <td style="border: 1px solid black;">${member.salary}</td>
+                    <td style="border: 1px solid black;">
+                        <button class="btn btn-danger" onclick="removeFamilyRow(this)">X</button>
+                    </td>
+                `;
+            });
+        }
+
+        function addFamilyRow() {
+            const name = document.getElementById('inputName').value;
+            const relation = document.getElementById('inputRelation').value;
+            const age = document.getElementById('inputAge').value;
+            const occupation = document.getElementById('inputOccupation').value;
+            const salary = document.getElementById('inputSalary').value;
+
+            if (!name || !relation || !age || !occupation || !salary) {
+                alert('Please fill in all the fields!');
+                return;
+            }
+
+            // Create a family member object
+            const familyMember = {
+                name,
+                relation,
+                age,
+                occupation,
+                salary
+            };
+
+            // Push the new family member to the familyData array
+            familyData.push(familyMember);
+
+            // Create a new row in the table
+            const table = document.getElementById('familyTable');
+            const row = table.insertRow();
+
+            row.innerHTML = `
+                <td style="border: 1px solid black; text-transform: uppercase;">${table.rows.length}</td>
+                <td style="border: 1px solid black; text-transform: uppercase;">${name}</td>
+                <td style="border: 1px solid black; text-transform: uppercase;">${relation}</td>
+                <td style="border: 1px solid black; text-transform: uppercase;">${age}</td>
+                <td style="border: 1px solid black; text-transform: uppercase;">${occupation}</td>
+                <td style="border: 1px solid black;" text-transform: uppercase;>${salary}</td>
+                <td style="border: 1px solid black;"><button class="btn btn-danger" onclick="removeFamilyRow(this)">X</button></td>
+            `;
+
+            // Clear input fields
+            clearInputs();
+
+            // Reapply currency mask for the new added row's salary field
+            applyCurrencyMask();
+            sendFamilyDataToPHP();
+        }
+
+        // For removing a family member row
+        function removeFamilyRow(button) {
+            const row = button.closest('tr');
+            if (row) row.remove();
+
+            reSyncFamilyData();
+            reindexRows();
+            sendFamilyDataToPHP(); // <<< Add this!
+        }
+
+        // Apply currency mask to the salary field
+        function applyCurrencyMask() {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        }
+
+        // Send family data to PHP for saving to a PHP array
+        function sendFamilyDataToPHP() {
+            const familyDataJSON = JSON.stringify(familyData);
+            
+            // Assign the JSON data to the hidden input
+            document.getElementById('familyDataInput').value = familyDataJSON;
+
+            // Submit the form
+            document.getElementById('familyForm').submit();
+        }
+
+        // Clear all input fields after adding a new row
+        function clearInputs() {
+            document.getElementById('inputName').value = '';
+            document.getElementById('inputRelation').value = '';
+            document.getElementById('inputAge').value = '';
+            document.getElementById('inputOccupation').value = '';
+            document.getElementById('inputSalary').value = '';
+        }
+
+        function reindexRows() {
+            const table = document.getElementById('familyTable');
+            const rows = table.querySelectorAll('tr');
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1; // Update the first cell with the correct index
+            });
+        }
+
+        // Sync the familyData array with the table if a row is removed
+        function reSyncFamilyData() {
+            const rows = document.querySelectorAll('#familyTable tr');
+            familyData = [];
+
+            rows.forEach((row) => {
+                const cells = row.cells;
+                familyData.push({
+                    name: cells[1].innerText,
+                    relation: cells[2].innerText,
+                    age: cells[3].innerText,
+                    occupation: cells[4].innerText,
+                    salary: cells[5].innerText
+                });
+            });
+
+            // After resync, send updated data again
+            sendFamilyDataToPHP();
+        }
     </script>
 </html>
