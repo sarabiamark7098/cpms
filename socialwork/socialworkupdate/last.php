@@ -285,12 +285,12 @@
                                                 <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
+                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(isset($gl['cname'])??"").'" placeholder="Providers Company Name" required><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.$gl['to_mention'].'" placeholder="Addressee to Mention in GL" hidden><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name"><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.(($gl['to_mention'])??"").'" placeholder="Addressee to Mention in GL" hidden><br>
                                             <div class="row">
                                                 <div class="checkbox col-3">
                                                     <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -302,8 +302,8 @@
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
                                                         foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). $value['first_name'] . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  $value['last_name'];
-                                                            echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "-" . $value['signatory_id'] ."'></option>";
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])??"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])??"");
+                                                            echo "<option value='" . strtoupper((!empty($signatoryname))??"") . "-" . (!empty($value['position'])??"") . "-" . (!empty($value['signatory_id'])??"") ."'></option>";
                                                         }
                         echo                        '</datalist>
                                                 </div>
@@ -406,7 +406,6 @@
                 echo '</div>';
             }
             ?>
-        </div>
     </body>
     <?php 
         if(!empty($gl || $cash)|| ($mode1=="DS" && !empty($mode2)=="DS") || ($mode1=="DS" && empty($mode2)) || (empty($mode1) && $mode2=="DS")){

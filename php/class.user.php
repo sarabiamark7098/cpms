@@ -2515,15 +2515,16 @@
 							VALUES 
 							('{$id}', '{$sd_officer}');";
 			}
+			
+			if (!empty($client_work) && !empty($client_salary) && !empty($client_agency)) {
+				$query .= "UPDATE client_data SET occupation = '{$client_work}', salary = '{$client_salary}', agency = '{$client_agency}' WHERE client_id = '{$client_id}';";
+			}
 			// echo $query;
 			// $query .= "UPDATE tbl_coe_fund SET fs_amount1 = '{$amount1}', fs_amount2 = '{$amount2}', fs_amount3 = '{$amount3}', fs_amount4 = '{$amount4}', fs_amount5 = '{$amount5}' WHERE trans_id = '{$id}';";
 			$result = mysqli_multi_query($this->db, $query);
 
-			$client_salary = str_replace(',','',$client_salary);
-			if (!empty($client_work) || !empty($client_salary) || !empty($client_agency)) {
-				$query = "UPDATE client_data SET occupation = '{$client_work}', salary = '{$client_salary}', agency = '{$client_agency}' WHERE client_id = '{$client_id}';";
-				$result = mysqli_query($this->db, $query);
-			}
+			// $client_salary = str_replace(',','',$client_salary);
+			
 
 			if($result){
 				echo "<script>alert('Successfully Updated!');</script>";
@@ -3164,7 +3165,7 @@
 
 		function ParseInputs($inputString) {
 			// Remove commas in numbers
-			$cleaned = preg_replace('/(?<=\d)(?=\d)/', '', $inputString);
+			$cleaned = preg_replace('/(?<=\d)(?=\d)/', '', $inputString ?? '');
 		
 			// Split into key-value segments
 			$segments = explode('-', $cleaned);
@@ -3180,7 +3181,7 @@
 					$results[$segment] = true;
 				}
 			}
-		
+
 			return $results;
 		}
 

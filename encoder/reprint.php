@@ -12,6 +12,14 @@
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+        $otherinfo = $user->getOtherInformations($_GET['id']);
+        $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+        $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+        $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
     
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 			
@@ -239,7 +247,7 @@
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printGIS()">GIS</button></div>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printCOE()">COE</button></div>
                         <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"success":"dark" ?> btn-block no-print" onclick="printGL()" <?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"":"disabled" ?>>GL</button></div>
-                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav" || strtolower($client_assistance[2]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav" || strtolower($client_assistance[2]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div>
+                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div>
                     </div>  
                 </div>
             </div>

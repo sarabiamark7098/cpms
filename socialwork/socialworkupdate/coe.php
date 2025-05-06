@@ -50,7 +50,7 @@
         
         if($record){
             $COEsignatory= $user->getsignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
-            $COEsignatoryName = (!empty($COEsignatory['name_title'])?$COEsignatory['name_title'] ." ":""). strtoupper($COEsignatory['first_name'] ." ". (!empty($COEsignatory['middle_I'])?$COEsignatory['middle_I'] .". ":""). $COEsignatory['last_name']);
+            $COEsignatoryName = (!empty($COEsignatory['name_title'])?$COEsignatory['name_title'] ." ":""). strtoupper((!empty($COEsignatory['first_name'])??"") ." ". (!empty($COEsignatory['middle_I'])?$COEsignatory['middle_I'] .". ":""). (!empty($COEsignatory['last_name'])??""));
         }
         
         $soc_worker = $user->getuserInfo($_SESSION['userId']); //get soc-worker data from database
@@ -72,8 +72,8 @@
         $rec_amount = 50001;
 		
 		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
-        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
-        $GLsignatoryPosition = $GLsignatory['position'];
+        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). (!empty($GLsignatory['first_name'])?$GLsignatory['first_name']:"") ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). (!empty($GLsignatory['last_name'])?$GLsignatory['last_name']:""));
+        $GLsignatoryPosition = !empty($GLsignatory['position'])?$GLsignatory['position']:"";
 		
         $mode1 = $client_assistance[1]['mode'];
         $cash = $user->getCash($_GET['id']); //cash table
@@ -562,7 +562,7 @@
                             </div>
                             <div class="col-10">
                                 <input type="text" class="form-control mr-sm-2 b" id="client_work"     name="client_work" value="<?php echo $client['occupation']?>" placeholder="Client Current Work" required><br>
-                                <input type="text" class="form-control mr-sm-2 b" name="client_salary" id="client_salary" value="<?php echo number_format($client['salary'])?>" placeholder="Monthly Salary"><br>
+                                <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" name="client_salary" id="client_salary" value="<?php echo $client['salary']?>" placeholder="Monthly Salary"><br>
                                 <input type="text" class="form-control mr-sm-2 b" id="client_agency"      name="client_agency" value="<?php echo $client['agency']?>" placeholder="Agency/Company" required>
                             </div>
                         </div>
@@ -614,7 +614,7 @@
                             <div class="card-body">
                                 <div>
 									<label> Special Disbursing Officer : </label>&nbsp&nbsp&nbsp
-									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo $cash['sd_officer'] ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
+									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_oddicer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
                                 </div>
                             </div>
                         </div> 
@@ -631,18 +631,18 @@
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck($record['document'], "", "Referral") ?>> Referral Letter</div>
+                                        <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Referral") ?>> Referral Letter</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="soc" value="Social Case Study" <?php echo $user->checkCheck($record['document'], "", "Social") ?>> Social Case Study Report</div>
+                                        <div><input type="checkbox" class="lg" name="soc" value="Social Case Study" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Social") ?>> Social Case Study Report</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="just" value="Justification" <?php echo $user->checkCheck($record['document'], "", "Justification") ?>> Justification</div>
+                                        <div><input type="checkbox" class="lg" name="just" value="Justification" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Justification") ?>> Justification</div>
                                     </div>
                                     <div class="row">
                                         <div>
-                                            <input type="checkbox" class="lg" name="val_id" value="Valid ID:" <?php echo $user->checkCheck($record['document'], "", "Valid ID") ?>> Valid ID Presented: 
-                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo $record['id_presented'] ?>">
+                                            <input type="checkbox" class="lg" name="val_id" value="Valid ID:" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Valid ID") ?>> Valid ID Presented: 
+                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>">
                                             <datalist id="valid">
                                                 <option>School-ID</option>
                                                 <option>Voter's ID</option>
@@ -659,23 +659,23 @@
                                         </div> 
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck($record['document'], "", "Contract of Employment") ?>> Contract of Employment</div>
+                                        <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Contract of Employment") ?>> Contract of Employment</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="cert_attest" value="Certificate of Attestation" <?php echo $user->checkCheck($record['document'], "", "Certificate of Attestation") ?>> Certificate of Attestation</div>
+                                        <div><input type="checkbox" class="lg" name="cert_attest" value="Certificate of Attestation" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Certificate of Attestation") ?>> Certificate of Attestation</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck($record['document'], "", "Certificate of Employment") ?>> Certificate of Employment</div>
+                                        <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Certificate of Employment") ?>> Certificate of Employment</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="itr" value="Income Tax Return" <?php echo $user->checkCheck($record['document'], "", "Income Tax Return") ?>> Income Tax Return</div>
+                                        <div><input type="checkbox" class="lg" name="itr" value="Income Tax Return" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Income Tax Return") ?>> Income Tax Return</div>
                                     </div>
                                     <!-- <div class="row">
-                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
+                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "4ps") ?>> 4PS DSWD I.D.</div>
                                     </div> -->
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck($record['document'], "", "Others") ?>> Others: 
-                                            <input type="text" class="text-left center-input" name="others_input" value=" <?php echo $record['others_input'] ?>">
+                                        <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Others") ?>> Others: 
+                                            <input type="text" class="text-left center-input" name="others_input" value=" <?php echo (!empty($record['others_input'])?$record['others_input']:"") ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -693,34 +693,34 @@
                                     if(substr_count(strval($type), "Medic") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate/Abstract</div>
+                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "MEDICAL").'> Medical Certificate/Abstract</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
                                         <div class="row">   
-                                            <div><input type="checkbox" class="lg" name="dis_sum" id="dis_sum" value="DISCHARGE SUMMARY" '.$user->checkCheck($record['document'], "", "DISCHARGE").'> Discharge Summary</div>
+                                            <div><input type="checkbox" class="lg" name="dis_sum" id="dis_sum" value="DISCHARGE SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DISCHARGE").'> Discharge Summary</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="tr_pro" id="tr_pro" value="TREATMENT PROTOCOL" '.$user->checkCheck($record['document'], "", "TREATMENT").'> Treatment Protocol</div>
+                                            <div><input type="checkbox" class="lg" name="tr_pro" id="tr_pro" value="TREATMENT PROTOCOL" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "TREATMENT").'> Treatment Protocol</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck($record['document'], "", "LAB REQUEST").'> Laboratory Request</div>
+                                            <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "LAB REQUEST").'> Laboratory Request</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck($record['document'], "", "QUOTATION").'> Quotation/Chargeslip</div>
+                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "QUOTATION").'> Quotation/Chargeslip</div>
                                         </div>  
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck($record['document'], "", "PRESCRIPTION").'> Prescription</div>
+                                            <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "PRESCRIPTION").'> Prescription</div>
                                         </div>
                                         <div class="row">   
-                                            <div><input type="checkbox" class="lg" name="cs_report" id="cs_report" value="CASE SUMMARY" '.$user->checkCheck($record['document'], "", "CASE SUMMARY").'> Case Summary Report</div>
+                                            <div><input type="checkbox" class="lg" name="cs_report" id="cs_report" value="CASE SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "CASE SUMMARY").'> Case Summary Report</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck($record['document'], "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
+                                            <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
                                         </div>
-                                                                                <div class="row">
-                                            <div><input type="checkbox" class="lg" name="promissory" id="promissory" value="PROMISSORY NOTE" '.$user->checkCheck($record['document'], "", "PROMISSORY NOTE").'> Promissory Note</div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="promissory" id="promissory" value="PROMISSORY NOTE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "PROMISSORY NOTE").'> Promissory Note</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Trans") > 0){
@@ -730,16 +730,16 @@
                                     }elseif(substr_count(strval($type), "Funeral") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck($record['document'], "", "DEATH CERTIFICATE").'> Death Certificate</div>
+                                            <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH CERTIFICATE").'> Death Certificate</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
+                                            <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "FUNERAL").'> Funeral Contact</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="t_perm" id="t_perm" value="TRANSFER PERMIT" '.$user->checkCheck($record['document'], "", "TRANSFER PERMIT").'> Transfer Permit</div>
+                                            <div><input type="checkbox" class="lg" name="t_perm" id="t_perm" value="TRANSFER PERMIT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "TRANSFER PERMIT").'> Transfer Permit</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Food") > 0){
@@ -1108,6 +1108,8 @@
         $docu = "";
         $id_pres = "";
         $others_input = "";
+        $others_medical = "";
+        $others_burial = "";
 		$sdo = "";
         if(!empty($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);

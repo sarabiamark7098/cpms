@@ -82,10 +82,13 @@
     }
 
     if(isset($_POST["search"])){
-        $output = '';
-        $sql= "SELECT * FROM provider WHERE company_name like '%".$_POST["search"]."%'";
+        $search = trim($_POST["search"]);
+        $search = mysqli_real_escape_string($user->db, $search); 
+
+        $sql= "SELECT * FROM provider WHERE company_name like '%".$search."%' LIMIT 1;";
         $result = mysqli_query($user->db, $sql);
-        if(mysqli_num_rows($result) > 0){
+
+        if($result && mysqli_num_rows($result) > 0){
             $row = mysqli_fetch_array($result);
             $address = $row["company_address"];
             $pos = $row["addressee_position"]; 

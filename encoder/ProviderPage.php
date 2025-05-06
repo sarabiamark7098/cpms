@@ -78,6 +78,7 @@
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<style>
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
@@ -87,7 +88,6 @@
 			$("#admintable").dataTable();
 		  })
 		</script>
-        
     </head>
 
 <body>
@@ -130,7 +130,7 @@
                     <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" style="margin-left: 10px;" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
 					</a>
-					<a class="nav-link toggle tohover" data-target="#AddProvider" data-toggle="modal" style="border-left: solid 4px gray" aria-haspopup="true" aria-expanded="false">Add Provider<a>
+					<a class="nav-link toggle tohover" data-target="#AddProvider" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Provider<a>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
@@ -369,25 +369,36 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
 		</div>
 	</div>
 	<script>
-	$('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget) // Button that triggered the modal
-          var modal = $(this);
-          var dataString = 'New Data';
- 
-            $.ajax({
-                type: "GET",
-                url: "AddCompany.php",
-                data: dataString,
-                cache: false,
-                success: function (data) {
-                    // console.log(data);
-                    modal.find('.Addbody').html(data);
-                },
-                error: function(err) {
-                    // console.log(err);
-                }
-				
-            });  
-	})
+        $('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var modal = $(this);
+            var dataString = 'New Data';
+    
+                $.ajax({
+                    type: "GET",
+                    url: "AddCompany.php",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        // console.log(data);
+                        modal.find('.Addbody').html(data);
+                    },
+                    error: function(err) {
+                        // console.log(err);
+                    }
+                    
+                });  
+        })
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
 	</script>
 </html>
