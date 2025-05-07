@@ -3039,7 +3039,7 @@
 			while($row = mysqli_fetch_assoc($result)){
 				$data[] = [
 					'name' => $row['name'],
-					'relation' => $row['relation_bene'],
+					'relation_bene' => $row['relation_bene'],
 					'age' => $row['age'],
 					'occupation' => $row['occupation'],
 					'salary' => $row['salary']
