@@ -34,17 +34,17 @@ $user = new User();
                 <!---->
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Last Name" required>
+                        <input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
                         <label>Lastname</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input name="fname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="First Name" required>
+                        <input name="fname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="First Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
                         <label>Firstname</label>
                     </div>
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Middle Name" >
+							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()" >
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
@@ -115,7 +115,7 @@ $user = new User();
 						<label>Civil Status</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;">
+                        <input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                         <label>Contact</label>
                     </div>
 				</div><br>

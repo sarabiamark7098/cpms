@@ -217,19 +217,19 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input value="<?php echo $getClient['firstname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required >
+					<input value="<?php echo $getClient['firstname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
 					<label>First Name</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input type="text" value="<?php echo $getClient['middlename'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" required >    
+					<input type="text" value="<?php echo $getClient['middlename'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">    
 					<label>Middle Name</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" value="<?php echo $getClient['lastname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required >
+				<input type="text" value="<?php echo $getClient['lastname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
 					<label>Last Name</label>
 				</div>
 			</div>
@@ -337,7 +337,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" value="<?php echo $getClient['contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+				<input type="number" value="<?php echo $getClient['contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
 				<label>Contact</label>
 				</div>
 			</div>
@@ -480,17 +480,17 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name">
+						<input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
+						<input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">    
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name">
+					<input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -543,7 +543,7 @@ $user = new User();
 				</div>
 					<div class="form-group row">
 					<div class="col-sm-12">
-					<input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+					<input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
 					</div>
 				</div>
 				<div class="form-group row">
