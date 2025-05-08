@@ -4018,7 +4018,7 @@
 		$query = "SELECT * FROM webcam WHERE trans_id='{$id}'";
 		$result = mysqli_query($this->db,$query);
 		$row = mysqli_fetch_assoc($result);
-		$img = "../clientImages/no_avatar.gif";
+		$img = "../images/noAvatar.png";
 		if(!empty($row['image'])){
 			$img = $row['image'];
 		}

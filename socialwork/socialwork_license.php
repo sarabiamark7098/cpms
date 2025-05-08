@@ -84,7 +84,7 @@ $user = new User();
 					<label class="active" for="swposition">Position</label>
 				</div>
 				<div class="form-group col-lg-12">
-					<input value="<?php echo $getuser['sw_license_no'];?>" id="license_no" name="license_no" type="text" class="form-control mr-sm-2">
+					<input value="<?php echo $getuser['sw_license_no'];?>" id="license_no" name="license_no" type="text" class="form-control mr-sm-2" pattern="^[0-9\-]+$">
 					<label class="active" for="license_no">License Number</label>
 				</div>
 				<div class="form-group col-lg-12">
@@ -93,11 +93,36 @@ $user = new User();
 				</div>
 			</div>
             <div class="modal-footer">
-                <input type="submit" class="btn btn-primary btn-md submitload" name="Add" value="Submit" onclick="msg()">      
+                <input type="submit" class="btn btn-primary btn-md submitload" name="Add" value="Submit" onclick="return checkExpiryDate()">      
             	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 			
 </form> 	
 </body>
+<script>
+	document.getElementById('license_no').addEventListener('input', function (e) {
+		this.value = this.value.replace(/[^0-9\-]/g, '');
+	});
+	function checkExpiryDate() {
+    const expiryInput = document.getElementById('expiry_license');
+    const expiryDate = new Date(expiryInput.value);
+    const today = new Date();
+	console.log(today);
+    // Set to start of today to ignore time
+    today.setHours(0, 0, 0, 0);
+
+    if (!expiryInput.value) {
+        alert("Please select a license expiry date.");
+        return false;
+    }
+
+    if (expiryDate <= today) {
+        alert("The license expiry date is in the past. Please choose a valid future date.");
+        return false;
+    }
+
+    return true; // allow form submission
+}
+</script>
 </html>

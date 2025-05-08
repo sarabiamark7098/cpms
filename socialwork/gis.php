@@ -52,9 +52,9 @@ if (isset($_GET['id'])) {
         $address['client'] .= $client['client_street'] . ", ";
     }
     $address['client'] .= $brgy[0] . ", " . $city[0] . ", " . $province[0];
-    $city = explode("/", $client['b_municipality']);
-    $brgy = explode("/", $client['b_barangay']);
-    $province = explode("/", $client['b_province']);
+    $city = explode("/", (!empty($client['b_municipality'])??""));
+    $brgy = explode("/", (!empty($client['b_barangay'])??""));
+    $province = explode("/", (!empty($client['b_province'])??""));
     $address['beneficiary'] = '';
     if (!empty($client['b_street'])) {
         $address['beneficiary'] .= $client['b_street'] . ", ";

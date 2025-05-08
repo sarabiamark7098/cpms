@@ -28,8 +28,7 @@
 		$addcname = $_POST['companyname'];
 		$addcaddress = $_POST['companyaddress'];
 		
-		
-		$result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
+        $result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
 		
 		if($result){
 			echo "<script>alert('Successfully Adding Company!');</script>";
@@ -357,7 +356,8 @@
 		</div>
 	</div>
 
-
+    
+    
 <script type="text/javascript">
 $('#ProviderInfo').appendTo("body").on('show.bs.modal', function (event) {
           var button = $(event.relatedTarget) // Button that triggered the modal
@@ -430,7 +430,7 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
     
                 $.ajax({
                     type: "GET",
-                    url: "AddCompany.php",
+                    url: "addCompany.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
@@ -442,7 +442,7 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
                     }
                     
                 });  
-        })
+        });
         $(document).ready(function () {
             $(".currencyMaskedInput").inputmask({
                 alias: "currency",

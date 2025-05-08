@@ -47,7 +47,7 @@
     if(isset($_POST['emp_id'])){
         $row = $user->get_employee_data($_POST['emp_id']);
         $output = "";
-        $output = "<form action='index.php?confirm_id={$row["empnum"]}' method='POST'>
+        $output = "<form action='index.php?confirm_id={$row["empnum"]}&emp_id={$row["empid"]}' method='POST'>
                         <div class='container' style='padding:20px 40px'>
                             <h5 style='text-align:center'><b>Employee Number:&nbsp ".$_POST['emp_id']."</b></h5><br>
                             <h5 style='text-align:center'><b>Name:&nbsp ". $row['emplname'] .", ". $row['empfname'] ." ". (!empty($row['empmname'])?$row['empmname'][0].'.':'') ." ". (!empty($row['empext'])?$row['empext']:'') ."</b></h5><br>

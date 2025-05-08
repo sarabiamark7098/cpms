@@ -213,7 +213,7 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">Client's List<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
+                    <a href="home.php">List of Served Clients<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
                 </li>
                 <li>
                     <a href="UnservedClient.php">Unserved List <i style="float: right;font-size:25px" class="fa fa-child"></i></a>
@@ -258,7 +258,7 @@
             </nav>
             <div class="container-fluid" style="padding-left: 5%">
                 <div class="table-responsive-lg">
-                <h5>List of Clients</h5>
+                <h5>List of Served Clients</h5>
                 
                     <div class="form-group">
                         <div class="input-group">

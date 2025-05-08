@@ -3,8 +3,8 @@
 	$user = new User();
 	
 	if(!$_SESSION['login']){
-		header('location:../index.php');
-		}
+        header('location:../index.php');
+    }
 	if($_SESSION['position'] != 'Encoder'){
 		switch ($_SESSION['position']){
 			case 'Encoder': header("Location: ../encoder/home.php");
@@ -101,7 +101,7 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">Client's List<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
+                    <a href="home.php">List of Served Clients<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
                 </li>
                 <li>
                     <a href="UnservedClient.php">Unserved List <i style="float: right;font-size:25px" class="fa fa-child"></i></a>
@@ -376,7 +376,7 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
     
                 $.ajax({
                     type: "GET",
-                    url: "AddCompany.php",
+                    url: "addCompany.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
@@ -388,7 +388,7 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
                     }
                     
                 });  
-        })
+        });
         $(document).ready(function () {
             $(".currencyMaskedInput").inputmask({
                 alias: "currency",
