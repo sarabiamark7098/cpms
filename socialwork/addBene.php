@@ -97,26 +97,23 @@ $user = new User();
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
-							<input name="s_category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Subcategory">
-							<label>Sub-Category</label>
+							<select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
+								<option value="" disabled selected>Civil Status</option>
+								<option value="Single">Single</option>
+								<option value="Married">Married</option>
+								<option value="Separated">Separated</option>
+								<option value="Widow/Widowed">Widow/Widowed</option>
+								<option value="Common-Law">Common-law</option>
+							</select>
+							<label>Civil Status</label>
 						</div>
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
-                    
 					<div class="form-group col-lg-6">
-                        <select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
-							<option value="" disabled selected>Civil Status</option>
-							<option value="Single">Single</option>
-							<option value="Married">Married</option>
-							<option value="Separated">Separated</option>
-							<option value="Widow/Widowed">Widow/Widowed</option>
-							<option value="Common-Law">Common-law</option>
-						</select>
-						<label>Civil Status</label>
-                    </div>
-                    <div class="form-group col-lg-6">
                         <input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                         <label>Contact</label>
+                    </div>
+                    <div class="form-group col-lg-6">
                     </div>
 				</div><br>
 				<h4><b>Address</b></h4>
@@ -124,7 +121,7 @@ $user = new User();
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
                         <input  list="regionClist" name="region" id="newreg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_c_Region(this)" required>
-                        <label>New Region</label>
+                        <label>Region</label>
                         <datalist id="regionClist">
                             <?php
                                 $getregions = $user->optionregion();
@@ -156,7 +153,7 @@ $user = new User();
 					</div>
 					<div class="form-group col-lg-6">
 						<input list="barangayClist" name="barangay" id="newbrgy" type="text" class="form-control" onChange="get_c_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
-						<label>New Barangay</label>
+						<label>Barangay</label>
 						<datalist id="barangayClist">
 						</datalist>
 					</div>
@@ -165,7 +162,7 @@ $user = new User();
 				<div class="row" style="margin-top: 2%; height:10%;">
 					<div class="form-group col-lg-6">
 						<input  name="street" type="text" id="newstr" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
-						<label>New Street/Purok</label>
+						<label>Street/Purok</label>
 					</div>
 					<div class="form-group col-lg-6">
 						<select id="client_district" class="form-control mr-sm-2 b" name="district" placeholder="Beneficiary District" style="border: 1px solid #b1acac; text-transform: none;">
@@ -181,7 +178,7 @@ $user = new User();
 								}
 							?>
 						</select>
-						<label>New District</label>
+						<label>District</label>
 					</div>
 				</div>
 				<div class="modal-footer">

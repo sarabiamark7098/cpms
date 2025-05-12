@@ -99,8 +99,6 @@
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
-							<input name="s_category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" value="<?php echo $bene['b_subCategory']?>">
-							<label>Sub-Category</label>
 						</div>
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
@@ -140,7 +138,7 @@
                     </div>
                     <div class="form-group col-lg-6">
                         <input  list="regionClist" name="region" id="newreg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_c_Region(this)" required>
-                        <label>New Region</label>
+                        <label>Region</label>
                         <datalist id="regionClist">
                             <?php
                                 $getregions = $user->optionregion();
@@ -189,7 +187,7 @@
                     </div>
 					<div class="form-group col-lg-6">
 						<input list="barangayClist" name="barangay" id="newbrgy" type="text" class="form-control" onChange="get_c_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
-						<label>New Barangay</label>
+						<label>Barangay</label>
 						<datalist id="barangayClist">
 						</datalist>
 					</div>
@@ -202,7 +200,7 @@
                     </div>
 					<div class="form-group col-lg-6">
 							<input name="street" type="text" id="newstr" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
-							<label>New Street/Purok</label>
+							<label>Street/Purok</label>
 						</div>
 				</div>
 
@@ -213,7 +211,7 @@
                         <label>Existing District</label>
                     </div>
 						<div class="form-group col-lg-6">
-							<select name="district" type="text" id="client_district" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
+							<select name="district" type="text" id="newdist" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
 								<option value="" selected>Select District</option>
 								<?php
 									$getdistrict = $user->getdistrictlist();
@@ -226,7 +224,7 @@
 									}
 								?>
 							</select>
-							<label>New District</label>
+							<label>District</label>
 						</div>
 				</div>
 			<div class="modal-footer">

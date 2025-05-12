@@ -98,25 +98,24 @@ $user = new User();
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
-							<input name="s_category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" value="<?php echo $bene['b_subCategory']?>">
-							<label>Sub-Category</label>
+							<select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
+								<option value="" disabled <?php echo ($bene['b_civilStatus']==""?"selected":"")?>>Civil Status</option>
+								<option value="Single" <?php echo ($bene['b_civilStatus']=="Single"?"selected":"")?>>Single</option>
+								<option value="Married" <?php echo ($bene['b_civilStatus']=="Married"?"selected":"")?>>Married</option>
+								<option value="Separated" <?php echo ($bene['b_civilStatus']=="Separated"?"selected":"")?>>Separated</option>
+								<option value="Widow/Widowed" <?php echo ($bene['b_civilStatus']=="Widow/Widowed"?"selected":"")?>>Widow/Widowed</option>
+								<option value="Common-Law" <?php echo ($bene['b_civilStatus']=="Common-Law"?"selected":"")?>>Common-law</option>
+							</select>
+							<label>Civil Status</label>
 						</div>
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
-							<option value="" disabled <?php echo ($bene['b_civilStatus']==""?"selected":"")?>>Civil Status</option>
-							<option value="Single" <?php echo ($bene['b_civilStatus']=="Single"?"selected":"")?>>Single</option>
-							<option value="Married" <?php echo ($bene['b_civilStatus']=="Married"?"selected":"")?>>Married</option>
-							<option value="Separated" <?php echo ($bene['b_civilStatus']=="Separated"?"selected":"")?>>Separated</option>
-							<option value="Widow/Widowed" <?php echo ($bene['b_civilStatus']=="Widow/Widowed"?"selected":"")?>>Widow/Widowed</option>
-							<option value="Common-Law" <?php echo ($bene['b_civilStatus']=="Common-Law"?"selected":"")?>>Common-law</option>
-						</select>
-						<label>Civil Status</label>
+						<input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $bene['b_contact']?>" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
+						<label>Contact</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $bene['b_contact']?>" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
-                        <label>Contact</label>
+                        
                     </div>
 				</div><br>
 				<h4><b>Address</b></h4>
@@ -139,7 +138,7 @@ $user = new User();
                     </div>
                     <div class="form-group col-lg-6">
                         <input  list="regionClist" name="region" id="newreg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_c_Region(this)" required>
-                        <label>New Region</label>
+                        <label>Region</label>
                         <datalist id="regionClist">
                             <?php
                                 $getregions = $user->optionregion();
@@ -188,7 +187,7 @@ $user = new User();
                     </div>
 					<div class="form-group col-lg-6">
 						<input list="barangayClist" name="barangay" id="newbrgy" type="text" class="form-control" onChange="get_c_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
-						<label>New Barangay</label>
+						<label>Barangay</label>
 						<datalist id="barangayClist">
 						</datalist>
 					</div>
@@ -201,7 +200,7 @@ $user = new User();
                     </div>
 					<div class="form-group col-lg-6">
 							<input name="street" type="text" id="newstr" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
-							<label>New Street/Purok</label>
+							<label>Street/Purok</label>
 						</div>
 				</div>
 
@@ -212,7 +211,7 @@ $user = new User();
                         <label>Existing District</label>
                     </div>
 						<div class="form-group col-lg-6">
-							<select name="district" type="text" id="client_district" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
+							<select name="district" type="text" id="newdist" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
 								<option value="" selected>Select District</option>
 								<?php
 									$getdistrict = $user->getdistrictlist();
@@ -225,7 +224,7 @@ $user = new User();
 									}
 								?>
 							</select>
-							<label>New District</label>
+							<label>District</label>
 						</div>
 				</div>
 			<div class="modal-footer">

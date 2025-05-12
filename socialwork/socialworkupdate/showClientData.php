@@ -122,7 +122,6 @@ $user = new User();
 							<label>Street/Purok</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<!-- <input name="district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php //echo $client['client_district']?>"> -->
 							<select name="district" id="client_district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
 								<option value=""  <?php (($client['client_district']=="")?"selected":"") ?>>Select District</option>
 								<?php

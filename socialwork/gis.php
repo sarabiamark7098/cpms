@@ -316,7 +316,7 @@ if (!$_SESSION['login']) {
                     <div class=col-12>
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
-                                <h5 class="card-header text-success">TARGET SECTOR</h5>
+                                <h5 class="card-header text-success">TARGET SECTOR <label style="font-size: 13px;">(Beneficiary)<label></h5>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-6 container" style="font-size: 15px;">
@@ -361,7 +361,7 @@ if (!$_SESSION['login']) {
                     <div class=col-6>
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
-                                <h5 class="card-header text-success">SPECIFY SUB-CATEGORY</h5>
+                                <h5 class="card-header text-success">SPECIFY SUB-CATEGORY <label style="font-size: 13px;">(Beneficiary)</label></h5>
                                 <div class="card-body">
                                     <div class="container">
                                         <div class="row" style="margin-bottom:7px;">
@@ -1899,7 +1899,6 @@ if (!$_SESSION['login']) {
             $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
             $bday = $_POST['bday'];
             $category = mysqli_real_escape_string($user->db, ($_POST['category']));
-            $s_category = mysqli_real_escape_string($user->db, ($_POST['s_category']));
             $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
             $status = mysqli_real_escape_string($user->db, ($_POST['status']));
             $contact = mysqli_real_escape_string($user->db, ($_POST['contact']));
@@ -1912,7 +1911,7 @@ if (!$_SESSION['login']) {
             $street = mysqli_real_escape_string($user->db, ($_POST['street']));
             
             $user->updateBene($trans_id, $b_id, $relation, $lname, $mname, $fname, $exname, 
-                            $bday, $category, $s_category, $sex, $status, $contact,
+                            $bday, $category, $sex, $status, $contact,
                             $region, $province, $municipality, $barangay, $district, $street);
         }
 
@@ -1925,7 +1924,6 @@ if (!$_SESSION['login']) {
             $exname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['exname'])));
             $bday = $_POST['bday'];
             $category = mysqli_real_escape_string($user->db, ($_POST['category']));
-            $s_category = mysqli_real_escape_string($user->db, ($_POST['s_category']));
             $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
             $status = mysqli_real_escape_string($user->db, ($_POST['status']));
             $contact = mysqli_real_escape_string($user->db, ($_POST['contact']));
@@ -1938,7 +1936,7 @@ if (!$_SESSION['login']) {
             $street = mysqli_real_escape_string($user->db, ($_POST['street']));
             //print_r($_POST);
             $user->addBene($trans_id, $relation, $lname, $mname, $fname, $exname, 
-                            $bday, $category, $s_category, $sex, $status, $contact,
+                            $bday, $category, $sex, $status, $contact,
                             $region, $province, $municipality, $barangay, $district, $street);
 
         }

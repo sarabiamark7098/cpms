@@ -3206,14 +3206,14 @@
 		
 		//Update beneficiary in GIS
 		public function updateBene($trans_id, $b_id, $relation, $lname, $mname, $fname, $exname, 
-								$bday, $category, $s_category, $sex, $status, $contact,
+								$bday, $category, $sex, $status, $contact,
 								$region, $province, $municipality, $barangay, $district, $street){
 
 			$query = "UPDATE tbl_transaction SET relation='{$relation}'  WHERE trans_id = '{$trans_id}';";
 			$result = mysqli_query($this->db,$query);
 			
 			$query = "UPDATE beneficiary_data SET b_fname='{$fname}', b_mname='{$mname}', b_lname='{$lname}', b_exname='{$exname}', 
-					   b_bday='{$bday}', b_category='{$category}',  b_subCategory='{$s_category}',b_sex='{$sex}', b_civilStatus='{$status}', b_contact='{$contact}',
+					   b_bday='{$bday}', b_category='{$category}',b_sex='{$sex}', b_civilStatus='{$status}', b_contact='{$contact}',
 					   b_region = '{$region}', b_province = '{$province}' , b_municipality='{$municipality}', b_barangay='{$barangay}', b_district='{$district}',
 					   b_street ='{$street}'  
 				 	   WHERE bene_id = '{$b_id}'";
@@ -3229,7 +3229,7 @@
 		}
 
 		public function addBene($trans_id, $relation, $lname, $mname, $fname, $exname, 
-								$bday, $category, $s_category, $sex, $status, $contact,
+								$bday, $category, $sex, $status, $contact,
 								$region, $province, $municipality, $barangay, $district, $street){
 			
 			$datenow = date("Y-m-d H:i:s"); //serve as date_entered
@@ -3243,7 +3243,7 @@
 					`b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, `b_date_inserted`) 
 					VALUES 
 					('{$fname}','{$mname}','{$lname}','{$exname}','{$status}','{$contact}','{$bday}','{$sex}','{$category}',
-					'{$s_category}','{$region}','{$province}','{$municipality}','{$barangay}','{$district}','{$street}', '{$datenow}')";
+					'{$region}','{$province}','{$municipality}','{$barangay}','{$district}','{$street}', '{$datenow}')";
 			$result = mysqli_query($this->db,$query);
 			
 			$query = "SELECT auto_increment_id_bene FROM beneficiary_data WHERE b_lname = '{$lname}' AND b_fname = '{$fname}' AND b_mname = '{$mname}' AND b_date_inserted = '{$datenow}'";
