@@ -24,17 +24,17 @@
                 <h4 class="text-center">Client Info</h4>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
+                        <input type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
+                        <input type="text" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
+                        <input type="text" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -244,17 +244,17 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
+                            <input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control mr-sm-2 b" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">    
+                            <input type="text" class="form-control mr-sm-2 b" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">    
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-.]/g, '').toUpperCase()">
+                        <input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                         </div>
                     </div>
                     <div class="form-group row">
