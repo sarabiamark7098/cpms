@@ -776,3 +776,10 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
+/* Keep DataTables search input border visible when focused */
+.dataTables_filter input:focus {
+  border: 1px solid #ccc !important; /* or your desired border color */
+  outline: none !important;
+  box-shadow: none !important; /* remove Bootstrap shadow if needed */
+}
