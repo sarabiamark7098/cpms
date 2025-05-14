@@ -13,25 +13,31 @@
      $office_loc = $_SESSION['f_office'];
 
     $count = 0;
-    $query= "SELECT DISTINCT
-            client_id, trans_id, date_entered, encoded_encoder, control_no, date_accomplished, mode, bene_id,
+    $query= "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, date_accomplished, mode, bene_id, 
             client_region, client_province, client_municipality, client_barangay, client_district,
             lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-            b_lname, b_fname, b_mname, b_exname, cname, subCategory, pantawid_bene, status_client 
-            from client_data
-            inner join tbl_transaction USING (client_id)
-            left outer join beneficiary_data USING (bene_id)
-            inner join assessment USING (trans_id)
-            inner join assistance USING (trans_id)
-            left outer join gl USING (trans_id)
+            b_lname, b_fname, b_mname, b_exname, cname, subCategory, pantawid_bene, status_client, COUNT(family.name) AS familycount
+            FROM client_data
+            INNER JOIN tbl_transaction USING (client_id)
+            LEFT OUTER JOIN beneficiary_data USING (bene_id)
+            INNER JOIN assessment USING (trans_id)
+            INNER JOIN assistance USING (trans_id)
+            LEFT JOIN family USING (trans_id)
+            LEFT OUTER JOIN gl USING (trans_id)
             WHERE (Left(trans_id, 9) = '$office_loc') AND (date_accomplished BETWEEN '{$from_date}' and '{$to_date}') and status_client = 'Done' 
-            ORDER BY tbl_transaction.date_accomplished ASC";
+            GROUP BY client_id, trans_id, date_entered, encoded_encoder, control_no, occupation, salary, 
+            date_accomplished, mode, bene_id, client_region, client_province, 
+            client_municipality, client_barangay, client_district, lastname, 
+            firstname, middlename, extraname, sex, civil_status, date_birth, 
+            mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, 
+            subCategory, pantawid_bene, status_client
+            ORDER BY tbl_transaction.date_entered ASC;";
     
     $result = mysqli_query($user->db,$query);
 
     $columnHeader = "Date Entered"."\t"."Entered By"."\t"."Client No"."\t"."Date Accomplished"."\t"."Region"."\t"."Province"."\t".
                     "City/Municipality"."\t"."Barangay"."\t"."District"."\t"."LastName"."\t"."FirstName"."\t"."MiddleName"."\t".
-                    "ExtraName"."\t"."Sex"."\t"."CivilStatus"."\t"."DOB"."\t"."Age"."\t"."ModeOfAdmission"."\t"."Type of Assistance1"."\t".
+                    "ExtraName"."\t"."Sex"."\t"."CivilStatus"."\t"."DOB"."\t"."Age"."\t"."Number of Family Member"."\t"."Occupation"."\t"."Salary"."\t"."ModeOfAdmission"."\t"."Type of Assistance1"."\t".
                     "Amount1"."\t"."Source of Fund1"."\t"."Type of Assistance2"."\t"."Amount2"."\t". "Source of Fund2"."\t"."ClientCategory".
                     "\t"."CHARGING1"."\t"."CHARGING2"."\t"."CHARGING3"."\t"."CHARGING4"."\t"."CHARGING5"."\t"."CHARGING6"."\t"."CHARGING7"."\t".
                     "CHARGING8"."\t"."CHARGING9"."\t"."CHARGING10"."\t"."CHARGING11"."\t"."CHARGING12"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
@@ -77,6 +83,9 @@
                     $row['civil_status']         ."\t".
                     $row['date_birth']           ."\t".
                     $user->getAge($row['date_birth'])                 ."\t".
+                    $row['familycount']           ."\t".
+                    $row['occupation']           ."\t".
+                    $row['salary']           ."\t".
                     $row['mode_admission']                            ."\t".
                     $user->translateAss($assistance[1]['type'])      ."\t".
                     $assistance[1]['amount']                         ."\t\t";

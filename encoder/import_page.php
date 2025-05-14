@@ -86,7 +86,7 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">Client's List<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
+                    <a href="home.php">List of Served Clients<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
                 </li>
                 <li>
                     <a href="UnservedClient.php">Unserved List <i style="float: right;font-size:25px" class="fa fa-child"></i></a>

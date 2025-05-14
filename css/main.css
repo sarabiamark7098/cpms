@@ -492,8 +492,8 @@ input.input100 {
   line-height: 1.4;
   text-align: left;
 
-  visibility: hidden;
-  opacity: 0;
+  /* visibility: hidden;
+  opacity: 0; */
 
   -webkit-transition: opacity 0.4s;
   -o-transition: opacity 0.4s;
@@ -579,8 +579,8 @@ input.input100 {
   line-height: 1.4;
   text-align: left;
 
-  visibility: hidden;
-  opacity: 0;
+  /* visibility: hidden;
+  opacity: 0; */
 
   -webkit-transition: opacity 0.4s;
   -o-transition: opacity 0.4s;
@@ -775,4 +775,11 @@ thead {
 body {
   margin: 0px;
   padding: 0px;
+}
+
+/* Keep DataTables search input border visible when focused */
+.dataTables_filter input:focus {
+  border: 1px solid #ccc !important; /* or your desired border color */
+  outline: none !important;
+  box-shadow: none !important; /* remove Bootstrap shadow if needed */
 }

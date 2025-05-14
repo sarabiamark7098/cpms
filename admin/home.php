@@ -28,8 +28,7 @@
 		$addcname = $_POST['companyname'];
 		$addcaddress = $_POST['companyaddress'];
 		
-		
-		$result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
+        $result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
 		
 		if($result){
 			echo "<script>alert('Successfully Adding Company!');</script>";
@@ -81,6 +80,7 @@
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<style>
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
@@ -127,9 +127,6 @@
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
                     <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
             </ul>
@@ -166,7 +163,7 @@
                     </div>
                 </div>
             </nav>
-            <div class="container-fluid"  style="padding-left: 5%">
+            <div class="container-fluid" style="padding-left: 5%">
                 <div class="table-responsive-lg">
 					<h5>List of Provider</h5>
 					<table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
@@ -231,8 +228,6 @@
 		</div>
     </div>
 </div>
-
-
 </body>
     <script>
         //userAccount
@@ -361,7 +356,8 @@
 		</div>
 	</div>
 
-
+    
+    
 <script type="text/javascript">
 $('#ProviderInfo').appendTo("body").on('show.bs.modal', function (event) {
           var button = $(event.relatedTarget) // Button that triggered the modal
@@ -427,25 +423,36 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
 		</div>
 	</div>
 	<script>
-	$('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget) // Button that triggered the modal
-          var modal = $(this);
-          var dataString = 'New Data';
- 
-            $.ajax({
-                type: "GET",
-                url: "AddCompany.php",
-                data: dataString,
-                cache: false,
-                success: function (data) {
-                    // console.log(data);
-                    modal.find('.Addbody').html(data);
-                },
-                error: function(err) {
-                    // console.log(err);
-                }
-				
-            });  
-	})
+        $('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var modal = $(this);
+            var dataString = 'New Data';
+    
+                $.ajax({
+                    type: "GET",
+                    url: "addCompany.php",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        // console.log(data);
+                        modal.find('.Addbody').html(data);
+                    },
+                    error: function(err) {
+                        // console.log(err);
+                    }
+                    
+                });  
+        });
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
 	</script>
 </html>

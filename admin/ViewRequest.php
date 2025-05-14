@@ -84,6 +84,7 @@
                     </label>
                     <div class="form-group col-lg-6">
                         <select id="designation" name="designation" type="text" class="form-control" required>
+                            <option value="" <?php echo ($getrequest['request_position'] == ''?"selected":"") ?>>Select Designation</option>
                             <option value="Admin" <?php echo ($getrequest['request_position'] == 'Admin'?"selected":"") ?>>Admin</option>
                             <option value="Encoder" <?php echo ($getrequest['request_position'] == 'Encoder'?"selected":"") ?>>Encoder</option>
                             <option value="Social Worker" <?php echo ($getrequest['request_position'] == 'Social Worker'?"selected":"") ?>>Social Worker</option>

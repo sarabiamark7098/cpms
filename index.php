@@ -5,31 +5,36 @@
 
 	if (isset($_GET['confirm_id'])) {
 		
+		$emp_id = $_GET['emp_id'];
 		$confirm_id = $_GET['confirm_id'];
 		$requestposition = $_POST['designation'];
 		$requestoffice = $_POST['office'];
 		
-		$validation = $user->validateid($confirm_id);
-		
-		if($validation < 1){
+		$user_info = $user->check_user($emp_id);
+		$office_id = $user_info['office_id'];
+		$position = $user_info['position'];
+		if($office_id == $requestoffice && $position == $requestposition){
+			echo "<script type='text/javascript'>alert('No Changes Detected!');</script>";
+		} else {
+			$validation = $user->validateid($confirm_id);
+			if($validation < 1){
 
-			$result = $user->insert_request($confirm_id, $requestposition, $requestoffice);
-			
-			if($result){
-				echo "<script type='text/javascript'>alert('Request Submitted! Wait for Admin Confirmation.');</script>";		
-				echo "<script type='text/javascript'>window.location='index.php';</script>";
+				$result = $user->insert_request($confirm_id, $requestposition, $requestoffice);
+				
+				if($result){
+					echo "<script type='text/javascript'>alert('Request Submitted! Wait for Admin Confirmation.');</script>";		
+				}else{
+					echo "<script type='text/javascript'>alert('Error!! Try Again');</script>";		
+				}
 			}else{
-				echo "<script type='text/javascript'>alert('Error!! Try Again');</script>";			
-				echo "<script type='text/javascript'>window.location='index.php';</script>";
+				echo "<script type='text/javascript'>alert('Wait For Confirmation!');</script>";		
 			}
-		}else{
-			echo "<script type='text/javascript'>alert('Wait For Confirmation!');</script>";		
-			echo "<script type='text/javascript'>window.location='index.php';</script>";
-		}
 
-		// echo "<script>window.location='index.php';</script>";
-		// header( "Location: https://localhost/xcpms/index.php");
+		}
+		
+		echo "<script>window.location='index.php';</script>";	
 	}
+
 	if(isset($_POST['close'])){
 		echo "<script>window.location='index.php';</script>";
 		session_destroy();
@@ -108,11 +113,19 @@
 					// echo "<script>window.location='index.php';</script>";
 			}
 		}
-		else{
-			echo '<center><div class="alert-Danger" style="padding: 15px;">
-			  <strong>User not Found!</strong>
-			</div></center>';
-		}
+		echo '<center>
+		<div id="user-alert" class="alert-Danger" style="padding: 15px;">
+			<strong>User not Found!</strong>
+		</div>
+		</center>
+		<script>
+		setTimeout(function() {
+			var alertBox = document.getElementById("user-alert");
+			if (alertBox) {
+			alertBox.style.display = "none";
+			}
+		}, 3000); // 10 seconds = 10000 milliseconds
+		</script>';
 	}
 	
 	if(isset($_REQUEST['save'])){
@@ -186,24 +199,6 @@
 							<b>CIU Processing and Monitoring System</b>
 						</span>
 						
-						<!-- <div class="wrap-input1000">
-							<select type="text" class="input100 form-control" id="office" name="office" style="border:none;height: 100%;" required>
-								<option value="" disabled selected></option>
-								<?php
-									// $getoffices = $user->optionoffice();
-
-									// //Loop through results
-									// foreach($getoffices as $index => $value){
-									// 	//Display info
-									// 	echo '<option value="'. $value['office_id'] .'">';
-									// 	echo $value['office_name'];
-									// 	echo '</option>';
-									// }
-								?>
-							</select>
-							<span class="label-input100">Office</span>
-						</div> -->
-
 						<div class="wrap-input100 rs1 validate-input" data-validate = "Username is required">
 							<input class="input100" type="text" name="username">
 							<span class="label-input100">Username</span>
@@ -323,10 +318,9 @@
 					</button>
 				</div>
 				<form class="form-group" action="index.php" method="POST">
-					<div class="modal-body2">
+					<div class="modal-body2">`
 						
 					</div>
-					
 				</form>
 			</div>
         </div>
@@ -396,8 +390,8 @@
 					</button>
 				</div>
 				<div class="modal-body4">
-					<?php $empdata = $user->getEmpData($_SESSION['userId']); ?>
-					<form action='index.php?confirm_id=<?php echo $empdata["empnum"]; ?>' method='POST'>
+					<?php $empdata = $user->getEmpData($_SESSION['userId']);?>
+					<form action='index.php?confirm_id=<?php echo $empdata["empnum"]; ?>&emp_id=<?php echo $empdata["empid"]; ?>' method='POST'>
 						<div class="modal-body">
 							<div class="container" style="padding:20px 40px">
 								<h5 style='text-align:center'><b>Employee Number:&nbsp <?php echo $empdata['empnum'] ?></b></h5><br>
@@ -405,7 +399,8 @@
 								<div class="row">
 									<div class="form-group col-lg-6">
 										<select id="designation" name="designation" type="text" class="form-control" required>
-											<option value=<?php echo ($empdata['position'] == 'Admin'?"Admin":"") ?> selected> <?php echo ($empdata['position'] == 'Admin'?"Admin":"") ?> </option>
+											<option value="" <?php echo ($empdata['position'] == ''?"selected":"") ?>>Select Designation</option>
+											<?php if ($empdata['position'] == 'Admin'){ ?><option value=<?php echo ($empdata['position'] == 'Admin'?"Admin":"") ?> selected> <?php echo ($empdata['position'] == 'Admin'?"Admin":"") ?> </option><?php } ?>
 											<option value="Encoder" <?php echo ($empdata['position'] == 'Encoder'?"selected":"") ?>>Encoder</option>
 											<option value="Social Worker" <?php echo ($empdata['position'] == 'Social Worker'?"selected":"") ?>>Social Worker</option>
 										</select>

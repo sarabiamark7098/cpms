@@ -29,17 +29,17 @@ $user = new User();
 				<div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['lastname']?>" required>
+							<input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['lastname']?>" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 							<label>Lastname</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<input name="fname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['firstname']?>" required>
+							<input name="fname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['firstname']?>" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 							<label>Firstname</label>
 						</div>
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['middlename']?>" required>
+							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $client['middlename']?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
@@ -122,7 +122,6 @@ $user = new User();
 							<label>Street/Purok</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<!-- <input name="district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php //echo $client['client_district']?>"> -->
 							<select name="district" id="client_district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
 								<option value=""  <?php (($client['client_district']=="")?"selected":"") ?>>Select District</option>
 								<?php
@@ -141,7 +140,7 @@ $user = new User();
 				</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type='submit' class='btn btn-primary' name='c_update'>UPDATE</button>
+				<button type='submit' class='btn btn-primary' name='c_update'>Update</button>
 			</div>
     </form> 		
 	
