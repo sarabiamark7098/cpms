@@ -186,6 +186,8 @@
         <script type="text/javascript" src="../js/main.js"></script>
         <script type="text/javascript" src="../js/PSGC.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
         
         <!-- added -->
         

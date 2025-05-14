@@ -44,7 +44,7 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Middle Name"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
+							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
@@ -97,24 +97,23 @@ $user = new User();
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
+							<select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
+								<option value="" disabled selected>Civil Status</option>
+								<option value="Single">Single</option>
+								<option value="Married">Married</option>
+								<option value="Separated">Separated</option>
+								<option value="Widow/Widowed">Widow/Widowed</option>
+								<option value="Common-Law">Common-law</option>
+							</select>
+							<label>Civil Status</label>
 						</div>
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
-                    
 					<div class="form-group col-lg-6">
-                        <select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
-							<option value="" disabled selected>Civil Status</option>
-							<option value="Single">Single</option>
-							<option value="Married">Married</option>
-							<option value="Separated">Separated</option>
-							<option value="Widow/Widowed">Widow/Widowed</option>
-							<option value="Common-Law">Common-law</option>
-						</select>
-						<label>Civil Status</label>
-                    </div>
-                    <div class="form-group col-lg-6">
                         <input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                         <label>Contact</label>
+                    </div>
+                    <div class="form-group col-lg-6">
                     </div>
 				</div><br>
 				<h4><b>Address</b></h4>
@@ -166,7 +165,7 @@ $user = new User();
 						<label>Street/Purok</label>
 					</div>
 					<div class="form-group col-lg-6">
-						<select id="client_district" class="form-control mr-sm-2 b" name="district" placeholder="Beneficiary District" style="border: 1px solid #b1acac; text-transform: none;">
+						<select id="newdist" class="form-control mr-sm-2 b" name="district" placeholder="Beneficiary District" style="border: 1px solid #b1acac; text-transform: none;">
 							<option value="">Select Beneficiary District</option>
 							<?php
 								$getdistrict = $user->getdistrictlist();

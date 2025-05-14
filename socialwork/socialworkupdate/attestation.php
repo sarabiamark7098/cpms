@@ -1,26 +1,6 @@
-<html>
-<body>
- <style>
+<style>
     
-	@page {
-		size: 8.3in 11.7in;
-		margin: .10in /* change the margins as you want them to be. */
-	}
-
-	@media print{
-		html, body {
-			width: 210mm;
-			height: 297mm;
-		}
-	}
-    
-	.header{
-		background-color: black !important;
-		color: white;
-		-webkit-print-color-adjust: exact; 
-		font-size: 14px;
-	}
-    .footer{
+	.attestfooter{
         position:absolute;
         bottom:0;
         width:90%;
@@ -28,10 +8,10 @@
     }
 	
  </style>
-    <div class="container" id="attestation_v1print" style="font-size:12px; padding:2%; font-family: Arial: sans-serif; padding-left:70px; padding-right: 80px;">
+    <div class="container" id="attestation_v1print" style=" width:100%; font-family: Arial; font-size:12px; padding:2%; padding-left:70px; padding-right: 80px;">
         
         <!--HEADER-->
-        <div class="row" style="margin-top:40px;">
+        <div class="row" style="margin-top:0px;">
             <div class="col-6">
             <img src="../../images/DSWD Field Office XI.png" alt="" width="230px" height="80px">
             </div>
@@ -54,7 +34,7 @@
                 <p>This is to certify that Mr./Ms. <b><?php echo strtoupper($name) ?></b>, <b><?php echo $age_client?></b> years old, residing 
                 at <b><?php echo strtoupper($c_add) ?></b> is currently working as a
                 <b><?php echo strtoupper($client['occupation']) ?></b> at <b><?php echo strtoupper($client['agency']) ?></b>
-                earning a monthly income of <b><?php echo "Php ". number_format($client['salary']) ?></b>. 
+                earning a monthly income of <b><?php echo "Php ". $client['salary'] ?></b>. 
                 </p>
                 <p>Following a thorough assessment and validation of the client's socio-economic profile conducted by the undersigned social worker, 
                     it has been determined that Mr./Ms.
@@ -108,5 +88,3 @@
         </div>
         <!--Container-->
     </div>
-</body>
-</html>

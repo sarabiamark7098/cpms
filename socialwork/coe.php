@@ -526,7 +526,42 @@
                     }
                 });
             });
+
+            $(function () {
+                if ($("#val_id").prop("checked")) {
+                    $("#pres_id").prop("disabled", false);
+                    $("#pres_id").prop("required", true);
+                }else{
+                    $("#pres_id").prop("disabled", true);
+                    $("#pres_id").prop("required", false);
+                    $("#pres_id").val("");
+                }
+                
+                $("#val_id").click(function () {
+                    let isChecked = $(this).prop("checked");
+                    $("#pres_id").prop("disabled", !isChecked);
+                    $("#pres_id").prop("required", isChecked);
+                    $("#pres_id").val(isChecked ? $("#pres_id").val() : "");
+                });
+            });
             
+            $(function () {
+                if ($("#coeother").prop("checked")) {
+                    $("#coeotherinput").prop("disabled", false);
+                    $("#coeotherinput").prop("required", true);
+                }else{
+                    $("#coeotherinput").prop("disabled", true);
+                    $("#coeotherinput").prop("required", false);
+                    $("#coeotherinput").val("");
+                }
+                
+                $("#coeother").click(function () {
+                    let isChecked = $(this).prop("checked");
+                    $("#coeotherinput").prop("disabled", !isChecked);
+                    $("#coeotherinput").prop("required", isChecked);
+                    $("#coeotherinput").val(isChecked ? $("#coeotherinput").val() : "");
+                });
+            });
         </script>
     </head>
     <body>
@@ -614,7 +649,7 @@
                             <div class="card-body">
                                 <div>
 									<label> Special Disbursing Officer : </label>&nbsp&nbsp&nbsp
-									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_oddicer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
+									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_officer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
                                 </div>
                             </div>
                         </div> 
@@ -641,8 +676,8 @@
                                     </div>
                                     <div class="row">
                                         <div>
-                                            <input type="checkbox" class="lg" name="val_id" value="Valid ID:" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Valid ID") ?>> Valid ID Presented: 
-                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>">
+                                            <input type="checkbox" class="lg" id="val_id" name="val_id" value="Valid ID:" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Valid ID") ?>> Valid ID Presented: 
+                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                             <datalist id="valid">
                                                 <option>School-ID</option>
                                                 <option>Voter's ID</option>
@@ -674,8 +709,8 @@
                                         <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "4ps") ?>> 4PS DSWD I.D.</div>
                                     </div> -->
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Others") ?>> Others: 
-                                            <input type="text" class="text-left center-input" name="others_input" value=" <?php echo (!empty($record['others_input'])?$record['others_input']:"") ?>">
+                                        <div><input type="checkbox" class="lg" id="coeother" name="others" value="Others"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Others") ?>> Others: 
+                                            <input type="text" class="text-left center-input" id="coeotherinput" name="others_input" value=" <?php echo (!empty($record['others_input'])?$record['others_input']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                         </div>
                                     </div>
                                 </div>

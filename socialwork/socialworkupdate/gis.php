@@ -50,9 +50,9 @@ if (isset($_GET['id'])) {
         $address['client'] .= $client['client_street'] . ", ";
     }
     $address['client'] .= $brgy[0] . ", " . $city[0] . ", " . $province[0];
-    $city = explode("/", $client['b_municipality']);
-    $brgy = explode("/", $client['b_barangay']);
-    $province = explode("/", $client['b_province']);
+    $city = explode("/", (!empty($client['b_municipality'])??""));
+    $brgy = explode("/", (!empty($client['b_barangay'])??""));
+    $province = explode("/", (!empty($client['b_province'])??""));
     $address['beneficiary'] = '';
     if (!empty($client['b_street'])) {
         $address['beneficiary'] .= $client['b_street'] . ", ";
@@ -538,16 +538,16 @@ if (!$_SESSION['login']) {
                                     <!-- Family Composition Form (Single Row Input) -->
                                     <div class="row text-center mb-2">
                                         <div class="col-3">
-                                            <input class="form-control" id="inputName" type="text" placeholder="Pangalan">
+                                            <input class="form-control" id="inputName" type="text" placeholder="Pangalan" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                         </div>
                                         <div class="col-2">
-                                            <input class="form-control" id="inputRelation" type="text" placeholder="Relasyon">
+                                            <input class="form-control" id="inputRelation" type="text" placeholder="Relasyon" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                         </div>
                                         <div class="col-1">
                                             <input class="form-control" id="inputAge" type="number" max="99" placeholder="Edad">
                                         </div>
                                         <div class="col-2">
-                                            <input class="form-control" id="inputOccupation" type="text" placeholder="Trabaho">
+                                            <input class="form-control" id="inputOccupation" type="text" placeholder="Trabaho" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                         </div>
                                         <div class="col-2">
                                             <input class="form-control currencyMaskedInput" id="inputSalary" type="text" placeholder="Buwanang Sahod">
@@ -577,7 +577,7 @@ if (!$_SESSION['login']) {
                                                         <tr>
                                                             <td style="border: 1px solid black;"><?= $index + 1 ?></td>
                                                             <td style="border: 1px solid black;"><?= htmlspecialchars($member['name']) ?></td>
-                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['relation']) ?></td>
+                                                            <td style="border: 1px solid black;"><?= htmlspecialchars($member['relation_bene']) ?></td>
                                                             <td style="border: 1px solid black;"><?= htmlspecialchars($member['age']) ?></td>
                                                             <td style="border: 1px solid black;"><?= htmlspecialchars($member['occupation']) ?></td>
                                                             <td style="border: 1px solid black;"><?= htmlspecialchars($member['salary']) ?></td>
@@ -1357,9 +1357,8 @@ if (!$_SESSION['login']) {
             $trans_id = $_GET['id'];
             $csubcat = $_POST['c_subcat'];
 
-//FAMILY DATA's
-$familyData = json_decode($_POST['family_data'], true);
-            
+            //FAMILY DATA's
+            $familyData = json_decode($_POST['family_data'], true);
             //SERVICE TABLE DATA's
             $ref_name = "";
             $s1 = (isset($_POST['psy'])? 1: 0 );
@@ -2798,7 +2797,7 @@ $familyData = json_decode($_POST['family_data'], true);
                 row.innerHTML = `
                     <td style="border: 1px solid black;">${index + 1}</td>
                     <td style="border: 1px solid black;">${member.name}</td>
-                    <td style="border: 1px solid black;">${member.relation}</td>
+                    <td style="border: 1px solid black;">${member.relation_bene}</td>
                     <td style="border: 1px solid black;">${member.age}</td>
                     <td style="border: 1px solid black;">${member.occupation}</td>
                     <td style="border: 1px solid black;">${member.salary}</td>
@@ -2811,12 +2810,12 @@ $familyData = json_decode($_POST['family_data'], true);
 
         function addFamilyRow() {
             const name = document.getElementById('inputName').value;
-            const relation = document.getElementById('inputRelation').value;
+            const relation_bene = document.getElementById('inputRelation').value;
             const age = document.getElementById('inputAge').value;
             const occupation = document.getElementById('inputOccupation').value;
             const salary = document.getElementById('inputSalary').value;
 
-            if (!name || !relation || !age || !occupation || !salary) {
+            if (!name || !relation_bene || !age || !occupation || !salary) {
                 alert('Please fill in all the fields!');
                 return;
             }
@@ -2824,7 +2823,7 @@ $familyData = json_decode($_POST['family_data'], true);
             // Create a family member object
             const familyMember = {
                 name,
-                relation,
+                relation_bene,
                 age,
                 occupation,
                 salary
@@ -2840,7 +2839,7 @@ $familyData = json_decode($_POST['family_data'], true);
             row.innerHTML = `
                 <td style="border: 1px solid black; text-transform: uppercase;">${table.rows.length}</td>
                 <td style="border: 1px solid black; text-transform: uppercase;">${name}</td>
-                <td style="border: 1px solid black; text-transform: uppercase;">${relation}</td>
+                <td style="border: 1px solid black; text-transform: uppercase;">${relation_bene}</td>
                 <td style="border: 1px solid black; text-transform: uppercase;">${age}</td>
                 <td style="border: 1px solid black; text-transform: uppercase;">${occupation}</td>
                 <td style="border: 1px solid black;" text-transform: uppercase;>${salary}</td>
@@ -2915,7 +2914,7 @@ $familyData = json_decode($_POST['family_data'], true);
                 const cells = row.cells;
                 familyData.push({
                     name: cells[1].innerText,
-                    relation: cells[2].innerText,
+                    relation_bene: cells[2].innerText,
                     age: cells[3].innerText,
                     occupation: cells[4].innerText,
                     salary: cells[5].innerText

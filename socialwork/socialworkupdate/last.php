@@ -67,23 +67,37 @@
         $city = explode("/", $client['client_municipality']);
         $brgy = explode("/", $client['client_barangay']);
         $province = explode("/", $client['client_province']);
-        $bcity = explode("/", $client['b_municipality']); 
-        $bbrgy = explode("/", $client['b_barangay']);
-        $bprovince = explode("/", $client['b_province']);
+        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
 
-        //if street kay way sulod ma blank lg sta
-		if(!empty($client['b_street'])){
-			$b_add .= $client['b_street'].", ";
-		}
-	
-		if(!empty($client['client_street'])){
+        if(!empty($client['client_street'])){
             $c_add .= $client['client_street'] .", ";
             $cash_add .= $client['client_street'] .", ";
 		}
         
-        $b_add .= $bbrgy[0] .", ". $bcity[0].", ". $bprovince[0]; //client final address
-        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
-        $cash_add .= $brgy[0] .", ". $city[0]; //address for CAV
+        //if street kay way sulod ma blank lg sta
+		if(!empty($client['b_street'])){
+			$b_add .= $client['b_street'].", ";
+		}
+	    if(!empty($client['b_barangay'])){
+            $bbrgy = explode("/", $client['b_barangay']);
+            $b_add .= $bbrgy[0] .", "; 
+        }else{
+            $bbrgy[0] = "";
+        }
+        if(!empty($client['b_municipality'])){
+            $bcity = explode("/", $client['b_municipality']);
+            $b_add .= $bcity[0].", "; 
+        }else{
+            $bcity[0] = "";
+        }
+        if(!empty($client['b_province'])){
+            $bprovince = explode("/", $client['b_province']);
+            $b_add .= $bprovince[0];
+        }else{
+            $bprovince[0] = "";
+        }
+       
+	    $cash_add .= $brgy[0] .", ". $city[0]; //address for CAV
         
         //magkuhag data if ever naa na s database
         $gl = $user->getGL($_GET['id']); //gl table
@@ -285,7 +299,7 @@
                                                 <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(isset($gl['cname'])??"").'" placeholder="Providers Company Name" required><br>
+                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(($gl['cname'])??"").'" placeholder="Providers Company Name" required><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
                                             <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required><br>
                                             <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name"><br>

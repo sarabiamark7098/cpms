@@ -34,7 +34,7 @@
             <p>This is to certify that Mr./Ms. <b><?php echo strtoupper($name) ?></b>, <b><?php echo $age_client?></b> years old, residing 
             at <b><?php echo strtoupper($c_add) ?></b> is currently working as a
             <b><?php echo strtoupper($client['occupation']) ?></b> at <b><?php echo strtoupper($client['agency']) ?></b>
-            earning a monthly income of <b><?php echo "Php ". number_format($client['salary']) ?></b>. 
+            earning a monthly income of <b><?php echo "Php ". $client['salary'] ?></b>. 
             </p>
             <p>Following a thorough assessment and validation of the client's socio-economic profile conducted by the undersigned social worker, 
                 it has been determined that Mr./Ms.

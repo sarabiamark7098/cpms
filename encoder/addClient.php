@@ -94,7 +94,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="number" class="form-control mr-sm-2 b" name="salary" placeholder="Salary">
+                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" name="salary" placeholder="Salary">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -313,7 +313,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="number" class="form-control mr-sm-2 b" name="b_salary" placeholder="Beneficiary Salary">
+                            <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" name="b_salary" placeholder="Beneficiary Salary">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -576,5 +576,17 @@
             });
         });
         
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
+
         </script>
 </html>

@@ -1792,7 +1792,7 @@
 				foreach ($familyData as $member) {
 					// Ensure each member's data is in uppercase
 					$membername = strtoupper($member['name']);
-					$memberrelation = strtoupper($member['relation']);
+					$memberrelation = strtoupper($member['relation_bene']);
 					$memberage = $member['age'];
 					$memberoccupation = strtoupper($member['occupation']);
 					$membersalary = $member['salary'];
@@ -1941,7 +1941,7 @@
 				foreach ($familyData as $member) {
 					// Ensure each member's data is in uppercase
 					$membername = strtoupper($member['name']);
-					$memberrelation = strtoupper($member['relation']);
+					$memberrelation = strtoupper($member['relation_bene']);
 					$memberage = $member['age'];
 					$memberoccupation = strtoupper($member['occupation']);
 					$membersalary = $member['salary'];
@@ -3239,7 +3239,7 @@
 			
 			$query = "INSERT INTO `beneficiary_data`
 					(`b_fname`, `b_mname`, `b_lname`, `b_exname`, 
-					`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_category`, `b_subCategory`, `b_region`, 
+					`b_civilStatus`, `b_contact`, `b_bday`, `b_sex`, `b_category`, `b_region`, 
 					`b_province`, `b_municipality`, `b_barangay`, `b_district`, `b_street`, `b_date_inserted`) 
 					VALUES 
 					('{$fname}','{$mname}','{$lname}','{$exname}','{$status}','{$contact}','{$bday}','{$sex}','{$category}',

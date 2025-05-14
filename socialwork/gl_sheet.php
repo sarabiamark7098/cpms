@@ -26,7 +26,7 @@
 			<div class="row" style="margin-bottom: 10px;">
 				<div class="col-12">
                     <b style="font-size:24px;">GL No: </b><span id="number" style="text-transform:uppercase;"><?php echo $gl['control_no']?></span><br>
-					<b style="text-left">Date:</b> <input id="signatory12" style="text-transform:capitalize;width:60%;border-bottom:none; " value="<?php echo date(" F j, Y ")?>">
+					<b style="text-left">Date:</b> <input id="signatory" style="text-transform:capitalize;width:60%;border-bottom:none; " value="<?php echo date(" F j, Y ")?>">
 					<br>
 				</div>
 			</div>

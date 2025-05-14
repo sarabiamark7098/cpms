@@ -1,7 +1,6 @@
 <?php
 	include('../../php/class.user.php');
 	$user = new User();
-	// echo "sample";
 	$bene = $user->getBeneData($_GET['id']);
 	
 	if(!$_SESSION['login']){
@@ -99,23 +98,24 @@
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
+							<select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
+								<option value="" disabled <?php echo ($bene['b_civilStatus']==""?"selected":"")?>>Civil Status</option>
+								<option value="Single" <?php echo ($bene['b_civilStatus']=="Single"?"selected":"")?>>Single</option>
+								<option value="Married" <?php echo ($bene['b_civilStatus']=="Married"?"selected":"")?>>Married</option>
+								<option value="Separated" <?php echo ($bene['b_civilStatus']=="Separated"?"selected":"")?>>Separated</option>
+								<option value="Widow/Widowed" <?php echo ($bene['b_civilStatus']=="Widow/Widowed"?"selected":"")?>>Widow/Widowed</option>
+								<option value="Common-Law" <?php echo ($bene['b_civilStatus']=="Common-Law"?"selected":"")?>>Common-law</option>
+							</select>
+							<label>Civil Status</label>
 						</div>
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <select name="status" type="text" class="form-control" style="border: 1px solid #b1acac;" required>
-							<option value="" disabled <?php echo ($bene['b_civilStatus']==""?"selected":"")?>>Civil Status</option>
-							<option value="Single" <?php echo ($bene['b_civilStatus']=="Single"?"selected":"")?>>Single</option>
-							<option value="Married" <?php echo ($bene['b_civilStatus']=="Married"?"selected":"")?>>Married</option>
-							<option value="Separated" <?php echo ($bene['b_civilStatus']=="Separated"?"selected":"")?>>Separated</option>
-							<option value="Widow/Widowed" <?php echo ($bene['b_civilStatus']=="Widow/Widowed"?"selected":"")?>>Widow/Widowed</option>
-							<option value="Common-Law" <?php echo ($bene['b_civilStatus']=="Common-Law"?"selected":"")?>>Common-law</option>
-						</select>
-						<label>Civil Status</label>
+						<input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $bene['b_contact']?>" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
+						<label>Contact</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input name="contact" type="text"  class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $bene['b_contact']?>" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
-                        <label>Contact</label>
+                        
                     </div>
 				</div><br>
 				<h4><b>Address</b></h4>

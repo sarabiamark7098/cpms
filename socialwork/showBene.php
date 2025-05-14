@@ -45,7 +45,7 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $bene['b_mname']?>"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
+							<input  name="mname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php echo $bene['b_mname']?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
