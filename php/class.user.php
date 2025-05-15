@@ -1927,7 +1927,7 @@
 			if ($row["program_type"] == 1) {
 				$data = "AKAP FUND " . $year;
 			} elseif ($row["program_type"] == 0) {
-				$data = "AICS FUND " . $year;
+				$data = "CURRENT FUND";
 			} elseif ($row["program_type"] == "other") {
 				$data = $row["other_program"] . " FUND " . $year;
 			} else {

@@ -78,9 +78,20 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['client_district'], $row['lastname'], $row['firstname'], $row['middlename'], $row['extraname'],
         $row['sex'], $row['civil_status'], $row['date_birth'], $age,
         $row['occupation'], $row['salary'], $row['familycount'], $row['mode_admission'],
-        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '', $assistance[1]['type'] ? $fundsource : '', (($assistance[1]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[1]['mode'] === "CAV") ? 'Outright Cash' : $assistance[1]['mode'])), 
-        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '', $assistance[2]['type'] ? $fundsource : '', (($assistance[2]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[2]['mode'] === "CAV") ? 'Outright Cash' : $assistance[2]['mode'])),
-        $user->translateAss($assistance[3]['type'] ?? ''), $assistance[3]['amount'] ?? '', $assistance[3]['type'] ? $fundsource : '', (($assistance[3]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[3]['mode'] === "CAV") ? 'Outright Cash' : $assistance[3]['mode'])),
+        $user->translateAss($assistance[1]['type'] ?? ''),
+        $assistance[1]['amount'] ?? '',
+        (!empty($fund[1]['type']) ? $fundsource : ''),
+        (($assistance[1]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[1]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[1]['mode'] ?? ''))),
+
+        $user->translateAss($assistance[2]['type'] ?? ''),
+        $assistance[2]['amount'] ?? '',
+        (!empty($fund[2]['type']) ? $fundsource : ''),
+        (($assistance[2]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[2]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[2]['mode'] ?? ''))),
+
+        $user->translateAss($assistance[3]['type'] ?? ''),
+        $assistance[3]['amount'] ?? '',
+        (!empty($fund[3]['type']) ? $fundsource : ''),
+        (($assistance[3]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[3]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[3]['mode'] ?? ''))),
         $row['category'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
         $row['subCategory'], $row['pantawid_bene']
     ];
