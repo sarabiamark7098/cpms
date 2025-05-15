@@ -1916,22 +1916,29 @@
 			$row = mysqli_fetch_assoc($result);
 			$data = "";
 
-			if($row["program_type"] == 1){
-				$data = "AKAP FUND ". date("Y", strtotime($row["date_accomplished"]));
-			}elseif($row["program_type"] == 0){
-				$data = "AICS FUND ". date("Y", strtotime($row["date_accomplished"]));
-			}elseif($row["program_type"] == "other"){
-				$data = $row["other_program"]. " FUND ".date("Y", strtotime($row["date_accomplished"]));
-			}else{
-				$data = "OTHER FUND ". date("Y",  strtotime($row["date_accomplished"]));
+			$year = '';
+			if (!empty($row["date_accomplished"])) {
+				$timestamp = strtotime($row["date_accomplished"]);
+				if ($timestamp !== false) {
+					$year = date("Y", $timestamp);
+				}
 			}
-			
-			if(empty($data)){
-				return ""; //pass as dimensional array
-			}else{
-				return $data;
+
+			if ($row["program_type"] == 1) {
+				$data = "AKAP FUND " . $year;
+			} elseif ($row["program_type"] == 0) {
+				$data = "AICS FUND " . $year;
+			} elseif ($row["program_type"] == "other") {
+				$data = $row["other_program"] . " FUND " . $year;
+			} else {
+				$data = "OTHER FUND " . $year;
 			}
-			
+
+			return trim($data);
+		}
+
+		function getModeName($mode) {
+		    return $mode === "GL" ? "Guarantee Letter" : ($mode === "CAV" ? "Outright Cash" : $mode);
 		}
 
 		public function updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,

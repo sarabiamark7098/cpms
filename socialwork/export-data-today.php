@@ -52,13 +52,12 @@ $sheet = $spreadsheet->getActiveSheet();
 $headers = [
     "Date Entered", "Entered By", "Client No", "Date Accomplished", "Region", "Province",
     "City/Municipality", "Barangay", "District", "LastName", "FirstName", "MiddleName", "ExtraName",
-    "Sex", "CivilStatus", "DOB", "Age", "Number of Family Member", "Occupation", "Salary",
-    "ModeOfAdmission", "Type of Assistance1", "Amount1", "Source of Fund1",
-    "Type of Assistance2", "Amount2", "Source of Fund2", "ClientCategory",
-    "CHARGING1", "CHARGING2", "CHARGING3", "CHARGING4", "CHARGING5", "CHARGING6",
-    "CHARGING7", "CHARGING8", "CHARGING9", "CHARGING10", "CHARGING11", "CHARGING12",
-    "MODE", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
-    "Sub Category", "Pantawid Beneficiary", "Fund Source"
+    "Sex", "CivilStatus", "DOB", "Age", "Occupation", "Salary", "Number of Family Member",
+    "ModeOfAdmission", "Type of Assistance1", "Amount1", "Source of Fund1", "Mode of Release1",
+    "Type of Assistance2", "Amount2", "Source of Fund2", "Mode of Release2",
+    "Type of Assistance3", "Amount3", "Source of Fund3", "Mode of Release3", 
+    "ClientCategory", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
+    "Sub-Category", "Pantawid Beneficiary"
 ];
 $sheet->fromArray($headers, NULL, 'A1');
 
@@ -77,25 +76,18 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['date_entered'], $fullname, $row['control_no'], $row['date_accomplished'],
         $row['client_region'], $row['client_province'], $row['client_municipality'], $row['client_barangay'],
         $row['client_district'], $row['lastname'], $row['firstname'], $row['middlename'], $row['extraname'],
-        $row['sex'], $row['civil_status'], $row['date_birth'], $age, $row['familycount'],
-        $row['occupation'], $row['salary'], $row['mode_admission'],
-        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '', $assistance[1]['fund'] ?? '',
-        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '', $assistance[2]['fund'] ?? '',
-        $row['category']
+        $row['sex'], $row['civil_status'], $row['date_birth'], $age,
+        $row['occupation'], $row['salary'], $row['familycount'], $row['mode_admission'],
+        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '', $assistance[1]['type'] ? $fundsource : '', (($assistance[1]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[1]['mode'] === "CAV") ? 'Outright Cash' : $assistance[1]['mode'])), 
+        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '', $assistance[2]['type'] ? $fundsource : '', (($assistance[2]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[2]['mode'] === "CAV") ? 'Outright Cash' : $assistance[2]['mode'])),
+        $user->translateAss($assistance[3]['type'] ?? ''), $assistance[3]['amount'] ?? '', $assistance[3]['type'] ? $fundsource : '', (($assistance[3]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[3]['mode'] === "CAV") ? 'Outright Cash' : $assistance[3]['mode'])),
+        $row['category'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
+        $row['subCategory'], $row['pantawid_bene']
     ];
-
-    for ($i = 1; $i <= 12; $i++) {
-        $rowData[] = isset($fund[$i]['fundsource']) ? $fund[$i]['fundsource'] . ' - ' . $fund[$i]['fs_amount'] : '';
-    }
-
-    $rowData = array_merge($rowData, [
-        $row['mode'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
-        $row['subCategory'], $row['pantawid_bene'], $fundsource
-    ]);
 
     $sheet->fromArray($rowData, NULL, 'A' . $rowIndex++);
 }
-
+ob_end_clean(); 
 // Output to browser
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header("Content-Disposition: attachment;filename=\"{$filename}.xlsx\"");

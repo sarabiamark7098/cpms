@@ -42,14 +42,14 @@ $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 
 $headers = [
-    "Date Entered", "Entered By", "Client No", "Date Accomplished", "Region", "Province", "City/Municipality",
-    "Barangay", "District", "LastName", "FirstName", "MiddleName", "ExtraName", "Sex", "CivilStatus",
-    "DOB", "Age", "Number of Family Member", "Occupation", "Salary", "ModeOfAdmission",
-    "Type of Assistance1", "Amount1", "Source of Fund1", "Type of Assistance2", "Amount2", "Source of Fund2",
-    "ClientCategory", "CHARGING1", "CHARGING2", "CHARGING3", "CHARGING4", "CHARGING5", "CHARGING6",
-    "CHARGING7", "CHARGING8", "CHARGING9", "CHARGING10", "CHARGING11", "CHARGING12", "MODE",
-    "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
-    "Sub Category", "Pantawid Beneficiary", "Fund Source"
+    "Date Entered", "Entered By", "Client No", "Date Accomplished", "Region", "Province",
+    "City/Municipality", "Barangay", "District", "LastName", "FirstName", "MiddleName", "ExtraName",
+    "Sex", "CivilStatus", "DOB", "Age", "Occupation", "Salary", "Number of Family Member",
+    "ModeOfAdmission", "Type of Assistance1", "Amount1", "Source of Fund1", "Mode of Release1",
+    "Type of Assistance2", "Amount2", "Source of Fund2", "Mode of Release2",
+    "Type of Assistance3", "Amount3", "Source of Fund3", "Mode of Release3", 
+    "ClientCategory", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
+    "Sub-Category", "Pantawid Beneficiary"
 ];
 
 $sheet->fromArray($headers, NULL, 'A1');
@@ -73,27 +73,11 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['client_district'], $row['lastname'], $row['firstname'], $row['middlename'], $row['extraname'],
         $row['sex'], $row['civil_status'], $row['date_birth'], $user->getAge($row['date_birth']),
         $row['familycount'], $row['occupation'], $row['salary'], $row['mode_admission'],
-        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '',
-        $fund[1]['fundsource'] ?? $assistance[1]['fund'] ?? '',
-        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '',
-        $fund[2]['fundsource'] ?? '',
-        $row['category']
+        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '', $fund[1]['type'] ? $fundsource : '', (($assistance[1]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[1]['mode'] === "CAV") ? 'Outright Cash' : $assistance[1]['mode'])),
+        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '', $fund[2]['type'] ? $fundsource : '', (($assistance[2]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[2]['mode'] === "CAV") ? 'Outright Cash' : $assistance[2]['mode'])),
+        $user->translateAss($assistance[3]['type'] ?? ''), $assistance[3]['amount'] ?? '', $fund[3]['type'] ? $fundsource : '', (($assistance[3]['mode'] === "GL") ? "Guarantee Letter" : (($assistance[3]['mode'] === "CAV") ? 'Outright Cash' : $assistance[3]['mode'])),
+        $row['category'], $row['cname'], $lname, $fname, $mname, $ename, $row['subCategory'], $row['pantawid_bene']
     ];
-
-    // Append CHARGING 1 to 12
-    for ($i = 1; $i <= 12; $i++) {
-        $rowData[] = isset($fund[$i]['fundsource']) ? $fund[$i]['fundsource'] . " - " . $fund[$i]['fs_amount'] : '';
-    }
-
-    $rowData[] = $row['mode'];
-    $rowData[] = $row['cname'];
-    $rowData[] = $lname;
-    $rowData[] = $fname;
-    $rowData[] = $mname;
-    $rowData[] = $ename;
-    $rowData[] = $row['subCategory'];
-    $rowData[] = $row['pantawid_bene'];
-    $rowData[] = $fundsource;
 
     $sheet->fromArray($rowData, NULL, 'A' . $rowNum);
     $rowNum++;
@@ -101,6 +85,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 if ($rowNum > 2) {
     $filename = date("M d", strtotime($from_date)) . "-" . date("M d Y", strtotime($to_date)) . " Export.xlsx";
+    
+    ob_end_clean(); 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header("Content-Disposition: attachment; filename=\"$filename\"");
     header('Cache-Control: max-age=0');
