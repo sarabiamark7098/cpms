@@ -58,7 +58,7 @@ $headers = [
     "CHARGING1", "CHARGING2", "CHARGING3", "CHARGING4", "CHARGING5", "CHARGING6",
     "CHARGING7", "CHARGING8", "CHARGING9", "CHARGING10", "CHARGING11", "CHARGING12",
     "MODE", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
-    "Sub Category", "Pantawid Beneficiary"
+    "Sub Category", "Pantawid Beneficiary", "Fund Source"
 ];
 $sheet->fromArray($headers, NULL, 'A1');
 
@@ -68,6 +68,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $fullname = $user->getuserFullname($row['encoded_encoder']);
     $assistance = $user->getAssistanceData($row['trans_id']);
     $fund = $user->getfundsourcedata($row['trans_id']);
+    $fundsource = $user->getfundsourceclient($row['trans_id']);
     $age = $user->getAge($row['date_birth']);
 
     $bname = $row['bene_id'] ? [$row['b_lname'], $row['b_fname'], $row['b_mname'], $row['b_exname']] : ["", "", "", ""];
@@ -89,7 +90,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     $rowData = array_merge($rowData, [
         $row['mode'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
-        $row['subCategory'], $row['pantawid_bene']
+        $row['subCategory'], $row['pantawid_bene'], $fundsource
     ]);
 
     $sheet->fromArray($rowData, NULL, 'A' . $rowIndex++);

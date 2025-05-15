@@ -1910,6 +1910,29 @@
 			}
 			
 		}
+		public function getfundsourceclient($id) {
+			$query = "SELECT program_type, date_accomplished, other_program FROM tbl_transaction WHERE trans_id = '{$id}';";
+			$result = mysqli_query($this->db, $query);
+			$row = mysqli_fetch_assoc($result);
+			$data = "";
+
+			if($row["program_type"] == 1){
+				$data = "AKAP FUND ". date("Y", strtotime($row["date_accomplished"]));
+			}elseif($row["program_type"] == 0){
+				$data = "AICS FUND ". date("Y", strtotime($row["date_accomplished"]));
+			}elseif($row["program_type"] == "other"){
+				$data = $row["other_program"]. " FUND ".date("Y", strtotime($row["date_accomplished"]));
+			}else{
+				$data = "OTHER FUND ". date("Y",  strtotime($row["date_accomplished"]));
+			}
+			
+			if(empty($data)){
+				return ""; //pass as dimensional array
+			}else{
+				return $data;
+			}
+			
+		}
 
 		public function updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
