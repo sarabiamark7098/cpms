@@ -1,217 +1,106 @@
 <?php
-    include('../php/class.user.php');
-    $user = new User();
-    $file = date("F d Y", strtotime($_GET['date']));
-    $filename =  $file." Export";
-    if(isset($_GET['date'])){
-        $fromdate  = date("Y-m-d", strtotime($_GET['date']));
-     }
-     if(isset($_GET['date'])){
-        $todate=  date("Y-m-d", strtotime($_GET['date']));
-     }
-    $date1 = $fromdate." 00:00:00";
-    $date2 = $todate." 23:59:00";
-     
-    $office_loc = $_SESSION['f_office'];
+require '../vendor/autoload.php';
+include('../php/class.user.php');
 
-    
-    $count = 0;
-    $query= "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, date_accomplished, mode, bene_id, 
-        client_region, client_province, client_municipality, client_barangay, client_district,
-        lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-        b_lname, b_fname, b_mname, b_exname, cname, subCategory, pantawid_bene, status_client, COUNT(family.name) AS familycount
-        FROM client_data
-        INNER JOIN tbl_transaction USING (client_id)
-        LEFT OUTER JOIN beneficiary_data USING (bene_id)
-        INNER JOIN assessment USING (trans_id)
-        INNER JOIN assistance USING (trans_id)
-        LEFT JOIN family USING (trans_id)
-        LEFT OUTER JOIN gl USING (trans_id)
-        WHERE (Left(trans_id, 9) = '$office_loc') AND (date_accomplished BETWEEN '{$date1}' and '{$date2}') and status_client = 'Done' 
-        GROUP BY client_id, trans_id, date_entered, encoded_encoder, control_no, occupation, salary, 
-                date_accomplished, mode, bene_id, client_region, client_province, 
-                client_municipality, client_barangay, client_district, lastname, 
-                firstname, middlename, extraname, sex, civil_status, date_birth, 
-                mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, 
-                subCategory, pantawid_bene, status_client
-        ORDER BY tbl_transaction.date_entered ASC;";
-    
-    $result = mysqli_query($user->db,$query);
-   
-    $columnHeader = "Date Entered"."\t"."Entered By"."\t"."Client No"."\t"."Date Accomplished"."\t"."Region"."\t"."Province"."\t".
-                    "City/Municipality"."\t"."Barangay"."\t"."District"."\t"."LastName"."\t"."FirstName"."\t"."MiddleName"."\t".
-                    "ExtraName"."\t"."Sex"."\t"."CivilStatus"."\t"."DOB"."\t"."Age"."\t"."Number of Family Member"."\t"."Occupation"."\t"."Salary"."\t"."ModeOfAdmission"."\t"."Type of Assistance1"."\t".
-                    "Amount1"."\t"."Source of Fund1"."\t"."Type of Assistance2"."\t"."Amount2"."\t". "Source of Fund2"."\t"."ClientCategory".
-                    "\t"."CHARGING1"."\t"."CHARGING2"."\t"."CHARGING3"."\t"."CHARGING4"."\t"."CHARGING5"."\t"."CHARGING6"."\t"."CHARGING7"."\t".
-                    "CHARGING8"."\t"."CHARGING9"."\t"."CHARGING10"."\t"."CHARGING11"."\t"."CHARGING12"."\t"."MODE"."\t"."SERVICE PROVIDERS"."\t"."B. LAST NAME"."\t"."B. FIRST NAME"."\t"."B. MIDDLE NAME"."\t"
-                    ."B. EXT."."\t"."Sub Category"."\t"."Pantawid Beneficiary";
-    $setData='';
-    
-    while($row = mysqli_fetch_assoc($result))
-    {
-        $mode = "";
-        $fullname = $user->getuserFullname($row['encoded_encoder']);
-        $assistance = $user->getAssistanceData($row['trans_id']);
-        $fund = $user->getfundsourcedata($row['trans_id']);
-        $rowData = '';
-		$lname2 = $row['b_lname'];
-        $fname2 = $row['b_fname'];
-		$mname2 = $row['b_mname'];
-		$ename2 = $row['b_exname'];
-		if($row['bene_id']<>''){
-		$lname = $lname2;					
-		$fname = $fname2;					
-		$mname = $mname2;					
-		$ename = $ename2;					
-		}else{
-		$lname = "";					
-		$fname = "";					
-		$mname = "";					
-		$ename = "";						
-		}
-        $rowData =  $row['date_entered']         ."\t".
-                    $fullname                    ."\t".
-                    $row['control_no']            ."\t".
-                    $row['date_accomplished']    ."\t".
-                    $row['client_region']        ."\t".
-                    $row['client_province']      ."\t".
-                    $row['client_municipality']  ."\t".
-                    $row['client_barangay']      ."\t".
-                    $row['client_district']      ."\t".
-                    $row['lastname']             ."\t".
-                    $row['firstname']            ."\t".
-                    $row['middlename']           ."\t".
-                    $row['extraname']            ."\t".
-                    $row['sex']                  ."\t".
-                    $row['civil_status']         ."\t".
-                    $row['date_birth']           ."\t".
-                    $user->getAge($row['date_birth'])                 ."\t".
-                    $row['familycount']           ."\t".
-                    $row['occupation']           ."\t".
-                    $row['salary']           ."\t".
-                    $row['mode_admission']                            ."\t".
-                    $user->translateAss($assistance[1]['type'])      ."\t".
-                    $assistance[1]['amount']                         ."\t\t";
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-            if(isset($assistance[2])){
-                $mode = $assistance[2]['mode']; //mode sa 2nd assistance
-                $rowData .= 
-                        $user->translateAss($assistance[2]['type']) ."\t".
-                        $assistance[2]['amount']                    ."\t\t";
-            }else{
-                $rowData .= "\t\t\t";
-            }
-                $rowData .=
-                    $row['category']                        ."\t";
-				if(!empty($fund[1]['fundsource'])){
-				$rowData .= 
-					$fund[1]['fundsource']." - ".$fund[1]['fs_amount']					."\t";
-				} else {
-				$rowData .= 
-					$assistance[1]['fund']					."\t";
-				}   
-                if(!empty($fund[2]['fundsource'])){               	
-				$rowData .= 
-					$fund[2]['fundsource']." - ".$fund[2]['fs_amount']                  	."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                   
-                if(!empty($fund[3]['fundsource'])){               	
-				$rowData .= 
-					$fund[3]['fundsource']." - ".$fund[3]['fs_amount']                  	."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[4]['fundsource'])){               	
-				$rowData .= 
-					$fund[4]['fundsource']." - ".$fund[4]['fs_amount']                  	."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[5]['fundsource'])){               	
-				$rowData .= 
-					$fund[5]['fundsource']." - ".$fund[5]['fs_amount']                  	."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[6]['fundsource'])){               	
-				$rowData .= 
-					$fund[6]['fundsource']." - ".$fund[6]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[7]['fundsource'])){               	
-				$rowData .= 
-					$fund[7]['fundsource']." - ".$fund[7]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[8]['fundsource'])){               	
-				$rowData .= 
-					$fund[8]['fundsource']." - ".$fund[8]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[9]['fundsource'])){               	
-				$rowData .= 
-					$fund[9]['fundsource']." - ".$fund[9]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[10]['fundsource'])){               	
-				$rowData .= 
-					$fund[10]['fundsource']." - ".$fund[10]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[11]['fundsource'])){               	
-				$rowData .= 
-					$fund[11]['fundsource']." - ".$fund[11]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                if(!empty($fund[12]['fundsource'])){               	
-				$rowData .= 
-					$fund[12]['fundsource']." - ".$fund[12]['fs_amount']                     ."\t";
-                }else{
-                $rowData .= 
-					"\t";
-                }
-                $rowData .=  $row['mode']         ."\t".
-                    $row['cname']                    		."\t".
-					$lname			                        ."\t".
-                    $fname			                        ."\t".
-                    $mname          			            ."\t".
-                    $ename                     		        ."\t".	
-                    $row['subCategory']                     ."\t".
-                    $row['pantawid_bene'];
-                    
-        $setData .= trim(strtoupper($rowData))."\n"; //for another line of data
-        // print_r($rowData);
-        $count++;
+$user = new User();
+$office_loc = $_SESSION['f_office'];
+
+$date = $_GET['date'] ?? date('Y-m-d');
+$file = date("F d Y", strtotime($date));
+$filename =  $file . " Export";
+
+$fromdate = date("Y-m-d", strtotime($date));
+$todate = date("Y-m-d", strtotime($date));
+$date1 = $fromdate . " 00:00:00";
+$date2 = $todate . " 23:59:00";
+
+$query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, date_accomplished, mode, bene_id, 
+    client_region, client_province, client_municipality, client_barangay, client_district,
+    lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
+    b_lname, b_fname, b_mname, b_exname, cname, subCategory, pantawid_bene, status_client, COUNT(family.name) AS familycount
+    FROM client_data
+    INNER JOIN tbl_transaction USING (client_id)
+    LEFT OUTER JOIN beneficiary_data USING (bene_id)
+    INNER JOIN assessment USING (trans_id)
+    INNER JOIN assistance USING (trans_id)
+    LEFT JOIN family USING (trans_id)
+    LEFT OUTER JOIN gl USING (trans_id)
+    WHERE (Left(trans_id, 9) = '$office_loc') AND (date_accomplished BETWEEN '{$date1}' and '{$date2}') and status_client = 'Done' 
+    GROUP BY client_id, trans_id, date_entered, encoded_encoder, control_no, occupation, salary, 
+            date_accomplished, mode, bene_id, client_region, client_province, 
+            client_municipality, client_barangay, client_district, lastname, 
+            firstname, middlename, extraname, sex, civil_status, date_birth, 
+            mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, 
+            subCategory, pantawid_bene, status_client
+    ORDER BY tbl_transaction.date_entered ASC";
+
+$result = mysqli_query($user->db, $query);
+if (mysqli_num_rows($result) === 0) {
+    echo "<script>alert('NO TRANSACTION MADE ON THIS DATE!');
+    window.location.href='export.php';</script>";
+    exit;
+}
+
+// Initialize PhpSpreadsheet
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+
+// Column headers
+$headers = [
+    "Date Entered", "Entered By", "Client No", "Date Accomplished", "Region", "Province",
+    "City/Municipality", "Barangay", "District", "LastName", "FirstName", "MiddleName", "ExtraName",
+    "Sex", "CivilStatus", "DOB", "Age", "Number of Family Member", "Occupation", "Salary",
+    "ModeOfAdmission", "Type of Assistance1", "Amount1", "Source of Fund1",
+    "Type of Assistance2", "Amount2", "Source of Fund2", "ClientCategory",
+    "CHARGING1", "CHARGING2", "CHARGING3", "CHARGING4", "CHARGING5", "CHARGING6",
+    "CHARGING7", "CHARGING8", "CHARGING9", "CHARGING10", "CHARGING11", "CHARGING12",
+    "MODE", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
+    "Sub Category", "Pantawid Beneficiary"
+];
+$sheet->fromArray($headers, NULL, 'A1');
+
+// Populate data rows
+$rowIndex = 2;
+while ($row = mysqli_fetch_assoc($result)) {
+    $fullname = $user->getuserFullname($row['encoded_encoder']);
+    $assistance = $user->getAssistanceData($row['trans_id']);
+    $fund = $user->getfundsourcedata($row['trans_id']);
+    $age = $user->getAge($row['date_birth']);
+
+    $bname = $row['bene_id'] ? [$row['b_lname'], $row['b_fname'], $row['b_mname'], $row['b_exname']] : ["", "", "", ""];
+
+    $rowData = [
+        $row['date_entered'], $fullname, $row['control_no'], $row['date_accomplished'],
+        $row['client_region'], $row['client_province'], $row['client_municipality'], $row['client_barangay'],
+        $row['client_district'], $row['lastname'], $row['firstname'], $row['middlename'], $row['extraname'],
+        $row['sex'], $row['civil_status'], $row['date_birth'], $age, $row['familycount'],
+        $row['occupation'], $row['salary'], $row['mode_admission'],
+        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '', $assistance[1]['fund'] ?? '',
+        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '', $assistance[2]['fund'] ?? '',
+        $row['category']
+    ];
+
+    for ($i = 1; $i <= 12; $i++) {
+        $rowData[] = isset($fund[$i]['fundsource']) ? $fund[$i]['fundsource'] . ' - ' . $fund[$i]['fs_amount'] : '';
     }
-    if($count > 0){
-        header("Content-type: application/octet-stream");
-        header("Content-Disposition: attachment; filename=".$filename.".xls");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-        echo ucwords($columnHeader)."\n".$setData."\n";
-    }
-    else{
-        echo "<script>alert('NO TRANSACTION MADE ON THIS DATE!');
-		window.location.href='export.php';</script>";
-    }
-    
-   
+
+    $rowData = array_merge($rowData, [
+        $row['mode'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
+        $row['subCategory'], $row['pantawid_bene']
+    ]);
+
+    $sheet->fromArray($rowData, NULL, 'A' . $rowIndex++);
+}
+
+// Output to browser
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header("Content-Disposition: attachment;filename=\"{$filename}.xlsx\"");
+header('Cache-Control: max-age=0');
+
+$writer = new Xlsx($spreadsheet);
+$writer->save('php://output');
+exit;
 ?>
