@@ -170,11 +170,11 @@
                                     <td>";
                                     
                                     if($row['note'] == 'yes'){
-                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px;'> Serve</a>
-                                        <button class='btn btn-primary deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px;'> Decline</button>";
+                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px; width: 80px;'> Serve</a>
+                                        <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; width: 80px';> X </button>";
                                     } else {
-                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px;'> Serve</a>
-                                        <button class='btn btn-primary deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px;'>Decline<span class='badge badge-danger'>1</span></button>";
+                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px; width: 80px;'> Serve</a>
+                                        <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; width: 80px';> X <span class='badge badge-success'>1</span></button>";
                                     }
                     $output.=       "</td>
                             </tr>";
@@ -238,11 +238,11 @@
 									<td>{$getEncoder}</td>
 									<td>";
 									if($row['note'] == 'yes'){
-										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X</button>";
+										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X </button>";
 									} else {
-										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X <span class='badge badge-success'>1</span></button>";
+										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X <span class='badge badge-success'>1</span></button>";
 									}
 					$output.=       "</td>
 							</tr>";
@@ -259,11 +259,11 @@
                                 <td>{$getEncoder}</td>
                                 <td>";
                                 if($row['note'] == 'no'){
-                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X</button>";
+                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X</button>";
                                 } else {
-                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X <span class='badge badge-success'>1</span></button>";
+                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X <span class='badge badge-success'>1</span></button>";
                                 }
                 $output.=       "</td>
                         </tr>";
