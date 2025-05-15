@@ -1925,13 +1925,13 @@
 			}
 
 			if ($row["program_type"] == "1") {
-				$data = "AKAP FUND " . $year;
+				$data = "AKAP Fund " . $year;
 			} elseif ($row["program_type"] == "0") {
-				$data = "CURRENT FUND";
+				$data = "Current Fund";
 			} elseif ($row["program_type"] == "other") {
-				$data = $row["other_program"] . " FUND " . $year;
+				$data = $row["other_program"] . " Fund " . $year;
 			} else {
-				$data = "OTHER FUND " . $year;
+				$data = "Other Fund " . $year;
 			}
 
 			return $data = trim($data);
