@@ -49,33 +49,6 @@ $user = new User();
 <!DOCTYPE html>
 <html>
 	<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
-		<link rel="stylesheet" type="text/css" href="../css/main.css">
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">	
-		<link rel="stylesheet" type="text/css" href="../css/table.responsive.css">
-		<link rel="stylesheet" type="text/css" href="../style5.css">
-        
-		<script defer src="../js/solid.js"></script>
-		<script defer src="../js/fontawesome.js"></script>
-		<script src="../js/jquery.slim.min.js"></script>
-		<script src="../js/popper.min.js"></script>
-		<script src="../js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
-		<script type="text/javascript" src="../js/main.js"></script>
-		<script type="text/javascript" src="../js/PSGC.js"></script>
-		<script type="text/javascript" src="../js/jquery.min.js"></script>
-		
-		<!-- added -->
-		
-		<link rel="stylesheet" type="text/css" href="../datatables/datatables.css">
-		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
-		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
-		
         <style>
             input[type=checkbox]
             {
@@ -105,27 +78,27 @@ $user = new User();
 				<div class="form-group col-lg-3">
 				</div> -->
 				<div class="form-group col-lg-12">
-                  <input value="<?php echo $getsignatory['name_title']; ?>" placeholder="Signatory Title" id="title" name="title" type="text" class="form-control">
+                  <input value="<?php echo $getsignatory['name_title']; ?>" placeholder="Signatory Title" id="title" name="title" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
                   <label class="active" for="title">Signatory Title (e.g. Atty.)</label>
                 </div>
                 <div class="form-group col-lg-12">
-				  <input value="<?php echo $getsignatory['first_name']; ?>" placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required>
+				  <input value="<?php echo $getsignatory['first_name']; ?>" placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
 				  <label class="active" for="fname">First Name</label>
 				</div>
 				<div class="form-group col-lg-12">
-				  <input value="<?php echo $getsignatory['last_name']; ?>" placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required>
+				  <input value="<?php echo $getsignatory['last_name']; ?>" placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
 				  <label class="active" for="lname">Last Name</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" required>
+				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
 				  <label class="active" for="mi">Middle Initial</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['initials']; ?>" placeholder="Initials" id="initials" name="initials" type="text" class="form-control " required>
+				  <input value="<?php echo $getsignatory['initials']; ?>" placeholder="Initials" id="initials" name="initials" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
 				  <label class="active" for="initials">Initials(e.g. NTS)</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['position']; ?>" placeholder="Position" id="position" name="position" type="text" class="form-control" required>
+				  <input value="<?php echo $getsignatory['position']; ?>" placeholder="Position" id="position" name="position" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
 				  <label class="active" for="position">Position</label>
 				</div>
 				<div class="form-group col-lg-6">
@@ -173,8 +146,8 @@ $user = new User();
                 </div>
                 <div class="form-group col-lg-6">
                     <select placeholder="SPECIAL SIGNATORY" id="s_signatory" name="s_signatory" type="text" class="form-control" required>
-						<option value="0" <?php echo ($getsignatory['special_ini'] == "0"?"selected":"") ?>>De-Activate</option>
-						<option value="1" <?php echo ($getsignatory['special_ini'] == "1"?"selected":"") ?>>Active</option>
+						<option value="0" <?php echo ($getsignatory['special_ini'] == "0"?"selected":"") ?>>No</option>
+						<option value="1" <?php echo ($getsignatory['special_ini'] == "1"?"selected":"") ?>>Yes</option>
 					</select>
                     <label class="active" for="s_signatory">SPECIAL SIGNATORY</label>
                 </div>

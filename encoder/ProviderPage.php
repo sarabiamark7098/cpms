@@ -28,12 +28,15 @@
 		
 		$result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
 		
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Adding Company!');</script>";
 			echo "<script>window.location='ProviderPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
-		}
-		else{
+		}elseif($result == "exists"){
+            echo "<script>alert('Company Already Exist!');</script>";
+            echo "<script>window.location='ProviderPage.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+        }else{
 			echo "<script>alert('Error Adding Company!');</script>";
 			echo "<script>window.location='ProviderPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";

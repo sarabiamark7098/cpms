@@ -23,10 +23,7 @@
     }
     
     $datenow = date("Y-m-d");
-    // $datenow2 = date("Y-m-d");
-    $datenow = strtotime($datenow);
-    $datenow2 = date('Y-m-d', strtotime('+ 1 days', $datenow));
-    $datenow = date("Y-m-d");
+    $datenow2 = date('Y-m-d', strtotime('+ 1 days', strtotime(date("Y-m-d"))));
     if(!empty($_POST["d_1"]) && !empty($_POST["d_2"]) && !empty($_POST['emp'])){
         $date1 = $_POST["d_1"];
         $date2 = $_POST["d_2"];
@@ -114,25 +111,25 @@
                     <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
-                </li>
-                <li>
-                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
-                    <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
-                </li>
-                <li>
-                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
             </ul>
         </nav>

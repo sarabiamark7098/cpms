@@ -50,7 +50,7 @@
                                     <button type='submit' class='btn btn-outline-primary deep-sky' data-toggle='modal' data-target='#clientdata' data-id='". $row["trans_id"] ."' style='margin-bottom:5px; font-size: 13px; width: 120px'> View </button>";
                         if ($row['status_client'] != 'Decline') {
                             $output .= "<button type='submit' class='btn btn-outline-success deep-sky' data-toggle='modal' data-target='#reissue' data-id='". $row["trans_id"] ."' style='margin-bottom: 5px; font-size: 13px; width: 120px' hidden><i class='fa fa-print'></i>Update</button>";
-                            $output .= "<button type='submit' class='btn btn-outline-success deep-sky' onclick='re_print(`{$row['trans_id']}`)' style='margin-bottom: 5px; font-size: 13px; width: 120px'><i class='fa fa-print'></i> Re-print </button>";
+                            // $output .= "<button type='submit' class='btn btn-outline-success deep-sky' onclick='re_print(`{$row['trans_id']}`)' style='margin-bottom: 5px; font-size: 13px; width: 120px'><i class='fa fa-print'></i> Re-print </button>";
                             //$output .= "<button type='submit' class='btn btn-outline-success deep-sky' onclick='create_osap(`{$row['trans_id']}`)' style='margin-bottom: 5px; font-size: 13px; width: 120px'><i class='fa fa-print'></i> Print OSAP </button>";
                             $output .= "<button type='submit' class='btn btn-outline-danger deep-sky' data-toggle='modal' data-target='#cancelGL' data-id='". $row["trans_id"] ."' style='margin-right: 5px; font-size: 13px; width: 120px'><i class='fa fa-eraser'></i> Cancel GL </button>";
                         }

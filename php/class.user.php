@@ -212,9 +212,19 @@
 				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				
-				$query = "SELECT office_id FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
+				$query = "SELECT * FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
 				$result = mysqli_query($this->db,$query);
 				$num_row = mysqli_num_rows($result);
+				
+				if($num_row > 0){
+					$check = "SELECT * FROM field_office WHERE office_name = '{$officename}' OR office_accronym = '{$officeacronym}'";
+					$result = mysqli_query($this->db,$check);
+					$rows = mysqli_num_rows($result);
+					if($rows > 0){
+						return "exists";
+					}
+				}
+
 				$num_row = $num_row + 1;
 
 				$num = sprintf("%02d", $num_row);
@@ -225,11 +235,12 @@
 				$result = mysqli_query($this->db,$query);
 				
 				if($result) {
-					return $result;
+					return "success";
 				}
 				else{
 					return false;
 				}
+				
 			}
 
 			public function updateOffice($officename, $officeacronym, $descrip, $m, $fo_id){
@@ -242,6 +253,16 @@
 				$query = "SELECT * FROM field_office WHERE office_id LIKE '%".$row['code']."%';";
 				$result = mysqli_query($this->db,$query);
 				$num_row = mysqli_num_rows($result);
+
+				if($num_row > 0){
+					$check = "SELECT * FROM field_office WHERE office_name = '{$officename}' OR office_accronym = '{$officeacronym}'";
+					$result = mysqli_query($this->db,$check);
+					$rows = mysqli_num_rows($result);
+					if($rows > 0){
+						return "exists";
+					}
+				}
+
 				$num_row = $num_row + 1;
 
 				$num = sprintf("%02d", $num_row);
@@ -259,7 +280,7 @@
 				$result = mysqli_query($this->db,$query);
 				
 				if($result) {
-					return $result;
+					return "success";
 				}
 				else{
 					return false;
@@ -360,17 +381,24 @@
 			}
 
 			public function updateEmployee($empid, $id, $position, $status, $office){
-				if($position != "" && $status != ""){
-					$query = "UPDATE cpms_account SET empid = '{$id}', position = '{$position}', status = '{$status}', office_id = '{$office}' WHERE empid = '{$empid}'";
+				$query = "SELECT office_accronym FROM field_office WHERE office_id = '{$office}'";
+				$result = mysqli_query($this->db, $query);
+				$rowoffice = mysqli_fetch_assoc($result);
+
+
+				$query = "SELECT * FROM cpms_account WHERE empid = '{$empid}'";
+				$result = mysqli_query($this->db2, $query);
+				$row = mysqli_num_rows($result);
+
+				if($row <= 0){
+					$query = "INSERT INTO cpms_account(empid, position, status, office, office_id) VALUES 
+							('{$id}','{$position}','{$status}', '{$rowoffice['office_accronym']}','{$office}')";
+					$result = mysqli_query($this->db2, $query);
+				}else{
+					$query = "UPDATE cpms_account SET empid = '{$id}', position = '{$position}', status = '{$status}', office_id = '{$office}', office = '{$rowoffice['office_accronym']}' WHERE empid = '{$empid}'";
 					$result = mysqli_query($this->db2, $query);
 				}
-				$query = "SELECT empnum FROM  tbl_employment WHERE empid = '{$empid}'";
-				$result = mysqli_query($this->db2, $query);
-				$row = mysqli_fetch_assoc($result);
-
-				$query = "UPDATE tbl_employment SET empid = '{$id}' WHERE empid = '{$empid}'";
-				$result = mysqli_query($this->db2, $query);
-
+				
 				return $result;
 			}
 
@@ -727,12 +755,20 @@
 				$company_name = mysqli_escape_string($this->db,$company_name);
 				$company_address = mysqli_escape_string($this->db,$company_address);
 
+				//check if the company already exists
+				$query = "SELECT * FROM provider WHERE company_name = '{$company_name}' AND company_address = '{$company_address}'";
+				$result = mysqli_query($this->db,$query);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return "exists";
+				}
+
 				$query = "INSERT INTO provider(addressee_name, addressee_position, company_name, to_mention, company_address, action_executed_by) 
 				VALUES ('{$addressee_name}','{$addressee_position}','{$company_name}','{$addresseetomention}','{$company_address}','{$fullname}');";
 
 				$result = mysqli_query($this->db,$query);
 				if($result){
-					return true;
+					return "success";
 				}
 				else{					
 					return false;
@@ -796,12 +832,20 @@
 			}
 		
 			public function addsignatory($signatory_title, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_tree, $special_sign){	// Add Signatory
+				// check if the signatory already exists
+				$query = "SELECT * FROM signatory WHERE first_name = '{$signatory_firstname}' AND last_name = '{$signatory_lastname}' AND middle_I = '{$signatory_middleI}'";
+				$result = mysqli_query($this->db,$query);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return "exists";
+				}
+				
 				$query = "INSERT INTO signatory (name_title, first_name, last_name, middle_I, initials, position, option_GIS, option_GL, signatory_tree, special_ini) VALUES ('{$signatory_title}', '{$signatory_firstname}',"; 
 				$query .= "'{$signatory_lastname}', '{$signatory_middleI}', '{$signatory_initials}', '{$signatory_position}', '{$signatory_options_GIS}', '{$signatory_options_GL}', '{$signatory_tree}', '{$special_sign}');";
 				$result = mysqli_query($this->db,$query);
 
 				if($result){
-					return true;
+					return "success";
 				}
 				else{
 					return false;
@@ -1007,12 +1051,19 @@
 
 			//mag add siya ug GIS Assessment
 			public function addassessment($opt, $prob, $ass){	// Add Provider
+				
+				$check_query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}'";
+				$check_result = mysqli_query($this->db, $check_query);
+				if(mysqli_num_rows($check_result) > 0){
+					return "exists";
+				}
+				
 				$query = "INSERT INTO gisassessment (ass_opt, prob_pres, ass_socwork) VALUES ('{$opt}', '{$prob}', '{$ass}');";
 				
 				$result = mysqli_query($this->db,$query);
 				if($result){
 					
-					return true;
+					return "success";
 				}
 				else{
 					
@@ -1037,6 +1088,11 @@
 			
 			//update nya ang assessment
 			public function updateAssessment($newopt, $prob, $ass, $opt){	// UPDATE certain assessment
+				$check_query = "SELECT * FROM gisassessment WHERE ass_opt = '{$newopt}' AND ass_opt != '{$opt}'";
+				$check_result = mysqli_query($this->db, $check_query);
+				if(mysqli_num_rows($check_result) > 0){
+					return "exists";
+				}
 				$query = "UPDATE gisassessment SET ass_opt='{$newopt}', prob_pres='{$prob}', ass_socwork='{$ass}' WHERE ass_opt = '{$opt}';";
 				$result = mysqli_query($this->db,$query);
 				if($result){
@@ -1100,7 +1156,7 @@
 						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
 						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
 						LEFT JOIN client_data using (client_id)
-						LEFT JOIN beneficiary_data using (bene_id) WHERE (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+						LEFT JOIN beneficiary_data using (bene_id) WHERE (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59');";
 
 				$result = mysqli_query($this->db, $query);
 				return $result;
@@ -1111,7 +1167,7 @@
 						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
 						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
 						LEFT JOIN client_data using (client_id)
-						LEFT JOIN beneficiary_data using (bene_id) WHERE (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+						LEFT JOIN beneficiary_data using (bene_id) WHERE (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59');";
 
 				$result = mysqli_query($this->db, $query);
 				$row = mysqli_num_rows($result);
@@ -1124,7 +1180,7 @@
 						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
 						LEFT JOIN client_data using (client_id)
 						LEFT JOIN beneficiary_data using (bene_id)
-						WHERE (encoded_encoder = '{$emp}' OR encoded_socialWork = '{$emp}') AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
+						WHERE (encoded_encoder = '{$emp}' OR encoded_socialWork = '{$emp}') AND (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59');";
 
 				$result = mysqli_query($this->db, $query);
 				return $result;
@@ -1135,8 +1191,8 @@
 						beneficiary_data.b_mname, beneficiary_data.b_lname, beneficiary_data.b_exname FROM tbl_transaction
 						LEFT JOIN client_data using (client_id)
 						LEFT JOIN beneficiary_data using (bene_id)
-						WHERE (encoded_encoder = '{$emp}' OR encoded_socialWork = '{$emp}') AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}');";
-
+						WHERE (encoded_encoder = '{$emp}' OR encoded_socialWork = '{$emp}') AND (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59');";
+				
 				$result = mysqli_query($this->db, $query);
 				$row = mysqli_num_rows($result);
 				return $row;

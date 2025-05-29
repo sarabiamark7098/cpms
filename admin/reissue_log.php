@@ -88,7 +88,7 @@
                         <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                     </li>
                     <li>
-                        <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
+                        <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
                     </li>
                     <li>
                         <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
@@ -106,10 +106,7 @@
                         <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                     </li>
                     <li>
-                        <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                    </li>
-                    <li>
-                        <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                        <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                     </li>
                 </ul>
             </nav>

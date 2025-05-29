@@ -30,12 +30,16 @@
 		
         $result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
 		
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Adding Company!');</script>";
 			echo "<script>window.location='home.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 		}
-		else{
+        elseif($result == "exists"){
+            echo "<script>alert('Company Already Exist!');</script>";
+            echo "<script>window.location='home.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+    	}else{
 			echo "<script>alert('Error Adding Company!');</script>";
 			echo "<script>window.location='home.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
@@ -109,32 +113,27 @@
                     <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
-                </li>
-                <li>
-                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
-                    <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
-                </li>
-                <li>
-                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                </li>
+                <li>
+                    <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
             </ul>
-			<ul class="nav navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link tohover" data-toggle="modal" data-target="#clear">Clear Duplicate<i style="float: right;font-size:25px" class="fa fa-cogs"></i> </a>
-				</li>
-			</ul>
         </nav>
 
         <!-- Page Content Holder -->
