@@ -14,12 +14,15 @@ $user = new User();
 		$setcname = $_POST['companyname'];
 		$setcaddress = $_POST['companyaddress'];
 		$result = $user->updateProvider($setname, $setposition, $setid, $settomention, $setcname, $setcaddress);
-		if($result){
+		if($result == "success") {
 			echo "<script>alert('Successfully Updating Company!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='home.php';</script>";
-		}
-		else{
+		}elseif($result == "exists") {
+			echo "<script>alert('Company Already Exist!');</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+			echo "<script>window.location='home.php';</script>";
+		}else{
 			echo "<script>alert('Error Updating Company!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='home.php';</script>";

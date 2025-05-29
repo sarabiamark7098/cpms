@@ -726,12 +726,20 @@
 				$addresseetomention = ucwords(strtolower($addresseetomention));
 				$companyname = mysqli_escape_string($this->db,$companyname);
 				$companyaddress = mysqli_escape_string($this->db,$companyaddress);
+				
+				//check if the company already exists
+				$query = "SELECT * FROM provider WHERE company_name = '{$companyname}' AND company_address = '{$companyaddress}'";
+				$result = mysqli_query($this->db,$query);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return "exists";
+				}
 
 				$query = "UPDATE provider SET addressee_name='{$addresseename}', addressee_position='{$addresseeposition}', to_mention='{$addresseetomention}', company_name='{$companyname}', company_address='{$companyaddress}', action_executed_by='{$fullname}' WHERE company_id = {$companyid};";
 				
 				$result = mysqli_query($this->db,$query);
 				if($result){
-					return true;
+					return "success";
 				}
 				else {
 					return false;
