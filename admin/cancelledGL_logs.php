@@ -176,7 +176,7 @@
                                             echo "<tr>
                                                 <td scope='row' style='width: 20%'>" . $value['lastname'] .", ". $value['firstname'] ." ". (!empty($value['middlename'][0])?$value['middlename'][0] .". ":"") . (!empty($value['extraname'])?$value['extraname']:"") . "</td> 
                                                 <td scope='row' style='width: 20%'>". 
-                                                (!empty($value['b_lname'])?$value['b_lname'] .", ". $value['b_fname'] ." ". (!empty($value['b_mname'][0])?$value['b_mname'][0] .". ":"") . (!empty($value['b_exname'])?$value['b_exname']:""):$value['lastname'] .", ". $value['firstname'] ." ". $value['middlename'][0] .". ". (!empty($value['extraname'])?$value['extraname']:""))
+                                                (!empty($value['b_lname'])?$value['b_lname'] .", ". $value['b_fname'] ." ". (!empty($value['b_mname'][0])?$value['b_mname'][0] .". ":"") . (!empty($value['b_exname'])?$value['b_exname']:""):$value['lastname'] .", ". $value['firstname'] ." ". (!empty($value['middlename'][0])?$value['middlename'][0] .". ":"") . (!empty($value['extraname'])?$value['extraname']:""))
                                                 ." </td>
                                                 <td scope='row' style='width: 15%'>" . date('F j,Y', strtotime($value['date_cancelled'])) ." </td>
                                                 <td scope='row' style='width: 20%'>" . $user->getEncoder($value['empid']) ." </td>
