@@ -177,10 +177,10 @@
                             $d1 = "";
                             $d2 = "";
                             if (!empty($_POST['d_1'])){
-                                $d1 = $_POST['d_1'];
+                                $d1 = date("Y-m-d", $_POST['d_1']);
                             }
                             if (!empty($_POST['d_2'])) {
-                                $d2 = $_POST['d_2'];
+                                $d1 = date("Y-m-d", $_POST['d_2']);
                             }
                             $summarydt = $user->summaryDataTableEncoder($datenow, $datenow2, $d1, $d2);
                             $summarynumrows = $user->summaryGetNumRowsEnc($datenow, $datenow2, $d1, $d2);

@@ -3882,13 +3882,13 @@
 			FROM `client_data` 
 			LEFT JOIN tbl_transaction USING (client_id) 
 			LEFT JOIN beneficiary_data USING (bene_id)
-			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}')) ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59')) ORDER BY `tbl_transaction`.`date_accomplished` DESC";
 		}else{
 			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_socialWork, b_fname, b_mname, b_lname, b_exname 
 			FROM `client_data` 
 			LEFT JOIN tbl_transaction USING (client_id) 
 			LEFT JOIN beneficiary_data USING (bene_id)
-			where status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}') ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+			where status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow} 00:01:01' AND '{$datenow2} 23:59:59') ORDER BY `tbl_transaction`.`date_accomplished` DESC";
 		}
 		$result = mysqli_query($this->db, $query);
 		return $result;
@@ -3899,7 +3899,7 @@
 			FROM `client_data` 
 			LEFT JOIN tbl_transaction USING(client_id) 
 			LEFT JOIN beneficiary_data USING (bene_id)
-			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}'));";
+			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59'));";
 			$result = mysqli_query($this->db, $query);
 			$rownum = mysqli_num_rows($result);
 		}else{
@@ -3907,7 +3907,7 @@
 			FROM `client_data` 
 			LEFT JOIN tbl_transaction USING(client_id) 
 			LEFT JOIN beneficiary_data USING (bene_id)
-			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}'));";
+			where (status_client = 'Done' AND encoded_encoder = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow} 00:01:01' AND '{$datenow2} 23:59:59'));";
 			$result = mysqli_query($this->db, $query);
 			$rownum = mysqli_num_rows($result);
 		}
@@ -3920,13 +3920,13 @@
             FROM `client_data` 
             LEFT JOIN tbl_transaction USING (client_id) 
             LEFT JOIN beneficiary_data USING (bene_id)
-            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}')) ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59')) ORDER BY `tbl_transaction`.`date_accomplished` DESC";
         }else{
 			$query = "SELECT client_id, trans_id, lastname, firstname, middlename, extraname, date_accomplished, encoded_encoder, b_fname, b_mname, b_lname, b_exname 
             FROM `client_data` 
             LEFT JOIN tbl_transaction USING (client_id) 
             LEFT JOIN beneficiary_data USING (bene_id)
-            where status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}') ORDER BY `tbl_transaction`.`date_accomplished` DESC";
+            where status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow} 00:01:01' AND '{$datenow2} 23:59:59') ORDER BY `tbl_transaction`.`date_accomplished` DESC";
         }
 		$result = mysqli_query($this->db, $query);
 		return $result;
@@ -3937,7 +3937,7 @@
             FROM `client_data` 
             LEFT JOIN tbl_transaction USING (client_id) 
             LEFT JOIN beneficiary_data USING (bene_id)
-            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}'))";
+            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$date1} 00:01:01' AND '{$date2} 23:59:59'))";
             $result = mysqli_query($this->db, $query);
             $rownum = mysqli_num_rows($result);
         } else {
@@ -3945,7 +3945,7 @@
             FROM `client_data` 
             LEFT JOIN tbl_transaction USING (client_id) 
             LEFT JOIN beneficiary_data USING (bene_id)
-            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow}' AND '{$datenow2}'));";
+            where (status_client = 'Done' AND encoded_socialWork = '{$_SESSION['userId']}' AND (date_accomplished BETWEEN '{$datenow} 00:01:01' AND '{$datenow2} 23:59:59'));";
             $result = mysqli_query($this->db, $query);
             $rownum = mysqli_num_rows($result);
         }
