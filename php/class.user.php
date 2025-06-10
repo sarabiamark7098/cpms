@@ -645,9 +645,8 @@
 				}
 			}
 
-			public function updatesw($id, $position, $license, $expiry){
-				$query = "UPDATE tbl_employment SET emp_position = '{$position}' WHERE empid = '{$id}';";
-				$query .= "UPDATE cpms_account SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
+			public function updatesw($id, $license, $expiry){
+				$query = "UPDATE cpms_account SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
 
 				$result = mysqli_multi_query($this->db2, $query);
 				if($result){
@@ -1113,12 +1112,18 @@
 
 			//add fundsource addmin function
 			public function addFundS($funds,$desc) {
-				$query = "INSERT INTO tbl_fundsource(fundsource, fs_description) VALUES ('{$funds}', '{$desc}');";
+				$query = "SELECT * FROM tbl_fundsource WHERE fundsource = '{$funds}';";
 				$result = mysqli_query($this->db, $query);
-				if($result){
-					return true;
+				if(mysqli_num_rows($result)>0){
+					return "exists";
 				}else{
-					return false;
+					$query = "INSERT INTO tbl_fundsource(fundsource, fs_description) VALUES ('{$funds}', '{$desc}');";
+					$result = mysqli_query($this->db, $query);
+					if($result){
+						return "success";
+					}else{
+						return false;
+					}
 				}
 			}
 			
@@ -1149,13 +1154,32 @@
 			}
 
 			public function UpdateFundsource($id, $funds, $desc) {
-				$query = "UPDATE tbl_fundsource SET fundsource = '{$funds}', fs_description = '{$desc}' WHERE id = '{$id}';";
-
+				$query = "SELECT * FROM tbl_fundsource WHERE id = '{$id}';";
 				$result = mysqli_query($this->db, $query);
-				if($result){
-					return true;
-				}else{
+				$rows = mysqli_fetch_assoc($result);
+				if(!$rows){
 					return false;
+				}else{
+					// Check if the fundsource already exists
+					$check_query = "SELECT * FROM tbl_fundsource WHERE fundsource = '{$funds}' AND id != '{$id}';";
+					$check_result = mysqli_query($this->db, $check_query);
+					if(mysqli_num_rows($check_result) > 0){
+						return "exists"; // Fundsource already exists
+					}else{
+						// If the fundsource does not exist, proceed with the update
+						if($rows['fundsource'] == $funds && $rows['fs_description'] == $desc){
+							return "nochange"; // No changes made
+						}else{
+							$query = "UPDATE tbl_fundsource SET fundsource = '{$funds}', fs_description = '{$desc}' WHERE id = '{$id}';";
+
+							$result = mysqli_query($this->db, $query);
+							if($result){
+								return "success";
+							}else{
+								return false;
+							}
+						}
+					}
 				}
 			}
 

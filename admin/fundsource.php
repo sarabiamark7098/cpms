@@ -26,12 +26,15 @@
 		$result = $user->addFundS($fundsource, $description);
 		
 		
-		if($result){
+		if($result == "success") {
 			echo "<script>alert('Successfully Adding Fund Source!');</script>";
 			echo "<script>window.location='fundsource.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
-		}
-		else{
+		}elseif($result == "exists") {
+            echo "<script>alert('Fund Source Already Exist!');</script>";
+            echo "<script>window.location='fundsource.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+        }else{
 			echo "<script>alert('Error Adding Fund Source!');</script>";
 			echo "<script>window.location='fundsource.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";

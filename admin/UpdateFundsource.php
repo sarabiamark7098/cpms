@@ -9,12 +9,19 @@ $user = new User();
 		$fundsource = $_POST['fundsource'];
 		$description = $_POST['fsdescription'];
 		$result = $user->UpdateFundsource($setid, $fundsource, $description);
-		if($result){
+		if($result=="success") {
 			echo "<script>alert('Successfully Updating Fund Source!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='fundsource.php';</script>";
-		}
-		else{
+		}elseif($result=="exists") {
+			echo "<script>alert('Fund Source Already Exist!');</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+			echo "<script>window.location='fundsource.php';</script>";
+		}elseif($result=="nochange") {
+			echo "<script>alert('No Changes Made!');</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+			echo "<script>window.location='fundsource.php';</script>";
+		}else{
 			echo "<script>alert('Error Updating Fund Source!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='fundsource.php';</script>";
