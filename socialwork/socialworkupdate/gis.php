@@ -81,7 +81,7 @@ if (!$_SESSION['login']) {
 		<link rel="icon" type="image/png" href="../../images/icons/ciu.ico"/>
 		<link rel="stylesheet" type="text/css" href="../../css/gis.css">
         <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css"> 
-        <link rel="stylesheet" type="text/css" href="../../css/font-awesome.min.css">
+        <!-- <link rel="stylesheet" type="text/css" href="../../css/font-awesome.min.css"> -->
         
         <script defer src="../../js/solid.js"></script>
         <script defer src="../../js/fontawesome.js"></script>
@@ -308,6 +308,7 @@ if (!$_SESSION['login']) {
                         </div>
                     </div>
                 </div><br>
+                
                 <div class="row">
                     <div class=col-12>
                         <div class="card">
@@ -544,14 +545,14 @@ if (!$_SESSION['login']) {
                                         <div class="col-1">
                                             <input class="form-control" id="inputAge" type="number" max="99" placeholder="Edad">
                                         </div>
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <input class="form-control" id="inputOccupation" type="text" placeholder="Trabaho" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                         </div>
                                         <div class="col-2">
                                             <input class="form-control currencyMaskedInput" id="inputSalary" type="text" placeholder="Buwanang Sahod">
                                         </div>
                                         <div class="col-1">
-                                            <button type="button" class="btn btn-primary" onclick="addFamilyRow()">Add Family Member</button>
+                                            <button type="button" class="btn btn-outline-primary" onclick="addFamilyRow()">+</button>
                                         </div>
                                     </div>
 
@@ -962,24 +963,30 @@ if (!$_SESSION['login']) {
 								</div> 
                             </div><br>
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">SELF HELP AND CLIENT EFFORTS</label>
-                                <div class="col-1">
+                                <label class="col-12 text-left font-weight-bold" style="font-size: 17px;">SELF HELP AND CLIENT EFFORTS</label>
+
+                                <!-- First Item -->
+                                <div class="col-12 col-md-1 d-flex justify-content-center align-items-start mb-2 mb-md-0"></div>
+                                <div class="col-12 col-md-1 d-flex justify-content-center align-items-start mb-2 mb-md-0">
+                                    <input type="checkbox" class="form-check-input mt-1" id="selfhelp1" name="selfhelp1" value="1" <?php echo (isset($selfHelp[1]) ? 'checked' : '') ?>>
                                 </div>
-                                <div class="col-1">
-                                    <input type="checkbox" class="col-lg-12" id="selfhelp1" name="selfhelp1" value="1" <?php echo (isset($selfHelp[1])?'checked':'') ?>>
-								</div> 
-                                <div class="col-4">
-								    <label class="col-lg-12 label text-left" style="font-size: 17px">Successfully sought employment opportunities or explored additional income sources</label>
-                                </div> 
-                                <div class="col-1">
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="selfhelp1" class="form-check-label" style="font-size: 16px;">
+                                        Successfully sought employment opportunities or explored additional income sources
+                                    </label>
                                 </div>
-                                <div class="col-1">
-                                    <input type="checkbox" class="col-lg-12" id="selfhelp2" name="selfhelp2" value="2" <?php echo (isset($selfHelp[2])?'checked':'') ?>>
-								</div> 
-                                <div class="col-4">
-								    <label class="col-lg-12 label text-left" style="font-size: 17px">Successfully reached out to relevant organizations or agencies for financial assistance or support</label>
-                                </div> 
-                            </div><br>
+
+                                <!-- Second Item -->
+                                <div class="col-12 col-md-1 d-flex justify-content-center align-items-start mb-2 mb-md-0"></div>
+                                <div class="col-12 col-md-1 d-flex justify-content-center align-items-start mb-2 mb-md-0">
+                                    <input type="checkbox" class="form-check-input mt-1" id="selfhelp2" name="selfhelp2" value="2" <?php echo (isset($selfHelp[2]) ? 'checked' : '') ?>>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <label for="selfhelp2" class="form-check-label" style="font-size: 16px;">
+                                        Successfully reached out to relevant organizations or agencies for financial assistance or support
+                                    </label>
+                                </div>
+                            </div>
                             <div class="row">
 								<label class="col-sm-12 label text-left" style="font-size: 17px">VULNERABILITY AND RISK FACTORS</label>
                                 <div class="col-12" style="margin-bottom: 8px;">
