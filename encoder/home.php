@@ -808,27 +808,5 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
             });
         });
 
-        function copyaddressclient() {
-            reg = document.getElementById('creg').value;
-			prov = document.getElementById('cprov').value;
-			muni = document.getElementById('client_city').value;
-            brgy = document.getElementById('cbrgy').value;
-            dist = document.getElementById('client_district').value;
-            str = document.getElementById('cstr').value;
-            // console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
-
-			document.getElementById('breg').value = reg;
-			document.getElementById('bprov').value = prov;
-			document.getElementById('beneficiary_city').value = muni;
-            document.getElementById('bbrgy').value = brgy;
-            document.getElementById('beneficiary_district').value = dist;
-            document.getElementById('bstr').value = str;
-            
-			get_b_Region_sw(reg);
-			get_b_Province_sw(prov);
-			get_b_Municipality_sw(muni);
-			get_b_Barangay_sw(brgy);
-		}
-
         </script>
 </html>

@@ -104,7 +104,7 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input list="municipalityClist" name="municipality" type="text" id="cmuni" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_municipality']?>" onChange="get_c_Municipality(this)" required>
+							<input list="municipalityClist" name="municipality" type="text" id="client_city" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_municipality']?>" onChange="get_c_Municipality(this)" required>
 							<label>Municipality</label>
 							<datalist id="municipalityClist">
 							</datalist>
@@ -118,12 +118,12 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="street" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_street']?>">
+							<input id="cstr" name="street" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_street']?>">
 							<label>Street/Purok</label>
 						</div>
 						<div class="form-group col-lg-6">
 							<select name="district" id="client_district" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
-								<option value=""  <?php (($client['client_district']=="")?"selected":"") ?>>Select District</option>
+								<option value="<?php echo (!empty($client['client_district'])??"") ?>"  <?php (($client['client_district']=="")?"selected":"") ?>>Select District</option>
 								<?php
 									$getdistrict = $user->getdistrictlist();
 									//Loop through results
@@ -148,12 +148,30 @@ $user = new User();
 	$(function () {
 		reg = document.getElementById('creg').value;
 		prov = document.getElementById('cprov').value;
-		muni = document.getElementById('cmuni').value;
+		muni = document.getElementById('client_city').value;
 		brgy = document.getElementById('cbrgy').value;
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+	
+		get_c_Region(document.getElementById('creg'));
+		get_c_Province(document.getElementById('cprov'));
+		get_c_Municipality(document.getElementById('client_city'));
+		get_c_Barangay(document.getElementById('cbrgy'));
 
-		get_c_Region_sw(reg);
-		get_c_Province_sw(prov);
-		get_c_Municipality_sw(muni);
-		get_c_Barangay_sw(brgy);
+		document.getElementById('creg').value = reg;
+		document.getElementById('cprov').value = prov;
+		document.getElementById('client_city').value = muni;
+		document.getElementById('cbrgy').value = brgy;
+		document.getElementById('cstr').value = str;
+
+		setTimeout(() => {
+			const bDist = document.getElementById('client_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	});
 </script>

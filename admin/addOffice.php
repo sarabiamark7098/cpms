@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-12">
-                        <input list="regionClist" id="creg" name="regionname" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_admin_Region(this)" required>
+                        <input list="regionClist" id="creg" name="regionname" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required>
                         <datalist id="regionClist">
                         <?php
                             $getregions = $user->optionregion();
@@ -26,7 +26,7 @@
                         </datalist>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input list="provinceClist" id="provincename" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_admin_Province(this)" required>
+                        <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" required>
                         <datalist id="provinceClist">
                         </datalist>
                     </div>

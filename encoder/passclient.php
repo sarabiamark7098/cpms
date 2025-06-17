@@ -149,45 +149,8 @@ $user = new User();
 		<script type="text/javascript" src="../js/main.js"></script>
 		<script type="text/javascript" src="../js/PSGC.js"></script>
 		<script type="text/javascript" src="../js/jquery.min.js"></script>
-
-		<script type="text/javascript">
-		$(document).ready(function(){
-             $('#client_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
-                var txt = $('#client_city').val(); //Assigning search box value to javascript variable.
-				if(txt != ''){ //Validating, if "name" is empty.
-                    $.ajax({
-                        type: "post", //method to use
-                        url: "district.php", //ginapasa  sa diri nga file and data
-                        data: {search:txt}, //mao ni nga data
-                        success: function(html){  //If result found, this funtion will be call
-							var json = JSON.parse(html);
-                            $('#client_district').val( json["Client_district"]);
-                        }
-                    });
-                }else{
-                $('#search_result').html(""); 
-                }
-            });
-        });
-		$(document).ready(function(){	
-             $('#beneficiary_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
-                var txt = $('#beneficiary_city').val(); //Assigning search box value to javascript variable.
-				if(txt != ''){ //Validating, if "name" is empty.
-                    $.ajax({
-                        type: "post", //method to use
-                        url: "district.php", //ginapasa  sa diri nga file and data
-                        data: {search:txt}, //mao ni nga data
-                        success: function(html){  //If result found, this funtion will be call
-							var json = JSON.parse(html);
-                            $('#beneficiary_district').val( json["Client_district"]);
-                        }
-                    });
-                }else{
-                $('#search_result').html(""); 
-                }
-            });
-        });
-		</script>
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
+		
 	</head>
 	<body>
 	<div class="body">
@@ -316,7 +279,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" value="<?php echo $getClient['salary'] ?>" class="form-control mr-sm-2 b" name="salary" placeholder="Salary" >
+				<input type="number" value="<?php echo $getClient['salary'] ?>" class="form-control mr-sm-2 b currencyMaskedInput" name="salary" placeholder="Salary" >
 				<label>Salary</label>
 				</div>
 			</div>
@@ -369,7 +332,7 @@ $user = new User();
 			<h4 class="text-center">Address</h4>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="regionClist" id="reg" value="<?php echo $getClient['client_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required >
+				<input list="regionClist" id="creg" value="<?php echo $getClient['client_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required >
 					<datalist id="regionClist">
 					<?php
 						$getregions = $user->optionregion();
@@ -388,7 +351,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="provinceClist" id="prov" value="<?php echo $getClient['client_province'] ?>" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required >
+				<input list="provinceClist" id="cprov" value="<?php echo $getClient['client_province'] ?>" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required >
 				<datalist id="provinceClist">
 				</datalist>
 				<label>Province</label>
@@ -396,7 +359,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="municipalityClist" id="muni" value="<?php echo $getClient['client_municipality'] ?>" type="text" id="client_city" class="form-control mr-sm-2 b" name="Ccity" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required >
+				<input list="municipalityClist" value="<?php echo $getClient['client_municipality'] ?>" id="client_city" class="form-control mr-sm-2 b" name="Ccity" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required >
 				<datalist id="municipalityClist">
 				</datalist>
 				<label>Municipality</label>
@@ -404,7 +367,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="barangayClist" id="brgy" value="<?php echo $getClient['client_barangay'] ?>" type="text" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" onChange="get_c_Barangay" required >
+				<input list="barangayClist" id="cbrgy" value="<?php echo $getClient['client_barangay'] ?>" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required >
 				<datalist id="barangayClist">
 				</datalist>
 				<label>Barangay</label>
@@ -414,8 +377,8 @@ $user = new User();
 				<div class="col-sm-12">
 				
 				<select id="client_district" class="form-control mr-sm-2 b" name="Cdistrict" placeholder="District">
-					<option value="" <?php echo ($getClient['client_district']==''?'selected':'')?>>Select District</option>
-					<<?php
+					<option value="<?php echo !empty($getClient['client_district'])??"" ?>" <?php echo ($getClient['client_district']==''?'selected':'')?>>Select District</option>
+					<?php
 						$getdistrict = $user->getdistrictlist();
 						//Loop through results
 						foreach($getdistrict as $index => $value){
@@ -431,7 +394,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" id="str" value="<?php echo $getClient['client_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok" >
+				<input type="text" id="cstr" value="<?php echo $getClient['client_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok" >
 				<label>Street</label>
 				</div>
 			</div>
@@ -656,37 +619,64 @@ $user = new User();
 	});
 
 	$(function () {
-		reg = document.getElementById('reg').value;
-		prov = document.getElementById('prov').value;
-		muni = document.getElementById('muni').value;
-		brgy = document.getElementById('brgy').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
-		get_c_Region_sw(reg);
-		get_c_Province_sw(prov);
-		get_c_Municipality_sw(muni);
-		get_c_Barangay_sw(brgy);
+		reg = document.getElementById('creg').value;
+		prov = document.getElementById('cprov').value;
+		muni = document.getElementById('client_city').value;
+		brgy = document.getElementById('cbrgy').value;
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+	
+		get_c_Region(document.getElementById('creg'));
+		get_c_Province(document.getElementById('cprov'));
+		get_c_Municipality(document.getElementById('client_city'));
+		get_c_Barangay(document.getElementById('cbrgy'));
+
+		document.getElementById('creg').value = reg;
+		document.getElementById('cprov').value = prov;
+		document.getElementById('client_city').value = muni;
+		document.getElementById('cbrgy').value = brgy;
+		document.getElementById('cstr').value = str;
+
+		setTimeout(() => {
+			const bDist = document.getElementById('client_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	});
 
 	function copyaddressclient() {
-		reg = document.getElementById('reg').value;
-		prov = document.getElementById('prov').value;
-		muni = document.getElementById('muni').value;
-		brgy = document.getElementById('brgy').value;
-		dist = document.getElementById('client_district').value;
-		str = document.getElementById('str').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
+		reg = document.getElementById('creg').value;
+		prov = document.getElementById('cprov').value;
+		muni = document.getElementById('client_city').value;
+		brgy = document.getElementById('cbrgy').value;
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
+		get_b_Region(document.getElementById('creg'));
+		get_b_Province(document.getElementById('cprov'));
+		get_b_Municipality(document.getElementById('client_city'));
+		get_b_Barangay(document.getElementById('cbrgy'));
+		
 		document.getElementById('breg').value = reg;
 		document.getElementById('bprov').value = prov;
 		document.getElementById('beneficiary_city').value = muni;
 		document.getElementById('bbrgy').value = brgy;
-		document.getElementById('beneficiary_district').value = dist;
 		document.getElementById('bstr').value = str;
 		
-		get_b_Region_sw(reg);
-		get_b_Province_sw(prov);
-		get_b_Municipality_sw(muni);
-		get_b_Barangay_sw(brgy);
+		setTimeout(() => {
+			const bDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	}
 
 	$(function () {
@@ -718,6 +708,18 @@ $user = new User();
 			}
 		});
 	});
+        
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
 
 </script>
 </html>

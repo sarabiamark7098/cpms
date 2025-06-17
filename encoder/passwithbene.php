@@ -94,9 +94,7 @@ $user = new User();
 		<script type="text/javascript" src="../js/main.js"></script>
 		<script type="text/javascript" src="../js/PSGC.js"></script>
 		<script type="text/javascript" src="../js/jquery.min.js"></script>
-		
-		<!-- added -->
-		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function(){
              $('#client_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
@@ -264,7 +262,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" value="<?php echo $getClient['salary'] ?>" class="form-control mr-sm-2 b" name="salary" placeholder="Salary">
+				<input type="number" value="<?php echo $getClient['salary'] ?>" class="form-control mr-sm-2 b currencyMaskedInput" name="salary" placeholder="Salary">
 				<label>Salary</label>
 				</div>
 			</div>
@@ -378,7 +376,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" id="str" value="<?php echo $getClient['client_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok">
+				<input type="text" id="cstr" value="<?php echo $getClient['client_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok">
 				<label>Street</label>
 				</div>
 			</div>
@@ -625,43 +623,98 @@ $user = new User();
 		prov = document.getElementById('cprov').value;
 		muni = document.getElementById('client_city').value;
 		brgy = document.getElementById('cbrgy').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
-		get_c_Region_sw(reg);
-		get_c_Province_sw(prov);
-		get_c_Municipality_sw(muni);
-		get_c_Barangay_sw(brgy);
-		
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+	
+		get_c_Region(document.getElementById('creg'));
+		get_c_Province(document.getElementById('cprov'));
+		get_c_Municipality(document.getElementById('client_city'));
+		get_c_Barangay(document.getElementById('cbrgy'));
+
+		document.getElementById('creg').value = reg;
+		document.getElementById('cprov').value = prov;
+		document.getElementById('client_city').value = muni;
+		document.getElementById('cbrgy').value = brgy;
+		document.getElementById('cstr').value = str;
+
+		setTimeout(() => {
+			const bDist = document.getElementById('client_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
+
 		breg = document.getElementById('breg').value;
 		bprov = document.getElementById('bprov').value;
 		bmuni = document.getElementById('beneficiary_city').value;
 		bbrgy = document.getElementById('bbrgy').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
-		get_b_Region_sw(breg);
-		get_b_Province_sw(bprov);
-		get_b_Municipality_sw(bmuni);
-		get_b_Barangay_sw(bbrgy);
-	});
+		bdist = document.getElementById('beneficiary_district').value.trim();
+		bstr = document.getElementById('bstr').value;
+	
+
+		document.getElementById('creg').value = breg;
+		document.getElementById('cprov').value = bprov;
+		document.getElementById('client_city').value = bmuni;
+		document.getElementById('cbrgy').value = bbrgy;
+		document.getElementById('cstr').value = bstr;
+
+		benedist = document.getElementById('beneficiary_district').value.trim();
+
+		get_b_Region(document.getElementById('breg'))
+		get_b_Province(document.getElementById('bprov'))
+		get_b_Municipality(document.getElementById('beneficiary_city'))
+		get_b_Barangay(document.getElementById('bbrgy'))
 		
+		
+		document.getElementById('breg').value = breg;
+		document.getElementById('bprov').value = bprov;
+		document.getElementById('beneficiary_city').value = bmuni;
+		document.getElementById('bbrgy').value = bbrgy;
+		document.getElementById('bstr').value = bstr;
+
+		setTimeout(() => {
+			const beDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < beDist.options.length; i++) {
+				if (beDist.options[i].value.trim() === benedist) {
+					beDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
+	});
+
 	function copyaddressclient() {
 		reg = document.getElementById('creg').value;
 		prov = document.getElementById('cprov').value;
 		muni = document.getElementById('client_city').value;
 		brgy = document.getElementById('cbrgy').value;
-		dist = document.getElementById('client_district').value;
-		str = document.getElementById('str').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
+		get_b_Region(document.getElementById('creg'));
+		get_b_Province(document.getElementById('cprov'));
+		get_b_Municipality(document.getElementById('client_city'));
+		get_b_Barangay(document.getElementById('cbrgy'));
+		
 		document.getElementById('breg').value = reg;
 		document.getElementById('bprov').value = prov;
 		document.getElementById('beneficiary_city').value = muni;
 		document.getElementById('bbrgy').value = brgy;
-		document.getElementById('beneficiary_district').value = dist;
 		document.getElementById('bstr').value = str;
 		
-		get_b_Region_sw(reg);
-		get_b_Province_sw(prov);
-		get_b_Municipality_sw(muni);
-		get_b_Barangay_sw(brgy);
+		setTimeout(() => {
+			const bDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	}
 
 	$(function () {

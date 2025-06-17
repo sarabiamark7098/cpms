@@ -44,10 +44,10 @@
             <div class="modal-body">
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <input id="creg" value="<?php echo (!empty($getregions)?$getregions['r_name']." / ". $getregions['psgc_code']:"")?>" name="regionname" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_admin_Region(this)" readonly>
+                        <input value="<?php echo (!empty($getregions)?$getregions['r_name']." / ". $getregions['psgc_code']:"")?>" name="regionname" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" readonly>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input list="regionClist" id="creg" name="updateregionname" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_admin_Region(this)" required>
+                        <input list="regionClist" id="creg" name="updateregionname" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required>
                         <datalist id="regionClist">
                         <?php
                             $getregions = $user->optionregion();
@@ -62,17 +62,17 @@
                         </datalist>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input id="provincename" value="<?php echo (!empty($getprovince)?$getprovince['p_name']." / ". $getprovince['psgc_code']:"")?>" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_admin_Province(this)" readonly>
+                        <input value="<?php echo (!empty($getprovince)?$getprovince['p_name']." / ". $getprovince['psgc_code']:"")?>" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" readonly>
                         
                     </div>
                     <div class="form-group col-lg-6">
-                        <input list="provinceClist" id="provincename" type="text" class="form-control mr-sm-2 b" name="updateprovince" placeholder="Province" onChange="get_admin_Province(this)" required>
+                        <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="updateprovince" placeholder="Province" onChange="get_c_Province(this)" required>
                         <datalist id="provinceClist">
                         </datalist>
                     </div>
                     
                     <div class="form-group col-lg-6">
-                        <input type="text" value="<?php echo (!empty($getmunicipal)?$getmunicipal['m_name']." / ". $getmunicipal['psgc_code']:"")?>" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" readonly>
+                        <input type="text" value="<?php echo (!empty($getmunicipal)?$getmunicipal['m_name']." / ". $getmunicipal['psgc_code']:"")?>" class="form-control mr-sm-2 b" name="city" placeholder="City or Municipality" readonly>
                     </div>
                     <div class="form-group col-lg-6">
                         <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="updatecity" placeholder="City or Municipality" required>

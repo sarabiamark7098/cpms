@@ -1,10 +1,10 @@
 <?php
-	include('../php/class.user.php');
+	include('../../php/class.user.php');
 	$user = new User();
 ?>
 <?php
 	if(!$_SESSION['login']){
-		header('Location:../index.php');
+		header('Location:../../index.php');
 	}
 ?>
 <?php

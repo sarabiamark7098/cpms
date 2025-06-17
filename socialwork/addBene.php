@@ -120,9 +120,9 @@ $user = new User();
 
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <input  list="regionClist" name="region" id="newreg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_c_Region(this)" required>
+                        <input  list="regionBlist" name="region" id="breg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_b_Region(this)" required>
                         <label>Region</label>
-                        <datalist id="regionClist">
+                        <datalist id="regionBlist">
                             <?php
                                 $getregions = $user->optionregion();
                                     //Loop through results
@@ -137,35 +137,35 @@ $user = new User();
                         </datalist>
                     </div>
 					<div class="form-group col-lg-6">
-                        <input list="provinceClist" name="province" id="newprov" type="text" class="form-control" onChange="get_c_Province(this)" style="border: 1px solid #b1acac; text-transform: none;" required/>
+                        <input list="provinceBlist" name="province" id="bprov" type="text" class="form-control" onChange="get_b_Province(this)" style="border: 1px solid #b1acac; text-transform: none;" required/>
                         <label>Province</label>
-                        <datalist id="provinceClist">
+                        <datalist id="provinceBlist">
 				        </datalist>
 				    </div>
                 </div>
 
 				<div class="row" style="margin-top: 2%; height:10%;">
 					<div class="form-group col-lg-6">
-						<input list="municipalityClist" name="municipality" id="newmuni" type="text" onChange="get_c_Municipality(this)" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
+						<input list="municipalityBlist" name="municipality" id="beneficiary_city" type="text" onChange="get_b_Municipality(this)" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
 						<label>Municipality</label>
-						<datalist id="municipalityClist">
+						<datalist id="municipalityBlist">
 						</datalist>
 					</div>
 					<div class="form-group col-lg-6">
-						<input list="barangayClist" name="barangay" id="newbrgy" type="text" class="form-control" onChange="get_c_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
+						<input list="barangayBlist" name="barangay" id="bbrgy" type="text" class="form-control" onChange="get_b_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
 						<label>Barangay</label>
-						<datalist id="barangayClist">
+						<datalist id="barangayBlist">
 						</datalist>
 					</div>
 				
 				</div>			
 				<div class="row" style="margin-top: 2%; height:10%;">
 					<div class="form-group col-lg-6">
-						<input  name="street" type="text" id="newstr" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
+						<input  name="street" type="text" id="bstr" class="form-control" style="border: 1px solid #b1acac; text-transform: none;">
 						<label>Street/Purok</label>
 					</div>
 					<div class="form-group col-lg-6">
-						<select id="newdist" class="form-control mr-sm-2 b" name="district" placeholder="Beneficiary District" style="border: 1px solid #b1acac; text-transform: none;">
+						<select id="beneficiary_district" class="form-control mr-sm-2 b" name="district" placeholder="Beneficiary District" style="border: 1px solid #b1acac; text-transform: none;">
 							<option value="">Select Beneficiary District</option>
 							<?php
 								$getdistrict = $user->getdistrictlist();
@@ -189,25 +189,34 @@ $user = new User();
 
 <script type="text/javascript">
 
-	function copyaddress(){
-		reg = document.getElementById('oldreg').value;
-		prov = document.getElementById('oldprov').value;
-		muni = document.getElementById('oldmuni').value;
-		brgy = document.getElementById('oldbrgy').value;
-		str = document.getElementById('oldstr').value;
-		dist = document.getElementById('olddist').value;
+	$(function () {
+		reg = document.getElementById('breg').value;
+		prov = document.getElementById('bprov').value;
+		muni = document.getElementById('beneficiary_city').value;
+		brgy = document.getElementById('bbrgy').value;
+		dist = document.getElementById('beneficiary_district').value.trim();
+		str = document.getElementById('bstr').value;
+	
+		get_b_Region(document.getElementById('breg'));
+		get_b_Province(document.getElementById('bprov'));
+		get_b_Municipality(document.getElementById('beneficiary_city'));
+		get_b_Barangay(document.getElementById('bbrgy'));
 
-		document.getElementById('newreg').value = reg;
-		document.getElementById('newprov').value = prov;
-		document.getElementById('newmuni').value = muni;
-		document.getElementById('newbrgy').value = brgy
-		document.getElementById('newstr').value = str;
-		document.getElementById('newdist').value = dist;
-		
-		get_c_Region_sw(reg);
-		get_c_Province_sw(prov);
-		get_c_Municipality_sw(muni);
-		get_c_Barangay_sw(brgy);
-	}
+		document.getElementById('breg').value = reg;
+		document.getElementById('bprov').value = prov;
+		document.getElementById('beneficiary_city').value = muni;
+		document.getElementById('bbrgy').value = brgy;
+		document.getElementById('bstr').value = str;
+
+		setTimeout(() => {
+			const bDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
+	});
 
 </script>
