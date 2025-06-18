@@ -4513,13 +4513,13 @@
 			$ini .= $rows['initials'];
 
 		}if($sign_tree == "CURRENTHEAD11" || $_SESSION['f_office'] == "112509-01"){ // davao oriental
-			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD12'";
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD11'";
 			$result = mysqli_query($this->db,$query);
 			$rows = mysqli_fetch_assoc($result);
 			$ini .= $rows['initials'];
 
 		}if($sign_tree == "CURRENTHEAD12" || $_SESSION['f_office'] == "118602-01"){ // davao occidental
-			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD11'";
+			$query = "SELECT initials FROM signatory WHERE signatory_tree = 'CURRENTHEAD12'";
 			$result = mysqli_query($this->db,$query);
 			$rows = mysqli_fetch_assoc($result);
 			$ini .= $rows['initials'];
