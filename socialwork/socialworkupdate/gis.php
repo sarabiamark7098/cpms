@@ -7,8 +7,10 @@ if (isset($_GET['id'])) {
     $id = $user->getClient_id($_GET['id']); //id sa client
     $client = $user->clientData($_GET['id']); //kuha sa mga data sa bene/client data
     $name = $client["lastname"] .", ". $client["firstname"] . " " . (!empty($client["middlename"])? $client["middlename"] . " ":"").(!empty($client['extraname'])?$client['extraname'] . ".":"");
-    $bname = $client["b_lname"] . ", ". $client["b_fname"] . " " . (!empty($client["b_mname"])? $client["b_mname"] . " ":"").(!empty($client['b_exname'])?$client['b_exname'] . ".":"");
-       
+    $bname = "";
+    if(!empty($client["b_lname"])){
+        $bname = $client["b_lname"] . ", ". $client["b_fname"] . " " . (!empty($client["b_mname"])? $client["b_mname"] . " ":"").(!empty($client['b_exname'])?$client['b_exname'] . ".":"");
+    }
     $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
     $client_assistance = $user->getGISAssistance($_GET['id']);
     $familyData = $user->getclientFam($_GET['id']);

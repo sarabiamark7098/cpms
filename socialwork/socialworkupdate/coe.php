@@ -11,12 +11,19 @@
         $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
         $client_fam = $user->getclientFam($_GET['id']);
         // print_r($client_fam);
-        $GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
-        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
-        $GISsignatoryPosition = $GISsignatory['position'];
+        $GISsignatoryName = "";
+        $GISsignatoryPosition = "";
+        if(!empty($gis['signatory_id'])){
+            $GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
+            $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+            $GISsignatoryPosition = $GISsignatory['position'];
+        }
         
 		$name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"]." ". (!empty($client['extraname'])?$client['extraname'].".":"");
-        $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname'].".":""); 
+        $bname = "";
+        if(!empty($client['b_fname'])){
+            $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname'].".":""); 
+        }
         if(!empty($client["b_lname"])){
 			$today = date("Y-m-d");
 			$diff = date_diff(date_create($client['b_bday']), date_create($today));
@@ -70,10 +77,13 @@
         }
         $type = strval($client_assistance[1]['type']);
         $rec_amount = 50001;
-		
-		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
-        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). (!empty($GLsignatory['first_name'])?$GLsignatory['first_name']:"") ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). (!empty($GLsignatory['last_name'])?$GLsignatory['last_name']:""));
-        $GLsignatoryPosition = !empty($GLsignatory['position'])?$GLsignatory['position']:"";
+		$GLsignatoryName = "";
+        $GLsignatoryPosition = "";
+        if(!empty($client['signatory_GL'])){
+            $GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+            $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). (!empty($GLsignatory['first_name'])?$GLsignatory['first_name']:"") ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). (!empty($GLsignatory['last_name'])?$GLsignatory['last_name']:""));
+            $GLsignatoryPosition = !empty($GLsignatory['position'])?$GLsignatory['position']:"";
+        }
 		
         $mode1 = $client_assistance[1]['mode'];
         $cash = $user->getCash($_GET['id']); //cash table
