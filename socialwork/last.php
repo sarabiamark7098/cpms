@@ -255,8 +255,8 @@
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
                                                         foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). $value['first_name'] . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  $value['last_name'];
-                                                            echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "-" . $value['signatory_id'] ."'></option>";
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])?$value['first_name']:"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])?$value['last_name']:"");
+                                                            echo "<option value='" . strtoupper((!empty($signatoryname))? $signatoryname : "") . "-" . (!empty($value['position'])?$value['position']:"") . "-" . (!empty($value['signatory_id'])?$value['signatory_id'] : "") ."'></option>";
                                                         }
                         echo                        '</datalist>
                                                 </div>
@@ -321,9 +321,10 @@
                                                     <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'">
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
+                                                        
                                                         foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])??"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])??"");
-                                                            echo "<option value='" . strtoupper((!empty($signatoryname))??"") . "-" . (!empty($value['position'])??"") . "-" . (!empty($value['signatory_id'])??"") ."'></option>";
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])?$value['first_name']:"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])?$value['last_name']:"");
+                                                            echo "<option value='" . strtoupper((!empty($signatoryname))? $signatoryname : "") . "-" . (!empty($value['position'])?$value['position']:"") . "-" . (!empty($value['signatory_id'])?$value['signatory_id'] : "") ."'></option>";
                                                         }
                         echo                        '</datalist>
                                                 </div>
