@@ -255,40 +255,14 @@
     </div>
     <div id="gis" hidden>
         
-        <?php // include('gis_sheet.php');
+        <?php 
             include('gisv2_print.php');
         ?>
 
     </div>
     <div id="coe" hidden>
-        
         <?php 
-        // if(substr_count(strval($client_assistance[1]['type']), "Medic") > 0){
-        //             include("coe_med.php"); 
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Trans") > 0){
-        //             include("coe_trans.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Food Sub") > 0){
-        //             include("coe_food.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Burial") > 0){
-        //             include("coe_burial.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Educ") > 0){
-        //             include("coe_educ.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Cash") > 0){
-        //             include("coe_cash.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Non") > 0){
-        //             include("coe_non_food.php");
-        //         }
-
-        //         if(!empty(substr_count(strval($client_assistance[2]['type']), "Food Sub") > 0)){
-		// 			include("coe_food.php");
-        //         }
-            if($mode1 == "CAV" || $mode2 == "CAV"){
-				include('coev2_print_cav.php');
-			} else if($mode1 == "GL" || $mode2 == "GL"){
-				include('coev2_print_gl.php');
-			} else {
-				include('coev2_print.php');
-			}
+            include('coev2_print.php');
 		?>
     </div>
     <div>
