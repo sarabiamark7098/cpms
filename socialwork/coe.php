@@ -779,7 +779,7 @@
                                             <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH CERTIFICATE").'> Death Certificate</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "FUNERAL").'> Funeral Contact</div>
+                                            <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "FUNERAL").'> Funeral Contract</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="t_perm" id="t_perm" value="TRANSFER PERMIT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "TRANSFER PERMIT").'> Transfer Permit</div>
