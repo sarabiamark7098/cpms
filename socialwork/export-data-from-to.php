@@ -1,15 +1,17 @@
 <?php
-require '../vendor/autoload.php';
 include('../php/class.user.php');
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
-session_start();
 $user = new User();
 
 $fromdate = isset($_GET['fromdate']) ? date("Y-m-d", strtotime($_GET['fromdate'])) : null;
 $todate = isset($_GET['todate']) ? date("Y-m-d", strtotime($_GET['todate'])) : null;
+
+// Validate that dates are provided
+if (empty($fromdate) || empty($todate)) {
+    echo "<script>alert('Please provide both From Date and To Date!');
+    window.location.href='export.php';</script>";
+    exit;
+}
 
 $from_date = $fromdate . " 00:00:00";
 $to_date = $todate . " 23:59:00";
@@ -39,9 +41,27 @@ $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no,
 
 $result = mysqli_query($user->db, $query);
 
-$spreadsheet = new Spreadsheet();
-$sheet = $spreadsheet->getActiveSheet();
+// Check if any rows are returned before proceeding
+if (mysqli_num_rows($result) === 0) {
+    echo "<script>alert('NO TRANSACTION MADE ON THIS DATE RANGE!');
+    window.location.href='export.php';</script>";
+    exit;
+}
 
+// Prepare the filename
+$filename = date("M d", strtotime($fromdate)) . "-" . date("M d Y", strtotime($todate)) . " Export.csv";
+
+// Set headers for CSV download
+header('Content-Type: text/csv');
+header("Content-Disposition: attachment; filename=\"$filename\"");
+header('Cache-Control: no-cache, no-store, must-revalidate'); // Standard cache control
+header('Pragma: no-cache'); // For HTTP 1.0
+header('Expires: 0'); // Proxies
+
+// Open a file handle for outputting to the browser
+$output = fopen('php://output', 'w');
+
+// Column headers
 $headers = [
     "Date Entered", "Entered By", "Client No", "Date Accomplished", "Region", "Province",
     "City/Municipality", "Barangay", "District", "LastName", "FirstName", "MiddleName", "ExtraName",
@@ -52,16 +72,15 @@ $headers = [
     "ClientCategory", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
     "Sub-Category", "Pantawid Beneficiary"
 ];
+// Write the headers to the CSV file with explicit escape parameter
+fputcsv($output, $headers, ',', '"', '\\');
 
-$sheet->fromArray($headers, NULL, 'A1');
-
-$rowNum = 2;
-
+// Populate data rows
 while ($row = mysqli_fetch_assoc($result)) {
     $fullname = $user->getuserFullname($row['encoded_encoder']);
     $assistance = $user->getAssistanceData($row['trans_id']);
     $fundsource = $user->getfundsourceclient($row['trans_id']);
-    $fund = $user->getfundsourcedata($row['trans_id']);
+    // $fund = $user->getfundsourcedata($row['trans_id']); // This variable seems unused, consider removing or confirming its purpose
 
     $lname = $row['bene_id'] ? $row['b_lname'] : "";
     $fname = $row['bene_id'] ? $row['b_fname'] : "";
@@ -91,23 +110,11 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['category'], $row['cname'], $lname, $fname, $mname, $ename, $row['subCategory'], $row['pantawid_bene']
     ];
 
-    $sheet->fromArray($rowData, NULL, 'A' . $rowNum);
-    $rowNum++;
+    // Write the row data to the CSV file with explicit escape parameter
+    fputcsv($output, $rowData, ',', '"', '\\');
 }
 
-if ($rowNum > 2) {
-    $filename = date("M d", strtotime($from_date)) . "-" . date("M d Y", strtotime($to_date)) . " Export.xlsx";
-    
-    ob_end_clean(); 
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header("Content-Disposition: attachment; filename=\"$filename\"");
-    header('Cache-Control: max-age=0');
-
-    $writer = new Xlsx($spreadsheet);
-    $writer->save('php://output');
-    exit;
-} else {
-    echo "<script>alert('NO TRANSACTION MADE ON THIS DATE!');
-    window.location.href='export.php';</script>";
-}
+// Close the file handle
+fclose($output);
+exit;
 ?>

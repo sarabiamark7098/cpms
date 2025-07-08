@@ -518,11 +518,11 @@
                                         <label style="font-size: 14px; margin-left: 10px;">FHONA</label>
                                     </div>
                                     <div class="col-6">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 2? '&#x2714;':'') ?>'>
+                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 5? '&#x2714;':'') ?>'>
                                         <label style="font-size: 14px; margin-left: 10px;">SC</label>
                                     </div>
                                     <div class="col-6" style="margin-top: 3px;">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 3? '&#x2714;':'') ?>'>
+                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 2? '&#x2714;':'') ?>'>
                                         <label style="font-size: 14px; margin-left: 10px;">WEDC</label>
                                     </div>
                                     <div class="col-6">
@@ -530,7 +530,7 @@
                                         <label style="font-size: 14px; margin-left: 10px;">YNSP</label>
                                     </div>
                                     <div class="col-6" style="margin-top: 3px;">
-                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 5? '&#x2714;':'') ?>'>
+                                        <input class="check-box text-center" style="margin-left: 10%; width: 20px; height: 20px;  font-size: 14px; padding:0; text-indent: 1px; border: 1px solid black;" type="text" value='<?php echo ($gis['target_sector'] == 3? '&#x2714;':'') ?>'>
                                         <label style="font-size: 14px; margin-left: 10px;">PWD</label>
                                     </div>
                                     <div class="col-6">
