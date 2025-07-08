@@ -16,7 +16,15 @@
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
-    
+        $otherinfo = $user->getOtherInformations($_GET['id']);
+        $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+        $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+        $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
+        
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 			
         $am = str_replace(",","",$client_assistance[1]['amount']);
@@ -59,22 +67,36 @@
         $city = explode("/", $client['client_municipality']);
         $brgy = explode("/", $client['client_barangay']);
         $province = explode("/", $client['client_province']);
-        $bcity = explode("/", $client['b_municipality']); 
-        $bbrgy = explode("/", $client['b_barangay']);
-        $bprovince = explode("/", $client['b_province']);
-
-        //if street kay way sulod ma blank lg sta
-		if(!empty($client['b_street'])){
-			$b_add .= $client['b_street'].", ";
-		}
-	
+        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
+        
 		if(!empty($client['client_street'])){
             $c_add .= $client['client_street'] .", ";
             $cash_add .= $client['client_street'] .", ";
 		}
         
-        $b_add .= $bbrgy[0] .", ". $bcity[0].", ". $bprovince[0]; //client final address
-        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
+        //if street kay way sulod ma blank lg sta
+		if(!empty($client['b_street'])){
+			$b_add .= $client['b_street'].", ";
+		}
+	    if(!empty($client['b_barangay'])){
+            $bbrgy = explode("/", $client['b_barangay']);
+            $b_add .= $bbrgy[0] .", "; 
+        }else{
+            $bbrgy[0] = "";
+        }
+        if(!empty($client['b_municipality'])){
+            $bcity = explode("/", $client['b_municipality']);
+            $b_add .= $bcity[0].", "; 
+        }else{
+            $bcity[0] = "";
+        }
+        if(!empty($client['b_province'])){
+            $bprovince = explode("/", $client['b_province']);
+            $b_add .= $bprovince[0];
+        }else{
+            $bprovince[0] = "";
+        }
+       
         $cash_add .= $brgy[0] .", ". $city[0]; //address for CAV
         
         //magkuhag data if ever naa na s database
@@ -113,14 +135,20 @@
 		$soc_worker = $user->getuserInfo($_SESSION['userId']);
         //fullname of social worker
         $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
-        
-		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
-        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
-        $GISsignatoryPosition = $GISsignatory['position'];
-        
-		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
-        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
-        $GLsignatoryPosition = $GLsignatory['position'];
+        $GISsignatoryName = "";
+        $GISsignatoryPosition = "";
+        if(!empty($gis['signatory_id'])){
+            $GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
+            $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+            $GISsignatoryPosition = $GISsignatory['position'];
+        }
+        $GLsignatoryName = "";
+        $GLsignatoryPosition = "";
+        if(!empty($client['signatory_GL'])){
+            $GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+            $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
+            $GLsignatoryPosition = $GLsignatory['position'];
+        }
 		
 		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
         //fullname of social worker
@@ -227,8 +255,8 @@
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
                                                         foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). $value['first_name'] . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  $value['last_name'];
-                                                            echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "-" . $value['signatory_id'] ."'></option>";
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])?$value['first_name']:"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])?$value['last_name']:"");
+                                                            echo "<option value='" . strtoupper((!empty($signatoryname))? $signatoryname : "") . "-" . (!empty($value['position'])?$value['position']:"") . "-" . (!empty($value['signatory_id'])?$value['signatory_id'] : "") ."'></option>";
                                                         }
                         echo                        '</datalist>
                                                 </div>
@@ -277,12 +305,12 @@
                                                 <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
+                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(($gl['cname'])??"").'" placeholder="Providers Company Name" required><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.$gl['to_mention'].'" placeholder="Addressee to Mention in GL" hidden><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name"><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.(($gl['to_mention'])??"").'" placeholder="Addressee to Mention in GL" hidden><br>
                                             <div class="row">
                                                 <div class="checkbox col-3">
                                                     <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -293,9 +321,10 @@
                                                     <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'">
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
+                                                        
                                                         foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). $value['first_name'] . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  $value['last_name'];
-                                                            echo "<option value='" . strtoupper($signatoryname) . "-" . $value['position'] . "-" . $value['signatory_id'] ."'></option>";
+                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])?$value['first_name']:"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])?$value['last_name']:"");
+                                                            echo "<option value='" . strtoupper((!empty($signatoryname))? $signatoryname : "") . "-" . (!empty($value['position'])?$value['position']:"") . "-" . (!empty($value['signatory_id'])?$value['signatory_id'] : "") ."'></option>";
                                                         }
                         echo                        '</datalist>
                                                 </div>
@@ -335,13 +364,14 @@
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printa" onclick="printAttest()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
                     <?php } ?>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
+                    <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print IS" name="printis" onclick="printInformationSheet()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
 					<div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"primary":"secondary" ?> btn-block no-print"  value="Print GL" name="print" onclick="printGLNow()" <?php echo (($mode1=="GL" || $mode2=="GL") && $gl != "")?"":"disabled" ?>>
                     </div>
-                    <div class="col">
+                    <!-- <div class="col">
                         <input type="button" class="btn btn-<?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")? "primary":"secondary" ?> btn-block no-print"  value="Print CAV" name="print" onclick="printCAVNow()" <?php echo (($mode1=="CAV" || $mode2=="CAV") && $cash != "")?"":"disabled" ?>>
-                    </div>
+                    </div> -->
                 </div><br>
 				<div class="row">
                     <?php if(((strtolower(!empty($client_assistance[1]['type'])) == "cash assistance") && (!empty($client_assistance[2]['type']) == "")) || ((strtolower(!empty($client_assistance[1]['type'])) == "non-food items") && (!empty($client_assistance[2]['type']) == ""))){ ?>
@@ -361,48 +391,42 @@
                     <div class="col"><input type="button" class="btn btn-success btn-block no-print" id="done" value="Done" onclick="confirmdone(<?php echo "'".$id."','".$_GET['id']."'" ?>)"/></div>
                 </div>
             </form>
-            <div id="gl" class="printable" hidden><br>
-                <?php     
-                    if($mode1 == "GL"){
-                        include('gl_sheet.php');
-                    }
-                    if(!empty($mode2)){
-                        if($mode2 == "GL"){
-                            include('gl_sheet2.php');
-                        }
-                    }
-                ?>
-            </div>
-            <div id="cav" class="printable" hidden><br>
-                <?php
-                    if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-                        include('cash.php');
-                    }
-                ?>
-            </div>
-            <div id="attest" hidden><br>
-                <?php
-                        include('attestation.php');
-                ?>
-            </div>
-			<div id="gisce" hidden><br>
-			<?php 
-				 include("gisv2_print.php"); 
-			?>
-			</div>
-			<div id="coe" class="printable" hidden>
-			<?php 
-                if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-				    include("coev2_print_cav.php"); 
-                }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
-				    include("coev2_print_gl.php"); 
-                }else{
-				    include("coev2_print.php"); 
+        <?php  
+            $printables = [
+                'gl' => [
+                    'file' => 'gl_sheet.php',
+                    'condition' => ($mode1 == "GL")
+                ],
+                'cav' => [
+                    'file' => 'cash.php',
+                    'condition' => ($mode1 == "CAV")
+                ],
+                'attest' => [
+                    'file' => 'attestation.php',
+                    'condition' => true
+                ],
+                'gisce' => [
+                    'file' => 'gis_print.php',
+                    'condition' => true
+                ],
+                'isheet' => [
+                    'file' => 'informationSheet_print.php',
+                    'condition' => true
+                ],
+                'coe' => [
+                    'file' => 'coe_print.php',
+                    'condition' => true
+                ]
+            ];
+
+            foreach ($printables as $id => $item) {
+                echo '<div id="' . $id . '" class="printable" hidden><br>';
+                if ($item['condition']) {
+                    include($item['file']);
                 }
-				
-				?>
-			</div>
-        </div>
+                echo '</div>';
+            }
+        ?>
     </body>
     <?php 
         if(!empty($gl || $cash)|| ($mode1=="DS" && !empty($mode2)=="DS") || ($mode1=="DS" && empty($mode2)) || (empty($mode1) && $mode2=="DS")){

@@ -83,7 +83,8 @@
                     <h5><small>&emsp;CPMS Field&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</small></h5>
                     </label>
                     <div class="form-group col-lg-6">
-                        <select id="designation" name="designation" type="text" class="form-control" required>
+                        <select id="designation" name="designation" type="text" class="form-control" required readonly disabled>
+                            <option value="" <?php echo ($getrequest['request_position'] == ''?"selected":"") ?>>Select Designation</option>
                             <option value="Admin" <?php echo ($getrequest['request_position'] == 'Admin'?"selected":"") ?>>Admin</option>
                             <option value="Encoder" <?php echo ($getrequest['request_position'] == 'Encoder'?"selected":"") ?>>Encoder</option>
                             <option value="Social Worker" <?php echo ($getrequest['request_position'] == 'Social Worker'?"selected":"") ?>>Social Worker</option>
@@ -92,7 +93,7 @@
                         <label class="active" for="designation">Designate Position</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <select id="office" name="office" type="text" class="form-control" required>
+                        <select id="office" name="office" type="text" class="form-control" required readonly disabled>
                             <option value="" selected></option>
                             <?php
                             $getoffice = $user->optionoffice();

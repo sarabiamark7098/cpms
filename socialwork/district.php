@@ -15,7 +15,7 @@
         $result = mysqli_query($user->db, $sql);
 		$rows = mysqli_fetch_assoc($result);
 		
-		$sql = "SELECT d_id FROM municipality WHERE psgc_code LIKE '{$rows[m]}%'";
+		$sql = "SELECT d_id FROM municipality WHERE psgc_code LIKE '{$rows['m']}%'";
 		$result = mysqli_query($user->db, $sql);
 		$rows = mysqli_fetch_assoc($result);
 
@@ -58,7 +58,7 @@
         $result = mysqli_query($user->db, $sql);
 		$rows = mysqli_fetch_assoc($result);
 		
-		$sql = "SELECT d_id FROM municipality WHERE psgc_code LIKE '{$rows[m]}%'";
+		$sql = "SELECT d_id FROM municipality WHERE psgc_code LIKE '{$rows['m']}%'";
 		$result = mysqli_query($user->db, $sql);
 		$rows = mysqli_fetch_assoc($result);
 

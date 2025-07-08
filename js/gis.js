@@ -154,35 +154,34 @@ function typerequire() {
 }
 
 function verifyfirst() {
-    t1 = '<?php echo $client_assisstance[1]['
-    type '] ?>';
-    p1 = '<?php echo $client_assisstance[1]['
-    purpose '] ?>';
-    a1 = '<?php echo $client_assisstance[1]['
-    amount '] ?>';
-    m1 = '<?php echo $client_assisstance[1]['
-    mode '] ?>';
-    f1 = '<?php echo $fundsourcedata['
-    fundsource1 '] ?>';
+    t1 = '<?php echo $client_assisstance[1][' + type +'] ?>';
+    p1 = '<?php echo $client_assisstance[1][' +
+    purpose +'] ?>';
+    a1 = '<?php echo $client_assisstance[1][' +
+    amount +'] ?>';
+    m1 = '<?php echo $client_assisstance[1][' +
+    mode +'] ?>';
+    f1 = '<?php echo $fundsourcedata[' +
+    fundsource1 +'] ?>';
     $fund2 = '';
     $fund3 = '';
     $fund4 = '';
     $fund5 = '';
     if (!empty($fundsourcedata['fundsource2'])) {
-        fund2 = '<?php echo $fundsourcedata['
-        fundsource2 '] ?>';
+        fund2 = '<?php echo $fundsourcedata[' +
+        fundsource2 +'] ?>';
     }
     if (!empty($fundsourcedata['fundsource3'])) {
-        fund3 = '<?php echo $fundsourcedata['
-        fundsource3 '] ?>';
+        fund3 = '<?php echo $fundsourcedata[' +
+        fundsource3 +'] ?>';
     }
     if (!empty($fundsourcedata['fundsource4'])) {
-        fund4 = '<?php echo $fundsourcedata['
-        fundsource4 '] ?>';
+        fund4 = '<?php echo $fundsourcedata[' +
+        fundsource4 +'] ?>';
     }
     if (!empty($fundsourcedata['fundsource5'])) {
-        fund5 = '<?php echo $fundsourcedata['
-        fundsource5 '] ?>';
+        fund5 = '<?php echo $fundsourcedata[' +
+        fundsource5 +'] ?>';
     }
     t2 = $('#type1').val();
     p2 = $('#pur1').val();
@@ -232,16 +231,16 @@ function verifyfirst() {
 }
 
 function verifysecond() {
-    t1 = '<?php echo $client_assisstance[2]['
-    type '] ?>';
-    p1 = '<?php echo $client_assisstance[2]['
-    purpose '] ?>';
-    a1 = '<?php echo $client_assisstance[2]['
-    amount '] ?>';
-    m1 = '<?php echo $client_assisstance[2]['
-    mode '] ?>';
-    f1 = '<?php echo $client_assisstance[2]['
-    fund '] ?>';
+    t1 = '<?php echo $client_assisstance[2]['+
+    type +'] ?>';
+    p1 = '<?php echo $client_assisstance[2]['+
+    purpose +'] ?>';
+    a1 = '<?php echo $client_assisstance[2]['+
+    amount +'] ?>';
+    m1 = '<?php echo $client_assisstance[2]['+
+    mode +'] ?>';
+    f1 = '<?php echo $client_assisstance[2]['+
+    fund +'] ?>';
     t2 = $('#type2').val();
     p2 = $('#pur2').val();
     a2 = $('#a2').val();

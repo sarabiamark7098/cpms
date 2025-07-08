@@ -1,26 +1,6 @@
-<html>
-<body>
- <style>
+<style>
     
-	@page {
-		size: 8.3in 11.7in;
-		margin: .10in /* change the margins as you want them to be. */
-	}
-
-	@media print{
-		html, body {
-			width: 210mm;
-			height: 297mm;
-		}
-	}
-    
-	.header{
-		background-color: black !important;
-		color: white;
-		-webkit-print-color-adjust: exact; 
-		font-size: 14px;
-	}
-    .footer{
+	.attestfooter{
         position:absolute;
         bottom:0;
         width:90%;
@@ -28,65 +8,83 @@
     }
 	
  </style>
-    <div class="container" id="attestation_v1print" style="font-size:12px; padding:2%; font-family: Arial: sans-serif; padding-left:70px; padding-right: 80px;">
+    <div class="container" id="attestation_v1print" style=" width:100%; font-family: Arial; font-size:12px; padding:2%; padding-left:70px; padding-right: 80px;">
         
         <!--HEADER-->
-        <div class="row" style="margin-top:40px;">
+        <div class="row" style="margin-top:0px;">
             <div class="col-6">
-                <img src="../../images/dswd_olog.png" alt="" width="230px" height="60px">
-                <img src="../../images/AICS.png" alt="" width="70px" height="60px">
-                <img src="../../images/BP.png" alt="" width="70px" height="60px">
+            <img src="../../images/DSWD Field Office XI.png" alt="" width="230px" height="80px">
             </div>
             <div class="col-6 ml-md-auto" style="color: #000000; ">
-                <p class="text-center" style="font-size: 14px; margin-top: 0px;">DSWD-PMB-GF-015 | REV 02 | 08 JAN 2024</p>
+                <!-- <p class="text-center" style="font-size: 14px; margin-top: 0px;">DSWD-PMB-GF-015 | REV 02 | 08 JAN 2024</p> -->
             </div>
         </div>
         <div class="row">
-            <div class="col-12" style="text-align: right; margin-top: 20px;">
+            <div class="col-12" style="text-align: right; margin-top: 10px;">
                 <b style="font-size: 24px">ANNEX A</b>                
             </div>
         </div>
         <div class="row">
-            <div class="col-12" style="text-align: center; margin-top: 100px;">
-                <b style="font-size: 30px">CERTIFICATE OF ATTESTATION</b>                
+            <div class="col-12" style="text-align: center; margin-top: 40px;">
+                <b style="font-size: 28px">CERTIFICATE OF ATTESTATION</b>                
             </div>
         </div>
-        <div class="row" style="margin-bottom: 90px;">
-            <div class="col-12 justify" style="margin-top: 40px; text-indent: 50px; font-size: 24px;">
-                <p>This is to certify that Mr./Mrs. <b><?php echo strtoupper($name) ?></b>, <b><?php echo $age_client?></b> years old residing 
-                at <b><?php echo strtoupper($c_add) ?></b> is currently working or has employment history as 
-                <b><?php echo strtoupper($client['occupation']) ?></b> in <b><?php echo strtoupper($client['agency']) ?></b>
-                earning <b><?php echo "Php ". number_format($client['salary']) ?></b> per month. 
-                </p><br>
-                <p>Based on the assessment and validation conducted by the undersigned, the abovementioned income remains
-                    insufficient to meet the family's daily sustenance for <b><?php echo ucwords(strtolower($client_assistance[1]['purpose'])) ?></b> and currently 
-                    experiencing financial difficulties due to rising inflation. 
-                </p><br>
-                <p>Issued this <?php echo date("jS")." day of ".date("F Y")  ?> at DSWD Field Office.
+        <div class="row" style="margin-bottom: 50px;">
+            <div class="col-12 justify" style="margin-top: 40px; text-indent: 50px; font-size: 20px;">
+                <p>This is to certify that Mr./Ms. <b><?php echo strtoupper($name) ?></b>, <b><?php echo $age_client?></b> years old, residing 
+                at <b><?php echo strtoupper($c_add) ?></b> is currently working as a
+                <b><?php echo strtoupper($client['occupation']) ?></b> at <b><?php echo strtoupper($client['agency']) ?></b>
+                earning a monthly income of <b><?php echo "Php ". $client['salary'] ?></b>. 
+                </p>
+                <p>Following a thorough assessment and validation of the client's socio-economic profile conducted by the undersigned social worker, 
+                    it has been determined that Mr./Ms.
+                <b><?php echo strtoupper($name) ?></b> is an individual receiving income below the regional minimum wage and is facing significant 
+                financial challenges because of the effects of inflation, like the rising prices of goods and services. The above-mentioned income remains insufficient to meet the unforeseen expenses for food, on top of the family's monthly household expenses amounting to Php
+                <b><?php echo $otherClientInformation['monthlyexpense'] ?></b>, thus further straining their limited financial resources.
+                </p>
+                
+                <p>This certification is issued upon the request of the above-named person for whatever legal purpose/s it may serve.</p>
+                <p>Issued on <b><?php echo date("jS")." day of ".date("F Y")  ?></b> at <b>DSWD Field Office</b>.
                 </p>
             </div>
         </div>
         <div class="row" style="font-size: 24px;">
-            <div class="col-6">                  
+            <div class="col-2">                  
             </div>
-            <div class="col-6">
-                <input id="signatory" style="font-weight: bold; text-transform:uppercase; width:100%; border:none;" value="<?php echo ucwords(strtolower($soc_workFullname)) ?>"><br>
-                <input id="s_position" style="border: none;width:100%;" value="<?php echo ucwords(strtolower($soc_worker['emp_position'])) ?>">
-                License no: &nbsp; <input id="license" style="border: none; width: 50%;" value="<?php echo $soc_worker['sw_license_no'] ?>">
+            <div class="col-8 text-center">
+                <input id="signatory" style="font-weight: bold; text-transform:uppercase; width:100%; border:none; text-align: center;" value="<?php echo ucwords(strtolower($soc_workFullname)) ?>"><br>
+                Name and Signature of Social Welfare Officer<br>
+                <input id="license" style="border: none; width: 100%; text-align: center;" value="License No.: <?php echo $soc_worker['sw_license_no'] ?>">
             </div>
-        </div>	
-        <div class="footer row">
-            <div class="col-10">
+            <div class="col-2">                  
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 50px;">
+            <div class="col-12 justify" style="margin-top: 40px; text-indent: 50px; font-size: 20px;">
+                <p style="font-style: italic;">"I declare under pain of criminal prosecution that all the information provided herewith are TRUE, CORRECT, VALID, and COMPLETE pursuant to existing laws, rules, and regulations of the Republic of the Philippines. I authorize the Agency Head/Authorized Representatives to verify and validate the contents stated herein. I also AGREE that any misrepresentation and information/acts to defraud the government may lead to the filing of appropriate cases against me, and may cause disqualification to receive financial assistance from the DSWD."
+                </p>
+            </div>
+        </div>
+        <div class="row" style="font-size: 24px;">
+            <div class="col-2">                  
+            </div>
+            <div class="col-8 text-center">
+                <input id="client" style="font-weight: bold; text-transform:uppercase; width:100%; border:none; text-align: center;" value="<?php echo ucwords(strtolower($name)) ?>"><br>
+                Name and Signature of Client
+            </div>
+            <div class="col-2">                  
+            </div>
+        </div>
+        <div class="attestfooter row">
+            <div class="col-11">
                 <div style="border-bottom: solid 1px black;"></div>
                 <p class="text-center">Page 1 of 1<br>
-                DSWD Field Office XI, Ramon Magsaysay Avenue corner Damaso Suazo Street, Davao City, Philippines 8000<br>
-                Website: http://fo11.dswd.gov.ph Tel Nos.: (082)_227 1964 / (082) 227 8746 / (082)_227 1435 Telefax: (082) 226 2857</p>
+                DSWD Field Office XI, Ramon Magsaysay Avenue, corner Damaso Suazo Street, Davao City, Philippines 8000<br>
+                Website: http://fo11.dswd.gov.ph Tel Nos.: (082) 227 1964 </p>
             </div>
-            <div class="col-2">
+            <!-- <div class="col-2">
                 <img src="../images/dswd-ISO.png" alt="" width="110px" height="60px">
-            </div>
+            </div> -->
         </div>
         <!--Container-->
     </div>
-</body>
-</html>

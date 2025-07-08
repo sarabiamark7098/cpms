@@ -152,30 +152,15 @@ $user = new User();
 	<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
-		<link rel="stylesheet" type="text/css" href="../css/main.css">
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">	
-		<link rel="stylesheet" type="text/css" href="../css/table.responsive.css">
-		<link rel="stylesheet" type="text/css" href="../style5.css">
         
-		<script defer src="../js/solid.js"></script>
-		<script defer src="../js/fontawesome.js"></script>
 		<script src="../js/jquery.slim.min.js"></script>
 		<script src="../js/popper.min.js"></script>
-		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/jquery.slim.min.js"></script>
 		<script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
 		<script type="text/javascript" src="../js/main.js"></script>
 		<script type="text/javascript" src="../js/PSGC.js"></script>
 		<script type="text/javascript" src="../js/jquery.min.js"></script>
-		
-		<!-- added -->
-		
-		<link rel="stylesheet" type="text/css" href="../datatables/datatables.css">
-		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
-		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<script>
 		$(document).ready(function(){
              $('#client_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
@@ -228,19 +213,19 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input id="foo" value="<?php echo $getClient['b_fname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required >
+					<input id="foo" value="<?php echo $getClient['b_fname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					<label>First Name</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input type="text" value="<?php echo $getClient['b_mname'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" required >    
+					<input type="text" value="<?php echo $getClient['b_mname'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()" >    
 					<label>Middle Name</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" value="<?php echo $getClient['b_lname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required >
+				<input type="text" value="<?php echo $getClient['b_lname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					<label>Last Name</label>
 				</div>
 			</div>
@@ -342,13 +327,13 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" class="form-control mr-sm-2 b" name="salary" value="<?php echo $getClient['b_salary'] ?>" placeholder="Salary" >
+				<input type="number" class="form-control mr-sm-2 b currencyMaskedInput" name="salary" value="<?php echo $getClient['b_salary'] ?>" placeholder="Salary" >
 				<label>Salary</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" value="<?php echo $getClient['b_contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+				<input type="number" value="<?php echo $getClient['b_contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
 				<label>Contact</label>
 				</div>
 			</div>
@@ -395,7 +380,7 @@ $user = new User();
 			<h4 class="text-center">Address</h4>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="regionClist" id="reg" value="<?php echo $getClient['b_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required >
+				<input list="regionClist" id="creg" value="<?php echo $getClient['b_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required >
 					<datalist id="regionClist">
 					<?php
 						$getregions = $user->optionregion();
@@ -403,7 +388,7 @@ $user = new User();
 						foreach($getregions as $index => $value){
 						  //Display info
 							echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-							echo $value['psgc_code'];
+							// echo $value['psgc_code'];
 							echo '</option>';
 						}
 					?>
@@ -413,7 +398,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="provinceClist" id="prov" value="<?php echo $getClient['b_province'] ?>" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required >
+				<input list="provinceClist" id="cprov" value="<?php echo $getClient['b_province'] ?>" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required >
 				<datalist id="provinceClist">
 				</datalist>
 				<label>Province</label>
@@ -421,7 +406,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="municipalityClist" id="muni" value="<?php echo $getClient['b_municipality'] ?>" type="text" id="client_city" class="form-control mr-sm-2 b" name="Ccity" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required >
+				<input list="municipalityClist" id="client_city" value="<?php echo $getClient['b_municipality'] ?>" type="text" id="client_city" class="form-control mr-sm-2 b" name="Ccity" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required >
 				<datalist id="municipalityClist">
 				</datalist>
 				<label>Municipality</label>
@@ -429,7 +414,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="barangayClist" id="brgy" value="<?php echo $getClient['b_barangay'] ?>" type="text" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required >
+				<input list="barangayClist" id="cbrgy" value="<?php echo $getClient['b_barangay'] ?>" type="text" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required >
 				<datalist id="barangayClist">
 				</datalist>
 				<label>Barangay</label>
@@ -455,7 +440,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" id="str" value="<?php echo $getClient['b_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok" >
+				<input type="text" id="cstr" value="<?php echo $getClient['b_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok" >
 				<label>Street</label>
 				</div>
 			</div>
@@ -487,17 +472,17 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input id="foo" type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" >
+						<input id="foo" type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" >    
+						<input type="text" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">    
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" >
+					<input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -547,7 +532,7 @@ $user = new User();
 				</div>
 					<div class="form-group row">
 					<div class="col-sm-12">
-					<input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+					<input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -588,7 +573,7 @@ $user = new User();
 						foreach($getregions as $index => $value){
 						  //Display info
 							echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-							echo $value['psgc_code'];
+							// echo $value['psgc_code'];
 							echo '</option>';
 						}
 					?>
@@ -673,39 +658,66 @@ $user = new User();
 			}
 		});
 	});
-
+	
 	$(function () {
-		reg = document.getElementById('reg').value;
-		prov = document.getElementById('prov').value;
-		muni = document.getElementById('muni').value;
-		brgy = document.getElementById('brgy').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
-		get_c_Region_sw(reg);
-		get_c_Province_sw(prov);
-		get_c_Municipality_sw(muni);
-		get_c_Barangay_sw(brgy);
+		reg = document.getElementById('creg').value;
+		prov = document.getElementById('cprov').value;
+		muni = document.getElementById('client_city').value;
+		brgy = document.getElementById('cbrgy').value;
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+	
+		get_c_Region(document.getElementById('creg'));
+		get_c_Province(document.getElementById('cprov'));
+		get_c_Municipality(document.getElementById('client_city'));
+		get_c_Barangay(document.getElementById('cbrgy'));
+
+		document.getElementById('creg').value = reg;
+		document.getElementById('cprov').value = prov;
+		document.getElementById('client_city').value = muni;
+		document.getElementById('cbrgy').value = brgy;
+		document.getElementById('cstr').value = str;
+
+		setTimeout(() => {
+			const bDist = document.getElementById('client_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	});
 
 	function copyaddressclient() {
-		reg = document.getElementById('reg').value;
-		prov = document.getElementById('prov').value;
-		muni = document.getElementById('muni').value;
-		brgy = document.getElementById('brgy').value;
-		dist = document.getElementById('client_district').value;
-		str = document.getElementById('str').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
+		reg = document.getElementById('creg').value;
+		prov = document.getElementById('cprov').value;
+		muni = document.getElementById('client_city').value;
+		brgy = document.getElementById('cbrgy').value;
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
+		get_b_Region(document.getElementById('creg'));
+		get_b_Province(document.getElementById('cprov'));
+		get_b_Municipality(document.getElementById('client_city'));
+		get_b_Barangay(document.getElementById('cbrgy'));
+		
 		document.getElementById('breg').value = reg;
 		document.getElementById('bprov').value = prov;
 		document.getElementById('beneficiary_city').value = muni;
 		document.getElementById('bbrgy').value = brgy;
-		document.getElementById('beneficiary_district').value = dist;
 		document.getElementById('bstr').value = str;
 		
-		get_b_Region_sw(reg);
-		get_b_Province_sw(prov);
-		get_b_Municipality_sw(muni);
-		get_b_Barangay_sw(brgy);
+		setTimeout(() => {
+			const bDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	}
 
 	$(function () {

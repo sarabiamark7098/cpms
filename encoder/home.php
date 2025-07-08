@@ -186,6 +186,8 @@
         <script type="text/javascript" src="../js/main.js"></script>
         <script type="text/javascript" src="../js/PSGC.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
         
         <!-- added -->
         
@@ -213,7 +215,7 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">Client's List<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
+                    <a href="home.php">List of Served Clients<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
                 </li>
                 <li>
                     <a href="UnservedClient.php">Unserved List <i style="float: right;font-size:25px" class="fa fa-child"></i></a>
@@ -258,7 +260,7 @@
             </nav>
             <div class="container-fluid" style="padding-left: 5%">
                 <div class="table-responsive-lg">
-                <h5>List of Clients</h5>
+                <h5>List of Served Clients</h5>
                 
                     <div class="form-group">
                         <div class="input-group">
@@ -805,28 +807,6 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
                 }
             });
         });
-
-        function copyaddressclient() {
-            reg = document.getElementById('creg').value;
-			prov = document.getElementById('cprov').value;
-			muni = document.getElementById('client_city').value;
-            brgy = document.getElementById('cbrgy').value;
-            dist = document.getElementById('client_district').value;
-            str = document.getElementById('cstr').value;
-            // console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
-
-			document.getElementById('breg').value = reg;
-			document.getElementById('bprov').value = prov;
-			document.getElementById('beneficiary_city').value = muni;
-            document.getElementById('bbrgy').value = brgy;
-            document.getElementById('beneficiary_district').value = dist;
-            document.getElementById('bstr').value = str;
-            
-			get_b_Region_sw(reg);
-			get_b_Province_sw(prov);
-			get_b_Municipality_sw(muni);
-			get_b_Barangay_sw(brgy);
-		}
 
         </script>
 </html>

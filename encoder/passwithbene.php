@@ -86,30 +86,15 @@ $user = new User();
 	<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
-		<link rel="stylesheet" type="text/css" href="../css/main.css">
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">	
-		<link rel="stylesheet" type="text/css" href="../css/table.responsive.css">
-		<link rel="stylesheet" type="text/css" href="../style5.css">
         
-		<script defer src="../js/solid.js"></script>
-		<script defer src="../js/fontawesome.js"></script>
 		<script src="../js/jquery.slim.min.js"></script>
 		<script src="../js/popper.min.js"></script>
-		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/jquery.slim.min.js"></script>
 		<script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
 		<script type="text/javascript" src="../js/main.js"></script>
 		<script type="text/javascript" src="../js/PSGC.js"></script>
 		<script type="text/javascript" src="../js/jquery.min.js"></script>
-		
-		<!-- added -->
-		
-		<link rel="stylesheet" type="text/css" href="../datatables/datatables.css">
-		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
-		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function(){
              $('#client_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
@@ -162,19 +147,19 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input id="foo" value="<?php echo $getClient['firstname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required>
+					<input id="foo" value="<?php echo $getClient['firstname'] ?>" type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					<label>First Name</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input type="text" value="<?php echo $getClient['middlename'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" required>    
+					<input type="text" value="<?php echo $getClient['middlename'] ?>" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name"  oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">    
 					<label>Middle Name</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" value="<?php echo $getClient['lastname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required>
+				<input type="text" value="<?php echo $getClient['lastname'] ?>" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					<label>Last Name</label>
 				</div>
 			</div>
@@ -277,13 +262,13 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" value="<?php echo $getClient['salary'] ?>" class="form-control mr-sm-2 b" name="salary" placeholder="Salary">
+				<input type="number" value="<?php echo $getClient['salary'] ?>" class="form-control mr-sm-2 b currencyMaskedInput" name="salary" placeholder="Salary">
 				<label>Salary</label>
 				</div>
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="number" value="<?php echo $getClient['contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;">
+				<input type="number" value="<?php echo $getClient['contact'] ?>" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
 				<label>Contact</label>
 				</div>
 			</div>
@@ -391,7 +376,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input type="text" id="str" value="<?php echo $getClient['client_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok">
+				<input type="text" id="cstr" value="<?php echo $getClient['client_street'] ?>" class="form-control mr-sm-2 b" name="Cstreet" placeholder="No./Street/Purok">
 				<label>Street</label>
 				</div>
 			</div>
@@ -424,17 +409,17 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input id="foo" type="text" value="<?php echo $getClient['b_fname']; ?>" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name">
+						<input id="foo" type="text" value="<?php echo $getClient['b_fname']; ?>" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input type="text" value="<?php echo $getClient['b_mname']; ?>" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
+						<input type="text" value="<?php echo $getClient['b_mname']; ?>" class="form-control mr-sm-2 b benerequire" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">    
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input type="text" value="<?php echo $getClient['b_lname']; ?>" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name">
+					<input type="text" value="<?php echo $getClient['b_lname']; ?>" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -524,7 +509,7 @@ $user = new User();
 				</div>
 					<div class="form-group row">
 					<div class="col-sm-12">
-					<input type="text" value="<?php echo $getClient['b_contact'] ?>" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+					<input type="text" value="<?php echo $getClient['b_contact'] ?>" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -638,43 +623,98 @@ $user = new User();
 		prov = document.getElementById('cprov').value;
 		muni = document.getElementById('client_city').value;
 		brgy = document.getElementById('cbrgy').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
-		get_c_Region_sw(reg);
-		get_c_Province_sw(prov);
-		get_c_Municipality_sw(muni);
-		get_c_Barangay_sw(brgy);
-		
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+	
+		get_c_Region(document.getElementById('creg'));
+		get_c_Province(document.getElementById('cprov'));
+		get_c_Municipality(document.getElementById('client_city'));
+		get_c_Barangay(document.getElementById('cbrgy'));
+
+		document.getElementById('creg').value = reg;
+		document.getElementById('cprov').value = prov;
+		document.getElementById('client_city').value = muni;
+		document.getElementById('cbrgy').value = brgy;
+		document.getElementById('cstr').value = str;
+
+		setTimeout(() => {
+			const bDist = document.getElementById('client_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
+
 		breg = document.getElementById('breg').value;
 		bprov = document.getElementById('bprov').value;
 		bmuni = document.getElementById('beneficiary_city').value;
 		bbrgy = document.getElementById('bbrgy').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);
-		get_b_Region_sw(breg);
-		get_b_Province_sw(bprov);
-		get_b_Municipality_sw(bmuni);
-		get_b_Barangay_sw(bbrgy);
-	});
+		bdist = document.getElementById('beneficiary_district').value.trim();
+		bstr = document.getElementById('bstr').value;
+	
+
+		document.getElementById('creg').value = breg;
+		document.getElementById('cprov').value = bprov;
+		document.getElementById('client_city').value = bmuni;
+		document.getElementById('cbrgy').value = bbrgy;
+		document.getElementById('cstr').value = bstr;
+
+		benedist = document.getElementById('beneficiary_district').value.trim();
+
+		get_b_Region(document.getElementById('breg'))
+		get_b_Province(document.getElementById('bprov'))
+		get_b_Municipality(document.getElementById('beneficiary_city'))
+		get_b_Barangay(document.getElementById('bbrgy'))
 		
+		
+		document.getElementById('breg').value = breg;
+		document.getElementById('bprov').value = bprov;
+		document.getElementById('beneficiary_city').value = bmuni;
+		document.getElementById('bbrgy').value = bbrgy;
+		document.getElementById('bstr').value = bstr;
+
+		setTimeout(() => {
+			const beDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < beDist.options.length; i++) {
+				if (beDist.options[i].value.trim() === benedist) {
+					beDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
+	});
+
 	function copyaddressclient() {
 		reg = document.getElementById('creg').value;
 		prov = document.getElementById('cprov').value;
 		muni = document.getElementById('client_city').value;
 		brgy = document.getElementById('cbrgy').value;
-		dist = document.getElementById('client_district').value;
-		str = document.getElementById('str').value;
-		//console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
+		dist = document.getElementById('client_district').value.trim();
+		str = document.getElementById('cstr').value;
+		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
+		get_b_Region(document.getElementById('creg'));
+		get_b_Province(document.getElementById('cprov'));
+		get_b_Municipality(document.getElementById('client_city'));
+		get_b_Barangay(document.getElementById('cbrgy'));
+		
 		document.getElementById('breg').value = reg;
 		document.getElementById('bprov').value = prov;
 		document.getElementById('beneficiary_city').value = muni;
 		document.getElementById('bbrgy').value = brgy;
-		document.getElementById('beneficiary_district').value = dist;
 		document.getElementById('bstr').value = str;
 		
-		get_b_Region_sw(reg);
-		get_b_Province_sw(prov);
-		get_b_Municipality_sw(muni);
-		get_b_Barangay_sw(brgy);
+		setTimeout(() => {
+			const bDist = document.getElementById('beneficiary_district');
+			for (let i = 0; i < bDist.options.length; i++) {
+				if (bDist.options[i].value.trim() === dist) {
+					bDist.selectedIndex = i;
+					break;
+				}
+			}
+		}, 500);
 	}
 
 	$(function () {

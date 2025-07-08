@@ -82,10 +82,13 @@
     }
 
     if(isset($_POST["search"])){
-        $output = '';
-        $sql= "SELECT * FROM provider WHERE company_name like '%".$_POST["search"]."%'";
+        $search = trim($_POST["search"]);
+        $search = mysqli_real_escape_string($user->db, $search); 
+
+        $sql= "SELECT * FROM provider WHERE company_name like '%".$search."%' LIMIT 1;";
         $result = mysqli_query($user->db, $sql);
-        if(mysqli_num_rows($result) > 0){
+
+        if($result && mysqli_num_rows($result) > 0){
             $row = mysqli_fetch_array($result);
             $address = $row["company_address"];
             $pos = $row["addressee_position"]; 
@@ -134,9 +137,9 @@
     if(isset($_POST['soc_work'])){
         $output = '';
         
-        $sql= "SELECT * FROM client_data 
-        LEFT JOIN tbl_transaction USING (client_id)
-        LEFT JOIN beneficiary_data USING (bene_id)
+        $sql= "SELECT a.trans_id, a.note, a.encoded_encoder, a.relation, a.date_entered, b.lastname, b.firstname, b.middlename, b.extraname, c.b_fname, c.b_mname, c.b_lname, c.b_exname  FROM client_data as b
+        LEFT JOIN tbl_transaction as a USING (client_id)
+        LEFT JOIN beneficiary_data as c USING (bene_id)
         WHERE status_client = 'Pending' order by date_entered asc;";
         $result2 = mysqli_query($user->db, $sql);
         
@@ -165,12 +168,13 @@
                                     <td>{$row['date_entered']}</td>
                                     <td>{$getEncoder}</td>
                                     <td>";
+                                    
                                     if($row['note'] == 'yes'){
-                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px;'> Serve</a>
-                                        <button class='btn btn-primary deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px;'> Decline</button>";
+                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px; width: 80px;'> Serve</a>
+                                        <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; width: 80px';> X </button>";
                                     } else {
-                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px;'> Serve</a>
-                                        <button class='btn btn-primary deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px;'>Decline<span class='badge badge-danger'>1</span></button>";
+                                        $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?&id={$row['trans_id']}' style='margin-right: 10px; width: 80px;'> Serve</a>
+                                        <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; width: 80px';> X <span class='badge badge-success'>1</span></button>";
                                     }
                     $output.=       "</td>
                             </tr>";
@@ -183,9 +187,10 @@
         
     }
     
-    if(isset($_POST['putangina'])){
-        $gago = $_POST['putangina'];
-        $query = "SELECT * FROM gisassessment WHERE ass_opt = '".$gago."';";
+    if(isset($_POST['assessmentoption'])){
+        $assessment = $_POST['assessmentoption'];
+        $query = "SELECT * FROM gisassessment WHERE ass_opt = '".$assessment."';";
+        // echo "<script>console.log(".$query.")</script>";
         $result = mysqli_query($user->db,$query);
         if(mysqli_num_rows($result) > 0){
             $row = mysqli_fetch_array($result);
@@ -193,7 +198,7 @@
             $sw_assessment = $row["ass_socwork"];
 
             $json = array('problem_presented' => $sw_problem_presented, 'sw_assessment' => $sw_assessment);
-            print_r (json_encode($json));
+            print_r(json_encode($json));
             
         }
     }
@@ -233,11 +238,11 @@
 									<td>{$getEncoder}</td>
 									<td>";
 									if($row['note'] == 'yes'){
-										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X</button>";
+										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X </button>";
 									} else {
-										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X <span class='badge badge-success'>1</span></button>";
+										$output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+										<button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X <span class='badge badge-success'>1</span></button>";
 									}
 					$output.=       "</td>
 							</tr>";
@@ -253,12 +258,12 @@
                                 <td>{$row['date_entered']}</td>
                                 <td>{$getEncoder}</td>
                                 <td>";
-                                if($row['note'] == 'yes'){
-                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X</button>";
+                                if($row['note'] == 'no'){
+                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X</button>";
                                 } else {
-                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue Serving</a>
-                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px;'>X <span class='badge badge-success'>1</span></button>";
+                                    $output.= "<a type='button' class=' btn btn-primary deep-sky text-white' href='gis.php?id={$row['trans_id']}&option=2' style='margin-right: 10px;'>Continue</a>
+                                    <button class='btn btn-danger deep-sky text-white' data-id='{$row['trans_id']}' data-target='#declineclient' data-toggle='modal' style='margin-right: 10px; margin-top: 5px; width: 80px;'> X <span class='badge badge-success'>1</span></button>";
                                 }
                 $output.=       "</td>
                         </tr>";

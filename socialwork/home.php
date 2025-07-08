@@ -30,6 +30,22 @@
 		header('Location:../index.php');
 		exit();
 		}
+
+    $licenseData = $user->show_user_data($_SESSION['userId']); // Create this method if needed
+    $licenseExpiryMessage = '';
+
+    if ($licenseData && isset($licenseData['sw_license_expiry'])) {
+        $expiryDate = new DateTime($licenseData['sw_license_expiry']);
+        $today = new DateTime();
+        $interval = $today->diff($expiryDate);
+        $daysRemaining = (int)$interval->format('%r%a');
+
+        if ($daysRemaining > 0 && $daysRemaining <= 30) {
+            $licenseExpiryMessage = "License nearing expiry! ($daysRemaining days left)";
+        }elseif ($daysRemaining == 0 ) {
+            $licenseExpiryMessage = "Your license expires today!";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -124,6 +140,7 @@
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
                     </a>
                     <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#license" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add/Update User License</a>
+                    <a class="nav-link" disabled style='color:red; font-weight:bold;'><?php echo $licenseExpiryMessage; ?></a>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
@@ -316,25 +333,5 @@
                     }
                 });  
         })
-
-               			$(document).ready(function () {
-                            const debouncedSearch = debounce(function () {
-                                var txt = $('#search_client').val();
-                                if (txt !== '') {
-                                    $.ajax({
-                                        type: "post",
-                                        url: "fetch.php",
-                                        data: { search: txt },
-                                        success: function (html) {
-                                            $('#search_result').html(html).show();
-                                        }
-                                    });
-                                } else {
-                                    $('#search_result').html("");
-                                }
-                            }, 500); 
-
-                            $('#search_client').keyup(debouncedSearch);
-                        });
 	</script>
 </html>

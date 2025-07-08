@@ -20,18 +20,21 @@
 	
 	if(isset($_POST['Add'])) {
 		
-		$ass_opt = mysqli_real_escape_string($user->db,strtoupper($_POST['assopt']));
-		$prob_pre = mysqli_real_escape_string($user->db,strtoupper($_POST['prob_pre']));
-		$swass = mysqli_real_escape_string($user->db,strtoupper($_POST['swass']));
+		$ass_opt = mysqli_real_escape_string($user->db,($_POST['assopt']));
+		$prob_pre = mysqli_real_escape_string($user->db,($_POST['prob_pre']));
+		$swass = mysqli_real_escape_string($user->db,($_POST['swass']));
 		
 		$result = $user->addassessment($ass_opt, $prob_pre, $swass);
 		
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Adding Assessment Option!');</script>";
 			echo "<script>window.location='GISassessment.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
-		}
-		else{
+		}elseif($result == "exists"){
+            echo "<script>alert('Assessment Option Already Exist!');</script>";
+            echo "<script>window.location='GISassessment.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+        }else{
 			echo "<script>alert('Error Adding Assessment Option!');</script>";
 			echo "<script>window.location='GISassessment.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
@@ -102,35 +105,29 @@
                     <a href="home.php">Providers<i style="float: right;font-size:25px" class="fa fa-handshake"></i> </a> 
                 </li>
                 <li>
-                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
-                </li>
-                <li>
-                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
-                </li>
-                <li>
-                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
                     <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
                 <li>
-                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
-                <!-- <li>
-                    <a href="Relation_District_Page.php">Additional <i style="float: right;font-size:25px" class="fa fa-expand"></i></a>
-                </li>     -->
             </ul>
         </nav>
 
@@ -161,7 +158,7 @@
             </nav>
             <div class="container-fluid"  style="padding-left: 5%">
                 <div class="table-responsive-lg">
-					<h5>Assessment Option List</h5>
+					<h5>List of Assessment Option</h5>
 					<table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
 						<thead>
 							<tr>

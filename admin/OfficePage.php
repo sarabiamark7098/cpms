@@ -31,12 +31,15 @@
         
         $result = $user->addOffice($officename, $officeacronym, $descrip, $m);
         
-        if($result){
+        if($result == "success"){
             echo "<script>alert('Successfully Adding Office!');</script>";
             echo "<script>window.location='OfficePage.php';</script>";
             echo "<meta http-equiv='refresh' content='0'>";
-        }
-        else{
+        }elseif($result == "exists"){
+            echo "<script>alert('Office Already Exist!');</script>";
+            echo "<script>window.location='OfficePage.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+        }else{
             echo "<script>alert('Error Adding Office!');</script>";
             echo "<script>window.location='OfficePage.php';</script>";
             echo "<meta http-equiv='refresh' content='0'>";
@@ -103,31 +106,28 @@
                     <a href="home.php">Providers<i style="float: right;font-size:25px" class="fa fa-handshake"></i> </a> 
                 </li>
                 <li>
-                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
-                </li>
-                <li>
-                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
-                </li>
-                <li>
-                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
                     <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
                 <li>
-                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
             </ul>
         </nav>
@@ -161,7 +161,7 @@
             </nav>
             <div class="container-fluid"  style="padding-left: 5%">
                 <div class="table-responsive-lg">
-					<h5>Office's</h5>
+					<h5>List of Office's</h5>
 					<table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
 						<thead>
 							<tr>

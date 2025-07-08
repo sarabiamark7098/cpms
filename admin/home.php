@@ -28,15 +28,18 @@
 		$addcname = $_POST['companyname'];
 		$addcaddress = $_POST['companyaddress'];
 		
+        $result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
 		
-		$result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
-		
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Adding Company!');</script>";
 			echo "<script>window.location='home.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 		}
-		else{
+        elseif($result == "exists"){
+            echo "<script>alert('Company Already Exist!');</script>";
+            echo "<script>window.location='home.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+    	}else{
 			echo "<script>alert('Error Adding Company!');</script>";
 			echo "<script>window.location='home.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
@@ -81,6 +84,7 @@
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<style>
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
@@ -106,38 +110,30 @@
                     <a href="home.php">Providers<i style="float: right;font-size:25px" class="fa fa-handshake"></i> </a> 
                 </li>
                 <li>
-                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
-                </li>
-                <li>
-                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
-                </li>
-                <li>
-                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
                     <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
                 <li>
-                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
             </ul>
-			<ul class="nav navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link tohover" data-toggle="modal" data-target="#clear">Clear Duplicate<i style="float: right;font-size:25px" class="fa fa-cogs"></i> </a>
-				</li>
-			</ul>
         </nav>
 
         <!-- Page Content Holder -->
@@ -166,7 +162,7 @@
                     </div>
                 </div>
             </nav>
-            <div class="container-fluid"  style="padding-left: 5%">
+            <div class="container-fluid" style="padding-left: 5%">
                 <div class="table-responsive-lg">
 					<h5>List of Provider</h5>
 					<table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
@@ -231,8 +227,6 @@
 		</div>
     </div>
 </div>
-
-
 </body>
     <script>
         //userAccount
@@ -361,7 +355,8 @@
 		</div>
 	</div>
 
-
+    
+    
 <script type="text/javascript">
 $('#ProviderInfo').appendTo("body").on('show.bs.modal', function (event) {
           var button = $(event.relatedTarget) // Button that triggered the modal
@@ -427,25 +422,36 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
 		</div>
 	</div>
 	<script>
-	$('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget) // Button that triggered the modal
-          var modal = $(this);
-          var dataString = 'New Data';
- 
-            $.ajax({
-                type: "GET",
-                url: "AddCompany.php",
-                data: dataString,
-                cache: false,
-                success: function (data) {
-                    // console.log(data);
-                    modal.find('.Addbody').html(data);
-                },
-                error: function(err) {
-                    // console.log(err);
-                }
-				
-            });  
-	})
+        $('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var modal = $(this);
+            var dataString = 'New Data';
+    
+                $.ajax({
+                    type: "GET",
+                    url: "addCompany.php",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        // console.log(data);
+                        modal.find('.Addbody').html(data);
+                    },
+                    error: function(err) {
+                        // console.log(err);
+                    }
+                    
+                });  
+        });
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
 	</script>
 </html>
