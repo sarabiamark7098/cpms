@@ -247,7 +247,7 @@
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printGIS()">GIS</button></div>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printCOE()">COE</button></div>
                         <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"success":"dark" ?> btn-block no-print" onclick="printGL()" <?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"":"disabled" ?>>GL</button></div>
-                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div>
+                        <!-- <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div> -->
                     </div>  
                 </div>
             </div>
