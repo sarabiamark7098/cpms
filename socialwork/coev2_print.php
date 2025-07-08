@@ -46,7 +46,7 @@
                     <div class="col-sm-10">
                         <input class="form-control input-lg border-dark" style="font-size: 15px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value="<?php echo $gis['client_num']; ?>">
                     </div>
-                </div>asdasdasd
+                </div>
             </div>
             <div class="col-5">
                 <div class="row" style="font-size: 15px; margin-top: -5px">
