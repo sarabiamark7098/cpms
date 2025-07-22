@@ -226,6 +226,20 @@
             //Restore orignal HTML
             document.body.innerHTML = oldPage;
         }
+        
+        function printInformationSheet(){
+            var divElements = $('#information_sheet').html();
+            //Get the HTML of whole page
+            var oldPage = document.body.innerHTML;
+            //Reset the page's HTML with div's HTML only
+            document.body.innerHTML = 
+            "<html><head><title></title></head><body>" + 
+            divElements + "</body>";
+            //Print Page
+            window.print();
+            //Restore orignal HTML
+            document.body.innerHTML = oldPage;
+        }
     </script>
         <br><br><br><br><br> 
         <div class="row">
@@ -245,6 +259,7 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printGIS()">GIS</button></div>
+                        <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printInformationSheet()">IS</button></div>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printCOE()">COE</button></div>
                         <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"success":"dark" ?> btn-block no-print" onclick="printGL()" <?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"":"disabled" ?>>GL</button></div>
                         <!-- <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div> -->
@@ -263,6 +278,12 @@
     <div id="coe" hidden>
         <?php 
             include('coev2_print.php');
+		?>
+    </div>
+    
+    <div id="information_sheet" hidden>
+        <?php 
+            include('informationSheet_print.php');
 		?>
     </div>
     <div>
