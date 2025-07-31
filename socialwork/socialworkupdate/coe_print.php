@@ -330,7 +330,7 @@
                 </div>
             </div>
             <div class="col text-center">
-                <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo $GLsignatoryName ?>'>
+                <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo (strtolower($mode1) == "cav"?$GISsignatoryName:$GLsignatoryName) ?>'>
                 <b>Approving Authority</b>
                 <p>(Signature Over Printed Name)</p>
             </div>

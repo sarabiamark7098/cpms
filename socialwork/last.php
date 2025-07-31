@@ -67,12 +67,13 @@
         $city = explode("/", $client['client_municipality']);
         $brgy = explode("/", $client['client_barangay']);
         $province = explode("/", $client['client_province']);
-        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
+        
         
 		if(!empty($client['client_street'])){
             $c_add .= $client['client_street'] .", ";
             $cash_add .= $client['client_street'] .", ";
 		}
+        $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
         
         //if street kay way sulod ma blank lg sta
 		if(!empty($client['b_street'])){
