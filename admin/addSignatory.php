@@ -23,19 +23,19 @@
             <div class="modal-body">
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-12">
-                        <input placeholder="Signatory Title" id="title" name="title" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '').toUpperCase()">
+                        <input placeholder="Signatory Title" id="title" name="title" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '')">
                         <label class="active" for="title">Signatory Title (e.g. Atty.)</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '').toUpperCase()">
+                        <input placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '')">
                         <label class="active" for="fname">First Name</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '').toUpperCase()">
+                        <input placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '')">
                         <label class="active" for="lname">Last Name</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input placeholder="Middle Initial" maxlength="1" id="mini" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
+                        <input placeholder="Middle Initial" maxlength="1" id="mini" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')">
                         <label class="active" for="mi">Middle Initial</label>
                     </div>
                     <div class="form-group col-lg-6">
@@ -43,7 +43,7 @@
                         <label class="active" for="initials">Initials(e.g. NTS)</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input placeholder="Position" id="position" name="position" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '').toUpperCase()">
+                        <input placeholder="Position" id="position" name="position" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-,. ]/g, '')">
                         <label class="active" for="position">Position</label>
                     </div>
                     <div class="form-group col-lg-6">

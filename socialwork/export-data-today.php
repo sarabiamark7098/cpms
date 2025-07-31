@@ -1,9 +1,5 @@
 <?php
-require '../vendor/autoload.php';
 include('../php/class.user.php');
-
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $user = new User();
 $office_loc = $_SESSION['f_office'];
@@ -44,9 +40,16 @@ if (mysqli_num_rows($result) === 0) {
     exit;
 }
 
-// Initialize PhpSpreadsheet
-$spreadsheet = new Spreadsheet();
-$sheet = $spreadsheet->getActiveSheet();
+// Set headers for CSV download
+header('Content-Type: text/csv');
+header("Content-Disposition: attachment; filename=\"{$filename}.csv\"");
+header('Cache-Control: no-cache, no-store, must-revalidate'); // Standard cache control
+header('Pragma: no-cache'); // For HTTP 1.0
+header('Expires: 0'); // Proxies
+
+// Open a file handle for outputting to the browser
+$output = fopen('php://output', 'w');
+
 
 // Column headers
 $headers = [
@@ -59,14 +62,14 @@ $headers = [
     "ClientCategory", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
     "Sub-Category", "Pantawid Beneficiary"
 ];
-$sheet->fromArray($headers, NULL, 'A1');
+// Write the headers to the CSV file
+fputcsv($output, $headers, ',', '"', '\\');
 
 // Populate data rows
-$rowIndex = 2;
 while ($row = mysqli_fetch_assoc($result)) {
     $fullname = $user->getuserFullname($row['encoded_encoder']);
     $assistance = $user->getAssistanceData($row['trans_id']);
-    $fund = $user->getfundsourcedata($row['trans_id']);
+    $fund = $user->getfundsourcedata($row['trans_id']); // This variable seems unused in $rowData, confirm if needed
     $fundsource = $user->getfundsourceclient($row['trans_id']);
     $age = $user->getAge($row['date_birth']);
 
@@ -96,15 +99,11 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['subCategory'], $row['pantawid_bene']
     ];
 
-    $sheet->fromArray($rowData, NULL, 'A' . $rowIndex++);
+    // Write the row data to the CSV file
+    fputcsv($output, $rowData, ',', '"', '\\');
 }
-ob_end_clean(); 
-// Output to browser
-header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header("Content-Disposition: attachment;filename=\"{$filename}.xlsx\"");
-header('Cache-Control: max-age=0');
 
-$writer = new Xlsx($spreadsheet);
-$writer->save('php://output');
+// Close the file handle
+fclose($output);
 exit;
 ?>

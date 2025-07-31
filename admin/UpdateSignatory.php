@@ -78,19 +78,19 @@ $user = new User();
 				<div class="form-group col-lg-3">
 				</div> -->
 				<div class="form-group col-lg-12">
-                  <input value="<?php echo $getsignatory['name_title']; ?>" placeholder="Signatory Title" id="title" name="title" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+                  <input value="<?php echo $getsignatory['name_title']; ?>" placeholder="Signatory Title" id="title" name="title" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
                   <label class="active" for="title">Signatory Title (e.g. Atty.)</label>
                 </div>
                 <div class="form-group col-lg-12">
-				  <input value="<?php echo $getsignatory['first_name']; ?>" placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getsignatory['first_name']; ?>" placeholder="First Name" id="fname" name="fname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="fname">First Name</label>
 				</div>
 				<div class="form-group col-lg-12">
-				  <input value="<?php echo $getsignatory['last_name']; ?>" placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getsignatory['last_name']; ?>" placeholder="Last Name" id="lname" name="lname" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="lname">Last Name</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="mi">Middle Initial</label>
 				</div>
 				<div class="form-group col-lg-6">
@@ -98,7 +98,7 @@ $user = new User();
 				  <label class="active" for="initials">Initials(e.g. NTS)</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['position']; ?>" placeholder="Position" id="position" name="position" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getsignatory['position']; ?>" placeholder="Position" id="position" name="position" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="position">Position</label>
 				</div>
 				<div class="form-group col-lg-6">
