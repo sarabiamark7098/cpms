@@ -54,23 +54,9 @@
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
         </style>
-        <?php 
-        // if(!empty($_POST["d_1"]) && !empty($_POST["d_2"])){
-        //     $date1 = $_POST["d_1"];
-        //     $date2 = $_POST["d_2"];
-        //     echo '<input type="text" name="date1_1" id="date1_1" hidden value="'.$date1.'">
-        //     <input type="text" name="date2_2" id="date2_2" hidden value="'.$date2.'">';
-        // }else{
-        //     $date1="";
-        //     $date2="";
-        // }
-        ?>
-    
-
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -83,31 +69,28 @@
                     <a href="home.php">Providers<i style="float: right;font-size:25px" class="fa fa-handshake"></i> </a> 
                 </li>
                 <li>
-                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
-                </li>
-                <li>
-                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
-                </li>
-                <li>
-                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
-                </li>
-                <li>
                     <a href="OfficePage.php">Offices<i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
                 <li>
-                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="osapListPage.php">OSAP Logs <i style="float: right;font-size:25px" class="fa fa-cube"></i></a>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="cancelledGl_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
             </ul>
         </nav>
@@ -191,9 +174,9 @@
                                                 document.getElementById("counttotalclient").value = "'.$summarynumrows.'";
                                             </script>';
                                             echo "<tr>
-                                                <td scope='row' style='width: 20%'>" . $value['lastname'] .", ". $value['firstname'] ." ". $value['middlename'][0] .". ". (!empty($value['extraname'])?$value['extraname']:"") . "</td> 
+                                                <td scope='row' style='width: 20%'>" . $value['lastname'] .", ". $value['firstname'] ." ". (!empty($value['middlename'][0])?$value['middlename'][0] .". ":"") . (!empty($value['extraname'])?$value['extraname']:"") . "</td> 
                                                 <td scope='row' style='width: 20%'>". 
-                                                (!empty($value['b_lname'])?$value['b_lname'] .", ". $value['b_fname'] ." ". $value['b_mname'][0] .". ". (!empty($value['b_exname'])?$value['b_exname']:""):$value['lastname'] .", ". $value['firstname'] ." ". $value['middlename'][0] .". ". (!empty($value['extraname'])?$value['extraname']:""))
+                                                (!empty($value['b_lname'])?$value['b_lname'] .", ". $value['b_fname'] ." ". (!empty($value['b_mname'][0])?$value['b_mname'][0] .". ":"") . (!empty($value['b_exname'])?$value['b_exname']:""):$value['lastname'] .", ". $value['firstname'] ." ". (!empty($value['middlename'][0])?$value['middlename'][0] .". ":"") . (!empty($value['extraname'])?$value['extraname']:""))
                                                 ." </td>
                                                 <td scope='row' style='width: 15%'>" . date('F j,Y', strtotime($value['date_cancelled'])) ." </td>
                                                 <td scope='row' style='width: 20%'>" . $user->getEncoder($value['empid']) ." </td>

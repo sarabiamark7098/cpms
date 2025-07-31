@@ -24,17 +24,17 @@
                 <h4 class="text-center">Client Info</h4>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required>
+                        <input type="text" name="firstname" class="form-control mr-sm-2 b" style="text-transform:uppercase" placeholder="First Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name">
+                        <input type="text" class="form-control mr-sm-2 b" name="middlename" style="text-transform:uppercase" placeholder="Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required>
+                        <input type="text" class="form-control mr-sm-2 b" name="lastname" style="text-transform:uppercase" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -94,12 +94,12 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <input type="number" class="form-control mr-sm-2 b" name="salary" placeholder="Salary">
+                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" name="salary" placeholder="Salary">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input type="text" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" onKeyPress="if(this.value.length==11) return false;">
+                        <input type="text" class="form-control mr-sm-2 b" name="contact" placeholder="Contact Number" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -144,7 +144,7 @@
                 <h4 class="text-center">Address</h4>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="regionClist" id="creg" name="regions" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_hc_Region(this)" required>
+                    <input list="regionClist" id="creg" name="regions" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required>
                         <datalist id="regionClist">
                         <?php
                             $getregions = $user->optionregion();
@@ -162,21 +162,21 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_hc_Province(this)" required>
+                    <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" required>
                     <datalist id="provinceClist">
                     </datalist>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" onChange="get_hc_Municipality(this)" required>
+                    <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required>
                     <datalist id="municipalityClist">
                     </datalist>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_hc_Barangay(this)" required>
+                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required>
                     <datalist id="barangayClist">
                     </datalist>
                     </div>  
@@ -186,21 +186,16 @@
                         <select class="form-control mr-sm-2 b" name="district" id="client_district">
                             <?php
                                 $getdistrict = $user->getdistrictlist();
-                                print_r($getdistrict);
+                                // print_r($getdistrict);
                                 // Loop through results
-                                echo "<option value='' selected>Select District</option>";
+                                echo "<option value=''>Select District</option>";
                                 foreach($getdistrict as $index => $value){
                                     //Display info
-                                    echo '<option value="'. $value['district_name'] .'"> ';
-                                    echo $value['district_name'];
-                                    echo '</option>';
+                                    echo '<option value="'. trim($value['district_name']) .'">' . htmlspecialchars($value['district_name']) . '</option>';
                                 }
                             ?>
                         </select>
                     </div>
-                    <!-- <div id="district_hidden_client" class="col-sm-12" style="margin-top:10px;">
-                        <input class="form-control mr-sm-2 b" type="text" name="selected_district" id="district_ni_client" placeholder="Other District">
-                    </div> -->
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
@@ -244,17 +239,17 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name">
+                            <input type="text" name="b_fname" class="form-control mr-sm-2 b benerequire" style="text-transform:uppercase" placeholder="Beneficiary First Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="text" class="form-control mr-sm-2 b" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name">    
+                            <input type="text" class="form-control mr-sm-2 b" name="b_mname" style="text-transform:uppercase" placeholder="Beneficiary Middle Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">    
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name">
+                        <input type="text" class="form-control mr-sm-2 b benerequire" name="b_lname" style="text-transform:uppercase" placeholder="Beneficiary Last Name" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -313,12 +308,12 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input type="number" class="form-control mr-sm-2 b" name="b_salary" placeholder="Beneficiary Salary">
+                            <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" name="b_salary" placeholder="Beneficiary Salary">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;" >
+                        <input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -348,7 +343,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="regionBlist" id="breg" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_hb_Region(this)">
+                        <input list="regionBlist" id="breg" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)">
                         <datalist id="regionBlist">
                         <?php
                                 $getregions = $user->optionregion();
@@ -366,21 +361,21 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="provinceBlist" id="bprov" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_hb_Province(this)">
+                        <input list="provinceBlist" id="bprov" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)">
                         <datalist id="provinceBlist">
                         </datalist>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_hb_Municipality(this)">
+                        <input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)">
                         <datalist id="municipalityBlist">
                         </datalist>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="barangayBlist" id="bbrgy" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay" onChange="get_hb_Barangay(this)">
+                        <input list="barangayBlist" id="bbrgy" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay" onChange="get_b_Barangay(this)">
                         <datalist id="barangayBlist">
                         </datalist>
                         </div>
@@ -388,15 +383,13 @@
                     <div class="form-group row">
                         <div class="col-sm-12">
                             <select class="form-control mr-sm-2 b" name="b_district" id="beneficiary_district">
-                                <option value="" selected>Select District</option>
                                 <?php
                                     $getdistrict = $user->getdistrictlist();
                                     //Loop through results
+                                    echo '<option value="" >Select District</option>';
                                     foreach($getdistrict as $index => $value){
                                         //Display info
-                                        echo '<option value="'. $value['district_name'] .'"> ';
-                                        echo $value['district_name'];
-                                        echo '</option>';
+                                        echo '<option value="'. trim($value['district_name']) .'">' . htmlspecialchars($value['district_name']) . '</option>';
                                     }
                                 ?>
                             </select>
@@ -529,21 +522,30 @@
 			prov = document.getElementById('cprov').value;
 			muni = document.getElementById('client_city').value;
             brgy = document.getElementById('cbrgy').value;
-            dist = document.getElementById('client_district').value;
+            dist = document.getElementById('client_district').value.trim();
             str = document.getElementById('cstr').value;
-            //console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
+            // console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
+            get_b_Region(document.getElementById('creg'));
+            get_b_Province(document.getElementById('cprov'));
+            get_b_Municipality(document.getElementById('client_city'));
+            get_b_Barangay(document.getElementById('cbrgy'));
+            
 			document.getElementById('breg').value = reg;
 			document.getElementById('bprov').value = prov;
 			document.getElementById('beneficiary_city').value = muni;
             document.getElementById('bbrgy').value = brgy;
-            document.getElementById('beneficiary_district').value = dist;
             document.getElementById('bstr').value = str;
             
-			get_b_Region_sw(reg);
-			get_b_Province_sw(prov);
-			get_b_Municipality_sw(muni);
-			get_b_Barangay_sw(brgy);
+            setTimeout(() => {
+                const bDist = document.getElementById('beneficiary_district');
+                for (let i = 0; i < bDist.options.length; i++) {
+                    if (bDist.options[i].value.trim() === dist) {
+                        bDist.selectedIndex = i;
+                        break;
+                    }
+                }
+            }, 500);
 		}
 
         $(function () {
@@ -575,6 +577,19 @@
                 }
             });
         });
+        
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
+
 
         </script>
 </html>

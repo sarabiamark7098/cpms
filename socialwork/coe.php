@@ -11,12 +11,19 @@
         $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
         $client_fam = $user->getclientFam($_GET['id']);
         // print_r($client_fam);
-        $GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
-        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
-        $GISsignatoryPosition = $GISsignatory['position'];
+        $GISsignatoryName = "";
+        $GISsignatoryPosition = "";
+        if(!empty($gis['signatory_id'])){
+            $GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
+            $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
+            $GISsignatoryPosition = $GISsignatory['position'];
+        }
         
 		$name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"]." ". (!empty($client['extraname'])?$client['extraname'].".":"");
-        $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname'].".":""); 
+        $bname = "";
+        if(!empty($client["b_lname"])){
+            $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname'].".":""); 
+        }
         if(!empty($client["b_lname"])){
 			$today = date("Y-m-d");
 			$diff = date_diff(date_create($client['b_bday']), date_create($today));
@@ -50,7 +57,7 @@
         
         if($record){
             $COEsignatory= $user->getsignatory($client['signatory_GL']); //kwaun ang data sa signatory using sign_id 
-            $COEsignatoryName = (!empty($COEsignatory['name_title'])?$COEsignatory['name_title'] ." ":""). strtoupper($COEsignatory['first_name'] ." ". (!empty($COEsignatory['middle_I'])?$COEsignatory['middle_I'] .". ":""). $COEsignatory['last_name']);
+            $COEsignatoryName = (!empty($COEsignatory['name_title'])?$COEsignatory['name_title'] ." ":""). strtoupper((!empty($COEsignatory['first_name'])??"") ." ". (!empty($COEsignatory['middle_I'])?$COEsignatory['middle_I'] .". ":""). (!empty($COEsignatory['last_name'])??""));
         }
         
         $soc_worker = $user->getuserInfo($_SESSION['userId']); //get soc-worker data from database
@@ -70,10 +77,14 @@
         }
         $type = strval($client_assistance[1]['type']);
         $rec_amount = 50001;
-		
-		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
-        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
-        $GLsignatoryPosition = $GLsignatory['position'];
+
+		$GLsignatoryName = "";
+        $GLsignatoryPosition = "";
+        if(!empty($client['signatory_GL'])){
+            $GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+            $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). (!empty($GLsignatory['first_name'])?$GLsignatory['first_name']:"") ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). (!empty($GLsignatory['last_name'])?$GLsignatory['last_name']:""));
+            $GLsignatoryPosition = !empty($GLsignatory['position'])?$GLsignatory['position']:"";
+        }
 		
         $mode1 = $client_assistance[1]['mode'];
         $cash = $user->getCash($_GET['id']); //cash table
@@ -106,6 +117,7 @@
         <script type="text/javascript" src="../js/jquery.min.js"></script>
         <script type="text/javascript" src="../js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../js/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
         <title>COE</title>
         <style>
             input[type=checkbox]
@@ -362,6 +374,18 @@
                 $('.salary_monthly').mask("#,000,000,000", {reverse: true});
                 $('.money').mask("#,000,000.00", {reverse: true,});
                 
+                $(document).ready(function () {
+                    $(".currencyMaskedInput").inputmask({
+                        alias: "currency",
+                        prefix: "",
+                        rightAlign: false,
+                        groupSeparator: ",",
+                        autoGroup: true,
+                        digits: 2,
+                        allowMinus: false
+                    });
+                });
+
                 function CurrencyFormat(number)
                 {
                     var decimalplaces = 2;
@@ -513,7 +537,42 @@
                     }
                 });
             });
+
+            $(function () {
+                if ($("#val_id").prop("checked")) {
+                    $("#pres_id").prop("disabled", false);
+                    $("#pres_id").prop("required", true);
+                }else{
+                    $("#pres_id").prop("disabled", true);
+                    $("#pres_id").prop("required", false);
+                    $("#pres_id").val("");
+                }
+                
+                $("#val_id").click(function () {
+                    let isChecked = $(this).prop("checked");
+                    $("#pres_id").prop("disabled", !isChecked);
+                    $("#pres_id").prop("required", isChecked);
+                    $("#pres_id").val(isChecked ? $("#pres_id").val() : "");
+                });
+            });
             
+            $(function () {
+                if ($("#coeother").prop("checked")) {
+                    $("#coeotherinput").prop("disabled", false);
+                    $("#coeotherinput").prop("required", true);
+                }else{
+                    $("#coeotherinput").prop("disabled", true);
+                    $("#coeotherinput").prop("required", false);
+                    $("#coeotherinput").val("");
+                }
+                
+                $("#coeother").click(function () {
+                    let isChecked = $(this).prop("checked");
+                    $("#coeotherinput").prop("disabled", !isChecked);
+                    $("#coeotherinput").prop("required", isChecked);
+                    $("#coeotherinput").val(isChecked ? $("#coeotherinput").val() : "");
+                });
+            });
         </script>
     </head>
     <body>
@@ -549,7 +608,7 @@
                             </div>
                             <div class="col-10">
                                 <input type="text" class="form-control mr-sm-2 b" id="client_work"     name="client_work" value="<?php echo $client['occupation']?>" placeholder="Client Current Work" required><br>
-                                <input type="text" class="form-control mr-sm-2 b" name="client_salary" id="client_salary" value="<?php echo number_format($client['salary'])?>" placeholder="Monthly Salary"><br>
+                                <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" name="client_salary" id="client_salary" value="<?php echo $client['salary']?>" placeholder="Monthly Salary"><br>
                                 <input type="text" class="form-control mr-sm-2 b" id="client_agency"      name="client_agency" value="<?php echo $client['agency']?>" placeholder="Agency/Company" required>
                             </div>
                         </div>
@@ -601,7 +660,7 @@
                             <div class="card-body">
                                 <div>
 									<label> Special Disbursing Officer : </label>&nbsp&nbsp&nbsp
-									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo $cash['sd_officer'] ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
+									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_officer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
                                 </div>
                             </div>
                         </div> 
@@ -618,18 +677,18 @@
                             <div class="card-body">
                                 <div class="container">
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck($record['document'], "", "Referral") ?>> Referral Letter</div>
+                                        <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Referral") ?>> Referral Letter</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="soc" value="Social Case Study" <?php echo $user->checkCheck($record['document'], "", "Social") ?>> Social Case Study Report</div>
+                                        <div><input type="checkbox" class="lg" name="soc" value="Social Case Study" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Social") ?>> Social Case Study Report</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="just" value="Justification" <?php echo $user->checkCheck($record['document'], "", "Justification") ?>> Justification</div>
+                                        <div><input type="checkbox" class="lg" name="just" value="Justification" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Justification") ?>> Justification</div>
                                     </div>
                                     <div class="row">
                                         <div>
-                                            <input type="checkbox" class="lg" name="val_id" value="Valid ID:" <?php echo $user->checkCheck($record['document'], "", "Valid ID") ?>> Valid ID Presented: 
-                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo $record['id_presented'] ?>">
+                                            <input type="checkbox" class="lg" id="val_id" name="val_id" value="Valid ID:" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Valid ID") ?>> Valid ID Presented: 
+                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                             <datalist id="valid">
                                                 <option>School-ID</option>
                                                 <option>Voter's ID</option>
@@ -646,20 +705,23 @@
                                         </div> 
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck($record['document'], "", "Contract of Employment") ?>> Contract of Employment</div>
+                                        <div><input type="checkbox" class="lg" name="cont_emp" value="Contract of Employment" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Contract of Employment") ?>> Contract of Employment</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck($record['document'], "", "Certificate of Employment") ?>> Certificate of Employment</div>
+                                        <div><input type="checkbox" class="lg" name="cert_attest" value="Certificate of Attestation" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Certificate of Attestation") ?>> Certificate of Attestation</div>
                                     </div>
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="itr" value="Income Tax Return" <?php echo $user->checkCheck($record['document'], "", "Income Tax Return") ?>> Income Tax Return</div>
+                                        <div><input type="checkbox" class="lg" name="cert_emp" value="Certificate of Employment" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Certificate of Employment") ?>> Certificate of Employment</div>
+                                    </div>
+                                    <div class="row">
+                                        <div><input type="checkbox" class="lg" name="itr" value="Income Tax Return" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Income Tax Return") ?>> Income Tax Return</div>
                                     </div>
                                     <!-- <div class="row">
-                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck($record['document'], "", "4ps") ?>> 4PS DSWD I.D.</div>
+                                        <div><input type="checkbox" class="lg" name="brgy" value="4ps"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "4ps") ?>> 4PS DSWD I.D.</div>
                                     </div> -->
                                     <div class="row">
-                                        <div><input type="checkbox" class="lg" name="others" value="Others"  <?php echo $user->checkCheck($record['document'], "", "Others") ?>> Others: 
-                                            <input type="text" class="text-left center-input" name="others_input" value=" <?php echo $record['others_input'] ?>">
+                                        <div><input type="checkbox" class="lg" id="coeother" name="others" value="Others"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Others") ?>> Others: 
+                                            <input type="text" class="text-left center-input" id="coeotherinput" name="others_input" value=" <?php echo (!empty($record['others_input'])?$record['others_input']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
                                         </div>
                                     </div>
                                 </div>
@@ -677,31 +739,34 @@
                                     if(substr_count(strval($type), "Medic") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck($record['document'], "", "MEDICAL").'> Medical Certificate/Abstract</div>
+                                            <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "MEDICAL").'> Medical Certificate/Abstract</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
                                         <div class="row">   
-                                            <div><input type="checkbox" class="lg" name="dis_sum" id="dis_sum" value="DISCHARGE SUMMARY" '.$user->checkCheck($record['document'], "", "DISCHARGE").'> Discharge Summary</div>
+                                            <div><input type="checkbox" class="lg" name="dis_sum" id="dis_sum" value="DISCHARGE SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DISCHARGE").'> Discharge Summary</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="tr_pro" id="tr_pro" value="TREATMENT PROTOCOL" '.$user->checkCheck($record['document'], "", "TREATMENT").'> Treatment Protocol</div>
+                                            <div><input type="checkbox" class="lg" name="tr_pro" id="tr_pro" value="TREATMENT PROTOCOL" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "TREATMENT").'> Treatment Protocol</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck($record['document'], "", "LAB REQUEST").'> Laboratory Request</div>
+                                            <div><input type="checkbox" class="lg" name="lab_req" id="lab_req" value="LAB REQUEST" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "LAB REQUEST").'> Laboratory Request</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck($record['document'], "", "QUOTATION").'> Quotation/Chargeslip</div>
+                                            <div><input type="checkbox" class="lg" name="qout" id="qout" value="QUOTATION" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "QUOTATION").'> Quotation/Chargeslip</div>
                                         </div>  
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck($record['document'], "", "PRESCRIPTION").'> Prescription</div>
+                                            <div><input type="checkbox" class="lg" name="pres" id="pres" value="PRESCRIPTIONS" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "PRESCRIPTION").'> Prescription</div>
+                                        </div>
+                                        <div class="row">   
+                                            <div><input type="checkbox" class="lg" name="cs_report" id="cs_report" value="CASE SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "CASE SUMMARY").'> Case Summary Report</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck($record['document'], "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
+                                            <div><input type="checkbox" class="lg" name="stat_acc" id="stat_acc" value="STATEMENT OF ACCOUNT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "STATEMENT OF ACCOUNT").'> Statement of Account</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="promissory" id="promissory" value="PROMISSORY NOTE" '.$user->checkCheck($record['document'], "", "PROMISSORY NOTE").'> Promissory Note</div>
+                                            <div><input type="checkbox" class="lg" name="promissory" id="promissory" value="PROMISSORY NOTE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "PROMISSORY NOTE").'> Promissory Note</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Trans") > 0){
@@ -711,13 +776,16 @@
                                     }elseif(substr_count(strval($type), "Funeral") > 0){
                                         echo '
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck($record['document'], "", "DEATH CERTIFICATE").'> Death Certificate</div>
+                                            <div><input type="checkbox" class="lg" name="regD" id="regD" value="REGISTERED DEATH CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH CERTIFICATE").'> Death Certificate</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck($record['document'], "", "FUNERAL").'> Funeral Contact</div>
+                                            <div><input type="checkbox" class="lg" name="funC" id="funC" value="FUNERAL CONTRACT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "FUNERAL").'> Funeral Contract</div>
                                         </div>
                                         <div class="row">
-                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck($record['document'], "", "DEATH SUMMARY").'> Death Summary</div>
+                                            <div><input type="checkbox" class="lg" name="t_perm" id="t_perm" value="TRANSFER PERMIT" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "TRANSFER PERMIT").'> Transfer Permit</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH SUMMARY").'> Death Summary</div>
                                         </div>
                                         ';
                                     }elseif(substr_count(strval($type), "Food") > 0){
@@ -751,7 +819,7 @@
                                                     <div class="col-12">
                                                         <h6 class="text-center">Amount to Be Distributed: </h6>
                                                         <h6 class="text-center">Php 
-                                                        <input type="text" class="money" id="totalamount" readonly /></h6>
+                                                        <input type="text" class="currencyMaskedInput" id="totalamount" readonly /></h6>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -760,7 +828,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[1]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf1" name="amountf1" value="<?php echo !empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf1" name="amountf1" value="<?php echo !empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -769,7 +837,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[2]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf2" name="amountf2" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf2" name="amountf2" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -779,7 +847,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[3]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf3" name="amountf3" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf3" name="amountf3" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -791,7 +859,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[4]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf4" name="amountf4" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf4" name="amountf4" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -803,7 +871,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[5]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf5" name="amountf5" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf5" name="amountf5" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -815,7 +883,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[6]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf6" name="amountf6" value="<?php echo !empty($fundsourcedata[6]['fs_amount'])?$fundsourcedata[6]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf6" name="amountf6" value="<?php echo !empty($fundsourcedata[6]['fs_amount'])?$fundsourcedata[6]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -827,7 +895,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[7]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf7" name="amountf7" value="<?php echo !empty($fundsourcedata[7]['fs_amount'])?$fundsourcedata[7]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf7" name="amountf7" value="<?php echo !empty($fundsourcedata[7]['fs_amount'])?$fundsourcedata[7]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -839,7 +907,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[8]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf8" name="amountf8" value="<?php echo !empty($fundsourcedata[8]['fs_amount'])?$fundsourcedata[8]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf8" name="amountf8" value="<?php echo !empty($fundsourcedata[8]['fs_amount'])?$fundsourcedata[8]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -851,7 +919,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[9]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf9" name="amountf9" value="<?php echo !empty($fundsourcedata[9]['fs_amount'])?$fundsourcedata[9]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf9" name="amountf9" value="<?php echo !empty($fundsourcedata[9]['fs_amount'])?$fundsourcedata[9]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -863,7 +931,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[10]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf10" name="amountf10" value="<?php echo !empty($fundsourcedata[10]['fs_amount'])?$fundsourcedata[10]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf10" name="amountf10" value="<?php echo !empty($fundsourcedata[10]['fs_amount'])?$fundsourcedata[10]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -875,7 +943,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[11]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[11]['fs_amount'])?$fundsourcedata[11]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[11]['fs_amount'])?$fundsourcedata[11]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -886,7 +954,7 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[12]['fundsource']." = " ?></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control mr-sm-2 b money" id="amountf12" name="amountf12" value="<?php echo !empty($fundsourcedata[12]['fs_amount'])?$fundsourcedata[12]['fs_amount']:''?>" placeholder="Amount" required>
+                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf12" name="amountf12" value="<?php echo !empty($fundsourcedata[12]['fs_amount'])?$fundsourcedata[12]['fs_amount']:''?>" placeholder="Amount" required>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -895,7 +963,7 @@
                                                     <div class="col-12">
                                                         <h6 class="text-center">Amount Distributed: </h6>
                                                         <h6 class="text-center">Php 
-                                                        <input type="text" class="text-center money" id="dtotalamount" readonly/></h6></h6>
+                                                        <input type="text" class="text-center currencyMaskedInput" id="dtotalamount" readonly/></h6></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -995,7 +1063,7 @@
 		if(isset($_POST['sd_officer'])){
             $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
         }
-        
+
 		if(isset($_POST['client_work'])){
             $client_work = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_work'])));
         }
@@ -1005,6 +1073,7 @@
 		if(isset($_POST['client_agency'])){
             $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
+        
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }
@@ -1085,6 +1154,8 @@
         $docu = "";
         $id_pres = "";
         $others_input = "";
+        $others_medical = "";
+        $others_burial = "";
 		$sdo = "";
         if(!empty($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);

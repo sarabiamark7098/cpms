@@ -12,6 +12,14 @@
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+        $otherinfo = $user->getOtherInformations($_GET['id']);
+        $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+        $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+        $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
     
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 			
@@ -239,7 +247,7 @@
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printGIS()">GIS</button></div>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printCOE()">COE</button></div>
                         <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"success":"dark" ?> btn-block no-print" onclick="printGL()" <?php echo (strtolower($client_assistance[1]["mode"])=="gl")?"":"disabled" ?>>GL</button></div>
-                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav" || strtolower($client_assistance[2]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav" || strtolower($client_assistance[2]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div>
+                        <div class="col"> <button class="btn btn-<?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"success":"dark" ?> btn-block no-print" onclick="printCAV()" <?php echo (strtolower($client_assistance[1]["mode"])=="cav")?"":"disabled" ?>>CASH</button></div>
                     </div>  
                 </div>
             </div>
@@ -247,40 +255,14 @@
     </div>
     <div id="gis" hidden>
         
-        <?php // include('gis_sheet.php');
+        <?php 
             include('gisv2_print.php');
         ?>
 
     </div>
     <div id="coe" hidden>
-        
         <?php 
-        // if(substr_count(strval($client_assistance[1]['type']), "Medic") > 0){
-        //             include("coe_med.php"); 
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Trans") > 0){
-        //             include("coe_trans.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Food Sub") > 0){
-        //             include("coe_food.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Burial") > 0){
-        //             include("coe_burial.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Educ") > 0){
-        //             include("coe_educ.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Cash") > 0){
-        //             include("coe_cash.php");
-        //         }elseif(substr_count(strval($client_assistance[1]['type']), "Non") > 0){
-        //             include("coe_non_food.php");
-        //         }
-
-        //         if(!empty(substr_count(strval($client_assistance[2]['type']), "Food Sub") > 0)){
-		// 			include("coe_food.php");
-        //         }
-            if($mode1 == "CAV" || $mode2 == "CAV"){
-				include('coev2_print_cav.php');
-			} else if($mode1 == "GL" || $mode2 == "GL"){
-				include('coev2_print_gl.php');
-			} else {
-				include('coev2_print.php');
-			}
+            include('coev2_print.php');
 		?>
     </div>
     <div>

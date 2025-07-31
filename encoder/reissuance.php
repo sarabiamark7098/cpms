@@ -37,8 +37,17 @@
     $_SESSION["client_id_assess"] = $_GET["id"];
     $dateentered = date("Y-m-d H:i:s");
     $timeentry = $user->theTime($dateentered);
-    $client_fam = $user->getGisDataFam($id);
+    $client_fam = $user->getclientFam($id);
     $gis = $user->getGISData($id);
+    $otherinfo = $user->getOtherInformations($_GET['id']);
+    $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
+    $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
+    $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
+    $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
+    $externalResources = $user->ParseInputs($otherinfo['externalResources']);
+    $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
+    $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
+        
     $soc_worker = $user->getuserInfo($client['encoded_socialWork']);
     $soc_workerFullname = $soc_worker['empfname'].' '.$soc_worker['empmname'][0].'. '.$soc_worker['emplname'].' '.$soc_worker['empext'];
     $encoder = $user->getuserInfo($client['encoded_encoder']);
@@ -56,12 +65,11 @@
 		$address['beneficiary'] .= $client['b_street'] .", ";
 	}
 	$address['beneficiary'] .= $Bbrgy[0] .", ". $Bcity[0].", ". $Bprovince[0];
-    $client_fam = $user->getGisDataFam($id);
     $amountToWord = $user->toWord($client["amount1"]);
     $signatoryName = strtoupper($signatory['first_name'] ." ". $signatory['middle_I'] .". ". $signatory['last_name']);
     $glsignatoryname = strtoupper($glsignatory['first_name'] ." ". $glsignatory['middle_I'] .". ". $glsignatory['last_name']);
-    $cash = $user->lastCash($id);
-    $gl = $user->lastGL($id);
+    $cash = $user->getCash($id);
+    $gl = $user->getGL($id);
     $coe = $user->getCOEData($id);
     $dateaccomplished = explode("-",$client['date_accomplished']);
     $dateenter = explode("-",$dateentered);
@@ -168,6 +176,24 @@
             document.body.innerHTML = oldPage;
 
 		}
+        
+        function printInformationSheet() {
+            //unsa na div iyang e print
+            var divElements = document.getElementById('isheet').innerHTML;;
+            //nag gunit sa whole page 
+            var oldPage = document.body.innerHTML;
+
+            //gi set ang div as a whole page
+            document.body.innerHTML =
+                "<html><head><title></title></head><body>" +
+                divElements + "</body>";
+            //Print Page
+            window.print();
+            //gi balik ang old page
+            document.body.innerHTML = oldPage;
+
+            //setInputCOE(arr); //gi pang butang sa input ang mga input sa user
+        }
         function printCOE(){
             var divElements = document.getElementById('coe').innerHTML;
             //Get the HTML of whole page
@@ -228,6 +254,7 @@
                 <form class="form-group" action="reissuance.php?id=<?php echo $id ?>&stat=0" method="POST" autocomplete="off">
                     <div class="row text-center" <?php echo $_GET['stat']==0? 'style="display:none"' : ""?>>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printGIS()" <?php echo $_GET['stat']==0?'disabled':'';?>>GIS</button></div>
+                        <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printInformationSheet()" <?php echo $_GET['stat']==0?'disabled':'';?>>Information Sheet</button></div>
                         <div class="col"> <button class="btn btn-primary btn-block no-print" onclick="printCOE()" <?php echo $_GET['stat']==0?'disabled':'';?>>COE</button></div>
                         <div class="col"> <button class="btn btn-<?php echo empty($gl)?"default":"success" ?> btn-block no-print" onclick="printGL()" <?php echo empty($gl)?"disabled":"" ?>>GL</button></div>
                         <div class="col"> <button class="btn btn-<?php echo empty($cash)?"default":"success" ?> btn-block no-print" onclick="printCAV()" <?php echo empty($cash)?"disabled":"" ?>>CASH</button></div>
@@ -264,30 +291,20 @@
         </div>
     </div>
    <div id="gis" hidden>
-    <?php include('gis_sheet.php');?>
-</div>
-<div id="coe" hidden>
-    <?php if(substr_count(strval($client['type1']), "Medic") > 0){
-                include("coe_med.php"); 
-            }elseif(substr_count(strval($client['type1']), "Trans") > 0){
-                include("coe_trans.php");
-            }elseif(substr_count(strval($client['type1']), "Food Sub") > 0){
-                include("coe_food.php");
-            }elseif(substr_count(strval($client['type1']), "Burial") > 0){
-                include("coe_burial.php");
-            }elseif(substr_count(strval($client['type1']), "Educ") > 0){
-                include("coe_educ.php");
-            }elseif(substr_count(strval($client['type1']), "Cash") > 0){
-                include("coe_cash.php");
-            }elseif(substr_count(strval($client['type1']), "Non") > 0){
-                include("coe_non_food.php");
-            }
-
-            if(substr_count(strval($client["type2"]), "Food Sub") > 0){
-                include("coe_food.php");
-            }
-    ?>
-</div>
+        <?php 
+            include('gis_sheet.php');
+        ?>
+    </div>
+    <div id="coe" hidden>
+        <?php 
+            include('coev2_print_gl.php');
+        ?>
+    </div>
+    <div id="isheet" hidden>
+        <?php 
+            include('information_sheet.php');
+        ?>
+    </div>
     <div>
         <div id="cav" hidden>
             <?php 

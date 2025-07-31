@@ -3,8 +3,8 @@
 	$user = new User();
 	
 	if(!$_SESSION['login']){
-		header('location:../index.php');
-		}
+        header('location:../index.php');
+    }
 	if($_SESSION['position'] != 'Encoder'){
 		switch ($_SESSION['position']){
 			case 'Encoder': header("Location: ../encoder/home.php");
@@ -28,12 +28,15 @@
 		
 		$result = $user->addCompany($addresseename, $addresseeposition, $addresseetomention, $addcname, $addcaddress);
 		
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Adding Company!');</script>";
 			echo "<script>window.location='ProviderPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
-		}
-		else{
+		}elseif($result == "exists"){
+            echo "<script>alert('Company Already Exist!');</script>";
+            echo "<script>window.location='ProviderPage.php';</script>";
+            echo "<meta http-equiv='refresh' content='0'>";
+        }else{
 			echo "<script>alert('Error Adding Company!');</script>";
 			echo "<script>window.location='ProviderPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
@@ -78,6 +81,7 @@
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 		
+        <script type="text/javascript" src="../js/jquery.inputmask.min.js"></script>
 		<style>
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
@@ -87,7 +91,6 @@
 			$("#admintable").dataTable();
 		  })
 		</script>
-        
     </head>
 
 <body>
@@ -96,12 +99,12 @@
         <!-- Sidebar Holder -->
         <nav id="sidebar">
             <div class="sidebar-header">
-                <img src="../images/logo.png" alt="dswd logo" width="100px" height="100px" s>
+                <img src="../images/logo.png" alt="dswd logo" width="100px" height="100px">
             </div>
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">Client's List<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
+                    <a href="home.php">List of Served Clients<i style="float: right;font-size:25px" class="fa fa-child"></i> </a> 
                 </li>
                 <li>
                     <a href="UnservedClient.php">Unserved List <i style="float: right;font-size:25px" class="fa fa-child"></i></a>
@@ -130,7 +133,7 @@
                     <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" style="margin-left: 10px;" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
 					</a>
-					<a class="nav-link toggle tohover" data-target="#AddProvider" data-toggle="modal" style="border-left: solid 4px gray" aria-haspopup="true" aria-expanded="false">Add Provider<a>
+					<a class="nav-link toggle tohover" data-target="#AddProvider" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Provider<a>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
@@ -157,44 +160,23 @@
 						</thead>
 						<tbody>
 							<?php
-							if(!isset($_REQUEST['buttonSearch'])){
-								$getuser = $user->get_provider_to_admin_table();
-								if($getuser){
-									foreach($getuser as $index => $value){
-									echo "<tr>
-												<td scope='row' style='width: 15%'>" . $value["company_id"]. "</td> 
-												<td>" . $value["company_name"] . "</td>
-												<td style='width: 25%'>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#ProviderInfo'> View </button>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#UpdateProvider'> Update </button>
-												</td>
-												</tr>
-												
-											";		
-									}
-								} else {
-									echo "NO DATA";
-								}
-							} else {
-								$search = $_POST["searchdata"];
-								$getuser = $user->search_provider($search);
-								if($getuser){
-									foreach($getuser as $index => $value){
-									echo "<tr>
-												<td scope='row' style='width: 15%'>" . $value["company_id"]. "</td> 
-												<td>" . $value["company_name"] . "</td>
-												<td style='width: 25%'>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#ProviderInfo'> View </button>
-												<button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#UpdateProvider'> Update </button>
-												</td>
-												</tr>
-												
-											";		
-									}
-								} else {
-									echo "NO DATA";
-								}
-							}
+                            $getuser = $user->get_provider_to_admin_table();
+                            if($getuser){
+                                foreach($getuser as $index => $value){
+                                echo "<tr>
+                                            <td scope='row' style='width: 15%'>" . $value["company_id"]. "</td> 
+                                            <td>" . $value["company_name"] . "</td>
+                                            <td style='width: 25%'>
+                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#ProviderInfo'> View </button>
+                                            <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["company_id"]. "' style='margin-right: 10px;' data-target='#UpdateProvider'> Update </button>
+                                            </td>
+                                            </tr>
+                                            
+                                        ";		
+                                }
+                            } else {
+                                echo "NO DATA";
+                            }
 							?>
 						</tbody>
 					</table>
@@ -390,25 +372,36 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
 		</div>
 	</div>
 	<script>
-	$('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget) // Button that triggered the modal
-          var modal = $(this);
-          var dataString = 'New Data';
- 
-            $.ajax({
-                type: "GET",
-                url: "AddCompany.php",
-                data: dataString,
-                cache: false,
-                success: function (data) {
-                    // console.log(data);
-                    modal.find('.Addbody').html(data);
-                },
-                error: function(err) {
-                    // console.log(err);
-                }
-				
-            });  
-	})
+        $('#AddProvider').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var modal = $(this);
+            var dataString = 'New Data';
+    
+                $.ajax({
+                    type: "GET",
+                    url: "addCompany.php",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        // console.log(data);
+                        modal.find('.Addbody').html(data);
+                    },
+                    error: function(err) {
+                        // console.log(err);
+                    }
+                    
+                });  
+        });
+        $(document).ready(function () {
+            $(".currencyMaskedInput").inputmask({
+                alias: "currency",
+                prefix: "",
+                rightAlign: false,
+                groupSeparator: ",",
+                autoGroup: true,
+                digits: 2,
+                allowMinus: false
+            });
+        });
 	</script>
 </html>
