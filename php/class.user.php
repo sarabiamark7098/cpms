@@ -727,7 +727,7 @@
 				$companyaddress = mysqli_escape_string($this->db,$companyaddress);
 				
 				//check if the company already exists
-				$query = "SELECT * FROM provider WHERE company_name = '{$companyname}' AND company_address = '{$companyaddress}'";
+				$query = "SELECT * FROM provider WHERE addressee_name = '{$addresseename}' AND addressee_position = '{$addresseeposition}' AND '{$companyname}' AND company_address = '{$companyaddress}'";
 				$result = mysqli_query($this->db,$query);
 				$rows = mysqli_num_rows($result);
 				if($rows > 0){

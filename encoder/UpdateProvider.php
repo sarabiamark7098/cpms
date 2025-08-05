@@ -39,23 +39,23 @@ $user = new User();
 				  <label class="active" for="companyid">Company ID</label>
 				</div>
 				<div class="form-group col-lg-7">
-				  <input value="<?php echo $getprovider['addressee_name']?>" id="addresseename" name="addresseename" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getprovider['addressee_name']?>" id="addresseename" name="addresseename" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="addresseename">Addressee</label>
 				</div>
 				<div class="form-group col-lg-5">
-				  <input value="<?php echo $getprovider['addressee_position']?>" placeholder="No Value" id="addresseeposition" name="addresseeposition" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getprovider['addressee_position']?>" placeholder="No Value" id="addresseeposition" name="addresseeposition" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="addresseeposition">Addressee Position</label>
 				</div>
 				<div class="form-group col-lg-12">
-					<input  value="<?php echo $getprovider['to_mention']?>" id="addresseetomention" name="addresseetomention" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+					<input  value="<?php echo $getprovider['to_mention']?>" id="addresseetomention" name="addresseetomention" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 					<label class="active" for="addresseetomention">Addressee To Mention(e.g. Mr. Dela Cruz OR Leave Empty if None)</label>
 				</div>
 				<div class="form-group col-lg-12">
-				  <input value="<?php echo $getprovider['company_name']?>" id="companyname" name="companyname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getprovider['company_name']?>" id="companyname" name="companyname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="companyname">Company Name</label>
 				</div>
 				<div class="form-group col-lg-12">
-				  <input value="<?php echo $getprovider['company_address']?>" id="companyaddress" name="companyaddress" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+				  <input value="<?php echo $getprovider['company_address']?>" id="companyaddress" name="companyaddress" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="companyaddress">Company Address</label>
 				</div>
 			</div>
