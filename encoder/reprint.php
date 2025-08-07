@@ -126,7 +126,7 @@
         
 		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
         $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). (!empty($GLsignatory['first_name'])? $GLsignatory['first_name'] ." ":"") . (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). (!empty($GLsignatory['last_name'])?$GLsignatory['last_name']:""));
-        $GLsignatoryPosition = $GLsignatory['position'];
+        $GLsignatoryPosition = !empty($GLsignatory['position'])?$GLsignatory['position']:"";
 		
 		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
         //fullname of social worker
