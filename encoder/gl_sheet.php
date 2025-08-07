@@ -136,13 +136,13 @@
             <?php if(empty($gl['for_the_id'])){ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($GLsignatoryName)?$GLsignatoryName:"")) ?>"><br>
-					<input id="s_position" style="border: none;width:100%;" value="<?php echo (!empty($GLsignatoryPosition)?$GLsignatoryPosition:"") ?>"><br>
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($GLsignatory['name_title'])?$GLsignatory['name_title']." ":"").$GLsignatory['first_name']." ".(!empty($GLsignatory['middle_I'])?$GLsignatory['middle_I'].". ":"").$GLsignatory['last_name']) ?>"><br>
+					<input id="s_position" style="border: none;width:100%;" value="<?php echo $GLsignatory['position'] ?>"><br>
 					<br>
 					<p class="">Valid within 30 days upon receipt.</p>
 					<p class="cn " style="font-size:18Opx ">
 						<?php 
-							echo $user->initials_gl($signatoryGL['signatory_tree'],$client['encoded_socialWork'],$client['encoded_encoder'],$signatoryGL['special_ini']);
+							echo $user->initials_gl($GLsignatory['signatory_tree'],$client['encoded_socialWork'],$client['encoded_encoder'],$GLsignatory['special_ini']);
 						?>
 					</p>
                     <span >Not valid without seal<span><br>
@@ -152,8 +152,8 @@
             <?php }else{ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
-					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>">                  
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($GLsignatory['name_title'])?$GLsignatory['name_title']." ":"").$GLsignatory['first_name']." ".(!empty($GLsignatory['middle_I'])?$GLsignatory['middle_I'].". ":"").$GLsignatory['last_name']) ?>"><br>
+					<input id="s_position" style="border: none;width:100%;" value="<?php echo $GLsignatory['position'] ?>">                  
                 </div>
                 <div class="col-1"></div>
                 <div class="col-5"><br>
@@ -167,7 +167,7 @@
             <p class="cn " style="font-size:18Opx ">
                 <?php 
                 //Mga initial ni diri buset
-					echo $user->initials_gl($signatoryGL['signatory_tree'],$client['encoded_socialWork'],$client['encoded_encoder'],$signatoryGL['special_ini']);
+					echo $user->initials_gl($GLsignatory['signatory_tree'],$client['encoded_socialWork'],$client['encoded_encoder'],$GLsignatory['special_ini']);
 				?>
             </p>
 				<span>Not valid without seal<span><br>
