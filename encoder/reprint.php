@@ -121,11 +121,11 @@
         $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
         
 		$GISsignatory=$user->getsignatory($gis['signatory_id']); //get data sa GIS na signatory
-        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). $GISsignatory['first_name'] ." ". (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). $GISsignatory['last_name']);
-        $GISsignatoryPosition = $GISsignatory['position'];
+        $GISsignatoryName = strtoupper((!empty($GISsignatory['name_title'])?($GISsignatory['name_title'] != " "?$GISsignatory['name_title'] ." ":""):""). (!empty($GISsignatory['first_name'])?$GISsignatory['first_name'] ." ":"") . (!empty($GISsignatory['middle_I'])?($GISsignatory['middle_I'] != " "?$GISsignatory['middle_I'] .". ":""):""). (!empty($GISsignatory['last_name'])?$GISsignatory['last_name']:""));
+        $GISsignatoryPosition = !empty($GISsignatory['position'])?$GISsignatory['position']:"";
         
 		$GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
-        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
+        $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). (!empty($GLsignatory['first_name'])? $GLsignatory['first_name'] ." ":"") . (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). (!empty($GLsignatory['last_name'])?$GLsignatory['last_name']:""));
         $GLsignatoryPosition = $GLsignatory['position'];
 		
 		$soc_worker = $user->getuserInfo($client['encoded_socialWork']);
