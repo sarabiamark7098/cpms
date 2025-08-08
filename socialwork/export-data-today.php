@@ -8,10 +8,8 @@ $date = $_GET['date'] ?? date('Y-m-d');
 $file = date("F d Y", strtotime($date));
 $filename =  $file . " Export";
 
-$fromdate = date("Y-m-d", strtotime($date));
-$todate = date("Y-m-d", strtotime($date));
-$date1 = $fromdate . " 00:00:00";
-$date2 = $todate . " 23:59:00";
+$date1 = date("Y-m-d 00:00:00", strtotime($date));
+$date2 = date("Y-m-d 23:59:00", strtotime($date));
 
 $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, date_accomplished, mode, bene_id, 
     client_region, client_province, client_municipality, client_barangay, client_district,
@@ -24,32 +22,34 @@ $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no,
     INNER JOIN assistance USING (trans_id)
     LEFT JOIN family USING (trans_id)
     LEFT OUTER JOIN gl USING (trans_id)
-    WHERE (Left(trans_id, 9) = '$office_loc') AND (date_accomplished BETWEEN '{$date1}' and '{$date2}') and status_client = 'Done' 
+    WHERE (LEFT(trans_id, 9) = '$office_loc') 
+      AND (date_accomplished BETWEEN '{$date1}' AND '{$date2}') 
+      AND status_client = 'Done' 
     GROUP BY client_id, trans_id, date_entered, encoded_encoder, control_no, occupation, salary, 
-            date_accomplished, mode, bene_id, client_region, client_province, 
-            client_municipality, client_barangay, client_district, lastname, 
-            firstname, middlename, extraname, sex, civil_status, date_birth, 
-            mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, 
-            subCategory, pantawid_bene, status_client
+             date_accomplished, mode, bene_id, client_region, client_province, 
+             client_municipality, client_barangay, client_district, lastname, 
+             firstname, middlename, extraname, sex, civil_status, date_birth, 
+             mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, 
+             subCategory, pantawid_bene, status_client
     ORDER BY tbl_transaction.date_entered ASC";
 
 $result = mysqli_query($user->db, $query);
 if (mysqli_num_rows($result) === 0) {
-    echo "<script>alert('NO TRANSACTION MADE ON THIS DATE!');
-    window.location.href='export.php';</script>";
+    echo "<script>alert('NO TRANSACTION MADE ON THIS DATE!'); window.location.href='export.php';</script>";
     exit;
 }
 
-// Set headers for CSV download
-header('Content-Type: text/csv');
+// UTF-8 CSV headers
+header('Content-Type: text/csv; charset=UTF-8');
 header("Content-Disposition: attachment; filename=\"{$filename}.csv\"");
-header('Cache-Control: no-cache, no-store, must-revalidate'); // Standard cache control
-header('Pragma: no-cache'); // For HTTP 1.0
-header('Expires: 0'); // Proxies
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
 
-// Open a file handle for outputting to the browser
 $output = fopen('php://output', 'w');
 
+// UTF-8 BOM for Excel
+fwrite($output, "\xEF\xBB\xBF");
 
 // Column headers
 $headers = [
@@ -62,14 +62,11 @@ $headers = [
     "ClientCategory", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
     "Sub-Category", "Pantawid Beneficiary"
 ];
-// Write the headers to the CSV file
-fputcsv($output, $headers, ',', '"', '\\');
+fputcsv($output, $headers);
 
-// Populate data rows
 while ($row = mysqli_fetch_assoc($result)) {
     $fullname = $user->getuserFullname($row['encoded_encoder']);
     $assistance = $user->getAssistanceData($row['trans_id']);
-    $fund = $user->getfundsourcedata($row['trans_id']); // This variable seems unused in $rowData, confirm if needed
     $fundsource = $user->getfundsourceclient($row['trans_id']);
     $age = $user->getAge($row['date_birth']);
 
@@ -81,29 +78,29 @@ while ($row = mysqli_fetch_assoc($result)) {
         $row['client_district'], $row['lastname'], $row['firstname'], $row['middlename'], $row['extraname'],
         $row['sex'], $row['civil_status'], $row['date_birth'], $age,
         $row['occupation'], $row['salary'], $row['familycount'], $row['mode_admission'],
-        $user->translateAss($assistance[1]['type'] ?? ''),
-        $assistance[1]['amount'] ?? '',
+
+        $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '',
         (!empty($assistance[1]['type']) ? $fundsource : ''),
-        (($assistance[1]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[1]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[1]['mode'] ?? ''))),
+        (($assistance[1]['mode'] ?? '') === "GL" ? "Guarantee Letter" :
+         (($assistance[1]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[1]['mode'] ?? ''))),
 
-        $user->translateAss($assistance[2]['type'] ?? ''),
-        $assistance[2]['amount'] ?? '',
+        $user->translateAss($assistance[2]['type'] ?? ''), $assistance[2]['amount'] ?? '',
         (!empty($assistance[2]['type']) ? $fundsource : ''),
-        (($assistance[2]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[2]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[2]['mode'] ?? ''))),
+        (($assistance[2]['mode'] ?? '') === "GL" ? "Guarantee Letter" :
+         (($assistance[2]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[2]['mode'] ?? ''))),
 
-        $user->translateAss($assistance[3]['type'] ?? ''),
-        $assistance[3]['amount'] ?? '',
+        $user->translateAss($assistance[3]['type'] ?? ''), $assistance[3]['amount'] ?? '',
         (!empty($assistance[3]['type']) ? $fundsource : ''),
-        (($assistance[3]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[3]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[3]['mode'] ?? ''))),
+        (($assistance[3]['mode'] ?? '') === "GL" ? "Guarantee Letter" :
+         (($assistance[3]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[3]['mode'] ?? ''))),
+
         $row['category'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
         $row['subCategory'], $row['pantawid_bene']
     ];
 
-    // Write the row data to the CSV file
-    fputcsv($output, $rowData, ',', '"', '\\');
+    fputcsv($output, $rowData);
 }
 
-// Close the file handle
 fclose($output);
 exit;
 ?>

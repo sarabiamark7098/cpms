@@ -51,15 +51,18 @@ if (mysqli_num_rows($result) === 0) {
 // Prepare the filename
 $filename = date("M d", strtotime($fromdate)) . "-" . date("M d Y", strtotime($todate)) . " Export.csv";
 
-// Set headers for CSV download
-header('Content-Type: text/csv');
-header("Content-Disposition: attachment; filename=\"$filename\"");
-header('Cache-Control: no-cache, no-store, must-revalidate'); // Standard cache control
-header('Pragma: no-cache'); // For HTTP 1.0
-header('Expires: 0'); // Proxies
+// Set headers for CSV download (UTF-8)
+header('Content-Type: text/csv; charset=UTF-8');
+header("Content-Disposition: attachment; filename=\"{$filename}.csv\"");
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 // Open a file handle for outputting to the browser
 $output = fopen('php://output', 'w');
+
+// Output UTF-8 BOM
+fwrite($output, "\xEF\xBB\xBF");
 
 // Column headers
 $headers = [
@@ -111,7 +114,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     ];
 
     // Write the row data to the CSV file with explicit escape parameter
-    fputcsv($output, $rowData, ',', '"', '\\');
+    fputcsv($output, $rowData);
 }
 
 // Close the file handle
