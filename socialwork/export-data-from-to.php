@@ -3,18 +3,18 @@ include('../php/class.user.php');
 
 $user = new User();
 
-$fromdate = isset($_GET['fromdate']) ? date("Y-m-d", strtotime($_GET['fromdate'])) : null;
-$todate = isset($_GET['todate']) ? date("Y-m-d", strtotime($_GET['todate'])) : null;
+// Set MySQL connection charset to UTF-8 to ensure proper encoding
+mysqli_set_charset($user->db, 'utf8mb4');
+
+$from_date = isset($_GET['fromdate']) ? date("Y-m-d 00:00:00", strtotime($_GET['fromdate'])) : null;
+$to_date = isset($_GET['todate']) ? date("Y-m-d 23:59:00", strtotime($_GET['todate'])) : null;
 
 // Validate that dates are provided
-if (empty($fromdate) || empty($todate)) {
+if (empty($from_date) || empty($to_date)) {
     echo "<script>alert('Please provide both From Date and To Date!');
     window.location.href='export.php';</script>";
     exit;
 }
-
-$from_date = $fromdate . " 00:00:00";
-$to_date = $todate . " 23:59:00";
 $office_loc = $_SESSION['f_office'];
 
 $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, 
@@ -49,11 +49,11 @@ if (mysqli_num_rows($result) === 0) {
 }
 
 // Prepare the filename
-$filename = date("M d", strtotime($fromdate)) . "-" . date("M d Y", strtotime($todate)) . " Export.csv";
+$filename = date("M d", strtotime($from_date)) . "-" . date("M d Y", strtotime($to_date)) . " Export.csv";
 
 // Set headers for CSV download (UTF-8)
 header('Content-Type: text/csv; charset=UTF-8');
-header("Content-Disposition: attachment; filename=\"{$filename}.csv\"");
+header("Content-Disposition: attachment; filename=\"{$filename}\"");
 header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');
