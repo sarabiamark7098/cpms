@@ -136,8 +136,8 @@
             <?php if(empty($gl['for_the_id'])){ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
-					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>"><br>
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position'])) ?>"><br>
+					<input id="s_position" style="border: none;width:100%;" value="<?php echo (!empty($signatoryGL['position'])?$signatoryGL['position']:"") ?>"><br>
 					<br>
 					<p class="">Valid within 30 days upon receipt.</p>
 					<p class="cn " style="font-size:18Opx ">
@@ -152,15 +152,13 @@
             <?php }else{ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
-					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>">                  
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position'])) ?>"><br>
+					<input id="s_position" style="border: none;width:100%;" value="<?php echo (!empty($signatoryGL['position'])?$signatoryGL['position']:"") ?>">
                 </div>
                 <div class="col-1"></div>
                 <div class="col-5"><br>
-
 					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryforthe['name_title'])?$signatoryforthe['name_title']." ":"").$signatoryforthe['first_name']." ".(!empty($signatoryforthe['middle_I'])?$signatoryforthe['middle_I'].". ":"").$signatoryforthe['last_name']) ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryforthe['position'] ?>"><br>
-
                 </div>
             </div><br>
 			<p class="">Valid within 30 days upon receipt.</p>
