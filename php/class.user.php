@@ -2015,7 +2015,7 @@
 			if ($row["program_type"] == "1") {
 				$data = "AKAP Fund " . $year;
 			} elseif ($row["program_type"] == "0") {
-				$data = "Current Fund";
+				$data = "Current Fund" . $year;
 			} elseif ($row["program_type"] == "other") {
 				$data = $row["other_program"] . " Fund " . $year;
 			} else {
