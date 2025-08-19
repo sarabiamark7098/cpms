@@ -255,7 +255,7 @@
 				$num_row = mysqli_num_rows($result);
 
 				if($num_row > 0){
-					$check = "SELECT * FROM field_office WHERE office_name = '{$officename}' OR office_accronym = '{$officeacronym}'";
+					$check = "SELECT * FROM field_office WHERE office_name = '{$officename}' AND office_accronym = '{$officeacronym}'";
 					$result = mysqli_query($this->db,$check);
 					$rows = mysqli_num_rows($result);
 					if($rows > 0){
@@ -2811,12 +2811,12 @@
 
 		$office = $row['office'];
 		
-		$query="SELECT office_accronym FROM field_office WHERE office_id = '{$office}';";
+		$query="SELECT description FROM field_office WHERE office_id = '{$office}';";
 		$result = mysqli_query($this->db, $query);
 		$row = mysqli_fetch_assoc($result);
-		$officeaccronym = $row['office_accronym'];
+		$description = $row['description'];
 		
-		if($officeaccronym == "SPMC" || $officeaccronym == "DRMC"){
+		if(strtoupper($description) === "MALASAKIT"){
 			return true;
 		}else{
 			return false;
