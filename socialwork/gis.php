@@ -55,9 +55,9 @@ if (isset($_GET['id'])) {
         $address['client'] .= $client['client_street'] . ", ";
     }
     $address['client'] .= $brgy[0] . ", " . $city[0] . ", " . $province[0];
-    $city = explode("/", (!empty($client['b_municipality'])??""));
-    $brgy = explode("/", (!empty($client['b_barangay'])??""));
-    $province = explode("/", (!empty($client['b_province'])??""));
+    $city = explode("/", (!empty($client['b_municipality'])?$client['b_municipality']:""));
+    $brgy = explode("/", (!empty($client['b_barangay'])?$client['b_barangay']:""));
+    $province = explode("/", (!empty($client['b_province'])?$client['b_province']:""));
     $address['beneficiary'] = '';
     if (!empty($client['b_street'])) {
         $address['beneficiary'] .= $client['b_street'] . ", ";
@@ -712,27 +712,27 @@ if (!$_SESSION['login']) {
                                 <div class="card-body">
                                     <div class="container" style="font-size: 15px;">
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="medical" id="medical" value="1" <?php echo (!empty($client_assistance[1]['financial'])==1 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="medical" id="medical" value="1" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==1 ? "checked": "") ?>></div>
                                             <div class="col-11"> Medical Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="transportation" id="transportation" value="2" <?php echo (!empty($client_assistance[1]['financial'])==2 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="transportation" id="transportation" value="2" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==2 ? "checked": "") ?>></div>
                                             <div class="col-11"> Transportation Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="food" id="food" value="3" <?php echo (!empty($client_assistance[1]['financial'])==3 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="food" id="food" value="3" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==3 ? "checked": "") ?>></div>
                                             <div class="col-11"> Food Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fassist" id="fassist" value="4" <?php echo (!empty($client_assistance[1]['financial'])==4 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fassist" id="fassist" value="4" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==4 ? "checked": "") ?>></div>
                                             <div class="col-11"> Funeral Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="educational" id="educational" value="5" <?php echo (!empty($client_assistance[1]['financial'])==5 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="educational" id="educational" value="5" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==5 ? "checked": "") ?>></div>
                                             <div class="col-11"> Educational Assistance</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="casha" id="casha" value="6" <?php echo (!empty($client_assistance[1]['financial'])==6 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="casha" id="casha" value="6" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==6 ? "checked": "") ?>></div>
                                             <div class="col-11"> Cash Relief Assistance</div>
                                         </div>
                                     </div>
@@ -808,11 +808,11 @@ if (!$_SESSION['login']) {
 							<div class="row">
 								<label class="col-sm-3 label text-left" style="font-size: 17px">PSYCHOSOCIAL SUPPORT:</label>
                                 <div class="col-3">
-									<input type="checkbox" id="pfa" class="col-lg-1" name="pfa" value="pfa" <?php echo ((!empty($gis['service5'])==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
+									<input type="checkbox" id="pfa" class="col-lg-1" name="pfa" value="pfa" <?php echo ((!empty($gis['service5']) && $gis['service5']==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
 								</div>&nbsp;
                                 <div class="col-1"></div>
                                 <div class="col-3">
-									<input type="checkbox" id="counseling" class="col-lg-1" name="counseling" value="Counseling" <?php echo ((!empty($gis['service6'])==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
+									<input type="checkbox" id="counseling" class="col-lg-1" name="counseling" value="Counseling" <?php echo ((!empty($gis['service6']) && $gis['service6']==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
 								</div>
                             </div><br>
 							<div class="row">
@@ -877,24 +877,24 @@ if (!$_SESSION['login']) {
                             <div class="row">
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">How long does the patient suffer from the disease?</label>
                                 <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity1" name="severity1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==1)?'checked':'') ?>> &nbsp; Recently Diagnosed (3 months & below) 
+                                    <input type="checkbox" class="col-lg-1" id="severity1" name="severity1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==1)?'checked':'') ?>> &nbsp; Recently Diagnosed (3 months & below) 
 								</div> 
                                 <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity2" name="severity2" value="2" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==2)?'checked':'') ?>> &nbsp; 3 Months to a Year 
+                                    <input type="checkbox" class="col-lg-1" id="severity2" name="severity2" value="2" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==2)?'checked':'') ?>> &nbsp; 3 Months to a Year 
 								</div> 
                                 <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
+                                    <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
 								</div> 
                                 <div class="col-12" style="margin-bottom: 12px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==0)?'checked':'') ?>> &nbsp; Not Applicable 
+                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==0)?'checked':'') ?>> &nbsp; Not Applicable 
 								</div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">In the past three (3) months, did the family experience at least one crisis?</label>
                                 <div class="col-1"></div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2'])==1)?'checked':'') ?>> &nbsp; YES
+                                    <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2']) && $otherinfo['crisisSeverityQuestion2']==1)?'checked':'') ?>> &nbsp; YES
 								</div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2'])==0)?'checked':'') ?>> &nbsp; NO
+                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2']) && $otherinfo['crisisSeverityQuestion2']==0)?'checked':'') ?>> &nbsp; NO
 								</div>
                                 <div class="col-7"></div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">If yes, which among the following crises did the family experience in the past three (3) months (check all that apply):</label>
@@ -1107,10 +1107,6 @@ if (!$_SESSION['login']) {
                 </div>
             </form>
         </div>
-        <div hidden>
-            <?php include("gis_sheet.php"); ?>
-        </div>
-        <!--File na e print--> 
         
         <?php 
             if (!empty($gis)) {
