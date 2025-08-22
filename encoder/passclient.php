@@ -377,7 +377,7 @@ $user = new User();
 				<div class="col-sm-12">
 				
 				<select id="client_district" class="form-control mr-sm-2 b" name="Cdistrict" placeholder="District">
-					<option value="<?php echo !empty($getClient['client_district'])?$getClient['client_district']:"" ?>" <?php echo ($getClient['client_district']==''?'selected':'')?>>Select District</option>
+					<option value="<?php echo !empty($getClient['client_district'])??"" ?>" <?php echo ($getClient['client_district']==''?'selected':'')?>>Select District</option>
 					<?php
 						$getdistrict = $user->getdistrictlist();
 						//Loop through results

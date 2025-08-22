@@ -3,8 +3,8 @@ include('webcamClass.php');
 
 $webcam = new Webcam();
 
-$id = $_POST['id'] ? $_POST['id'] : '';
-$do = $_POST['do'] ? $_POST['do'] : 0;
+$id = $_POST['id'] ?? '';
+$do = $_POST['do'] ?? 0;
 
 if (!$id) {
     http_response_code(400);
