@@ -372,7 +372,7 @@
                     </div> -->
                 </div><br>
 				<div class="row">
-                    <?php if(((strtolower(!empty($client_assistance[1]['type'])) == "cash assistance") && (!empty($client_assistance[2]['type']) == "")) || ((strtolower(!empty($client_assistance[1]['type'])) == "non-food items") && (!empty($client_assistance[2]['type']) == ""))){ ?>
+                    <?php if(((!empty($client_assistance[1]['type']) && strtolower($client_assistance[1]['type']) == "cash assistance") && (!empty($client_assistance[2]['type']) && $client_assistance[2]['type'] == "")) || ((!empty($client_assistance[1]['type']) && strtolower($client_assistance[1]['type']) == "non-food items") && (!empty($client_assistance[2]['type']) && $client_assistance[2]['type'] == ""))){ ?>
                         <div class="col"><a href="gis.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> GIS</a></div>
                     <?php } else { ?>
                         <div class="col"><a href="coe.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> COE</a></div>

@@ -3,7 +3,6 @@
 	include ("db_config.php");
 	include ("db_config2.php");
 
-	// include ("db_config3.php");
 
 	class User{
 
