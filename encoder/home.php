@@ -37,9 +37,9 @@
 			}else{
 				$salary = '0';
 			}
-            if($_POST['pantawid_y']){
+            if(!empty($_POST['pantawid_y'])){
                 $pantawid = "Yes";
-            }elseif($_POST['pantawid_n']){
+            }elseif(!empty($_POST['pantawid_n'])){
                 $pantawid = "No";
             }
 			$category = mysqli_real_escape_string($user->db,$_POST['category']);
