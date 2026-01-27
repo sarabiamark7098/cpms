@@ -71,7 +71,7 @@
                     echo '<p class="">Please be informed that the check is payable to your company. Should you have any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
 					with the telephone number 227-1964 local 1133.</p>';
 					echo '<p class="">Thank you for your consideration.</p><br>';
-					echo '<p class="">Valid within 30 days upon receipt.</p>';
+					echo '<p class="">Valid within 7 days upon receipt.</p>';
 					*/
 					echo '<p class="">This has reference to the request for the <b>'. ucwords(strtolower($client_assistance[1]['type'])) .'</b> of herein client,
 					<b>'.strtoupper($name).'</b>, from '. ucwords(strtolower($c_add)) .'.</p>';
@@ -98,7 +98,7 @@
                     echo '<p class="">Please be informed that the check is payable to your company. Should you have any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
 					with the telephone number 227-1964 local 1133.</p>';
 					echo '<p class="">Thank you for your consideration.</p><br>';
-					echo '<p class="">Valid within 30 days upon receipt.</p>';
+					echo '<p class="">Valid within 7 days upon receipt.</p>';
 					*/
 					echo '<p class="">This has reference to the request for the <b>'. ucwords(strtolower($client_assistance[1]['type'])) .'</b> of herein client,
 					<b>'.strtoupper($name).'</b>, from '. ucwords(strtolower($c_add)) .', for his/her <b>'.ucwords(strtolower($client['relation'])).'</b> , <b>'.strtoupper($bname).'</b> of '. (($b_add!=$c_add)?ucwords(strtolower($b_add)):"the same address") .'.</p>';
@@ -139,7 +139,7 @@
 					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL["name_title"])?$signatoryGL['name_title'] ." ":""). strtoupper($signatoryGL['first_name'] ." ". (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] .". ":""). $signatoryGL['last_name'] ."-". $signatoryGL['position'])) ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo (!empty($signatoryGL['position'])?$signatoryGL['position']:"") ?>"><br>
 					<br>
-					<p class="">Valid within 30 days upon receipt.</p>
+					<p class="">Valid within 7 days upon receipt.</p>
 					<p class="cn " style="font-size:18Opx ">
 						<?php 
 							echo $user->initials_gl($signatoryGL['signatory_tree'],$client['encoded_socialWork'],$client['encoded_encoder'],$signatoryGL['special_ini']);
@@ -161,7 +161,7 @@
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryforthe['position'] ?>"><br>
                 </div>
             </div><br>
-			<p class="">Valid within 30 days upon receipt.</p>
+			<p class="">Valid within 7 days upon receipt.</p>
             <p class="cn " style="font-size:18Opx ">
                 <?php 
                 //Mga initial ni diri buset

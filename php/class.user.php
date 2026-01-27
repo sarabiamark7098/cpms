@@ -384,7 +384,6 @@
 				$result = mysqli_query($this->db, $query);
 				$rowoffice = mysqli_fetch_assoc($result);
 
-
 				$query = "SELECT * FROM cpms_account WHERE empid = '{$empid}'";
 				$result = mysqli_query($this->db2, $query);
 				$row = mysqli_num_rows($result);

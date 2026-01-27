@@ -51,7 +51,7 @@ $user = new User();
 					<label class="active" for="addresseetomention">Addressee To Mention(e.g. Mr. Dela Cruz OR Leave Empty if None)</label>
 				</div>
 				<div class="form-group col-lg-12">
-				  <input value="<?php echo $getprovider['company_name']?>" id="companyname" name="companyname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
+				  <input value="<?php echo $getprovider['company_name']?>" id="companyname" name="companyname" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="companyname">Company Name</label>
 				</div>
 				<div class="form-group col-lg-12">
