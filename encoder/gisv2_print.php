@@ -875,12 +875,10 @@
                             </div>
                             <div class="col-5 text-center" style="font-size:14px; margin-top: -18px; border: solid 1px #000000;">
                                 <span><?php
-                                    for ($i = 1; $i <= 12; $i++) {
-                                        if (!empty($fundsourcedata[$i]['fundsource'])) {
-                                            echo $fundsourcedata[$i]['fundsource'] . "=" . 
-                                                (!empty($fundsourcedata[$i]['fs_amount']) ? $fundsourcedata[$i]['fs_amount'] : $client_assistance[1]['amount']) . ", ";
-                                        }
-                                    }
+                                    if($client['program_type']==0){echo "AICS FUND ".date('Y');}
+                                        elseif($client['program_type']==1){echo "AKAP FUND ".date('Y');}
+                                        elseif($client['program_type']=='other'){echo strtoupper($client['other_program']).' FUND '.date('Y');}
+                                        else{echo "";};
                                 ?></span>
                             </div>
                         </div>

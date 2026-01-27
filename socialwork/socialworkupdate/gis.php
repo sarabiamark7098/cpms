@@ -342,8 +342,8 @@ if (!$_SESSION['login']) {
                                                 <div class="col-11"> SENIOR CITIZEN (SC)</div>
                                             </div>
                                             <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plwhiv" id="plwhiv" value="6" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==6? "checked": ""; ?>></div>
-                                                <div class="col-11"> PERSON LIVING WITH HIV(PLWHIV)</div>
+                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plhiv" id="plhiv" value="6" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==6? "checked": ""; ?>></div>
+                                                <div class="col-11"> PERSON LIVING WITH HIV(PLHIV)</div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==7? "checked": ""; ?>></div>
@@ -1489,7 +1489,7 @@ if (!$_SESSION['login']) {
             if(isset($_POST['pwd'])){$targets = 3;}
             if(isset($_POST['youth'])){$targets = 4;}
             if(isset($_POST['sc'])){$targets = 5;}
-            if(isset($_POST['plwhiv'])){$targets = 6;}
+            if(isset($_POST['plhiv'])){$targets = 6;}
             if(isset($_POST['cnsp'])){$targets = 7;}
             
             if(isset($_POST['solo'])){$subcat = 1;}
@@ -2275,37 +2275,37 @@ if (!$_SESSION['login']) {
         $(function () {
             $("#fhona").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#wedc, #pwd, #youth, #sc, #plwhiv, #cnsp").prop("checked", false);
+    	     		$("#wedc, #pwd, #youth, #sc, #plhiv, #cnsp").prop("checked", false);
         		}
 		    });
         	$("#wedc").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#fhona, #pwd, #youth, #sc, #plwhiv, #cnsp").prop("checked", false);
+    	     		$("#fhona, #pwd, #youth, #sc, #plhiv, #cnsp").prop("checked", false);
         		}
 		    });
         	$("#pwd").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#wedc, #fhona, #youth, #sc, #plwhiv, #cnsp").prop("checked", false);
+    	     		$("#wedc, #fhona, #youth, #sc, #plhiv, #cnsp").prop("checked", false);
         		}
 		    });
         	$("#youth").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#wedc, #pwd, #fhona, #sc, #plwhiv, #cnsp").prop("checked", false);
+    	     		$("#wedc, #pwd, #fhona, #sc, #plhiv, #cnsp").prop("checked", false);
         		}
 		    });
         	$("#sc").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#wedc, #pwd, #youth, #fhona, #plwhiv, #cnsp").prop("checked", false);
+    	     		$("#wedc, #pwd, #youth, #fhona, #plhiv, #cnsp").prop("checked", false);
         		}
 		    });
-        	$("#plwhiv").click(function () {
+        	$("#plhiv").click(function () {
 	        	if ($(this).prop("checked")) {
     	     		$("#wedc, #pwd, #youth, #sc, #fhona, #cnsp").prop("checked", false);
         		}
 		    });
         	$("#cnsp").click(function () {
 	        	if ($(this).prop("checked")) {
-    	     		$("#wedc, #pwd, #youth, #sc, #plwhiv, #fhona").prop("checked", false);
+    	     		$("#wedc, #pwd, #youth, #sc, #plhiv, #fhona").prop("checked", false);
         		}
 		    });
         });

@@ -3,7 +3,6 @@
 	include ("db_config.php");
 	include ("db_config2.php");
 
-	// include ("db_config3.php");
 
 	class User{
 
@@ -255,7 +254,7 @@
 				$num_row = mysqli_num_rows($result);
 
 				if($num_row > 0){
-					$check = "SELECT * FROM field_office WHERE office_name = '{$officename}' OR office_accronym = '{$officeacronym}'";
+					$check = "SELECT * FROM field_office WHERE office_name = '{$officename}' AND office_accronym = '{$officeacronym}'";
 					$result = mysqli_query($this->db,$check);
 					$rows = mysqli_num_rows($result);
 					if($rows > 0){
@@ -384,7 +383,6 @@
 				$query = "SELECT office_accronym FROM field_office WHERE office_id = '{$office}'";
 				$result = mysqli_query($this->db, $query);
 				$rowoffice = mysqli_fetch_assoc($result);
-
 
 				$query = "SELECT * FROM cpms_account WHERE empid = '{$empid}'";
 				$result = mysqli_query($this->db2, $query);
@@ -727,7 +725,7 @@
 				$companyaddress = mysqli_escape_string($this->db,$companyaddress);
 				
 				//check if the company already exists
-				$query = "SELECT * FROM provider WHERE company_name = '{$companyname}' AND company_address = '{$companyaddress}'";
+				$query = "SELECT * FROM provider WHERE addressee_name = '{$addresseename}' AND addressee_position = '{$addresseeposition}' AND '{$companyname}' AND company_address = '{$companyaddress}'";
 				$result = mysqli_query($this->db,$query);
 				$rows = mysqli_num_rows($result);
 				if($rows > 0){
@@ -2015,7 +2013,7 @@
 			if ($row["program_type"] == "1") {
 				$data = "AKAP Fund " . $year;
 			} elseif ($row["program_type"] == "0") {
-				$data = "Current Fund";
+				$data = "Current Fund" . $year;
 			} elseif ($row["program_type"] == "other") {
 				$data = $row["other_program"] . " Fund " . $year;
 			} else {
@@ -2811,12 +2809,12 @@
 
 		$office = $row['office'];
 		
-		$query="SELECT office_accronym FROM field_office WHERE office_id = '{$office}';";
+		$query="SELECT description FROM field_office WHERE office_id = '{$office}';";
 		$result = mysqli_query($this->db, $query);
 		$row = mysqli_fetch_assoc($result);
-		$officeaccronym = $row['office_accronym'];
+		$description = $row['description'];
 		
-		if($officeaccronym == "SPMC" || $officeaccronym == "DRMC"){
+		if(strtoupper($description) === "MALASAKIT"){
 			return true;
 		}else{
 			return false;

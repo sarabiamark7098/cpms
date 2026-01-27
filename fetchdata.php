@@ -55,8 +55,8 @@
                                 <div class='form-group col-lg-6'>
                                     <select id='designation' name='designation' type='text' class='form-control' required>option
                                         <option value=". ($row['position'] == 'Admin'?'Admin':'') ." selected>". ($row['position'] == 'Admin'?'Admin':'') ."</>
-                                        <option value='Encoder' ". (!empty($row['position'] == 'Encoder')?'selected':'') .">Encoder</option>
-                                        <option value='Social Worker' ". ($row['position'] == 'Social Worker'?'selected':'') .">Social Worker</option>
+                                        <option value='Encoder' ".(!empty($row['position']) && $row['position'] == 'Encoder' ? 'selected' : '').">Encoder</option>
+                                        <option value='Social Worker' ". (!empty($row['position']) && $row['position'] == 'Social Worker'?'selected':'') .">Social Worker</option>
                                     </select>
                                     <label class='active' for='designation'>Designate Position</label>
                                 </div>

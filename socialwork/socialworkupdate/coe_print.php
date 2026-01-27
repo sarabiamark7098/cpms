@@ -274,9 +274,9 @@
                     <div class="row" style="font-size: 15px; position: static;">
                         <div class="col-12" style="text-align: justify; text-indent: 85px; float:left; line-height: 40px;">
                         <?php
-                            if($mode1 == "CAV" || !empty($mode2) == "CAV"){
-                                echo "The client is hereby recommended to receive <u>&emsp;". ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0])) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u>.";
-                            }elseif($mode1 == "GL" || !empty($mode2) == "GL"){
+                            if($mode1 == "CAV" || (!empty($mode2) && $mode2 == "CAV")){
+                                echo "The client is hereby recommended to receive <u>&emsp;". (strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]) == "cash"? "Financial":ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]))) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u>.";
+                            }elseif($mode1 == "GL" || (!empty($mode2) && $mode2 == "GL")){
                                 echo "The client is hereby recommended to receive <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> assistance for <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> in the amount of <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> Php<u>&emsp;&emsp;&emsp;&emsp;&emsp;</u>.";
                             }
                         ?>
@@ -294,15 +294,15 @@
                             <p class="text-center">GL No.:</p>
                         </div>
                         <div class="col-sm-6">
-                            <input class="text" style="width: 100%; font-size: 15px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo (($mode1 == "GL" || !empty($mode2) == "GL")?$GLid:"") ?>'>
+                            <input class="text" style="width: 100%; font-size: 15px; padding:0; text-indent: 8px; border: 1px solid black;" type="text" value='<?php echo (($mode1 == "GL" || (!empty($mode2) && $mode2 == "GL"))?$GLid:"") ?>'>
                         </div>
                     </div>
                     <div class="row" style="font-size: 15px; position: static;">
                         <div class="col-12" style="text-align: justify; text-indent: 85px; float:left; line-height: 30px;">
                         <?php
-                            if($mode1 == "GL" || !empty($mode2) == "GL"){
+                            if($mode1 == "GL" || (!empty($mode2) && $mode2== "GL")){
                                 echo "The client is hereby recommended to receive <u>&emsp;". ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0])) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u> payable to <u>&emsp;". ucwords(strtolower($gl['cname'])) ."&emsp;</u>, <u>&emsp;".ucwords(strtolower($gl['caddress']))."&emsp;</u>.";
-                            }elseif($mode1 == "CAV" || !empty($mode2) == "CAV"){
+                            }elseif($mode1 == "CAV" || (!empty($mode2) && $mode2 == "CAV")){
                                 echo "The client is hereby recommended to receive <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> assistance for <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> in the amount of <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> Php<u>&emsp;&emsp;&emsp;&emsp;&emsp;</u> payable to <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u>, <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u>.";
                             }
                         ?>

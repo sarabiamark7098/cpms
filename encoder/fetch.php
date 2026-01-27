@@ -45,7 +45,7 @@
                             $output .= "<p class='text-danger'>Remaining ".$user->datediffFromToEnd($row['date_accomplished']) ."<p>";
                         }
                         $output .= "</td>
-                                    <td>".$client_assistance[1]['type']."<br>".(!empty($client_assistance[2]['type'])?$client_assistance[2]['type']:"")."</td>
+                                    <td>".(!empty($client_assistance[1]['type'])?$client_assistance[1]['type']:"")."<br>".(!empty($client_assistance[2]['type'])?$client_assistance[2]['type']:"")."</td>
                                     <td>
                                     <button type='submit' class='btn btn-outline-primary deep-sky' data-toggle='modal' data-target='#clientdata' data-id='". $row["trans_id"] ."' style='margin-bottom:5px; font-size: 13px; width: 120px'> View </button>";
                         if ($row['status_client'] != 'Decline') {
