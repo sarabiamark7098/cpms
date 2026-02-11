@@ -83,7 +83,8 @@
     <script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
     <script type="text/javascript">
         //var num = document.getElementById();
-        var auto_refresh = setInterval(refreshPage, 1000); // refresh every 1 second interval
+        refreshPage();
+        var auto_refresh = setInterval(refreshPage, 300000); // refresh every 1 second interval
         
         function refreshPage(){
             $.ajax({
