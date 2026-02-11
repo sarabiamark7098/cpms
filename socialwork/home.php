@@ -157,7 +157,13 @@
             </nav>
             <div class="container-fluid" style="padding-left: 5%;">
                 <div class="table-responsive-lg">
-                    <h5>List of New Clients</h5>
+                    <div class="container-fluid d-flex justify-content-between" style="padding: 0% 0% 0% 0%;">
+                        <h5>List of New Clients</h5> 
+                        <button class="btn btn-success ml-auto" type="button" onclick="refreshPage()">
+                            <i class="fa fa-sync"></i> Refresh List 
+                        </button>
+                        </div>
+                    </div>
                     <div class="table-responsive-lg" style=" overflow-y: auto; height: 500px;">
                         <table id="tablenamo" class="table responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
                             <thead>
