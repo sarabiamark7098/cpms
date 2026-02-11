@@ -97,6 +97,9 @@
                 }
             });
         }
+        function reloadPage(){
+            window.location.reload();
+        }
     </script>
 </head>
 
@@ -159,7 +162,7 @@
                 <div class="table-responsive-lg">
                     <div class="container-fluid d-flex justify-content-between" style="padding: 0% 0% 0% 0%;">
                         <h5>List of New Clients</h5> 
-                        <button class="btn btn-success ml-auto" type="button" onclick="refreshPage()">
+                        <button class="btn btn-success ml-auto" type="button" onclick="reloadPage()">
                             <i class="fa fa-sync"></i> Refresh List 
                         </button>
                         </div>
