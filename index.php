@@ -220,9 +220,6 @@
 						</div>
 
 						<div class="text-center w-full p-t-23">
-							<a href="cpms_verification" class="txt1">
-								Go to Offline Verification
-							</a>
 						</div>
 					</form>
 			</div>
