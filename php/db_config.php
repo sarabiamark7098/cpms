@@ -5,7 +5,7 @@
     //define('DB_DATABASE', 'cpmsdatabase');
 
     define('DB_SERVER', 'localhost');
-    define('DB_USERNAME', 'root'); 
-    define('DB_PASSWORD', '');
-    define('DB_DATABASE', 'onse_cpms');
+    define('DB_USERNAME', 'dev'); 
+    define('DB_PASSWORD', 'qnLvYgDC$!XRThb3#eJyNE');
+    define('DB_DATABASE', 'dev_cpms');
 ?>

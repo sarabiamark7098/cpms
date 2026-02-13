@@ -5,8 +5,8 @@
     #define('DB_DATABASE2', 'employee');
     
     define('DB_SERVER2', 'localhost');
-    define('DB_USERNAME2', 'root');
-    define('DB_PASSWORD2', '');
-    define('DB_DATABASE2', 'onse_employee');
+    define('DB_USERNAME2', 'dev');
+    define('DB_PASSWORD2', 'qnLvYgDC$!XRThb3#eJyNE');
+    define('DB_DATABASE2', 'dev_onse_employee');
 
 ?>
