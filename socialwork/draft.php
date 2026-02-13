@@ -65,7 +65,8 @@
     <script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
     <script type="text/javascript">
 			//var num = document.getElementById();
-            var auto_refresh = setInterval(refreshPage, 1000); // refresh every 1 second interval
+            refreshPage();
+            var auto_refresh = setInterval(refreshPage, 300000); // refresh every 1 second interval
 			
 			function refreshPage(){
                 $.ajax({
@@ -77,6 +78,9 @@
 						//console.log(msg);
                     }
                 });
+            }
+            function reloadPage(){
+                window.location.reload();
             }
 		
 			$(document).ready(function(){
@@ -156,21 +160,29 @@
             </nav>
             <div class="container-fluid" style="padding-left:5%;">
                 <div class="table-responsive-lg">
-                    <h5>List of New Clients</h5>
-                    <table id="tablenamo" class="table responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
-                        <thead>
-                            <tr>
-                                <th>Client Name</th>
-                                <th>Beneficiary Name</th>
-                                <th>Date Started</th>
-                                <th>Encoder</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table_result">
-                            
-                        </tbody>
-                    </table>
+                    <div class="container-fluid d-flex justify-content-between" style="padding: 0% 0% 0% 0%; margin-bottom: 5px;">
+                        <h5>List of New Clients</h5> 
+                        <button class="btn btn-success ml-auto" type="button" onclick="reloadPage()">
+                            <i class="fa fa-sync"></i> Refresh List 
+                        </button>
+                        </div>
+                    </div>
+                    <div style="overflow-y:auto;height:500px;">
+                        <table id="tablenamo" class="table responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
+                            <thead>
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Beneficiary Name</th>
+                                    <th>Date Started</th>
+                                    <th>Encoder</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table_result">
+                                
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -304,4 +316,23 @@
             });  
         })
     </script>
+    <style>
+        #tablenamo {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #tablenamo thead th {
+            position: sticky;
+            top: 0;
+            background: gray;
+            color: white;
+            z-index: 999;
+        }
+
+        #tablenamo th,
+        #tablenamo td {
+            white-space: nowrap;
+        }
+    </style>
 </html>

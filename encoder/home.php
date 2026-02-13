@@ -325,6 +325,12 @@
                             }, 1000); 
 
                             $('#search_text').keyup(debouncedSearch);
+                            // $('#search_text').on('keydown', function (e) {
+                            //     if (e.key === 'Enter') {
+                            //         e.preventDefault();     // stop form submit if inside form
+                            //         debouncedSearch();     // run debounced search
+                            //     }
+                            // });
                         });
                     </script>
             </div>
