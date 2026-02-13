@@ -159,7 +159,7 @@
                 </div>
             </nav>
             <div class="container-fluid" style="padding-left: 5%;">
-                <div class="table-responsive-lg">
+                <div class="table-responsive-lg" style="margin-bottom: 5px">
                     <div class="container-fluid d-flex justify-content-between" style="padding: 0% 0% 0% 0%;">
                         <h5>List of New Clients</h5> 
                         <button class="btn btn-success ml-auto" type="button" onclick="reloadPage()">
@@ -344,4 +344,25 @@
                 });  
         })
 	</script>
+    <style>
+        #tablenamo {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #tablenamo thead th {
+            position: sticky;
+            top: 0;
+            background-color: gray;
+            color: white;
+            z-index: 999;
+        }
+
+        /* Optional: prevents column shifting */
+        #tablenamo th,
+        #tablenamo td {
+            white-space: nowrap;
+        }
+    </style>
+
 </html>
