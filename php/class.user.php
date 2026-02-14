@@ -3619,115 +3619,80 @@
 	}
 
 	public function searchServed($val){
-		$value = mysqli_real_escape_string($this->db,$val); 
 
-		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.trans_id, t.relation, t.date_accomplished, t.clientonly, t.clientsamebene, t.benetoclient
-		FROM client_data c 
-		LEFT JOIN tbl_transaction t using (client_id)
-		LEFT JOIN beneficiary_data b using (bene_id)
-		WHERE (status_client = 'Done' OR status_client = 'Decline')
-		AND ((CONCAT
-		(firstname, ' ',middlename, ' ',lastname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		 (b_fname, ' ',b_mname, ' ',b_lname)
-		 LIKE '%".$value."%')
-		 OR (CONCAT
-		(lastname, ' ',middlename, ' ',firstname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		 (b_mname, ' ',b_fname, ' ',b_lname)
-		  LIKE '%".$value."%') 
-		 OR (CONCAT
-		(middlename, ' ',firstname, ' ',lastname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_lname, ' ',b_mname, ' ',b_fname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(lastname, ' ',firstname, ' ',middlename)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_lname, ' ',b_fname, ' ',b_mname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(middlename, ' ',lastname, ' ',firstname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_mname, ' ',b_lname, ' ',b_fname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(firstname, ' ',lastname, ' ',middlename)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_fname, ' ',b_lname, ' ',b_mname)
-		 LIKE '%".$value."%')) 
-		 ORDER BY date_entered DESC LIMIT 3";
+		$value = mysqli_real_escape_string($this->db, $val);
 
-		$result = mysqli_query($this->db, $query);
+		$words = explode(" ", trim($value));
+		$booleanSearch = "";
 
-		if($result){
-			return $result;
+		foreach ($words as $word) {
+			if (!empty($word)) {
+				$booleanSearch .= "+" . $word . "* ";
+			}
 		}
-		else{
-			return false;
-		}
+
+		$query = "
+		SELECT 
+			c.lastname, c.firstname, c.middlename, c.extraname,
+			b.b_lname, b.b_fname, b.b_mname, b.b_exname,
+			t.status_client, t.trans_id, t.relation,
+			t.date_accomplished, t.clientonly, 
+			t.clientsamebene, t.benetoclient
+		FROM client_data c
+		LEFT JOIN tbl_transaction t ON t.client_id = c.client_id
+		LEFT JOIN beneficiary_data b ON b.bene_id = t.bene_id
+		WHERE 
+			t.status_client IN ('Done','Decline')
+		AND (
+			MATCH(c.firstname, c.middlename, c.lastname)
+				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+			OR
+			MATCH(b.b_fname, b.b_mname, b.b_lname)
+				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+		)
+		ORDER BY t.date_entered DESC
+		LIMIT 3
+		";
+
+		return mysqli_query($this->db, $query);
 	}
 	
 	public function searchServedforReissue($val){
-		$value = mysqli_real_escape_string($this->db,$val); 
+		$value = mysqli_real_escape_string($this->db, $val);
 
-		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.status_client, t.trans_id, t.relation, t.date_accomplished, t.clientonly, t.clientsamebene, t.benetoclient
-		FROM client_data as c
-		LEFT JOIN tbl_transaction as t using (client_id)
-		LEFT JOIN beneficiary_data as b using (bene_id)
-		WHERE (status_client = 'Done')
-		AND ((CONCAT
-		(firstname, ' ',middlename, ' ',lastname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		 (b_fname, ' ',b_mname, ' ',b_lname)
-		 LIKE '%".$value."%')
-		 OR (CONCAT
-		(lastname, ' ',middlename, ' ',firstname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		 (b_mname, ' ',b_fname, ' ',b_lname)
-		  LIKE '%".$value."%') 
-		 OR (CONCAT
-		(middlename, ' ',firstname, ' ',lastname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_lname, ' ',b_mname, ' ',b_fname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(lastname, ' ',firstname, ' ',middlename)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_lname, ' ',b_fname, ' ',b_mname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(middlename, ' ',lastname, ' ',firstname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_mname, ' ',b_lname, ' ',b_fname)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(firstname, ' ',lastname, ' ',middlename)
-		 LIKE '%".$value."%') 
-		 OR (CONCAT
-		(b_fname, ' ',b_lname, ' ',b_mname)
-		 LIKE '%".$value."%')) 
-		ORDER BY date_entered DESC LIMIT 3";
+		$words = explode(" ", trim($value));
+		$booleanSearch = "";
 
-		$result = mysqli_query($this->db, $query);
-
-		if($result){
-			return $result;
+		foreach ($words as $word) {
+			if (!empty($word)) {
+				$booleanSearch .= "+" . $word . "* ";
+			}
 		}
-		else{
-			return false;
-		}
+
+		$query = "
+		SELECT 
+			c.lastname, c.firstname, c.middlename, c.extraname,
+			b.b_lname, b.b_fname, b.b_mname, b.b_exname,
+			t.status_client, t.trans_id, t.relation,
+			t.date_accomplished, t.clientonly, 
+			t.clientsamebene, t.benetoclient
+		FROM client_data c
+		LEFT JOIN tbl_transaction t ON t.client_id = c.client_id
+		LEFT JOIN beneficiary_data b ON b.bene_id = t.bene_id
+		WHERE 
+			t.status_client IN ('Done')
+		AND (
+			MATCH(c.firstname, c.middlename, c.lastname)
+				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+			OR
+			MATCH(b.b_fname, b.b_mname, b.b_lname)
+				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+		)
+		ORDER BY t.date_entered DESC
+		LIMIT 3
+		";
+
+		return mysqli_query($this->db, $query);
 	}
 
 	public function showdataServed_reissued(){
