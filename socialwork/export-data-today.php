@@ -14,7 +14,7 @@ $date2 = date("Y-m-d 23:59:00", strtotime($date));
 $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, date_accomplished, mode, bene_id, 
     client_region, client_province, client_municipality, client_barangay, client_district,
     lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-    b_lname, b_fname, b_mname, b_exname, b_bday, b_sex, b_category, cname, subCategory, pantawid_bene, status_client, COUNT(family.name) AS familycount
+    b_lname, b_fname, b_mname, b_exname, cname, subCategory, pantawid_bene, status_client, COUNT(family.name) AS familycount
     FROM client_data
     INNER JOIN tbl_transaction USING (client_id)
     LEFT OUTER JOIN beneficiary_data USING (bene_id)
@@ -29,7 +29,7 @@ $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no,
              date_accomplished, mode, bene_id, client_region, client_province, 
              client_municipality, client_barangay, client_district, lastname, 
              firstname, middlename, extraname, sex, civil_status, date_birth, 
-             mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, b_bday, b_sex, b_category,
+             mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, 
              subCategory, pantawid_bene, status_client
     ORDER BY tbl_transaction.date_entered ASC";
 
@@ -69,15 +69,14 @@ while ($row = mysqli_fetch_assoc($result)) {
     $assistance = $user->getAssistanceData($row['trans_id']);
     $fundsource = $user->getfundsourceclient($row['trans_id']);
     $age = $user->getAge($row['date_birth']);
-    $b_age = $user->getAge($row['b_bday']);
 
     $bname = $row['bene_id'] ? [$row['b_lname'], $row['b_fname'], $row['b_mname'], $row['b_exname']] : ["", "", "", ""];
 
     $rowData = [
-        $row['date_entered'], $fullname, $row['control_no'], date('d/m/Y', strtotime($row['date_accomplished'])),
+        $row['date_entered'], $fullname, $row['control_no'], $row['date_accomplished'],
         $row['client_region'], $row['client_province'], $row['client_municipality'], $row['client_barangay'],
         $row['client_district'], $row['lastname'], $row['firstname'], $row['middlename'], $row['extraname'],
-        $row['sex'], $row['civil_status'], date('m/d/Y', strtotime($row['date_birth'])), $age,
+        $row['sex'], $row['civil_status'], $row['date_birth'], $age,
         $row['occupation'], $row['salary'], $row['familycount'], $row['mode_admission'],
 
         $user->translateAss($assistance[1]['type'] ?? ''), $assistance[1]['amount'] ?? '',
@@ -95,8 +94,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         (($assistance[3]['mode'] ?? '') === "GL" ? "Guarantee Letter" :
          (($assistance[3]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[3]['mode'] ?? ''))),
 
-        $row['category'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3], date('m/d/Y', strtotime($row['b_bday'])), 
-        $b_age, $row['b_sex'], $row['b_category'],
+        $row['category'], $row['cname'], $bname[0], $bname[1], $bname[2], $bname[3],
         $row['subCategory'], $row['pantawid_bene']
     ];
 
