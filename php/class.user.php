@@ -1754,8 +1754,35 @@
 		
 		//Age Calculation
 		
-		public function getAge($date){		
-			return  $age = date_diff(date_create($date), date_create('now'))->y;
+		public function getAge(?string $date): ?int {
+			if ($date === null || trim($date) === '') {
+				return null;
+			}
+			
+			try {
+				// DateTime constructor accepts string directly, no need for strtotime
+				$birthDate = new DateTime($date);
+				$today = new DateTime('now');
+				
+				return $today->diff($birthDate)->y;
+			} catch (Exception $e) {
+				return null;
+			}
+		}
+
+		public function calculate_age_by_date_accomplished(?string $bday, ?string $date_accomplished): ?int {
+			if ($bday === null || $date_accomplished === null) {
+				return null;
+			}
+			
+			try {
+				$birthDate = new DateTime($bday);
+				$dateAccomplished = new DateTime($date_accomplished);
+				
+				return $dateAccomplished->diff($birthDate)->y;
+			} catch (Exception $e) {
+				return null;
+			}
 		}
 		
 		//SOCIAL Work
