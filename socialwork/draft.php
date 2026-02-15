@@ -64,7 +64,6 @@
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
     <script type="text/javascript">
-			//var num = document.getElementById();
             refreshPage();
             var auto_refresh = setInterval(refreshPage, 300000); // refresh every 1 second interval
 			
@@ -74,8 +73,7 @@
                     url:'fetch.php',// put your real file name 
                     data:{soc_work_serving:1},
                     success:function(msg){
-						$('#table_result').html(msg); 
-						//console.log(msg);
+						$('#table_result').html(msg);
                     }
                 });
             }
@@ -85,16 +83,14 @@
 		
 			$(document).ready(function(){
 				$('#search').keyup(function(){  //On pressing a key on "Search box". This function will be called
-					var txt = $('#search').val(); //Assigning search box value to javascript variable.
-					//console.log(txt);
-					if(txt != ''){ //Validating, if "name" is empty.
+					var txt = $('#search').val();
+					if(txt != ''){
 						$.ajax({
 							type: "post", //method to use
-							url: "php/fetch.php", //ginapasa  sa diri nga file and data
-							data: {soc_search_serving:txt}, //mao ni nga data
-							success: function(html){  //If result found, this funtion will be called.
-								$('#table_result').html(html);  //Assigning result to "result" div.
-								//console.log(html);
+							url: "php/fetch.php",
+							data: {soc_search_serving:txt},
+							success: function(html){
+								$('#table_result').html(html);
 							}
 						});
 					}else{
@@ -106,7 +102,6 @@
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -116,7 +111,7 @@
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php">List of Client<i style="float: right;font-size:25px" class="fa fa-users"></i> </a> 
+                    <a href="home.php">List of Client<i style="float: right;font-size:25px" class="fa fa-users"></i> </a>
                 </li>
                 <li>
                     <a href="draft.php">Serving Client <i style="float: right;font-size:25px" class="fa fa-child"></i></a>
@@ -221,26 +216,22 @@
 	 	 <!-- Modal sa user Account -->
 
     <script>
-        //userAccount
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
     </script>
 <div class="modal hide fade" id="declineclient" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -259,26 +250,22 @@
 	</div>
 	
 	<script type="text/javascript">
-	//jscript declineclient
 		$('#declineclient').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var clientid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + clientid;
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "declineClient.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.declineClientbody').html(data);
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
     })
 	</script>
 
@@ -300,20 +287,17 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "draft.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
     </script>
     <style>

@@ -3,7 +3,6 @@
     $user = new User();
 	
 	
-    //$result = mysqli_query($user->db, $query);
 	if((!$_SESSION['login']) && (!$_SESSION['userAccountusername'])	&& (!$_SESSION['userAccountpassword'])){
 		header('Location:../index.php');
 		}
@@ -46,8 +45,6 @@
         <script type="text/javascript" src="../js/PSGC.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
         
-        <!-- added -->
-        
         <link rel="stylesheet" type="text/css" href="../datatables/datatables.css">
 		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
@@ -71,7 +68,6 @@
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -92,9 +88,6 @@
                 <li>
                     <a href="summary.php">Summary <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
-                <!-- <li>
-                    <a href="import_page.php">Import <i style="float: right;font-size:25px" class="fa fa-upload"></i></a>
-                </li> -->
             </ul>
         </nav>
 
@@ -160,8 +153,7 @@
                                                 <td>". date('F j, Y H:i:s', strtotime($value['date_entered'])) ."</td>
                                                 <td>
 												<button type='submit' class='btn btn-outline-primary deep-sky' data-toggle='modal' data-target='#clientdata' data-id='". $value["trans_id"] ."' style='margin-right: 10px; width: 110px;'> View </button>
-												<!--<button type='submit' class='btn btn-outline-primary deep-sky' data-toggle='modal' data-target='#idcert' data-id='". $value["trans_id"] ."' style='margin-right: 10px; width: 110px; margin-top:5px;'> ID Cert </button>-->
-												</td><td>";
+</td><td>";
 												if($value['status_client'] == 'Pending') {
 													echo "<h4 class='text-danger'><small>PENDING...</small></h4>";
 												} elseif($value['status_client'] == 'Serving') {
@@ -212,24 +204,20 @@
 </div>
 </body>
     <script>
-        //userAccount
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
         })
@@ -253,18 +241,15 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "UnservedClient.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })
@@ -306,18 +291,15 @@
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "showClientData.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.showClientData').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
         })
@@ -326,18 +308,14 @@
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
-                    //  url: "idcertmodal.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.idcertbody').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
         })

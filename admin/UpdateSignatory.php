@@ -72,7 +72,7 @@ $user = new User();
 				<!-- <div class="form-group col-lg-3">
 				</div> 
 				<div class="form-group col-lg-6">
-				  <input value="<?php //echo $getsignatory['signatory_id']; ?>" placeholder="Signatory ID" id="empid" name="empid" type="text" class="form-control text-center">
+				  <input value="" placeholder="Signatory ID" id="empid" name="empid" type="text" class="form-control text-center">
 				  <label class="active" for="empid">Employee ID(Signatory)</label>
 				</div>
 				<div class="form-group col-lg-3">
@@ -110,18 +110,6 @@ $user = new User();
                             <input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == 1?"checked":"") ?>><label for="gl_check">GL</label>
                             </div>
                         </div>
-					<!-- <select placeholder="Options" id="option" name="option" type="text" class="form-control " required>
-						<?php 
-							// if($getsignatory['options'] == 'GL'){
-							// 	echo '<option value="GL" selected>Guarantee Letter</option>';
-							// 	echo '<option value="GIS / CE">GIS / CE</option>';
-							// }else if($getsignatory['options'] == 'GIS / CE'){
-							// 	echo '<option value="GL" selected>Guarantee Letter</option>';
-							// 	echo '<option value="GIS / CE" selected>GIS / CE</option>';
-							// }
-						?>
-					</select>
-					 <label class="active" for="position">Options</label> -->
 				</div>
                 <div class="form-group col-lg-6">
                     <select placeholder="SIGNATORY TREE" id="s_tree" name="s_tree" type="text" class="form-control" required>

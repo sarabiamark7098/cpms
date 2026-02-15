@@ -43,7 +43,6 @@ $user = new User();
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<!-- <input name="exname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php //echo $client['extraname']?>"> -->
 							<select name="exname" class="form-control" style="border: 1px solid #b1acac;">
 								<option value=""  <?php echo (empty($client['extraname'])?'selected':'') ?>> Extension Name</option>
 								<option value="JR" <?php echo (($client['extraname'] == 'JR')?'selected':'') ?>>JR</option>

@@ -74,11 +74,9 @@
 			$user_id = $user->getUserId($username, $password);
 			$user_info = $user->check_user($user_id);
 			$useroffice = $user->show_office_data($user_info['office_id']);
-			// echo "<script>confirm('". $user_info['fullname'] ." you are currently Assigned to: ". $useroffice['office_name'] ."')</script>";
 			switch ($user_info['position']){
 				case 'Encoder': echo '<script>var x = true;
 					window.location="index.php?optionenc="+x</script>';
-					// echo "<script>window.location='encoder/home.php'</script>";
 					$_SESSION['login'] = $login;
 					$_SESSION['userAccountusername'] = $username;
 					$_SESSION['userAccountpassword'] = $password;
@@ -89,7 +87,6 @@
 					break;
 				case 'Social Worker': echo '<script>var x = true;
 					window.location="index.php?optionsw="+x</script>';
-					// echo "<script>window.location='socialwork/home.php'</script>";
 					$_SESSION['login'] = $login;
 					$_SESSION['userAccountusername'] = $username;
 					$_SESSION['userAccountpassword'] = $password;
@@ -100,7 +97,6 @@
 					break;
 				case 'Admin': echo '<script>var x = true;
 					window.location="index.php?optionadmin="+x</script>';
-					// echo "<script>window.location='admin/home.php'</script>";
 					$_SESSION['login'] = $login;
 					$_SESSION['userAccountusername'] = $username;
 					$_SESSION['userAccountpassword'] = $password;
@@ -110,7 +106,7 @@
 					$_SESSION['f_office']=$user_info['office_id'];
 					break;
 				default:
-					// echo "<script>window.location='index.php';</script>";
+					break;
 			}
 		}
 		echo '<center>
@@ -163,26 +159,16 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-<!--===============================================================================================-->	
 	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
 	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-<!--===============================================================================================-->
 </head>
 <body>
 	
@@ -226,21 +212,14 @@
 		</div>
 	</div>
 	
-<!--===============================================================================================-->
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/daterangepicker/moment.min.js"></script>
 	<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
 	<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
 	<script src="js/main.js"></script>
 
 	<div class="modal hide fade" id="ModalRegister" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -255,15 +234,11 @@
 				<form class="form-group" action="index.php" id="submitted" method="POST">
 					<div class="modal-body">
 						<label>Search Name</label>
-						<!-- <form action="index.php" method="post"> -->
 							<input class="form-control border border-black" type="text" name="search_emp" id="search_emp" placeholder="Search"></input>
-							<!-- <button type="submit" name="request_add_emp">Search</button>
-						</form> -->
 						<div>
 							<table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
 								<thead>
 									<tr>
-									<!-- <th scope="col" style='width: 15%'>Employee ID</th> -->
 									<th scope="col" style='width: 20%'>Last Name</th>
 									<th scope="col" style='width: 20%'>First Name</th>
 									<th scope="col" style='width: 20%'>Middle Name</th>
@@ -286,20 +261,19 @@
 
 	<script>
 		$(document).ready(function(){
-			$('#search_emp').keyup(function(){  //On pressing a key on "Search box". This function will be called
-				var txt = $('#search_emp').val(); //Assigning search box value to javascript variable.
-				// console.log(txt);
-				if(txt != ''){ //Validating, if "name" is empty.
+			$('#search_emp').keyup(function(){
+				var txt = $('#search_emp').val();
+				if(txt != ''){
 					$.ajax({
-						type: "post", //method to use
-						url: "fetchdata.php", //ginapasa  sa diri nga file and data
-						data: {search:txt}, //mao ni nga data
-						success: function(html){  //If result found, this funtion will be called.
-							$('#search_emp_result').html(html).show();  //Assigning result to "#result" div.
+						type: "post",
+						url: "fetchdata.php",
+						data: {search:txt},
+						success: function(html){
+							$('#search_emp_result').html(html).show();
 						}
 					});
 				}else{
-				$('#search_emp_result').html(""); //Assigning no result to "result" div.
+				$('#search_emp_result').html("");
 				}
 			});
 		});
@@ -374,7 +348,6 @@
 <script>
 	if(x == 1){
 		$('#myModal').modal('show');
-		// console.log(x);
 	}
 </script>
 	<div class="modal fade" id="request_modal" role="dialog">

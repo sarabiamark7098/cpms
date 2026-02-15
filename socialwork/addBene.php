@@ -14,7 +14,6 @@ $user = new User();
             <h1 class="text-center">Beneficiary Information</h1> <br>
                 <div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <!-- <input  name="relation" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Relation to Client" required> -->
 						<select name="relation" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
 							<option value="" disabled selected>Relation With Beneficiary</option>
                             <?php
@@ -31,7 +30,6 @@ $user = new User();
                         <label>Relationship with the client</label>
                     </div>
                 </div>
-                <!---->
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
                         <input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
@@ -48,8 +46,7 @@ $user = new User();
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<!-- <input name="exname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Extra Name"> -->
-							<select name="exname" class="form-control" style="border: 1px solid #b1acac;">
+								<select name="exname" class="form-control" style="border: 1px solid #b1acac;">
 								<option value="" selected> Extension Name</option>
 								<option value="JR">JR</option>
 								<option value="SR">SR</option>

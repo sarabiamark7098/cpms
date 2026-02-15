@@ -97,7 +97,6 @@
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -235,18 +234,15 @@
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "adminuserAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
         })
@@ -286,37 +282,31 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
         $('#clear').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=clear';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.clearbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })
@@ -370,11 +360,9 @@ $('#ProviderInfo').appendTo("body").on('show.bs.modal', function (event) {
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    // console.log(data);
                     modal.find('.Viewbody').html(data);
                 },
                 error: function(err) {
-                    // console.log(err);
                 }
 				
             });  
@@ -393,11 +381,9 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    // console.log(data);
                     modal.find('.Updatebody').html(data);
                 },
                 error: function(err) {
-                    // console.log(err);
                 }
 				
             });  
@@ -433,11 +419,9 @@ $('#UpdateProvider').appendTo("body").on('show.bs.modal', function (event) {
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        // console.log(data);
                         modal.find('.Addbody').html(data);
                     },
                     error: function(err) {
-                        // console.log(err);
                     }
                     
                 });  

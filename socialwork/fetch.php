@@ -150,8 +150,6 @@
                 $query = "SELECT LEFT('{$row['trans_id']}', 9) as foid";
                 $result3 = mysqli_query($user->db,$query);
                 $row1 = mysqli_fetch_assoc($result3);
-                // echo "<script> console.log('{$row1['foid']}') </script>";
-        
                 if($_SESSION['f_office'] == $row1['foid']){
         
                     $getEncoder = $user->getEncoder($row['encoded_encoder']);
@@ -190,7 +188,6 @@
     if(isset($_POST['assessmentoption'])){
         $assessment = $_POST['assessmentoption'];
         $query = "SELECT * FROM gisassessment WHERE ass_opt = '".$assessment."';";
-        // echo "<script>console.log(".$query.")</script>";
         $result = mysqli_query($user->db,$query);
         if(mysqli_num_rows($result) > 0){
             $row = mysqli_fetch_array($result);
@@ -218,8 +215,6 @@
                 $query = "SELECT LEFT('{$row['trans_id']}', 9) as foid";
                 $result2 = mysqli_query($user->db,$query);
                 $row2 = mysqli_fetch_assoc($result2);
-                // echo "<script> console.log('{$row1['o_id']}') </script>";
-        
                 if($_SESSION['f_office'] == $row2['foid']){
         
 				/*if(!empty($row['encoded_socialWork'])){ */
@@ -277,15 +272,11 @@
     if(isset($_POST['page'])){
         $output = "";
         $page = $_POST['page'];
-        $datas = ($_POST['page'] - 1 )  * 8; //asa magsugod ang id n e show
-        // echo $page;
+        $datas = ($_POST['page'] - 1 )  * 8;
         $datenow = date("Y-m-d");
-		// $datenow2 = date("Y-m-d");
 		$datenow = strtotime($datenow);
 		$datenow2 = date('Y-m-d', strtotime('+ 1 days', $datenow));
         $datenow = date("Y-m-d");
-        // echo $_POST['d_1'];
-        // echo $_POST['d_2'];
         $output = '
             <form class="form-group" action="summary_social.php" method="POST">
                 <div class="row" style="padding-bottom: 50px;">

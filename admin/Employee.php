@@ -72,7 +72,6 @@
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -157,9 +156,6 @@
                                     foreach($getemployees as $index => $value){
                                         $compare = $user->compareEmpNum($value['empnum']);
 										
-                                        /*if($_SESSION['userId'] == '11-Sample'){
-                                            $compare = $user->compareEmpNumSA($value['empnum'], $_SESSION['f_office']);
-                                        }*/
                                         if($compare > 0){
                                             echo "<tr>
                                                 <td scope='row' style='width: 15%'>" . $value["empid"] . "</td> 
@@ -254,26 +250,22 @@
 </div>
 </body>
     <script>
-        //userAccount
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "adminuserAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
     </script>
 
@@ -295,18 +287,15 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "Employee.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })
@@ -341,11 +330,9 @@
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    // console.log(data);
                     modal.find('.r_body').html(data);
                 },
                 error: function(err) {
-                    // console.log(err);
                 }
 				
             });  
@@ -388,18 +375,15 @@
 						var empid = button.data('id') // Extract info from data-* attributes
 						var modal = $(this);
 						var dataString = 'empid=' + empid;
-                        // console.log(dataString);
 							$.ajax({
 									type: "POST",
 									url: "EmployeeInfo.php",
 									data: dataString,
 									cache: false,
 									success: function (data) {
-											// console.log(data);
 											modal.find('.Viewbody').html(data);
 									},
 									error: function(err) {
-											// console.log(err);
 									}
 					
 							});  
@@ -418,11 +402,9 @@
 									data: dataString,
 									cache: false,
 									success: function (data) {
-											// console.log(data);
 											modal.find('.Updatebody').html(data);
 									},
 									error: function(err) {
-											// console.log(err);
 									}
 					
 							});  

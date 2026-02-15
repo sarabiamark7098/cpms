@@ -9,7 +9,6 @@
     }
 
     if(isset($_POST['cancelRequest'])){
-        // echo $id = $_GET['cancelempid'];
         $id = $_POST['empnum'];
         $result = $user->cancelRequest($id);
 
@@ -126,7 +125,6 @@
     <script>
         $(function () {
             $("#cancelRequest").click(function () {
-                // console.log("wla na require");
                 $("#designation").removeAttr('required');
                
             });

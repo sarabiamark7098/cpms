@@ -9,6 +9,5 @@
     if(isset($_GET['do'])){
         echo $do = $_GET['do'];
     }
-    // echo "<script>console.log('naa');</script>";
     echo $webcam->showImage($id, $do); // mao ning mo show sa na save na database
 ?>

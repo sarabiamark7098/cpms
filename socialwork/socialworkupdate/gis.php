@@ -1046,8 +1046,7 @@ if (!$_SESSION['login']) {
                                     <br>
                                     <input type="hidden" name="selection" id="selection" />
                                     <select id="assess" name="swatype" class="form-control col-sm-4"  onchange="getSelectedValue();">
-                                        <!-- <option value="<?php //echo empty($gis['gis_option'])?'':$gis['gis_option'] ?>" <?php //echo empty($gis['gis_option'])?'disabled':'' ?> selected><?php //echo empty($gis['gis_option'])?'Select your option':$gis['gis_option'] ?></option>; -->
-                                            <?php 
+                                            <?php
                                                 echo "<option value='' selected>" . "Assessment Option" . "</option>";
                                             $data = $user->assessment_by_socialwork();
                                             foreach ($data as $index => $value) {
@@ -1193,20 +1192,16 @@ if (!$_SESSION['login']) {
 
             function getSelectedValue() {  
                 var assessmentoption = document.getElementById('assess').value;
-                document.getElementById('selection').value = assessmentoption;  
-                // console.log(assessmentoption);
+                document.getElementById('selection').value = assessmentoption;
                 $.ajax({
                     type: "post", //method to use
                     url: "fetch.php", //ginapasa  sa diri nga file and data
                     data: {assessmentoption : assessmentoption}, //mao ni nga data
                     success: function(html){  //If result found, this funtion will be call
-                        // console.log(html);   
-                
                         var json = JSON.parse(html);
                         $('#ass').val(json["sw_assessment"]);
                         $('#prob').val( json["problem_presented"]);
-                        // console.log(json);
-                                                                    
+
                     }
                 });
             }
@@ -1231,18 +1226,15 @@ if (!$_SESSION['login']) {
                 var userid = button.data('id') // Extract info from data-* attributes
                 var modal = $(this);
                 var dataString = 'id=' + userid;
-                //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "showClientData.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.showClientData').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
             });
@@ -1253,18 +1245,15 @@ if (!$_SESSION['login']) {
                 var userid = button.data('id') // Extract info from data-* attributes
                 var modal = $(this);
                 var dataString = 'id=' + userid;
-                //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "showBene.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.showBene').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
             });
@@ -1275,18 +1264,15 @@ if (!$_SESSION['login']) {
                 var userid = button.data('id') // Extract info from data-* attributes
                 var modal = $(this);
                 var dataString = 'id=' + userid;
-                //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "addBene.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.showBene').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
                 });  
             });  
@@ -1304,7 +1290,6 @@ if (!$_SESSION['login']) {
             
             function rangeKey(evt){
                 var charCode = (evt.which) ? evt.which : event.keyCode;
-                //console.log(charCode);
                     if (charCode != 46 && charCode != 45 && charCode > 31
                     && (charCode < 48 || charCode > 57))
                     return false;
@@ -1687,8 +1672,7 @@ if (!$_SESSION['login']) {
             $barangay = mysqli_real_escape_string($user->db, ($_POST['barangay']));
             $district = mysqli_real_escape_string($user->db, ($_POST['district']));
             $street = mysqli_real_escape_string($user->db, ($_POST['street']));
-            //print_r($_POST);
-            $user->addBene($trans_id, $relation, $lname, $mname, $fname, $exname, 
+            $user->addBene($trans_id, $relation, $lname, $mname, $fname, $exname,
                             $bday, $category, $sex, $status, $contact,
                             $region, $province, $municipality, $barangay, $district, $street);
 
@@ -1915,7 +1899,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs1").keyup(function(){
                 f1 = document.getElementById("fs1").value;
-                // console.log(f1);
 			    document.getElementById('fsof1').value = f1;
                 $("#fs2").attr('disabled', false);
                 $("#fundf1").attr('disabled', true);
@@ -1929,7 +1912,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs2").keyup(function(){
                 f2 = document.getElementById("fs2").value;
-                // console.log(f2);
 			    document.getElementById('fsof2').value = f2;
                 $("#fs3").attr('disabled', false);
             });
@@ -1942,7 +1924,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs3").keyup(function(){
                 f3 = document.getElementById("fs3").value;
-                // console.log(f3);
 			    document.getElementById('fsof3').value = f3;
                 $("#fs4").attr('disabled', false);
             });
@@ -1955,7 +1936,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs4").keyup(function(){
                 f4 = document.getElementById("fs4").value;
-                // console.log(f4);
 			    document.getElementById('fsof4').value = f4;
                 $("#fs5").attr('disabled', false);
             });
@@ -1969,7 +1949,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs5").keyup(function(){
                 f5 = document.getElementById("fs5").value;
-                // console.log(f5);
 			    document.getElementById('fsof5').value = f5;
                 $("#fs6").attr('disabled', false);
             });
@@ -1982,7 +1961,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs6").keyup(function(){
                 f6 = document.getElementById("fs6").value;
-                // console.log(f6);
 			    document.getElementById('fsof6').value = f6;
                 $("#fs7").attr('disabled', false);
             });
@@ -1995,7 +1973,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs7").keyup(function(){
                 f7 = document.getElementById("fs7").value;
-                // console.log(f7);
 			    document.getElementById('fsof7').value = f7;
                 $("#fs8").attr('disabled', false);
             });
@@ -2008,7 +1985,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs8").keyup(function(){
                 f8 = document.getElementById("fs8").value;
-                // console.log(f8);
 			    document.getElementById('fsof8').value = f8;
                 $("#fs9").attr('disabled', false);
             });
@@ -2021,7 +1997,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs9").keyup(function(){
                 f9 = document.getElementById("fs9").value;
-                // console.log(f9);
 			    document.getElementById('fsof9').value = f9;
                 $("#fs10").attr('disabled', false);
             });
@@ -2034,7 +2009,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs10").keyup(function(){
                 f10 = document.getElementById("fs10").value;
-                // console.log(f10);
 			    document.getElementById('fsof10').value = f10;
                 $("#fs11").attr('disabled', false);
             });
@@ -2047,7 +2021,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs11").keyup(function(){
                 f11 = document.getElementById("fs11").value;
-                // console.log(f4);
 			    document.getElementById('fsof11').value = f11;
                 $("#fs12").attr('disabled', false);
             });
@@ -2059,7 +2032,6 @@ if (!$_SESSION['login']) {
             }
             $("#fs12").keyup(function(){
                 f12 = document.getElementById("fs12").value;
-                // console.log(f12);
 			    document.getElementById('fsof12').value = f12;
             });
         });

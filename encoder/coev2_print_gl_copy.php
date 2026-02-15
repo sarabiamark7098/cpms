@@ -212,7 +212,6 @@
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;margin-bottom:7px;border:1px solid black;" value="<?php echo $user->coe_check('justification', $record['document'])?>" />&emsp;Justification<br>
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('valid id', $record['document'])?>" />&emsp;Valid I.D. Presented:<br>
                         <p class="text-center" style="width: 100%;height:20px; font-size: 13px; padding:0; border:none; border-bottom: 1px solid black;"><?php echo $record['id_presented']?></p>
-                        <!-- <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('4ps', $record['document'])?>" />&emsp;4PS DSWD I.D.<br> -->
                     </div>
                     <div class="col" style="padding-top: 0px; margin-top: -8px;">
                         <input class="text-center" type="text" style="font-size:18px;width:18px;height:18px;border:1px solid black;" value="<?php echo $user->coe_check('medical certificate', $record['document'])?>" />&emsp;Medical Certificate/Abstract<br>
@@ -276,7 +275,6 @@
             <div class="col" style="margin-left: -80px;">
                 <input class="text-center" style="height: 52%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $gl["cname"]; ?>"></input><br>
                 <input class="text-center" style="height: 52%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo $gl["caddress"]; ?>"></input>
-                <!-- <input class="text-center" style="height: 22%; width: 85%; font-size: 15px; border-bottom: 1px solid black;" value="<?php echo strtoupper((strtolower($gis["mode_admission"]) == "referral")?"R":"W")?>"></input> -->
             </div>
         </div><br><br>
         <!-- Signatory -->
@@ -316,7 +314,6 @@
             <?php if($am > 50000 &&  $gis['signatory_id'] != $client['signatory_GL']){?>
                 <div class="col-6 text-center">
                     <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo $GISsignatoryName ?>'>
-                    <!-- <b>CID/CIU/CIS/SWTL</b> -->
                     <b><?php echo $GISsignatoryPosition ?></b>
                     <p>Signature Over Printed Name</p>
                 </div>
@@ -336,7 +333,6 @@
             <div class="col"></div>
             <div class="col-6 text-center">
                 <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo $GLsignatoryName ?>'>
-                <!-- <b>CID/CIU/CIS/SWTL</b> -->
                 <b><?php echo $GLsignatoryPosition ?></b>
                 <p>Signature Over Printed Name</p>
             </div>

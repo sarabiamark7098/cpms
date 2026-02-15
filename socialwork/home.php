@@ -24,7 +24,6 @@
 		}
     }
 
-    // echo $_SESSION['f_office'];
 
 	if((!$_SESSION['login']) && (!$_SESSION['userAccountusername'])	&& (!$_SESSION['userAccountpassword'])){
 		header('Location:../index.php');
@@ -82,7 +81,6 @@
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
     <script type="text/javascript">
-        //var num = document.getElementById();
         refreshPage();
         var auto_refresh = setInterval(refreshPage, 300000); // refresh every 1 second interval
         
@@ -92,8 +90,7 @@
                 url:'fetch.php',// put your real file name 
                 data:{soc_work:1},
                 success:function(msg){
-                    $('#table_result').html(msg); 
-                    //console.log(msg);
+                    $('#table_result').html(msg);
                 }
             });
         }
@@ -104,7 +101,6 @@
 </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -259,89 +255,74 @@
     </div>
     
 	<script type="text/javascript">
-        //userAccount   
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
 
-	    //jscript declineclient
 		$('#declineclient').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var clientid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + clientid;
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "declineClient.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.declineClientbody').html(data);
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
         $('#logoutmodal').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
 
-        //Social Worker license 
         $('#license').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "socialwork_license.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.swlicense').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
 	</script>
     <style>

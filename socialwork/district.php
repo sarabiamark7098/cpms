@@ -26,11 +26,8 @@
 			$district = $row["district_name"];
 
 			$getdistrict = $user->getdistrictlist();
-			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
-				//Display info
 				echo '<option value="'. $value['district_name'] .'" '.(($district == $value['district_name'])?"selected":"").'> ';
 				echo $value['district_name'];
 				echo '</option>';
@@ -38,11 +35,8 @@
 		}
 		else{
 			$getdistrict = $user->getdistrictlist();
-			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
-				//Display info
 				echo '<option value="'. $value['district_name'] .'"> ';
 				echo $value['district_name'];
 				echo '</option>';
@@ -69,11 +63,8 @@
 			$district = $row["district_name"];
 
 			$getdistrict = $user->getdistrictlist();
-			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
-				//Display info
 				echo '<option value="'. $value['district_name'] .'" '.(($district == $value['district_name'])?"selected":"").'> ';
 				echo $value['district_name'];
 				echo '</option>';
@@ -81,11 +72,8 @@
 		}
 		else{
 			$getdistrict = $user->getdistrictlist();
-			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
-				//Display info
 				echo '<option value="'. $value['district_name'] .'"> ';
 				echo $value['district_name'];
 				echo '</option>';

@@ -69,25 +69,12 @@
         <script type="text/javascript">
             var d_1_1 = $("#date1_1").val();
             var d_2_2 = $("#date2_2").val();
-        
-            // window.onload = function() {
-            //     $.ajax({
-            //         url: "fetch.php",
-            //         method: "POST",
-            //         data : {page:1,date1:d_1_1,date2:d_2_2},
-            //         success:function(data){
-            //             $('#page_data').html(data);
-            //             //console.log(data);
-            //         } 
-            //         })
-            //     }
         </script>
     
 
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -253,20 +240,17 @@
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
     </script>
 
@@ -288,20 +272,17 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "summary.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
         
         // function prev(page){  

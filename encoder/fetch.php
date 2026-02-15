@@ -97,7 +97,6 @@
         $output = "";
         $page = $_POST['page'];
         $datas = ($_POST['page'] - 1 )  * 8; //asa magsugod ang id n e show
-        //echo $page;
 		$datenow = date("Y-m-d");
 		// $datenow2 = date("Y-m-d");
 		$datenow = strtotime($datenow);
