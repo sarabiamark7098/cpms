@@ -7,7 +7,6 @@ $user = new User();
 		
 		if(!isset($_POST['beneficiary'])){
 			if(isset($_POST['pass'])){
-				// print_r($_POST);
 				$trans = $_GET['id'];
 				//client the one that process the transaction
 				$fname = mysqli_real_escape_string($user->db,strtoupper($_POST['firstname']));
@@ -231,7 +230,6 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<!-- <input type="text" value="<?php //echo $getClient['b_exname'] ?>" class="form-control mr-sm-2 b" name="extraname" style="text-transform:uppercase" placeholder="Extension Name" > -->
 					<select name="extraname" class="form-control mr-sm-2 b">
 						<option value=""  <?php echo empty($getClient['b_exname'])?"selected":"" ?>> Extension Name</option>
 						<option value="JR" <?php echo ($getClient['b_exname']=="JR")?"selected":"" ?>>JR</option>
@@ -388,7 +386,6 @@ $user = new User();
 						foreach($getregions as $index => $value){
 						  //Display info
 							echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-							// echo $value['psgc_code'];
 							echo '</option>';
 						}
 					?>
@@ -573,7 +570,6 @@ $user = new User();
 						foreach($getregions as $index => $value){
 						  //Display info
 							echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-							// echo $value['psgc_code'];
 							echo '</option>';
 						}
 					?>
@@ -650,10 +646,8 @@ $user = new User();
 	$(function () {
 		$("#radiobutton").click(function () {
 			if ($(this).is(":checked")) {
-				//console.log("require");
 				$(".benerequire").attr('required', '');
 			} else {
-				//console.log("wla na require");
 				$(".benerequire").removeAttr('required');
 			}
 		});
@@ -696,19 +690,18 @@ $user = new User();
 		brgy = document.getElementById('cbrgy').value;
 		dist = document.getElementById('client_district').value.trim();
 		str = document.getElementById('cstr').value;
-		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
 		get_b_Region(document.getElementById('creg'));
 		get_b_Province(document.getElementById('cprov'));
 		get_b_Municipality(document.getElementById('client_city'));
 		get_b_Barangay(document.getElementById('cbrgy'));
-		
+
 		document.getElementById('breg').value = reg;
 		document.getElementById('bprov').value = prov;
 		document.getElementById('beneficiary_city').value = muni;
 		document.getElementById('bbrgy').value = brgy;
 		document.getElementById('bstr').value = str;
-		
+
 		setTimeout(() => {
 			const bDist = document.getElementById('beneficiary_district');
 			for (let i = 0; i < bDist.options.length; i++) {

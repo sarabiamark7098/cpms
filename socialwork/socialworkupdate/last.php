@@ -458,10 +458,8 @@
         $(function () {
             $("#radiobutton").click(function () {
                 if ($(this).is(":checked")) {
-                    // console.log("require");
                     $(".for_the").attr('required', '');
                 } else {
-                    // console.log("wla na require");
                     $(".for_the").removeAttr('required');
                 }
             });
@@ -476,7 +474,6 @@
     	$(document).ready(function(){
              $('#comp_name').keyup(function(){  //On pressing a key on "Search box". This function will be called
                 var txt = $('#comp_name').val(); //Assigning search box value to javascript variable.
-                //console.log(txt);
                 if(txt != ''){ //Validating, if "name" is empty.
                     $.ajax({
                         type: "post", //method to use
@@ -564,7 +561,6 @@
                 $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
                                                                                         
                                                                                             
-                //print_r($_POST);
                 $user->insertCash($_GET['id'], $sd_officer);
             }
 
@@ -585,7 +581,6 @@
                 $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
                 $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
                 $tomention= mysqli_real_escape_string($user->db,$_POST['tomention']); 
-                //print_r($_POST);
                  $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
             }
         }
@@ -604,8 +599,7 @@
             $if2= (strtolower($mode1) == "cav" && strtolower($mode2) == "gl");
 
             if( $if1 || $if2 ){
-                //GL 
-                // print_r($_POST["c_no"]);
+                //GL
                 $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
                 $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
                 $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));

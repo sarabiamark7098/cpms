@@ -15,7 +15,6 @@ $user = new User();
             <h1 class="text-center">Beneficiary Information</h1> <br>
                 <div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <!-- <input  name="relation" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" value="<?php //echo $bene['relation']?>" required> -->
 						<select name="relation" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
 							<option value="" <?php echo (empty($bene['relation'])?'selected':'') ?>>Relation With Beneficiary</option>
                             <?php
@@ -49,7 +48,6 @@ $user = new User();
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<!-- <input name="exname" type="text" class="form-control" style="border: 1px solid #b1acac;" value="<?php //echo $bene['b_exname']?>"> -->
 							<select name="exname" class="form-control" style="border: 1px solid #b1acac;">
 								<option value="" <?php echo (($bene['b_exname'])?'selected':'') ?>> Extension Name</option>
 								<option value="JR" <?php echo (($bene['b_exname']=='JR')?'selected':'') ?>>JR</option>

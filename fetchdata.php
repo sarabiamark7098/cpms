@@ -7,7 +7,6 @@
 
     if(isset($_POST['search'])){
         $var = $_POST['search'];
-        // echo "<script> console.log('".$var."') </script>";
         $output = '';
         $result = $user->searchEmployeeforRequest($var);
 		if($result){
@@ -33,7 +32,6 @@
     echo "<script>
         $('#r_request').click(function (event) {
             var empid = $(this).attr('data-id');
-            // console.log(empid);
             $.ajax({
                 type: 'post',
                 url:'fetchdata.php',
@@ -54,19 +52,17 @@
                             <div class='row'>
                                 <div class='form-group col-lg-6'>
                                     <select id='designation' name='designation' type='text' class='form-control' required>option
-                                        <option value=". ($row['position'] == 'Admin'?'Admin':'') ." selected>". ($row['position'] == 'Admin'?'Admin':'') ."</>
+                                        <option value=". ($row['position'] == 'Admin'?'Admin':'') ." selected>". ($row['position'] == 'Admin'?'Admin':'') ."</option>
                                         <option value='Encoder' ".(!empty($row['position']) && $row['position'] == 'Encoder' ? 'selected' : '').">Encoder</option>
                                         <option value='Social Worker' ". (!empty($row['position']) && $row['position'] == 'Social Worker'?'selected':'') .">Social Worker</option>
                                     </select>
                                     <label class='active' for='designation'>Designate Position</label>
                                 </div>
                                 <div class='form-group col-lg-6'>
-                                    <select id='office' name='office' type='tex' class='form-control' required>
+                                    <select id='office' name='office' type='text' class='form-control' required>
                                     <option value='' selected></option>";
                                         $getoffice = $user->optionoffice();
-                                            //Loop through results
                                         foreach($getoffice as $index => $value){
-                                            //Display info
                                             $output .= '<option value="'. $value['office_id'] .'" '. (($row['office_id']==$value['office_id'])?"selected":"") .'> ';
                                             $output .= $value['office_name'];
                                             $output .= '</option>';

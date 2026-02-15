@@ -350,7 +350,6 @@
                 $transid= mysqli_real_escape_string($user->db,$_GET['id']);
                 $req_by= mysqli_real_escape_string($user->db,ucwords(strtolower($_POST['req_by'])));
                 $signatory = mysqli_real_escape_string($user->db,$_POST['signatory_osap']);
-                //print_r($_POST);
                 $result = $user->create_osap($transid, $req_by, $signatory);
 
                 if($result){
@@ -365,7 +364,6 @@
                 $transid= mysqli_real_escape_string($user->db,$_GET['id']);
                 $req_by= mysqli_real_escape_string($user->db,ucwords(strtolower($_POST['req_by'])));
                 $signatory = mysqli_real_escape_string($user->db,$_POST['signatory_osap']);
-                //print_r($_POST);
                 $result = $user->update_osap($transid, $req_by, $signatory);
 
                 if($result){

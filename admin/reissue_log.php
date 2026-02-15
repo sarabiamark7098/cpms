@@ -64,15 +64,13 @@
                 data : {page:1},
                 success:function(data){
                     $('#page_data').html(data);
-                    //console.log(data);
-                } 
+                }
                 })
             }
     </script>
     </head>
 
     <body>
-        <?php //echo $_SESSION['userfullname'] ?>
         <div class="wrapper">
             <!-- Sidebar Holder -->
             <nav id="sidebar">
@@ -182,7 +180,6 @@
                         //if naa nay value
                         $('#search_text').keyup(function(){  //On pressing a key on "Search box". This function will be called
                             var txt = $('#search_text').val(); //Assigning search box value to javascript variable.
-                            // console.log(txt);
                             if(txt != ''){ //Validating, if "name" is empty.
                                 $.ajax({
                                     type: "post", //method to use
@@ -234,18 +231,15 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })

@@ -24,8 +24,6 @@
 				echo "<script>window.location='index.php';</script>";
 		}
 	}
-    // echo $_POST['d_1'];
-    // echo $_POST['d_2'];
 ?>
 
 
@@ -77,24 +75,10 @@
     <script type="text/javascript">
     var d_1_1 = $("#date1_1").val();
     var d_2_2 = $("#date2_2").val();
-    // console.log(d_1_1);
-    // console.log(d_2_2);
-    //    window.onload = function() {
-    //         $.ajax({
-    //             url: "fetch.php",
-    //             method: "POST",
-    //             data : {page:1,date1:d_1_1,date2:d_2_2},
-    //             success:function(data){
-    //                 $('#page_data').html(data);
-    //                 //console.log(data);
-    //             } 
-    //             })
-    //         }
     </script>
     </head>
 
     <body>
-        <?php //echo $_SESSION['userfullname'] ?>
         <div class="wrapper">
             <!-- Sidebar Holder -->
             <nav id="sidebar">
@@ -104,7 +88,7 @@
 
                 <ul class="list-unstyled components">
                     <li>
-                        <a href="home.php">List of Client<i style="float: right;font-size:25px" class="fa fa-users"></i> </a> 
+                        <a href="home.php">List of Client<i style="float: right;font-size:25px" class="fa fa-users"></i> </a>
                     </li>
                     <li>
                         <a href="draft.php">Serving Client <i style="float: right;font-size:25px" class="fa fa-child"></i></a>
@@ -177,7 +161,6 @@
                         <tbody>
                             <?php
                                 $datenow = date("Y-m-d");
-                                // $datenow2 = date("Y-m-d");
                                 $datenow = strtotime($datenow);
                                 $datenow2 = date('Y-m-d', strtotime('+ 1 days', $datenow));
                                 $datenow = date("Y-m-d");
@@ -262,20 +245,17 @@
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
 	</script>
 
@@ -297,20 +277,17 @@
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal = $(this);
         var dataString = 'id=logout';
-        //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "summary_social.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
     </script>
 </html>

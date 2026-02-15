@@ -55,7 +55,6 @@
                             foreach($getregions as $index => $value){
                                 //Display info
                                 echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-                                //echo $value['psgc_code'];
                                 echo '</option>';
                             }
                         ?>

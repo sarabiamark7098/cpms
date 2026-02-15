@@ -165,7 +165,6 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<!-- <input type="text" value="<?php //echo $getClient['extraname'] ?>" class="form-control mr-sm-2 b" name="extraname" style="text-transform:uppercase" placeholder="Extension Name"> -->
 					<select name="extraname" class="form-control mr-sm-2 b">
 						<option value=""  <?php echo empty($getClient['extraname'])?"selected":"" ?>> Extension Name</option>
 						<option value="JR" <?php echo ($getClient['extraname']=="JR")?"selected":"" ?>>JR</option>
@@ -424,7 +423,6 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<!-- <input type="text" value="<?php //echo $getClient['b_exname']; ?>" class="form-control mr-sm-2 b" name="b_exname" style="text-transform:uppercase" placeholder="Beneficiary Extension Name"> -->
 						<select name="b_exname" class="form-control mr-sm-2 b">
 							<option value=""  <?php echo empty($getClient['b_exname'])?"selected":"" ?>> Extension Name</option>
 							<option value="JR" <?php echo ($getClient['b_exname']=="JR")?"selected":"" ?>>JR</option>
@@ -693,7 +691,6 @@ $user = new User();
 		brgy = document.getElementById('cbrgy').value;
 		dist = document.getElementById('client_district').value.trim();
 		str = document.getElementById('cstr').value;
-		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
 		get_b_Region(document.getElementById('creg'));
 		get_b_Province(document.getElementById('cprov'));

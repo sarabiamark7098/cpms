@@ -6,8 +6,7 @@ include('../php/class.user.php');
         $output = '';
         $var = $_POST['search_client'];
         // if (($scount = strlen($_POST['search_client']) > 5)) {
-        //     echo strlen($_POST['search_client']);
-        
+
             if ($var=='') {
                 $result = $user->searchReissue_log_noData($var);
                 if ($result) {
@@ -41,7 +40,6 @@ include('../php/class.user.php');
                     $output .= '';
                     // $row = mysqli_fetch_assoc($result);
                     while ($row = mysqli_fetch_assoc($result)) {
-                        // print_r($row);
                         $client_assistance = $user->getGISAssistance($row['trans_id']); //kuha sa data sa assistance table
                     
                         $output .= "<tr class='danger' style='font-size: 15px;'>
