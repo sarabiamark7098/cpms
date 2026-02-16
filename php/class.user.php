@@ -2,6 +2,7 @@
 	session_start();
 	include ("db_config.php");
 	include ("db_config2.php");
+	include ("api_config.php");
 
 
 	class User{
@@ -4268,7 +4269,148 @@
 		$ini .= strtolower("/".$sw."/".$e);
 		return $ini;
 	}
-	
+
+	public function getMedicalAssistanceForApi(){
+		$query = "SELECT
+			a.trans_id,
+			a.type,
+			a.amount,
+			a.mode,
+			a.type_description,
+			c.firstname,
+			c.middlename,
+			c.lastname,
+			b.b_fname,
+			b.b_mname,
+			b.b_lname,
+			t.date_accomplished,
+			t.status_client,
+			CASE WHEN asl.id IS NOT NULL THEN 'Sent' ELSE 'Unsent' END AS api_status,
+			asl.sent_at
+		FROM assistance a
+		LEFT JOIN tbl_transaction t USING (trans_id)
+		LEFT JOIN client_data c USING (client_id)
+		LEFT JOIN beneficiary_data b USING (bene_id)
+		LEFT JOIN api_send_log asl ON a.trans_id = asl.trans_id
+			AND a.type_description = asl.assist_type_desc
+			AND asl.status = 'success'
+		WHERE a.type LIKE '%Medic%'
+		AND t.status_client = 'Done'
+		ORDER BY t.date_accomplished DESC";
+
+		$result = mysqli_query($this->db, $query);
+		if($result){
+			return $result;
+		}else{
+			return false;
+		}
+	}
+
+	public function getUnsentMedicalAssistance(){
+		$query = "SELECT
+			a.trans_id,
+			a.type,
+			a.amount,
+			a.mode,
+			a.type_description,
+			c.firstname,
+			c.middlename,
+			c.lastname,
+			b.b_fname,
+			b.b_mname,
+			b.b_lname
+		FROM assistance a
+		LEFT JOIN tbl_transaction t USING (trans_id)
+		LEFT JOIN client_data c USING (client_id)
+		LEFT JOIN beneficiary_data b USING (bene_id)
+		WHERE a.type LIKE '%Medic%'
+		AND t.status_client = 'Done'
+		AND NOT EXISTS (
+			SELECT 1 FROM api_send_log asl
+			WHERE asl.trans_id = a.trans_id
+			AND asl.assist_type_desc = a.type_description
+			AND asl.status = 'success'
+		)
+		ORDER BY t.date_accomplished ASC";
+
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	public function logApiSend($trans_id, $type_desc, $status, $response_code, $response_body){
+		$now = date("Y-m-d H:i:s");
+		$sent_by = $_SESSION['userId'];
+		$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+		$type_desc = mysqli_real_escape_string($this->db, $type_desc);
+		$status = mysqli_real_escape_string($this->db, $status);
+		$response_code = intval($response_code);
+		$response_body = mysqli_real_escape_string($this->db, $response_body);
+
+		$query = "INSERT INTO api_send_log (trans_id, assist_type_desc, sent_at, status, response_code, response_body, sent_by)
+				  VALUES ('{$trans_id}', '{$type_desc}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
+
+		$result = mysqli_query($this->db, $query);
+		if($result){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function sendMedicalDataToApi($records){
+		$payload = [];
+		foreach($records as $row){
+			$payload[] = [
+				'trans_id' => $row['trans_id'],
+				'client' => [
+					'firstname' => $row['firstname'],
+					'middlename' => $row['middlename'],
+					'lastname' => $row['lastname']
+				],
+				'beneficiary' => [
+					'firstname' => !empty($row['b_fname']) ? $row['b_fname'] : $row['firstname'],
+					'middlename' => !empty($row['b_mname']) ? $row['b_mname'] : $row['middlename'],
+					'lastname' => !empty($row['b_lname']) ? $row['b_lname'] : $row['lastname']
+				],
+				'assistance_type' => 'Medical',
+				'amount' => $row['amount'],
+				'mode' => $row['mode']
+			];
+		}
+
+		$jsonData = json_encode(['medical_assistance' => $payload]);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, API_ENDPOINT_URL);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: application/json',
+			'Accept: application/json'
+		]);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT);
+
+		$response = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$curlError = curl_error($ch);
+		curl_close($ch);
+
+		$result = [
+			'http_code' => $httpCode,
+			'response' => $response,
+			'error' => $curlError,
+			'success' => ($httpCode >= 200 && $httpCode < 300 && empty($curlError))
+		];
+
+		return $result;
+	}
 
 }
 
