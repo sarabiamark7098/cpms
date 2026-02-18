@@ -2,6 +2,12 @@
 include('../php/class.user.php');
 $user = new User();
 
+if(isset($_POST['load_medical_counts'])){
+	$counts = $user->getMedicalAssistanceCounts();
+	echo json_encode(['status' => 'success', 'unsent' => $counts['unsent'], 'sent' => $counts['sent']]);
+	exit;
+}
+
 if(isset($_POST['send_unsent_medical'])){
 	$records = $user->getUnsentMedicalAssistance();
 
