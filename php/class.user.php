@@ -4320,8 +4320,7 @@
 			AND asl.assist_type_desc = a.type_description
 			AND asl.status = 'success'
 		)
-		ORDER BY t.date_accomplished ASC
-		LIMIT 200";
+		ORDER BY t.date_accomplished ASC";
 
 		$result = mysqli_query($this->db, $query);
 		$data = [];
