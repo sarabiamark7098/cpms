@@ -43,22 +43,20 @@
         <script type="text/javascript" src="../js/PSGC.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="../datatables/datatables.css">
-		<script type="text/javascript" charset="utf8" src="../datatables/datatables.js"></script>
 		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
 
         <style type="text/css">
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
-			.badge-sent { background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-			.badge-unsent { background-color: #dc3545; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+			.count-card { border-radius: 8px; padding: 25px 20px; text-align: center; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+			.count-card .count-number { font-size: 48px; font-weight: bold; }
+			.count-card .count-label { font-size: 16px; margin-top: 5px; }
+			.count-card.unsent { background-color: #fff3cd; border: 1px solid #ffc107; color: #856404; }
+			.count-card.sent { background-color: #d4edda; border: 1px solid #28a745; color: #155724; }
+			#dataLoader { text-align: center; padding: 30px 0; }
+			#dataLoader .fa-spinner { font-size: 24px; color: #007bff; }
         </style>
-		<script>
-			$(function(){
-				$("#apiSendTable").dataTable();
-			})
-		</script>
     </head>
 
 <body>
@@ -128,60 +126,50 @@
                     </div>
                 </div>
             </nav>
-            <div class="container-fluid" style="padding-left: 5%">
-                <div class="table-responsive-lg">
-                    <h5>Medical Assistance - API Send</h5>
-                    <div class="row" style="padding-bottom: 20px; padding-top: 10px;">
+            <div class="container-fluid" style="padding-left: 5%; padding-right: 5%;">
+                <h5 style="margin-bottom: 25px;">Medical Assistance - API Send</h5>
+
+                <div id="dataLoader">
+                    <i class="fa fa-spinner fa-spin"></i>
+                    <p style="margin-top:10px; color:#666;">Loading records...</p>
+                </div>
+
+                <div id="countsContainer" style="display:none;">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="count-card unsent">
+                                <div class="count-number" id="unsentNumber">0</div>
+                                <div class="count-label"><i class="fa fa-clock-o"></i> Unsent Records</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="count-card sent">
+                                <div class="count-number" id="sentNumber">0</div>
+                                <div class="count-label"><i class="fa fa-check-circle"></i> Sent Records</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px;">
                         <div class="col-lg-3">
-                            <button id="btnSendUnsent" class="btn btn-primary">
+                            <button id="btnSendUnsent" class="btn btn-primary btn-lg" disabled>
                                 <i class="fa fa-paper-plane"></i> Send Unsent Records
                             </button>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-2">
+                            <button id="btnRefresh" class="btn btn-outline-secondary btn-lg">
+                                <i class="fa fa-refresh"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="col-lg-7">
                             <div id="apiResult" style="display:none;" class="alert" role="alert"></div>
                         </div>
                     </div>
-                    <table id="apiSendTable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">
-                        <thead>
-                            <tr>
-                            <th scope="col">Trans ID</th>
-                            <th scope="col">Client Name</th>
-                            <th scope="col">Beneficiary Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Mode</th>
-                            <th scope="col">Date Accomplished</th>
-                            <th scope="col" style="width: 10%">API Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $medicalRecords = $user->getMedicalAssistanceForApi();
-                            if($medicalRecords){
-                                foreach($medicalRecords as $index => $value){
-                                    $dateacc = !empty($value['date_accomplished']) ? date('F j, Y', strtotime($value['date_accomplished'])) : '';
-                                    $statusBadge = ($value['api_status'] == 'Sent')
-                                        ? "<span class='badge-sent'>Sent</span>"
-                                        : "<span class='badge-unsent'>Unsent</span>";
-                                    $clientName = $value['lastname'] . ", " . $value['firstname'] . " " . $value['middlename'];
-                                    $beneName = !empty($value['b_lname'])
-                                        ? $value['b_lname'] . ", " . $value['b_fname'] . " " . $value['b_mname']
-                                        : $value['lastname'] . ", " . $value['firstname'] . " " . $value['middlename'];
-                                    echo "<tr>
-                                        <td>" . $value['trans_id'] . "</td>
-                                        <td>" . $clientName . "</td>
-                                        <td>" . $beneName . "</td>
-                                        <td>Medical</td>
-                                        <td>" . $value['amount'] . "</td>
-                                        <td>" . $value['mode'] . "</td>
-                                        <td>" . $dateacc . "</td>
-                                        <td style='width: 10%'>" . $statusBadge . "</td>
-                                    </tr>";
-                                }
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                </div>
+
+                <div id="dataError" style="display:none; text-align:center; padding:40px 0;">
+                    <p style="color:#dc3545;"><i class="fa fa-exclamation-triangle"></i> Failed to load records.</p>
+                    <button class="btn btn-outline-primary btn-sm" onclick="loadCounts()"><i class="fa fa-refresh"></i> Retry</button>
                 </div>
             </div>
     <script type="text/javascript">
@@ -199,7 +187,47 @@
     </script>
 
     <script type="text/javascript">
+        function loadCounts(){
+            $('#dataLoader').show();
+            $('#countsContainer').hide();
+            $('#dataError').hide();
+            $('#btnSendUnsent').prop('disabled', true);
+
+            $.ajax({
+                type: "POST",
+                url: "api_fetch.php",
+                data: { load_medical_counts: true },
+                dataType: "json",
+                success: function(response){
+                    if(response.status === 'success'){
+                        $('#unsentNumber').text(response.unsent);
+                        $('#sentNumber').text(response.sent);
+
+                        if(response.unsent > 0){
+                            $('#btnSendUnsent').prop('disabled', false);
+                        }
+
+                        $('#dataLoader').hide();
+                        $('#countsContainer').show();
+                    } else {
+                        $('#dataLoader').hide();
+                        $('#dataError').show();
+                    }
+                },
+                error: function(){
+                    $('#dataLoader').hide();
+                    $('#dataError').show();
+                }
+            });
+        }
+
         $(document).ready(function(){
+            loadCounts();
+
+            $('#btnRefresh').on('click', function(){
+                loadCounts();
+            });
+
             $('#btnSendUnsent').on('click', function(){
                 var btn = $(this);
                 btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
@@ -225,10 +253,10 @@
 
                         btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send Unsent Records');
 
-                        if(response.status === 'success'){
+                        if(response.status === 'success' || response.status === 'info'){
                             setTimeout(function(){
-                                location.reload();
-                            }, 2000);
+                                loadCounts();
+                            }, 1500);
                         }
                     },
                     error: function(xhr, status, error){

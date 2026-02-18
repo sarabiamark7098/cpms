@@ -4270,39 +4270,28 @@
 		return $ini;
 	}
 
-	public function getMedicalAssistanceForApi(){
+	public function getMedicalAssistanceCounts(){
 		$query = "SELECT
-			a.trans_id,
-			a.type,
-			a.amount,
-			a.mode,
-			a.type_description,
-			c.firstname,
-			c.middlename,
-			c.lastname,
-			b.b_fname,
-			b.b_mname,
-			b.b_lname,
-			t.date_accomplished,
-			t.status_client,
-			CASE WHEN asl.id IS NOT NULL THEN 'Sent' ELSE 'Unsent' END AS api_status,
-			asl.sent_at
+			SUM(CASE WHEN asl.id IS NULL THEN 1 ELSE 0 END) AS unsent_count,
+			SUM(CASE WHEN asl.id IS NOT NULL THEN 1 ELSE 0 END) AS sent_count
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
-		LEFT JOIN beneficiary_data b USING (bene_id)
 		LEFT JOIN api_send_log asl ON a.trans_id = asl.trans_id
 			AND a.type_description = asl.assist_type_desc
 			AND asl.status = 'success'
 		WHERE a.type LIKE '%Medic%'
-		AND t.status_client = 'Done'
-		ORDER BY t.date_accomplished DESC";
+		AND t.status_client = 'Done'";
 
 		$result = mysqli_query($this->db, $query);
 		if($result){
-			return $result;
+			$row = mysqli_fetch_assoc($result);
+			return [
+				'unsent' => intval($row['unsent_count']),
+				'sent' => intval($row['sent_count'])
+			];
 		}else{
-			return false;
+			return ['unsent' => 0, 'sent' => 0];
 		}
 	}
 
