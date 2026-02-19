@@ -1737,7 +1737,7 @@
 			$query = "SELECT client_data.*, beneficiary_data.*, tbl_transaction.* FROM tbl_transaction  
 			LEFT JOIN client_data USING (client_id)
 			LEFT JOIN beneficiary_data USING (bene_id)
-			WHERE trans_id = '{$id}';";
+			WHERE trans_id = '{$id}' LIMIT 1;";
 			$result = mysqli_query($this->db, $query);
 			$data = mysqli_fetch_assoc($result);
 	
