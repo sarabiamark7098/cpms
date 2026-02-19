@@ -1795,7 +1795,7 @@
 									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
 									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
 									$SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
-										
+			
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
 				$rl2 = "";

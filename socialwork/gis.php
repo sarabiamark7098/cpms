@@ -1350,6 +1350,43 @@ if (!$_SESSION['login']) {
             $trans_id = $_GET['id'];
             $csubcat = $_POST['c_subcat'];
 
+            // Initialize ALL optional variables
+            $docu_otherinfo = "";
+            $material = "";
+            $belowMonthly = "";
+            $severity = "";
+            $crisis = "";
+            $crisis1 = "";
+            $support = "";
+            $external = "";
+            $selfhelp = "";
+            $vulnerability = "";
+
+            $SOI_wage = "";
+            $SOI_profit = "";
+            $SOI_domesticsource = "";
+            $SOI_abroad = "";
+            $SOI_governmenttransfer = "";
+            $SOI_pension = "";
+            $SOI_otherincome = "";
+
+            $targets = "";
+            $subcat = "";
+            $if_medical = "";
+            $if_burial = "";
+            $financial = "";
+            $diagnosis_cause_of_death = "";
+
+            // IMPORTANT (missing in SAVE block)
+            $fund6 = "";
+            $fund7 = "";
+            $fund8 = "";
+            $fund9 = "";
+            $fund10 = "";
+            $fund11 = "";
+            $fund12 = "";
+
+
 
             $familyData = json_decode($_POST['family_data'], true);
             
@@ -1392,8 +1429,10 @@ if (!$_SESSION['login']) {
                 $program = "other";
                 $otherProgram = strtoupper($_POST['otherProgramItem']);
             }
+            
+            $type2 = $_POST['type2'] ?? "";
 
-            if ($_POST['type2'] == "") {
+            if ($type2 == "") {
                 $type2 = "";
                 $pur2 = "";
                 $a2 = "";
@@ -1598,6 +1637,33 @@ if (!$_SESSION['login']) {
             $empid = $_SESSION['userId']; // id sa social worker
             $trans_id = $_GET['id'];
             $csubcat = $_POST['c_subcat'];
+            // Initialize ALL optional variables
+            $docu_otherinfo = "";
+            $material = "";
+            $belowMonthly = "";
+            $severity = "";
+            $crisis = "";
+            $crisis1 = "";
+            $support = "";
+            $external = "";
+            $selfhelp = "";
+            $vulnerability = "";
+
+            $SOI_wage = "";
+            $SOI_profit = "";
+            $SOI_domesticsource = "";
+            $SOI_abroad = "";
+            $SOI_governmenttransfer = "";
+            $SOI_pension = "";
+            $SOI_otherincome = "";
+
+            $targets = "";
+            $subcat = "";
+            $if_medical = "";
+            $if_burial = "";
+            $financial = "";
+            $diagnosis_cause_of_death = "";
+
             
             //FAMILY DATA's
             $familyData = json_decode($_POST['family_data'], true);
@@ -1646,7 +1712,9 @@ if (!$_SESSION['login']) {
                 $otherProgram = strtoupper($_POST['otherProgramItem']);
             }
 
-            if ($_POST['type2'] == "") {
+            $type2 = $_POST['type2'] ?? "";
+
+            if ($type2 == "") {
                 $type2 = "";
                 $pur2 = "";
                 $a2 = "";
