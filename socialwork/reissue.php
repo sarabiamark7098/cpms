@@ -161,7 +161,7 @@
                         <tbody id="search_result">
                         </tbody>
                     </table>
-                    <script>
+                <script>
                         // Custom debounce function
                         function debounce(func, wait) {
                             let timeout;
@@ -185,7 +185,7 @@
                                     $.ajax({
                                         type: "post",
                                         url: "fetch.php",
-                                        data: { search: txt },
+                                        data: { search_client: txt },
                                         beforeSend: function() {
                                             $('#search_text').prop('disabled', true);
                                             $('body').css('cursor', 'progress');
