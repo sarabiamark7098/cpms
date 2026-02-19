@@ -1237,7 +1237,7 @@
 					LEFT JOIN beneficiary_data using (bene_id)
 					LEFT JOIN gl using (trans_id)
 					LEFT JOIN assessment using (trans_id)
-					WHERE trans_id = '{$id}';";
+					WHERE trans_id = '{$id}' LIMIT 1;";
 				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				$rows = mysqli_num_rows($result);
@@ -1366,7 +1366,7 @@
 				$query = "SELECT * FROM employee_info 
 				LEFT JOIN tbl_employment USING (empnum)
 				LEFT JOIN cpms_account USING (empid)
-				WHERE empid='{$id}';";
+				WHERE empid='{$id}' LIMIT 1;";
 				$result = mysqli_query($this->db2,$query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
@@ -3928,7 +3928,7 @@
 	}
 	
 	public function getClientImage($id){
-		$query = "SELECT * FROM webcam WHERE trans_id='{$id}'";
+		$query = "SELECT * FROM webcam WHERE trans_id='{$id}' LIMIT 1";
 		$result = mysqli_query($this->db,$query);
 		$row = mysqli_fetch_assoc($result);
 		$img = "../images/noAvatar.png";
