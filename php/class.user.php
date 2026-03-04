@@ -4270,17 +4270,67 @@
 		return $ini;
 	}
 
-	public function getMedicalAssistanceCounts(){
+	public function getApiSyncConfig(){
+		$query = "SELECT id, assistance_type, is_active FROM api_sync_config ORDER BY id ASC";
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	public function updateApiSyncConfig($types){
+		$resetQuery = "UPDATE api_sync_config SET is_active = 0";
+		mysqli_query($this->db, $resetQuery);
+
+		if(!empty($types) && is_array($types)){
+			$escaped = [];
+			foreach($types as $type){
+				$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+			}
+			$inClause = implode(',', $escaped);
+			$activateQuery = "UPDATE api_sync_config SET is_active = 1 WHERE assistance_type IN ({$inClause})";
+			mysqli_query($this->db, $activateQuery);
+		}
+		return true;
+	}
+
+	public function getActiveAssistanceTypes(){
+		$query = "SELECT assistance_type FROM api_sync_config WHERE is_active = 1 ORDER BY id ASC";
+		$result = mysqli_query($this->db, $query);
+		$types = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$types[] = $row['assistance_type'];
+			}
+		}
+		return $types;
+	}
+
+	public function getAssistanceCounts(){
+		$activeTypes = $this->getActiveAssistanceTypes();
+		if(empty($activeTypes)){
+			return ['unsent' => 0, 'sent' => 0];
+		}
+
+		$escaped = [];
+		foreach($activeTypes as $type){
+			$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+		}
+		$inClause = implode(',', $escaped);
+
 		$query = "SELECT
 			SUM(CASE WHEN asl.id IS NULL THEN 1 ELSE 0 END) AS unsent_count,
 			SUM(CASE WHEN asl.id IS NOT NULL THEN 1 ELSE 0 END) AS sent_count
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
-		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN api_send_log asl ON a.trans_id = asl.trans_id
 			AND a.type_description = asl.assist_type_desc
 			AND asl.status = 'success'
-		WHERE a.type LIKE '%Medic%'
+		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'";
 
 		$result = mysqli_query($this->db, $query);
@@ -4295,7 +4345,19 @@
 		}
 	}
 
-	public function getUnsentMedicalAssistance(){
+	public function getUnsentAssistance($limit = 200){
+		$activeTypes = $this->getActiveAssistanceTypes();
+		if(empty($activeTypes)){
+			return [];
+		}
+
+		$escaped = [];
+		foreach($activeTypes as $type){
+			$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+		}
+		$inClause = implode(',', $escaped);
+		$limit = intval($limit);
+
 		$query = "SELECT
 			a.trans_id,
 			a.type,
@@ -4312,7 +4374,7 @@
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN beneficiary_data b USING (bene_id)
-		WHERE a.type LIKE '%Medic%'
+		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
@@ -4320,7 +4382,60 @@
 			AND asl.assist_type_desc = a.type_description
 			AND asl.status = 'success'
 		)
-		ORDER BY t.date_accomplished ASC";
+		ORDER BY t.date_accomplished ASC
+		LIMIT {$limit}";
+
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	public function getUnsentAssistanceByDate($date, $limit = 200){
+		$activeTypes = $this->getActiveAssistanceTypes();
+		if(empty($activeTypes)){
+			return [];
+		}
+
+		$escaped = [];
+		foreach($activeTypes as $type){
+			$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+		}
+		$inClause = implode(',', $escaped);
+		$date = mysqli_real_escape_string($this->db, $date);
+		$limit = intval($limit);
+
+		$query = "SELECT
+			a.trans_id,
+			a.type,
+			a.amount,
+			a.mode,
+			a.type_description,
+			c.firstname,
+			c.middlename,
+			c.lastname,
+			b.b_fname,
+			b.b_mname,
+			b.b_lname
+		FROM assistance a
+		LEFT JOIN tbl_transaction t USING (trans_id)
+		LEFT JOIN client_data c USING (client_id)
+		LEFT JOIN beneficiary_data b USING (bene_id)
+		WHERE a.type IN ({$inClause})
+		AND t.status_client = 'Done'
+		AND t.date_accomplished BETWEEN '{$date} 00:00:00' AND '{$date} 23:59:59'
+		AND NOT EXISTS (
+			SELECT 1 FROM api_send_log asl
+			WHERE asl.trans_id = a.trans_id
+			AND asl.assist_type_desc = a.type_description
+			AND asl.status = 'success'
+		)
+		ORDER BY t.date_accomplished ASC
+		LIMIT {$limit}";
 
 		$result = mysqli_query($this->db, $query);
 		$data = [];
@@ -4352,7 +4467,27 @@
 		}
 	}
 
-	public function sendMedicalDataToApi($records){
+	public function logApiSendCron($trans_id, $type_desc, $status, $response_code, $response_body, $sent_by = 'CRON'){
+		$now = date("Y-m-d H:i:s");
+		$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+		$type_desc = mysqli_real_escape_string($this->db, $type_desc);
+		$status = mysqli_real_escape_string($this->db, $status);
+		$response_code = intval($response_code);
+		$response_body = mysqli_real_escape_string($this->db, $response_body);
+		$sent_by = mysqli_real_escape_string($this->db, $sent_by);
+
+		$query = "INSERT INTO api_send_log (trans_id, assist_type_desc, sent_at, status, response_code, response_body, sent_by)
+				  VALUES ('{$trans_id}', '{$type_desc}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
+
+		$result = mysqli_query($this->db, $query);
+		if($result){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function sendAssistanceDataToApi($records){
 		$payload = [];
 		foreach($records as $row){
 			$payload[] = [
@@ -4367,13 +4502,13 @@
 					'middlename' => !empty($row['b_mname']) ? $row['b_mname'] : $row['middlename'],
 					'lastname' => !empty($row['b_lname']) ? $row['b_lname'] : $row['lastname']
 				],
-				'assistance_type' => 'Medical',
+				'assistance_type' => $row['type'],
 				'amount' => $row['amount'],
 				'mode' => $row['mode']
 			];
 		}
 
-		$jsonData = json_encode(['medical_assistance' => $payload]);
+		$jsonData = json_encode(['assistance_data' => $payload]);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, API_ENDPOINT_URL);
