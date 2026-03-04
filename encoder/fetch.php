@@ -133,7 +133,6 @@
                     <tbody id="page_data">';
         
         echo '<script>
-            console.log("'.$rownum.'");
             document.getElementById("counttotalclient").value = "'.$rownum.'";
         </script>';
         if($result){

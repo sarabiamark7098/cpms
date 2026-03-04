@@ -6,7 +6,7 @@
             <div class="modal-body">
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-12">
-                        <input placeholder="Assessment Option" id="assopt" name="assopt" type="text" class="form-control">
+                        <input placeholder="Assessment Option" id="assopt" name="assopt" type="text" class="form-control" required>
                         <label class="active" for="assopt">Assessment Option</label>
                     </div>
                     <div class="form-group col-lg-12">

@@ -1,5 +1,6 @@
 <?php
 	include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
     $user = new User();
 
     //$result = mysqli_query($user->db, $query);
@@ -175,7 +176,6 @@
                                     foreach($summarydt as $index => $value){
                                         if($summarynumrows > 0){
                                             echo '<script>
-                                                console.log("'.$summarynumrows.'");
                                                 document.getElementById("counttotalclient").value = "'.$summarynumrows.'";
                                             </script>';
                                             echo "<tr>

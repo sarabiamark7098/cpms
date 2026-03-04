@@ -1,5 +1,6 @@
 <?php
 	include("../php/class.user.php");
+    require_once("../php/session_timeout.php");
 	$user = new User();
 	
 	if(!$_SESSION['login']){
@@ -23,7 +24,7 @@
 		$settitle = ucwords($_POST['title']);
 		$setfirstname = ucwords($_POST['fname']);
 		$setlastname = ucwords($_POST['lname']);
-		$setmiddleI = strtoupper($_POST['mi']);
+		$setmiddleI = $_POST['mi'] != "" ? strtoupper($_POST['mi']) : "";
 		$setinitials = strtoupper($_POST['initials']);
 		$setposition = $_POST['position'];
 		$set_s_tree = strtoupper($_POST['s_tree']);

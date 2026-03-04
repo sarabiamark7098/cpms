@@ -1029,7 +1029,7 @@
 			}
 			
 			public function show_ass_data($opt){
-				$query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
+				echo $query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
 				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				$rows = mysqli_num_rows($result);
@@ -1051,8 +1051,9 @@
 				}
 				$query = "UPDATE gisassessment SET ass_opt='{$newopt}', prob_pres='{$prob}', ass_socwork='{$ass}' WHERE ass_opt = '{$opt}';";
 				$result = mysqli_query($this->db,$query);
+				
 				if($result){
-					return true;
+					return "success";
 				}
 				else {
 					return false;
@@ -3819,13 +3820,17 @@
 				$index++;
 			}
 			$data = $mode[1] .", ". $mode[2];
-		}else{
+			
+			return $data;
+		}elseif($num == 1){
 			while($row = mysqli_fetch_assoc($result)){
 				$data = $row['mode'];
 			}
+			return $data;
+		}else{
+			return "";
 		}
 		
-		return $data;
 	}
 
 	public function getencoderINI($id){
