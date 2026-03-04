@@ -103,7 +103,6 @@ $user = new User();
     const expiryInput = document.getElementById('expiry_license');
     const expiryDate = new Date(expiryInput.value);
     const today = new Date();
-	console.log(today);
     // Set to start of today to ignore time
     today.setHours(0, 0, 0, 0);
 

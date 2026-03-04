@@ -178,7 +178,7 @@
                                         foreach($summarydt as $index => $value){
                                             if($summarynumrows > 0){
                                                 echo '<script>
-                                                    console.log("'.$summarynumrows.'");
+                                                    ("'.$summarynumrows.'");
                                                     document.getElementById("counttotalclient").value = "'.$summarynumrows.'";
                                                 </script>';
                                                 echo "<tr>

@@ -46,7 +46,6 @@ $user = new User();
 	<body>
     <script type="text/javascript">
         function idcert(id){
-            console.log(id);
             window.location.href = "idcert.php?id="+ id;
         }
     </script>
