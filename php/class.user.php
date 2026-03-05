@@ -4363,17 +4363,29 @@
 			a.type,
 			a.amount,
 			a.mode,
+			a.fund,
+			a.purpose,
 			a.type_description,
 			c.firstname,
 			c.middlename,
 			c.lastname,
-			b.b_fname,
-			b.b_mname,
-			b.b_lname
+			c.extraname,
+			DAY(c.date_birth) AS birth_day,
+			MONTH(c.date_birth) AS birth_month,
+			YEAR(c.date_birth) AS birth_year,
+			SUBSTRING_INDEX(c.client_province, '/', 1) AS province,
+			SUBSTRING_INDEX(c.client_municipality, '/', 1) AS city_municipality,
+			t.date_accomplished,
+			t.program_type,
+			t.other_program,
+			g.control_no,
+			cs.sd_officer
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN beneficiary_data b USING (bene_id)
+		LEFT JOIN gl g USING (trans_id)
+		LEFT JOIN cash cs USING (trans_id)
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
 		AND NOT EXISTS (
@@ -4414,17 +4426,29 @@
 			a.type,
 			a.amount,
 			a.mode,
+			a.fund,
+			a.purpose,
 			a.type_description,
 			c.firstname,
 			c.middlename,
 			c.lastname,
-			b.b_fname,
-			b.b_mname,
-			b.b_lname
+			c.extraname,
+			DAY(c.date_birth) AS birth_day,
+			MONTH(c.date_birth) AS birth_month,
+			YEAR(c.date_birth) AS birth_year,
+			SUBSTRING_INDEX(c.client_province, '/', 1) AS province,
+			SUBSTRING_INDEX(c.client_municipality, '/', 1) AS city_municipality,
+			t.date_accomplished,
+			t.program_type,
+			t.other_program,
+			g.control_no,
+			cs.sd_officer
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN beneficiary_data b USING (bene_id)
+		LEFT JOIN gl g USING (trans_id)
+		LEFT JOIN cash cs USING (trans_id)
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
 		AND t.date_accomplished BETWEEN '{$date} 00:00:00' AND '{$date} 23:59:59'
@@ -4490,21 +4514,42 @@
 	public function sendAssistanceDataToApi($records){
 		$payload = [];
 		foreach($records as $row){
+			// Determine program name from program_type
+			$program = '';
+			if($row['program_type'] == '0'){
+				$program = 'AICS';
+			} elseif($row['program_type'] == '1'){
+				$program = 'AKAP';
+			} elseif($row['program_type'] == 'other' && !empty($row['other_program'])){
+				$program = $row['other_program'];
+			}
+
+			// Format date_last_served
+			$dateLastServed = '';
+			if(!empty($row['date_accomplished'])){
+				$dateLastServed = date('Y-m-d', strtotime($row['date_accomplished']));
+			}
+
 			$payload[] = [
-				'trans_id' => $row['trans_id'],
-				'client' => [
-					'firstname' => $row['firstname'],
-					'middlename' => $row['middlename'],
-					'lastname' => $row['lastname']
-				],
-				'beneficiary' => [
-					'firstname' => !empty($row['b_fname']) ? $row['b_fname'] : $row['firstname'],
-					'middlename' => !empty($row['b_mname']) ? $row['b_mname'] : $row['middlename'],
-					'lastname' => !empty($row['b_lname']) ? $row['b_lname'] : $row['lastname']
-				],
-				'assistance_type' => $row['type'],
-				'amount' => $row['amount'],
-				'mode' => $row['mode']
+				'control_number'    => !empty($row['control_no']) ? $row['control_no'] : '',
+				'first_name'        => !empty($row['firstname']) ? $row['firstname'] : '',
+				'middle_name'       => !empty($row['middlename']) ? $row['middlename'] : '',
+				'last_name'         => !empty($row['lastname']) ? $row['lastname'] : '',
+				'extension_name'    => !empty($row['extraname']) ? $row['extraname'] : '',
+				'birth_day'         => !empty($row['birth_day']) ? $row['birth_day'] : '',
+				'birth_month'       => !empty($row['birth_month']) ? $row['birth_month'] : '',
+				'birth_year'        => !empty($row['birth_year']) ? $row['birth_year'] : '',
+				'province'          => !empty($row['province']) ? $row['province'] : '',
+				'city_municipality' => !empty($row['city_municipality']) ? $row['city_municipality'] : '',
+				'date_last_served'  => $dateLastServed,
+				'last_served_location' => '',
+				'program'           => $program,
+				'event_type'        => !empty($row['type']) ? $row['type'] : '',
+				'partners'          => '',
+				'charging'          => !empty($row['fund']) ? $row['fund'] : '',
+				'sdo_incharge'      => !empty($row['sd_officer']) ? $row['sd_officer'] : '',
+				'other_remarks'     => !empty($row['purpose']) ? $row['purpose'] : '',
+				'file_source'       => 'CPMS'
 			];
 		}
 
