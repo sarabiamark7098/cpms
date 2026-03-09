@@ -2,7 +2,6 @@
 	session_start();
 	include ("db_config.php");
 	include ("db_config2.php");
-	include ("api_config.php");
 
 
 	class User{
@@ -1030,7 +1029,7 @@
 			}
 			
 			public function show_ass_data($opt){
-				$query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
+				echo $query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
 				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				$rows = mysqli_num_rows($result);
@@ -1052,8 +1051,9 @@
 				}
 				$query = "UPDATE gisassessment SET ass_opt='{$newopt}', prob_pres='{$prob}', ass_socwork='{$ass}' WHERE ass_opt = '{$opt}';";
 				$result = mysqli_query($this->db,$query);
+				
 				if($result){
-					return true;
+					return "success";
 				}
 				else {
 					return false;
@@ -1238,7 +1238,7 @@
 					LEFT JOIN beneficiary_data using (bene_id)
 					LEFT JOIN gl using (trans_id)
 					LEFT JOIN assessment using (trans_id)
-					WHERE trans_id = '{$id}';";
+					WHERE trans_id = '{$id}' LIMIT 1;";
 				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				$rows = mysqli_num_rows($result);
@@ -1367,7 +1367,7 @@
 				$query = "SELECT * FROM employee_info 
 				LEFT JOIN tbl_employment USING (empnum)
 				LEFT JOIN cpms_account USING (empid)
-				WHERE empid='{$id}';";
+				WHERE empid='{$id}' LIMIT 1;";
 				$result = mysqli_query($this->db2,$query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
@@ -1738,7 +1738,7 @@
 			$query = "SELECT client_data.*, beneficiary_data.*, tbl_transaction.* FROM tbl_transaction  
 			LEFT JOIN client_data USING (client_id)
 			LEFT JOIN beneficiary_data USING (bene_id)
-			WHERE trans_id = '{$id}';";
+			WHERE trans_id = '{$id}' LIMIT 1;";
 			$result = mysqli_query($this->db, $query);
 			$data = mysqli_fetch_assoc($result);
 	
@@ -1796,7 +1796,7 @@
 									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
 									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
 									$SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
-										
+			
 			if(strtolower($mode_ad) == "walk-in"){
 				$rl1 = "";
 				$rl2 = "";
@@ -3820,13 +3820,17 @@
 				$index++;
 			}
 			$data = $mode[1] .", ". $mode[2];
-		}else{
+			
+			return $data;
+		}elseif($num == 1){
 			while($row = mysqli_fetch_assoc($result)){
 				$data = $row['mode'];
 			}
+			return $data;
+		}else{
+			return "";
 		}
 		
-		return $data;
 	}
 
 	public function getencoderINI($id){
@@ -3929,7 +3933,7 @@
 	}
 	
 	public function getClientImage($id){
-		$query = "SELECT * FROM webcam WHERE trans_id='{$id}'";
+		$query = "SELECT * FROM webcam WHERE trans_id='{$id}' LIMIT 1";
 		$result = mysqli_query($this->db,$query);
 		$row = mysqli_fetch_assoc($result);
 		$img = "../images/noAvatar.png";

@@ -35,7 +35,7 @@
                         <label class="active" for="lname">Last Name</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <input placeholder="Middle Initial" maxlength="1" id="mini" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')">
+                        <input placeholder="Middle Initial" maxlength="1" id="mini" name="mi" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')">
                         <label class="active" for="mi">Middle Initial</label>
                     </div>
                     <div class="form-group col-lg-6">

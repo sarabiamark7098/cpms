@@ -1,5 +1,6 @@
 <?php
 	include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
     $user = new User();
 
     //$result = mysqli_query($user->db, $query);

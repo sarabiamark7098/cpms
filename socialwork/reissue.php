@@ -1,5 +1,6 @@
 <?php
-     include('../php/class.user.php');
+    include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
      $user = new User();
 
     if(isset($_POST)){
@@ -68,6 +69,13 @@
                 })
             }
     </script>
+    <style type="text/css">
+        #search_text:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            border-color: #d1d1d1;
+        }
+    </style>
     </head>
 
     <body>
@@ -169,26 +177,49 @@
                         }
 
                         $(document).ready(function () {
+                            let isSearching = false;
+
                             const debouncedSearch = debounce(function () {
                                 var txt = $('#search_text').val();
+                                
                                 if (txt !== '') {
                                     $.ajax({
                                         type: "post",
                                         url: "fetch.php",
                                         data: { search_client: txt },
+                                        beforeSend: function() {
+                                            $('#search_text').prop('disabled', true);
+                                            $('body').css('cursor', 'progress');
+                                        },
                                         success: function (html) {
                                             $('#search_result').html(html).show();
+                                        },
+                                        complete: function() {
+                                            isSearching = false;
+                                            $('#search_text').prop('disabled', false);
+                                            $('body').css('cursor', 'default');
+                                            
+                                            $('#search_text').focus();
                                         }
                                     });
                                 } else {
                                     $('#search_result').html("");
+                                    isSearching = false;
                                 }
                             }, 1000); 
 
-                            $('#search_text').keyup(debouncedSearch);
+                            $('#search_text').on('keydown', function (e) {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault(); 
+                                    if (isSearching) return;
+
+                                    isSearching = true;
+                                    debouncedSearch(); 
+                                }
+                            });
                         });
                     </script>
-            </div>
+                </div>
             </div>
         </div>
     </body>

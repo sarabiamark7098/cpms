@@ -1,5 +1,6 @@
 <?php
 	include("../php/class.user.php");
+    require_once("../php/session_timeout.php");
 	$user = new User();
 	
 	if(!$_SESSION['login']){
@@ -130,9 +131,6 @@
                 <li>
                     <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
-                <li>
-                    <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
-                </li>
             </ul>
         </nav>
 
@@ -199,7 +197,7 @@
                             <div class="col-lg-2">From:<input id="d_1" name="d_1" class="form-control border border-primary" type="date" required></div>
                             <div class="col-lg-1"></div>
                             <div class="col-lg-2">To:<input id="d_2" name="d_2" class="form-control border border-primary" type="date" required></div>
-                            <div class="col-lg-1"><br><button class="btn btn-outline-primary text-center" type="submit">Submit<button></div>
+                            <div class="col-lg-1"><br><button class="btn btn-outline-primary text-center" type="submit">Submit</button></div>
                             <div class="col-lg-1"></div>
                         </div>
                     </form>
@@ -286,45 +284,23 @@
             });
         });
     </script>
-<div class="module">
-    <div class="modal fade in" id="userAccount" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">User Account</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-				<div class="useraccount">
-				
-				</div>
-			</div>	
-		</div>
+    <div class="module">
+        <div class="modal fade in" id="userAccount" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">User Account</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="useraccount">
+                    
+                    </div>
+                </div>	
+            </div>
+        </div>
     </div>
-</div>
-</body>
-    <script>
-        //userAccount
-        $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var userid = button.data('id') // Extract info from data-* attributes
-            var modal = $(this);
-            var dataString = 'id=' + userid;
-                $.ajax({
-                    type: "GET",
-                    url: "adminuserAccount.php",
-                    data: dataString,
-                    cache: false,
-                    success: function (data) {
-                        modal.find('.useraccount').html(data);
-                    },
-                    error: function(err) {
-                    }
-                });  
-        })
-    </script>
-
     <div class="modal hide fade" id="logoutmodal" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
@@ -339,6 +315,43 @@
     </div>
 
     <script>
+        document.querySelector("form").addEventListener("submit", function(e) {
+
+            let fromDate = document.getElementById("d_1").value;
+            let toDate   = document.getElementById("d_2").value;
+
+            if (!fromDate || !toDate) {
+                alert("Please select both From and To dates.");
+                e.preventDefault();
+                return;
+            }
+
+            if (fromDate > toDate) {
+                alert("Invalid Date Range: 'From' date cannot be later than 'To' date.");
+                e.preventDefault();
+                return;
+            }
+        });
+
+        //userAccount
+        $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var userid = button.data('id') // Extract info from data-* attributes
+            var modal = $(this);
+            var dataString = 'id=' + userid;
+            $.ajax({
+                type: "GET",
+                url: "adminuserAccount.php",
+                data: dataString,
+                cache: false,
+                success: function (data) {
+                    modal.find('.useraccount').html(data);
+                },
+                error: function(err) {
+                }
+            });  
+        });
+        
         $('#logoutmodal').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
@@ -356,5 +369,6 @@
             });  
         })
     </script>
+</body>
 
 </html>

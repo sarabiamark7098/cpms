@@ -1,5 +1,6 @@
 <?php
 	include("../php/class.user.php");
+    require_once("../php/session_timeout.php");
 	$user = new User();
 	
 	if(!$_SESSION['login']){
@@ -23,7 +24,7 @@
 		$settitle = ucwords($_POST['title']);
 		$setfirstname = ucwords($_POST['fname']);
 		$setlastname = ucwords($_POST['lname']);
-		$setmiddleI = strtoupper($_POST['mi']);
+		$setmiddleI = $_POST['mi'] != "" ? strtoupper($_POST['mi']) : "";
 		$setinitials = strtoupper($_POST['initials']);
 		$setposition = $_POST['position'];
 		$set_s_tree = strtoupper($_POST['s_tree']);
@@ -134,9 +135,6 @@
                 </li>
                 <li>
                     <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
-                </li>
-                <li>
-                    <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
                 </li>
             </ul>
         </nav>

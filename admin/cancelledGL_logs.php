@@ -1,5 +1,6 @@
 <?php
 	include("../php/class.user.php");
+    require_once("../php/session_timeout.php");
 	$user = new User();
 	
 	if(!$_SESSION['login']){
@@ -92,9 +93,6 @@
                 <li>
                     <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
-                <li>
-                    <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
-                </li>
             </ul>
         </nav>
 
@@ -184,7 +182,7 @@
                                                 <td scope='row' style='width: 15%'>" . date('F j,Y', strtotime($value['date_cancelled'])) ." </td>
                                                 <td scope='row' style='width: 20%'>" . $user->getEncoder($value['empid']) ." </td>
                                                 <td scope='row' style='width: 10%'>" . $user->get_assistance_mode($value['trans_id']) ." </td>
-                                                <td scope='row' style='width: 15%'>" . $client_assistance[1]['type'] ." </td>
+                                                <td scope='row' style='width: 15%'>" . ($client_assistance[1]['type'] ? $client_assistance[1]['type'] : '') ." </td>
                                                 </td>
                                                 </tr>
                                             ";

@@ -74,7 +74,8 @@ $headers = [
     "Type of Assistance3", "Amount3", "Source of Fund3", "Mode of Release3", 
     "ClientCategory", "SERVICE PROVIDERS", "B. LAST NAME", "B. FIRST NAME", "B. MIDDLE NAME", "B. EXT.",
     "B. DOB", "B. AGE", "B. SEX", "B. CATEGORY",
-    "Sub-Category", "Pantawid Beneficiary"
+    "Sub-Category", "Pantawid Beneficiary", 
+    "CLient Birth Day", "Client Birth Month", "Client Birth Year", "Beneficiary Birth Day", "Beneficiary Birth Month", "Beneficiary Birth Year"
 ];
 // Write the headers to the CSV file with explicit escape parameter
 fputcsv($output, $headers, ',', '"', '\\');
@@ -87,6 +88,13 @@ while ($row = mysqli_fetch_assoc($result)) {
     
     $age = $user->calculate_age_by_date_accomplished($row['date_birth'], $row['date_accomplished']);
     $b_age = $user->calculate_age_by_date_accomplished($row['b_bday'], $row['date_accomplished']);
+
+    $client_bday = $row['date_birth'] ? date('d', strtotime($row['date_birth'])) : '';
+    $client_bmonth = $row['date_birth'] ? date('m', strtotime($row['date_birth'])) : '';
+    $client_byear = $row['date_birth'] ? date('Y', strtotime($row['date_birth'])) : '';
+    $beneficiary_bday = $row['b_bday'] ? date('d', strtotime($row['b_bday'])) : '';
+    $beneficiary_bmonth = $row['b_bday'] ? date('m', strtotime($row['b_bday'])) : '';
+    $beneficiary_byear = $row['b_bday'] ? date('Y', strtotime($row['b_bday'])) : '';
 
     $formatted_date_entered = $row['date_entered'] ? date('d/m/Y', strtotime($row['date_entered'])) : '';
     $formatted_date_accomplished = $row['date_accomplished'] ? date('d/m/Y', strtotime($row['date_accomplished'])) : '';
@@ -118,7 +126,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         $assistance[3]['amount'] ?? '',
         (!empty($assistance[3]['type']) ? $fundsource : ''),
         (($assistance[3]['mode'] ?? '') === "GL" ? "Guarantee Letter" : (($assistance[3]['mode'] ?? '') === "CAV" ? 'Outright Cash' : ($assistance[3]['mode'] ?? ''))),
-        $row['category'], $row['cname'], $lname, $fname, $mname, $ename, $formatted_b_bday, $b_age, $row['b_sex'], $row['b_category'], $row['subCategory'], $row['pantawid_bene']
+        $row['category'], $row['cname'], $lname, $fname, $mname, $ename, $formatted_b_bday, $b_age, $row['b_sex'], $row['b_category'], $row['subCategory'], $row['pantawid_bene'],
+        $client_bday, $client_bmonth, $client_byear, $beneficiary_bday, $beneficiary_bmonth, $beneficiary_byear
     ];
 
     // Write the row data to the CSV file with explicit escape parameter
