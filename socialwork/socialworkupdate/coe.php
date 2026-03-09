@@ -1001,6 +1001,9 @@
         $amount12 = "";
 		$sdo = "";
             $id_sign = $client['signatory_id'];
+            $client_work = "";
+            $client_salary = "";
+            $client_agency = "";
         if(isset($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);
         }
@@ -1121,6 +1124,10 @@
         $amount10 = "";
         $amount11 = "";
         $amount12 = "";
+        
+        $client_work = "";
+        $client_salary = "";
+        $client_agency = "";
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }
