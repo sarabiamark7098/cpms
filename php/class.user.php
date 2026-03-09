@@ -4327,11 +4327,14 @@
 			SUM(CASE WHEN asl.id IS NOT NULL THEN 1 ELSE 0 END) AS sent_count
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
+		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN api_send_log asl ON a.trans_id = asl.trans_id
 			AND a.type_description = asl.assist_type_desc
 			AND asl.status = 'success'
 		WHERE a.type IN ({$inClause})
-		AND t.status_client = 'Done'";
+		AND t.status_client = 'Done'
+		AND c.firstname IS NOT NULL AND c.firstname != ''
+		AND c.lastname IS NOT NULL AND c.lastname != ''";
 
 		$result = mysqli_query($this->db, $query);
 		if($result){
@@ -4388,6 +4391,8 @@
 		LEFT JOIN cash cs USING (trans_id)
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
+		AND c.firstname IS NOT NULL AND c.firstname != ''
+		AND c.lastname IS NOT NULL AND c.lastname != ''
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
 			WHERE asl.trans_id = a.trans_id
@@ -4451,6 +4456,8 @@
 		LEFT JOIN cash cs USING (trans_id)
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
+		AND c.firstname IS NOT NULL AND c.firstname != ''
+		AND c.lastname IS NOT NULL AND c.lastname != ''
 		AND t.date_accomplished BETWEEN '{$date} 00:00:00' AND '{$date} 23:59:59'
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
@@ -4531,24 +4538,24 @@
 			}
 
 			$payload[] = [
-				'control_number'    => !empty($row['control_no']) ? $row['control_no'] : '',
-				'first_name'        => !empty($row['firstname']) ? $row['firstname'] : '',
-				'middle_name'       => !empty($row['middlename']) ? $row['middlename'] : '',
-				'last_name'         => !empty($row['lastname']) ? $row['lastname'] : '',
-				'extension_name'    => !empty($row['extraname']) ? $row['extraname'] : '',
+				'control_number'    => mb_substr(!empty($row['trans_id']) ? $row['trans_id'] : '', 0, 50),
+				'first_name'        => mb_substr(!empty($row['firstname']) ? $row['firstname'] : '', 0, 50),
+				'middle_name'       => mb_substr(!empty($row['middlename']) ? $row['middlename'] : '', 0, 50),
+				'last_name'         => mb_substr(!empty($row['lastname']) ? $row['lastname'] : '', 0, 50),
+				'extension_name'    => mb_substr(!empty($row['extraname']) ? $row['extraname'] : '', 0, 50),
 				'birth_day'         => !empty($row['birth_day']) ? $row['birth_day'] : '',
 				'birth_month'       => !empty($row['birth_month']) ? $row['birth_month'] : '',
 				'birth_year'        => !empty($row['birth_year']) ? $row['birth_year'] : '',
-				'province'          => !empty($row['province']) ? $row['province'] : '',
-				'city_municipality' => !empty($row['city_municipality']) ? $row['city_municipality'] : '',
+				'province'          => mb_substr(!empty($row['province']) ? $row['province'] : '', 0, 50),
+				'city_municipality' => mb_substr(!empty($row['city_municipality']) ? $row['city_municipality'] : '', 0, 50),
 				'date_last_served'  => $dateLastServed,
 				'last_served_location' => '',
-				'program'           => $program,
-				'event_type'        => !empty($row['type']) ? $row['type'] : '',
+				'program'           => mb_substr($program, 0, 50),
+				'event_type'        => mb_substr(!empty($row['type']) ? $row['type'] : '', 0, 50),
 				'partners'          => '',
-				'charging'          => !empty($row['fund']) ? $row['fund'] : '',
-				'sdo_incharge'      => !empty($row['sd_officer']) ? $row['sd_officer'] : '',
-				'other_remarks'     => !empty($row['purpose']) ? $row['purpose'] : '',
+				'charging'          => mb_substr(!empty($row['fund']) ? $row['fund'] : '', 0, 50),
+				'sdo_incharge'      => mb_substr(!empty($row['sd_officer']) ? $row['sd_officer'] : '', 0, 50),
+				'other_remarks'     => mb_substr(!empty($row['purpose']) ? $row['purpose'] : '', 0, 50),
 				'file_source'       => 'CPMS'
 			];
 		}

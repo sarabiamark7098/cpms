@@ -76,9 +76,28 @@ if(isset($_POST['send_unsent_batch'])){
 				!empty($apiResult['error']) ? $apiResult['error'] : $apiResult['response']
 			);
 		}
+		// Show response body for validation errors (422), curl error for connection issues
+		$errorDetail = '';
+		if(!empty($apiResult['error'])){
+			$errorDetail = $apiResult['error'];
+		} elseif(!empty($apiResult['response'])){
+			$decoded = json_decode($apiResult['response'], true);
+			if($decoded && isset($decoded['message'])){
+				$errorDetail = $decoded['message'];
+				if(isset($decoded['errors'])){
+					$firstError = reset($decoded['errors']);
+					if(is_array($firstError)){
+						$errorDetail .= ' - ' . $firstError[0];
+					}
+				}
+			} else {
+				$errorDetail = substr($apiResult['response'], 0, 200);
+			}
+		}
+
 		echo json_encode([
 			'status' => 'error',
-			'message' => 'API request failed. HTTP Code: ' . $apiResult['http_code'] . '. Error: ' . $apiResult['error'],
+			'message' => 'API failed (HTTP ' . $apiResult['http_code'] . '): ' . $errorDetail,
 			'sent_count' => 0,
 			'remaining' => 0
 		]);
