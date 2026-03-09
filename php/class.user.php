@@ -4412,6 +4412,19 @@
 		return $data;
 	}
 
+	public function getOfficeFromTransId($trans_id){
+		$parts = explode('-', $trans_id);
+		$office_prefix = isset($parts[0], $parts[1]) ? $parts[0] . '-' . $parts[1] : '';
+		$office_prefix = mysqli_real_escape_string($this->db, $office_prefix);
+		$query = "SELECT office_name FROM field_office WHERE office_id = '{$office_prefix}'";
+		$result = mysqli_query($this->db, $query);
+		if($result && mysqli_num_rows($result) > 0){
+			$row = mysqli_fetch_assoc($result);
+			return $row['office_name'];
+		}
+		return null;
+	}
+
 	public function getUnsentAssistanceByDate($date, $limit = 200){
 		$activeTypes = $this->getActiveAssistanceTypes();
 		if(empty($activeTypes)){
@@ -4549,13 +4562,13 @@
 				'province'          => mb_substr(!empty($row['province']) ? $row['province'] : '', 0, 50),
 				'city_municipality' => mb_substr(!empty($row['city_municipality']) ? $row['city_municipality'] : '', 0, 50),
 				'date_last_served'  => $dateLastServed,
-				'last_served_location' => '',
+				'last_served_location' => $this->getOfficeFromTransId($row['trans_id']),
 				'program'           => mb_substr($program, 0, 50),
 				'event_type'        => mb_substr(!empty($row['type']) ? $row['type'] : '', 0, 50),
 				'partners'          => '',
 				'charging'          => mb_substr(!empty($row['fund']) ? $row['fund'] : '', 0, 50),
 				'sdo_incharge'      => mb_substr(!empty($row['sd_officer']) ? $row['sd_officer'] : '', 0, 50),
-				'other_remarks'     => mb_substr(!empty($row['purpose']) ? $row['purpose'] : '', 0, 50),
+				'other_remarks'     => mb_substr(!empty($row['mode']) ? $row['mode'] : '', 0, 50),
 				'file_source'       => 'CPMS'
 			];
 		}
