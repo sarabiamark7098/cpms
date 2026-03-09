@@ -56,6 +56,13 @@
 			.count-card.sent { background-color: #d4edda; border: 1px solid #28a745; color: #155724; }
 			#dataLoader { text-align: center; padding: 30px 0; }
 			#dataLoader .fa-spinner { font-size: 24px; color: #007bff; }
+			.config-card { border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; margin-bottom: 20px; background: #f8f9fa; }
+			.config-card h6 { margin-bottom: 15px; font-weight: bold; }
+			.config-card .form-check { margin-bottom: 8px; }
+			.batch-log { font-family: monospace; font-size: 13px; background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 6px; max-height: 300px; overflow-y: auto; white-space: pre-wrap; }
+			.batch-log .log-success { color: #4ec9b0; }
+			.batch-log .log-error { color: #f44747; }
+			.batch-log .log-info { color: #569cd6; }
         </style>
     </head>
 
@@ -127,13 +134,32 @@
                 </div>
             </nav>
             <div class="container-fluid" style="padding-left: 5%; padding-right: 5%;">
-                <h5 style="margin-bottom: 25px;">Medical Assistance - API Send</h5>
+                <h5 style="margin-bottom: 25px;">Assistance - API Sync</h5>
 
-                <div id="dataLoader">
+                <!-- Sync Configuration Card -->
+                <div class="config-card">
+                    <h6><i class="fa fa-cog"></i> Sync Configuration - Select Assistance Types</h6>
+                    <div id="configLoader" style="text-align:center; padding:10px;">
+                        <i class="fa fa-spinner fa-spin"></i> Loading configuration...
+                    </div>
+                    <div id="configCheckboxes" style="display:none;">
+                        <div class="row" id="checkboxRow"></div>
+                        <div style="margin-top: 15px;">
+                            <button id="btnSaveConfig" class="btn btn-success btn-sm">
+                                <i class="fa fa-save"></i> Save Configuration
+                            </button>
+                            <span id="configSaveMsg" style="margin-left: 10px; display:none;" class="text-success"><i class="fa fa-check"></i> Saved</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading spinner for counts -->
+                <div id="dataLoader" style="display:none;">
                     <i class="fa fa-spinner fa-spin"></i>
                     <p style="margin-top:10px; color:#666;">Loading records...</p>
                 </div>
 
+                <!-- Count Cards -->
                 <div id="countsContainer" style="display:none;">
                     <div class="row">
                         <div class="col-lg-4 col-md-6">
@@ -152,8 +178,8 @@
 
                     <div class="row" style="margin-top: 20px;">
                         <div class="col-lg-3">
-                            <button id="btnSendUnsent" class="btn btn-primary btn-lg" disabled>
-                                <i class="fa fa-paper-plane"></i> Send Unsent Records
+                            <button id="btnSendAll" class="btn btn-primary btn-lg" disabled>
+                                <i class="fa fa-paper-plane"></i> Send All Unsent
                             </button>
                         </div>
                         <div class="col-lg-2">
@@ -161,17 +187,29 @@
                                 <i class="fa fa-refresh"></i> Refresh
                             </button>
                         </div>
-                        <div class="col-lg-7">
-                            <div id="apiResult" style="display:none;" class="alert" role="alert"></div>
+                    </div>
+
+                    <!-- Batch Progress Card -->
+                    <div id="batchProgressCard" style="display:none; margin-top: 20px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong><i class="fa fa-tasks"></i> Batch Progress</strong>
+                                <span id="batchStatus" style="float:right;"></span>
+                            </div>
+                            <div class="card-body" style="padding: 0;">
+                                <div class="batch-log" id="batchLog"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Error State -->
                 <div id="dataError" style="display:none; text-align:center; padding:40px 0;">
                     <p style="color:#dc3545;"><i class="fa fa-exclamation-triangle"></i> Failed to load records.</p>
                     <button class="btn btn-outline-primary btn-sm" onclick="loadCounts()"><i class="fa fa-refresh"></i> Retry</button>
                 </div>
             </div>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#sidebar').toggleClass('active');
@@ -187,16 +225,80 @@
     </script>
 
     <script type="text/javascript">
-        function loadCounts(){
-            $('#dataLoader').show();
-            $('#countsContainer').hide();
-            $('#dataError').hide();
-            $('#btnSendUnsent').prop('disabled', true);
+        // Load sync configuration checkboxes
+        function loadConfig(){
+            $('#configLoader').show();
+            $('#configCheckboxes').hide();
 
             $.ajax({
                 type: "POST",
                 url: "api_fetch.php",
-                data: { load_medical_counts: true },
+                data: { load_sync_config: true },
+                dataType: "json",
+                success: function(response){
+                    if(response.status === 'success'){
+                        var html = '';
+                        $.each(response.config, function(i, item){
+                            var checked = parseInt(item.is_active) === 1 ? 'checked' : '';
+                            html += '<div class="col-lg-3 col-md-4 col-sm-6">';
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input sync-type-check" type="checkbox" value="' + item.assistance_type + '" id="chk_' + i + '" ' + checked + '>';
+                            html += '<label class="form-check-label" for="chk_' + i + '">' + item.assistance_type + '</label>';
+                            html += '</div></div>';
+                        });
+                        $('#checkboxRow').html(html);
+                        $('#configLoader').hide();
+                        $('#configCheckboxes').show();
+                        loadCounts();
+                    }
+                },
+                error: function(){
+                    $('#configLoader').html('<span class="text-danger">Failed to load config.</span>');
+                }
+            });
+        }
+
+        // Save sync configuration
+        $('#btnSaveConfig').on('click', function(){
+            var selectedTypes = [];
+            $('.sync-type-check:checked').each(function(){
+                selectedTypes.push($(this).val());
+            });
+
+            var btn = $(this);
+            btn.prop('disabled', true);
+            $('#configSaveMsg').hide();
+
+            $.ajax({
+                type: "POST",
+                url: "api_fetch.php",
+                data: { save_sync_config: true, types: selectedTypes },
+                dataType: "json",
+                success: function(response){
+                    btn.prop('disabled', false);
+                    if(response.status === 'success'){
+                        $('#configSaveMsg').show().delay(3000).fadeOut();
+                        loadCounts();
+                    }
+                },
+                error: function(){
+                    btn.prop('disabled', false);
+                    alert('Failed to save configuration.');
+                }
+            });
+        });
+
+        // Load counts
+        function loadCounts(){
+            $('#dataLoader').show();
+            $('#countsContainer').hide();
+            $('#dataError').hide();
+            $('#btnSendAll').prop('disabled', true);
+
+            $.ajax({
+                type: "POST",
+                url: "api_fetch.php",
+                data: { load_counts: true },
                 dataType: "json",
                 success: function(response){
                     if(response.status === 'success'){
@@ -204,7 +306,7 @@
                         $('#sentNumber').text(response.sent);
 
                         if(response.unsent > 0){
-                            $('#btnSendUnsent').prop('disabled', false);
+                            $('#btnSendAll').prop('disabled', false);
                         }
 
                         $('#dataLoader').hide();
@@ -221,53 +323,88 @@
             });
         }
 
+        // Batch send logic
+        var totalSent = 0;
+        var batchNum = 0;
+        var isSending = false;
+
+        function appendLog(msg, cls){
+            var timestamp = new Date().toLocaleTimeString();
+            var span = '<span class="' + (cls || '') + '">[' + timestamp + '] ' + msg + '</span>\n';
+            var logEl = document.getElementById('batchLog');
+            logEl.innerHTML += span;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function sendBatch(){
+            batchNum++;
+            appendLog('Batch ' + batchNum + ': Sending up to 200 records...', 'log-info');
+            $('#batchStatus').html('<i class="fa fa-spinner fa-spin"></i> Processing batch ' + batchNum + '...');
+
+            $.ajax({
+                type: "POST",
+                url: "api_fetch.php",
+                data: { send_unsent_batch: true },
+                dataType: "json",
+                success: function(response){
+                    if(response.status === 'success'){
+                        totalSent += response.sent_count;
+                        appendLog('Batch ' + batchNum + ': Sent ' + response.sent_count + ' record(s). Remaining: ' + response.remaining, 'log-success');
+
+                        if(response.remaining > 0){
+                            sendBatch();
+                        } else {
+                            appendLog('All done! Total records sent: ' + totalSent, 'log-success');
+                            $('#batchStatus').html('<span class="text-success"><i class="fa fa-check-circle"></i> Completed</span>');
+                            isSending = false;
+                            $('#btnSendAll').prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send All Unsent');
+                            loadCounts();
+                        }
+                    } else if(response.status === 'info'){
+                        appendLog(response.message, 'log-info');
+                        appendLog('Total records sent: ' + totalSent, 'log-success');
+                        $('#batchStatus').html('<span class="text-success"><i class="fa fa-check-circle"></i> Completed</span>');
+                        isSending = false;
+                        $('#btnSendAll').prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send All Unsent');
+                        loadCounts();
+                    } else {
+                        appendLog('ERROR: ' + response.message, 'log-error');
+                        appendLog('Stopped. Total records sent before error: ' + totalSent, 'log-error');
+                        $('#batchStatus').html('<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> Error</span>');
+                        isSending = false;
+                        $('#btnSendAll').prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send All Unsent');
+                        loadCounts();
+                    }
+                },
+                error: function(xhr, status, error){
+                    appendLog('AJAX Error: ' + error, 'log-error');
+                    appendLog('Stopped. Total records sent before error: ' + totalSent, 'log-error');
+                    $('#batchStatus').html('<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> Error</span>');
+                    isSending = false;
+                    $('#btnSendAll').prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send All Unsent');
+                }
+            });
+        }
+
         $(document).ready(function(){
-            loadCounts();
+            loadConfig();
 
             $('#btnRefresh').on('click', function(){
                 loadCounts();
             });
 
-            $('#btnSendUnsent').on('click', function(){
-                var btn = $(this);
-                btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
-                $('#apiResult').hide();
+            $('#btnSendAll').on('click', function(){
+                if(isSending) return;
+                isSending = true;
+                totalSent = 0;
+                batchNum = 0;
 
-                $.ajax({
-                    type: "POST",
-                    url: "api_fetch.php",
-                    data: { send_unsent_medical: true },
-                    dataType: "json",
-                    success: function(response){
-                        var alertClass = 'alert-success';
-                        if(response.status === 'error'){
-                            alertClass = 'alert-danger';
-                        } else if(response.status === 'info'){
-                            alertClass = 'alert-info';
-                        }
-                        $('#apiResult')
-                            .removeClass('alert-success alert-danger alert-info')
-                            .addClass(alertClass)
-                            .html(response.message)
-                            .show();
+                $(this).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Sending...');
+                $('#batchLog').html('');
+                $('#batchProgressCard').show();
 
-                        btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send Unsent Records');
-
-                        if(response.status === 'success' || response.status === 'info'){
-                            setTimeout(function(){
-                                loadCounts();
-                            }, 1500);
-                        }
-                    },
-                    error: function(xhr, status, error){
-                        $('#apiResult')
-                            .removeClass('alert-success alert-info')
-                            .addClass('alert-danger')
-                            .html('AJAX Error: ' + error)
-                            .show();
-                        btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Send Unsent Records');
-                    }
-                });
+                appendLog('Starting batch sync...', 'log-info');
+                sendBatch();
             });
         });
     </script>

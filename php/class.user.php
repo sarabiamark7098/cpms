@@ -4274,7 +4274,58 @@
 		return $ini;
 	}
 
-	public function getMedicalAssistanceCounts(){
+	public function getApiSyncConfig(){
+		$query = "SELECT id, assistance_type, is_active FROM api_sync_config ORDER BY id ASC";
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	public function updateApiSyncConfig($types){
+		$resetQuery = "UPDATE api_sync_config SET is_active = 0";
+		mysqli_query($this->db, $resetQuery);
+
+		if(!empty($types) && is_array($types)){
+			$escaped = [];
+			foreach($types as $type){
+				$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+			}
+			$inClause = implode(',', $escaped);
+			$activateQuery = "UPDATE api_sync_config SET is_active = 1 WHERE assistance_type IN ({$inClause})";
+			mysqli_query($this->db, $activateQuery);
+		}
+		return true;
+	}
+
+	public function getActiveAssistanceTypes(){
+		$query = "SELECT assistance_type FROM api_sync_config WHERE is_active = 1 ORDER BY id ASC";
+		$result = mysqli_query($this->db, $query);
+		$types = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$types[] = $row['assistance_type'];
+			}
+		}
+		return $types;
+	}
+
+	public function getAssistanceCounts(){
+		$activeTypes = $this->getActiveAssistanceTypes();
+		if(empty($activeTypes)){
+			return ['unsent' => 0, 'sent' => 0];
+		}
+
+		$escaped = [];
+		foreach($activeTypes as $type){
+			$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+		}
+		$inClause = implode(',', $escaped);
+
 		$query = "SELECT
 			SUM(CASE WHEN asl.id IS NULL THEN 1 ELSE 0 END) AS unsent_count,
 			SUM(CASE WHEN asl.id IS NOT NULL THEN 1 ELSE 0 END) AS sent_count
@@ -4284,8 +4335,10 @@
 		LEFT JOIN api_send_log asl ON a.trans_id = asl.trans_id
 			AND a.type_description = asl.assist_type_desc
 			AND asl.status = 'success'
-		WHERE a.type LIKE '%Medic%'
-		AND t.status_client = 'Done'";
+		WHERE a.type IN ({$inClause})
+		AND t.status_client = 'Done'
+		AND c.firstname IS NOT NULL AND c.firstname != ''
+		AND c.lastname IS NOT NULL AND c.lastname != ''";
 
 		$result = mysqli_query($this->db, $query);
 		if($result){
@@ -4299,32 +4352,125 @@
 		}
 	}
 
-	public function getUnsentMedicalAssistance(){
+	public function getUnsentAssistance($limit = 200){
+		$activeTypes = $this->getActiveAssistanceTypes();
+		if(empty($activeTypes)){
+			return [];
+		}
+
+		$escaped = [];
+		foreach($activeTypes as $type){
+			$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+		}
+		$inClause = implode(',', $escaped);
+		$limit = intval($limit);
+
 		$query = "SELECT
 			a.trans_id,
 			a.type,
 			a.amount,
 			a.mode,
+			a.fund,
+			a.purpose,
 			a.type_description,
 			c.firstname,
 			c.middlename,
 			c.lastname,
-			b.b_fname,
-			b.b_mname,
-			b.b_lname
+			c.extraname,
+			DAY(c.date_birth) AS birth_day,
+			MONTH(c.date_birth) AS birth_month,
+			YEAR(c.date_birth) AS birth_year,
+			SUBSTRING_INDEX(c.client_province, '/', 1) AS province,
+			SUBSTRING_INDEX(c.client_municipality, '/', 1) AS city_municipality,
+			t.date_accomplished,
+			t.program_type,
+			t.other_program,
+			g.control_no,
+			cs.sd_officer
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN beneficiary_data b USING (bene_id)
-		WHERE a.type LIKE '%Medic%'
+		LEFT JOIN gl g USING (trans_id)
+		LEFT JOIN cash cs USING (trans_id)
+		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
+		AND c.firstname IS NOT NULL AND c.firstname != ''
+		AND c.lastname IS NOT NULL AND c.lastname != ''
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
 			WHERE asl.trans_id = a.trans_id
 			AND asl.assist_type_desc = a.type_description
 			AND asl.status = 'success'
 		)
-		ORDER BY t.date_accomplished ASC";
+		ORDER BY t.date_accomplished ASC
+		LIMIT {$limit}";
+
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	public function getUnsentAssistanceByDate($date, $limit = 200){
+		$activeTypes = $this->getActiveAssistanceTypes();
+		if(empty($activeTypes)){
+			return [];
+		}
+
+		$escaped = [];
+		foreach($activeTypes as $type){
+			$escaped[] = "'" . mysqli_real_escape_string($this->db, $type) . "'";
+		}
+		$inClause = implode(',', $escaped);
+		$date = mysqli_real_escape_string($this->db, $date);
+		$limit = intval($limit);
+
+		$query = "SELECT
+			a.trans_id,
+			a.type,
+			a.amount,
+			a.mode,
+			a.fund,
+			a.purpose,
+			a.type_description,
+			c.firstname,
+			c.middlename,
+			c.lastname,
+			c.extraname,
+			DAY(c.date_birth) AS birth_day,
+			MONTH(c.date_birth) AS birth_month,
+			YEAR(c.date_birth) AS birth_year,
+			SUBSTRING_INDEX(c.client_province, '/', 1) AS province,
+			SUBSTRING_INDEX(c.client_municipality, '/', 1) AS city_municipality,
+			t.date_accomplished,
+			t.program_type,
+			t.other_program,
+			g.control_no,
+			cs.sd_officer
+		FROM assistance a
+		LEFT JOIN tbl_transaction t USING (trans_id)
+		LEFT JOIN client_data c USING (client_id)
+		LEFT JOIN beneficiary_data b USING (bene_id)
+		LEFT JOIN gl g USING (trans_id)
+		LEFT JOIN cash cs USING (trans_id)
+		WHERE a.type IN ({$inClause})
+		AND t.status_client = 'Done'
+		AND c.firstname IS NOT NULL AND c.firstname != ''
+		AND c.lastname IS NOT NULL AND c.lastname != ''
+		AND t.date_accomplished BETWEEN '{$date} 00:00:00' AND '{$date} 23:59:59'
+		AND NOT EXISTS (
+			SELECT 1 FROM api_send_log asl
+			WHERE asl.trans_id = a.trans_id
+			AND asl.assist_type_desc = a.type_description
+			AND asl.status = 'success'
+		)
+		ORDER BY t.date_accomplished ASC
+		LIMIT {$limit}";
 
 		$result = mysqli_query($this->db, $query);
 		$data = [];
@@ -4356,28 +4502,69 @@
 		}
 	}
 
-	public function sendMedicalDataToApi($records){
+	public function logApiSendCron($trans_id, $type_desc, $status, $response_code, $response_body, $sent_by = 'CRON'){
+		$now = date("Y-m-d H:i:s");
+		$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+		$type_desc = mysqli_real_escape_string($this->db, $type_desc);
+		$status = mysqli_real_escape_string($this->db, $status);
+		$response_code = intval($response_code);
+		$response_body = mysqli_real_escape_string($this->db, $response_body);
+		$sent_by = mysqli_real_escape_string($this->db, $sent_by);
+
+		$query = "INSERT INTO api_send_log (trans_id, assist_type_desc, sent_at, status, response_code, response_body, sent_by)
+				  VALUES ('{$trans_id}', '{$type_desc}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
+
+		$result = mysqli_query($this->db, $query);
+		if($result){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function sendAssistanceDataToApi($records){
 		$payload = [];
 		foreach($records as $row){
+			// Determine program name from program_type
+			$program = '';
+			if($row['program_type'] == '0'){
+				$program = 'AICS';
+			} elseif($row['program_type'] == '1'){
+				$program = 'AKAP';
+			} elseif($row['program_type'] == 'other' && !empty($row['other_program'])){
+				$program = $row['other_program'];
+			}
+
+			// Format date_last_served
+			$dateLastServed = '';
+			if(!empty($row['date_accomplished'])){
+				$dateLastServed = date('Y-m-d', strtotime($row['date_accomplished']));
+			}
+
 			$payload[] = [
-				'trans_id' => $row['trans_id'],
-				'client' => [
-					'firstname' => $row['firstname'],
-					'middlename' => $row['middlename'],
-					'lastname' => $row['lastname']
-				],
-				'beneficiary' => [
-					'firstname' => !empty($row['b_fname']) ? $row['b_fname'] : $row['firstname'],
-					'middlename' => !empty($row['b_mname']) ? $row['b_mname'] : $row['middlename'],
-					'lastname' => !empty($row['b_lname']) ? $row['b_lname'] : $row['lastname']
-				],
-				'assistance_type' => 'Medical',
-				'amount' => $row['amount'],
-				'mode' => $row['mode']
+				'control_number'    => mb_substr(!empty($row['trans_id']) ? $row['trans_id'] : '', 0, 50),
+				'first_name'        => mb_substr(!empty($row['firstname']) ? $row['firstname'] : '', 0, 50),
+				'middle_name'       => mb_substr(!empty($row['middlename']) ? $row['middlename'] : '', 0, 50),
+				'last_name'         => mb_substr(!empty($row['lastname']) ? $row['lastname'] : '', 0, 50),
+				'extension_name'    => mb_substr(!empty($row['extraname']) ? $row['extraname'] : '', 0, 50),
+				'birth_day'         => !empty($row['birth_day']) ? $row['birth_day'] : '',
+				'birth_month'       => !empty($row['birth_month']) ? $row['birth_month'] : '',
+				'birth_year'        => !empty($row['birth_year']) ? $row['birth_year'] : '',
+				'province'          => mb_substr(!empty($row['province']) ? $row['province'] : '', 0, 50),
+				'city_municipality' => mb_substr(!empty($row['city_municipality']) ? $row['city_municipality'] : '', 0, 50),
+				'date_last_served'  => $dateLastServed,
+				'last_served_location' => '',
+				'program'           => mb_substr($program, 0, 50),
+				'event_type'        => mb_substr(!empty($row['type']) ? $row['type'] : '', 0, 50),
+				'partners'          => '',
+				'charging'          => mb_substr(!empty($row['fund']) ? $row['fund'] : '', 0, 50),
+				'sdo_incharge'      => mb_substr(!empty($row['sd_officer']) ? $row['sd_officer'] : '', 0, 50),
+				'other_remarks'     => mb_substr(!empty($row['purpose']) ? $row['purpose'] : '', 0, 50),
+				'file_source'       => 'CPMS'
 			];
 		}
 
-		$jsonData = json_encode(['medical_assistance' => $payload]);
+		$jsonData = json_encode(['assistance_data' => $payload]);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, API_ENDPOINT_URL);
