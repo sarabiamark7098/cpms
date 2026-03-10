@@ -26,12 +26,15 @@ $user = new User();
 		$setid = $_GET['id'];
 		$result = $user->updatesignatory($settitle, $setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $setoptionsgis, $setoptionsgl, $set_s_tree, $set_s_signatory, $setid);
 	
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Updating Signatory!');</script>";
 			echo "<script>window.location='SignatoryPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
-		}
-		else{
+		}else if($result == "exists"){
+			echo "<script>alert('Signatory with the same name already exists!');</script>";
+			echo "<script>window.location='SignatoryPage.php';</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+		}else{
 			echo "<script>alert('Error Updating Signatory!');</script>";
 			echo "<script>window.location='SignatoryPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
@@ -90,7 +93,7 @@ $user = new User();
 				  <label class="active" for="lname">Last Name</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
+				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="mi">Middle Initial</label>
 				</div>
 				<div class="form-group col-lg-6">

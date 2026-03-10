@@ -44,11 +44,11 @@ $user = new User();
 		<div class="modal-body">
 			<div class="row form-group" style="margin-top: 2%; height:10%;">
 				<div class="form-group col-lg-12 align-self-end">
-				  <input value="<?php echo $getgis['ass_opt'] ?>" id="assopt" name="assopt" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')">
+				  <input value="<?php echo $getgis['ass_opt'] ?>" id="assopt" name="assopt" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')">
 				  <label class="active" for="assopt">Assessment Option</label>
 				</div>
 				<div class="form-group col-lg-12">
-				  <textarea id="prob" name="prob" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')"><?php echo $getgis['prob_pres'] ?></textarea>
+				  <textarea id="prob" name="prob" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')"><?php echo $getgis['prob_pres'] ?></textarea>
 				  <label class="active" for="prob">Problem Presented</label>
 				</div>
 				<div class="form-group col-lg-12">

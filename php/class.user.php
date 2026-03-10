@@ -2,6 +2,7 @@
 	session_start();
 	include ("db_config.php");
 	include ("db_config2.php");
+	include ("api_config.php");
 
 
 	class User{
@@ -782,11 +783,19 @@
 			}
 		
 			public function updatesignatory($signatory_title, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_tree, $special_sign, $signatory_id){
+				
+				$query = "SELECT * FROM signatory WHERE first_name = '{$signatory_firstname}' AND last_name = '{$signatory_lastname}' AND middle_I = '{$signatory_middleI}';";
+				$result = mysqli_query($this->db,$query);
+				$rows = mysqli_num_rows($result);
+				if($rows > 0){
+					return "exists";
+				}
+			
 				$query = "UPDATE signatory SET name_title='{$signatory_title}', first_name='{$signatory_firstname}', last_name='{$signatory_lastname}', middle_I='{$signatory_middleI}', initials='{$signatory_initials}', position='{$signatory_position}', ";
 				$query .= "option_GIS='{$signatory_options_GIS}', option_GL='{$signatory_options_GL}', signatory_tree='{$signatory_tree}', special_ini='{$special_sign}' WHERE signatory_id = '{$signatory_id}';";
 				$result = mysqli_query($this->db,$query);
 				if($result){
-					return true;
+					return "success";
 				}
 				else {
 					return false;
@@ -794,7 +803,7 @@
 			}
 		
 			public function addsignatory($signatory_title, $signatory_firstname, $signatory_lastname, $signatory_middleI, $signatory_initials, $signatory_position, $signatory_options_GIS, $signatory_options_GL, $signatory_tree, $special_sign){
-				$query = "SELECT * FROM signatory WHERE first_name = '{$signatory_firstname}' AND last_name = '{$signatory_lastname}' AND middle_I = '{$signatory_middleI}'";
+				$query = "SELECT * FROM signatory WHERE first_name = '{$signatory_firstname}' AND last_name = '{$signatory_lastname}' AND middle_I = '{$signatory_middleI}';";
 				$result = mysqli_query($this->db,$query);
 				$rows = mysqli_num_rows($result);
 				if($rows > 0){
@@ -1029,7 +1038,7 @@
 			}
 			
 			public function show_ass_data($opt){
-				echo $query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
+				$query = "SELECT * FROM gisassessment WHERE ass_opt = '{$opt}';";
 				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				$rows = mysqli_num_rows($result);
@@ -4275,15 +4284,17 @@
 	}
 
 	public function getOfficeName($id) {
-		$query = "SELECT left($id, 9) as office_code";
+		$id = mysqli_real_escape_string($this->db, $id);
+		$query = "SELECT LEFT('{$id}', 9) AS office_id";
 		$result = mysqli_query($this->db, $query);
 		$row = mysqli_fetch_assoc($result);
-		$office_code = $row['office_code'];
+		$office_id = $row['office_id'];
 
-		$query = "SELECT office_name FROM offices WHERE office_code = '{$office_code}'";
+		$office_id = mysqli_real_escape_string($this->db, $office_id);
+		$query = "SELECT office_name FROM field_office WHERE office_id = '{$office_id}'";
 		$result = mysqli_query($this->db, $query);
 		$row = mysqli_fetch_assoc($result);
-		return $row['office_name'];
+		return $row ? $row['office_name'] : null;
 	}
 
 	public function getApiSyncConfig(){
