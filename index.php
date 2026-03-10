@@ -135,7 +135,7 @@
 	
 		if(isset($_GET['reason']) && $_GET['reason'] === 'kicked'){
 		echo '<center>
-		<div id="kicked-alert" style="background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;padding:15px;border-radius:4px;margin:10px 0;">
+		<div id="kicked-alert" style="background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;padding:15px;border-radius:4px;">
 			<strong><i class="fa fa-exclamation-circle"></i> This account is being used on another device. You have been logged out.</strong>
 		</div>
 		</center>
