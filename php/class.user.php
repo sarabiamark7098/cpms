@@ -4274,6 +4274,18 @@
 		return $ini;
 	}
 
+	public function getOfficeName($id) {
+		$query = "SELECT left($id, 9) as office_code";
+		$result = mysqli_query($this->db, $query);
+		$row = mysqli_fetch_assoc($result);
+		$office_code = $row['office_code'];
+
+		$query = "SELECT office_name FROM offices WHERE office_code = '{$office_code}'";
+		$result = mysqli_query($this->db, $query);
+		$row = mysqli_fetch_assoc($result);
+		return $row['office_name'];
+	}
+
 	public function getApiSyncConfig(){
 		$query = "SELECT id, assistance_type, is_active FROM api_sync_config ORDER BY id ASC";
 		$result = mysqli_query($this->db, $query);
@@ -4553,13 +4565,13 @@
 				'province'          => mb_substr(!empty($row['province']) ? $row['province'] : '', 0, 50),
 				'city_municipality' => mb_substr(!empty($row['city_municipality']) ? $row['city_municipality'] : '', 0, 50),
 				'date_last_served'  => $dateLastServed,
-				'last_served_location' => '',
-				'program'           => 'ONSITE',
-				'event_type'        => mb_substr(!empty($row['type']) ? $row['type'] : '', 0, 50),
+				'last_served_location' => $this->getOfficeName($row['trans_id']),
+				'program'           => mb_substr(!empty($row['type']) ? $row['type'] : '', 0, 50),
+				'event_type'        => 'ONSITE',
 				'partners'          => '',
 				'charging'          => mb_substr($program, 0, 50),
 				'sdo_incharge'      => mb_substr(!empty($row['sd_officer']) ? $row['sd_officer'] : '', 0, 50),
-				'other_remarks'     => mb_substr(!empty($row['purpose']) ? $row['purpose'] : '', 0, 50),
+				'other_remarks'     => mb_substr(!empty($row['mode']) ? $row['mode'] : '', 0, 50),
 				'file_source'       => 'CPMS'
 			];
 		}
