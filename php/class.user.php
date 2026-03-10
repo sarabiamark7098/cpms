@@ -4554,10 +4554,10 @@
 				'city_municipality' => mb_substr(!empty($row['city_municipality']) ? $row['city_municipality'] : '', 0, 50),
 				'date_last_served'  => $dateLastServed,
 				'last_served_location' => '',
-				'program'           => mb_substr($program, 0, 50),
+				'program'           => 'ONSITE',
 				'event_type'        => mb_substr(!empty($row['type']) ? $row['type'] : '', 0, 50),
 				'partners'          => '',
-				'charging'          => mb_substr(!empty($row['fund']) ? $row['fund'] : '', 0, 50),
+				'charging'          => mb_substr($program, 0, 50),
 				'sdo_incharge'      => mb_substr(!empty($row['sd_officer']) ? $row['sd_officer'] : '', 0, 50),
 				'other_remarks'     => mb_substr(!empty($row['purpose']) ? $row['purpose'] : '', 0, 50),
 				'file_source'       => 'CPMS'
@@ -4593,6 +4593,5 @@
 	}
 
 }
-
 
 ?>
