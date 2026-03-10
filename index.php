@@ -84,6 +84,9 @@
 					$_SESSION['position'] = $user_info['position'];
 					$_SESSION['userfullname'] = $user_info['fullname'];
 					$_SESSION['f_office']=$user_info['office_id'];
+					$session_token = bin2hex(random_bytes(32));
+					$user->setSessionToken($user_id, $session_token);
+					$_SESSION['session_token'] = $session_token;
 					break;
 				case 'Social Worker': echo '<script>var x = true;
 					window.location="index.php?optionsw="+x</script>';
@@ -94,6 +97,9 @@
 					$_SESSION['position'] = $user_info['position'];
 					$_SESSION['userfullname'] = $user_info['fullname'];
 					$_SESSION['f_office']=$user_info['office_id'];
+					$session_token = bin2hex(random_bytes(32));
+					$user->setSessionToken($user_id, $session_token);
+					$_SESSION['session_token'] = $session_token;
 					break;
 				case 'Admin': echo '<script>var x = true;
 					window.location="index.php?optionadmin="+x</script>';
@@ -104,6 +110,9 @@
 					$_SESSION['position'] = $user_info['position'];
 					$_SESSION['userfullname'] = $user_info['fullname'];
 					$_SESSION['f_office']=$user_info['office_id'];
+					$session_token = bin2hex(random_bytes(32));
+					$user->setSessionToken($user_id, $session_token);
+					$_SESSION['session_token'] = $session_token;
 					break;
 				default:
 					break;
@@ -124,6 +133,20 @@
 		</script>';
 	}
 	
+		if(isset($_GET['reason']) && $_GET['reason'] === 'kicked'){
+		echo '<center>
+		<div id="kicked-alert" style="background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;padding:15px;border-radius:4px;margin:10px 0;">
+			<strong><i class="fa fa-exclamation-circle"></i> This account is being used on another device. You have been logged out.</strong>
+		</div>
+		</center>
+		<script>
+		setTimeout(function() {
+			var el = document.getElementById("kicked-alert");
+			if(el) el.style.display = "none";
+		}, 6000);
+		</script>';
+	}
+
 	if(isset($_REQUEST['save'])){
 		extract($_REQUEST);
 			$password_partial = $_POST['password_partial'];

@@ -561,11 +561,42 @@
 			}
 		
 			public function user_logout() {
+				if(isset($_SESSION['userId'])){
+					$this->clearSessionToken($_SESSION['userId']);
+				}
 				$_SESSION['login'] = FALSE;
 				session_unset();
-				session_destroy();  
-				
+				session_destroy();
+
 				return true;
+			}
+
+			public function setSessionToken($empid, $token){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$token = mysqli_real_escape_string($this->db, $token);
+				$now   = date('Y-m-d H:i:s');
+				$query = "INSERT INTO active_sessions (empid, session_token, updated_at)
+						  VALUES ('{$empid}', '{$token}', '{$now}')
+						  ON DUPLICATE KEY UPDATE session_token = '{$token}', updated_at = '{$now}'";
+				return mysqli_query($this->db, $query);
+			}
+
+			public function validateSessionToken($empid, $token){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$token = mysqli_real_escape_string($this->db, $token);
+				$query = "SELECT session_token FROM active_sessions WHERE empid = '{$empid}'";
+				$result = mysqli_query($this->db, $query);
+				if($result && mysqli_num_rows($result) > 0){
+					$row = mysqli_fetch_assoc($result);
+					return $row['session_token'] === $token;
+				}
+				return false;
+			}
+
+			public function clearSessionToken($empid){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$query = "DELETE FROM active_sessions WHERE empid = '{$empid}'";
+				return mysqli_query($this->db, $query);
 			}
 		
 			public function cleardup() {

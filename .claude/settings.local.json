@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \":*)",
+      "Bash(powershell -File \"/tmp/patch_user.ps1\")",
+      "Bash(/tmp/patch_index.ps1:*)",
+      "Bash(powershell -File \"C:/tmp/patch_index.ps1\")",
+      "Bash(powershell -File \"/tmp/patch_index.ps1\")",
+      "Bash(/tmp/inspect_index.ps1:*)",
+      "Bash(powershell -File \"/tmp/inspect_index.ps1\")",
+      "Bash(/tmp/patch_index2.ps1:*)",
+      "Bash(powershell -File \"/tmp/patch_index2.ps1\")",
+      "Bash(/tmp/verify_index.ps1:*)",
+      "Bash(powershell -File \"/tmp/verify_index.ps1\")",
+      "Bash(powershell.exe -Command \":*)",
+      "Bash(/tmp/patch_session.ps1:*)",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"C:/msys64/tmp/patch_session.ps1\")",
+      "Bash(cygpath -w /tmp/patch_session.ps1)",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\MTSARA~1\\\\AppData\\\\Local\\\\Temp\\\\patch_session.ps1\")",
+      "Bash(/tmp/check_endings.ps1:*)",
+      "Bash(/tmp/patch_session2.ps1:*)"
+    ]
+  }
+}

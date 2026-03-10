@@ -35,6 +35,20 @@ function checkSessionTimeout(): void {
 
     // Refresh last activity timestamp on every valid request
     $_SESSION['last_activity'] = $now;
+
+    // Enforce single-device login: kick if another device replaced the session token
+    if(isset($_SESSION['userId']) && isset($_SESSION['session_token'])){
+        if(class_exists('User')){
+            try {
+                $checker = new User();
+                if(!$checker->validateSessionToken($_SESSION['userId'], $_SESSION['session_token'])){
+                    _doSessionKicked();
+                }
+            } catch(Throwable $e) {
+                // DB unavailable - fail open to avoid locking out all users
+            }
+        }
+    }
 }
 
 /**
@@ -57,6 +71,18 @@ function _doSessionTimeout(): void {
     session_destroy();
 
     header('Location: ' . SESSION_TIMEOUT_REDIRECT . '?reason=timeout');
+    exit;
+}
+
+/**
+ * Handle forced logout when another device logs in with the same account.
+ */
+function _doSessionKicked(): void {
+    $_SESSION['login'] = false;
+    session_unset();
+    session_destroy();
+
+    header('Location: ' . SESSION_TIMEOUT_REDIRECT . '?reason=kicked');
     exit;
 }
 
