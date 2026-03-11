@@ -598,6 +598,20 @@
 				$query = "DELETE FROM active_sessions WHERE empid = '{$empid}'";
 				return mysqli_query($this->db, $query);
 			}
+
+			public function isAccountAlreadyLoggedIn($empid){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$query = "SELECT 1 FROM active_sessions WHERE empid = '{$empid}' AND updated_at > DATE_SUB(NOW(), INTERVAL 600 SECOND)";
+				$result = mysqli_query($this->db, $query);
+				return $result && mysqli_num_rows($result) > 0;
+			}
+
+			public function refreshSessionToken($empid){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$now = date('Y-m-d H:i:s');
+				$query = "UPDATE active_sessions SET updated_at = '{$now}' WHERE empid = '{$empid}'";
+				return mysqli_query($this->db, $query);
+			}
 		
 			public function cleardup() {
 				$query = "UPDATE client_data SET client_id = '-1' WHERE client_id = ''";

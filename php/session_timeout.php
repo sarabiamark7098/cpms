@@ -28,7 +28,6 @@ function checkSessionTimeout(): void {
         $elapsed = $now - $_SESSION['last_activity'];
 
         if ($elapsed >= SESSION_TIMEOUT_SECONDS) {
-            // Log out and redirect
             _doSessionTimeout();
         }
     }
@@ -36,53 +35,38 @@ function checkSessionTimeout(): void {
     // Refresh last activity timestamp on every valid request
     $_SESSION['last_activity'] = $now;
 
-    // Enforce single-device login: kick if another device replaced the session token
-    if(isset($_SESSION['userId']) && isset($_SESSION['session_token'])){
-        if(class_exists('User')){
-            try {
-                $checker = new User();
-                if(!$checker->validateSessionToken($_SESSION['userId'], $_SESSION['session_token'])){
-                    _doSessionKicked();
-                }
-            } catch(Throwable $e) {
-                // DB unavailable - fail open to avoid locking out all users
-            }
+    // Keep active_sessions heartbeat in sync so the single-device lock
+    // expires naturally when this session goes idle
+    if (isset($_SESSION['userId']) && class_exists('User')) {
+        try {
+            $checker = new User();
+            $checker->refreshSessionToken($_SESSION['userId']);
+        } catch (Throwable $e) {
+            // DB unavailable - fail open to avoid locking out all users
         }
     }
 }
 
 /**
- * Handle the actual timeout: log the event, destroy session, redirect.
+ * Handle the actual timeout: log the event, release the session lock, destroy session.
  */
 function _doSessionTimeout(): void {
-    // Attempt to record logout in the DB if User class is available
     if (class_exists('User') && isset($_SESSION['userId'])) {
         try {
             $user = new User();
             $user->logout_log();
+            $user->clearSessionToken($_SESSION['userId']);
         } catch (Throwable $e) {
-            // Silently continue — we still need to destroy the session
+            // Silently continue - we still need to destroy the session
         }
     }
 
-    $_SESSION['login']        = false;
-    $_SESSION['timeout']      = true; // flag so the login page can show a message
+    $_SESSION['login']   = false;
+    $_SESSION['timeout'] = true;
     session_unset();
     session_destroy();
 
     header('Location: ' . SESSION_TIMEOUT_REDIRECT . '?reason=timeout');
-    exit;
-}
-
-/**
- * Handle forced logout when another device logs in with the same account.
- */
-function _doSessionKicked(): void {
-    $_SESSION['login'] = false;
-    session_unset();
-    session_destroy();
-
-    header('Location: ' . SESSION_TIMEOUT_REDIRECT . '?reason=kicked');
     exit;
 }
 

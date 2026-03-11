@@ -70,8 +70,25 @@
 		
 	    $login = $user->check_login($username, $password);
 	  
+	$login_blocked = false;
+
 		if ($login) {
 			$user_id = $user->getUserId($username, $password);
+
+			if ($user->isAccountAlreadyLoggedIn($user_id)) {
+				$login_blocked = true;
+				echo '<center>
+			<div id="blocked-alert" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:15px;border-radius:4px;margin:10px 0;">
+				<strong><i class="fa fa-lock"></i> This account is currently active on another device. Please wait for that session to expire or log out first.</strong>
+			</div>
+			</center>
+			<script>
+			setTimeout(function() {
+				var el = document.getElementById("blocked-alert");
+				if(el) el.style.display = "none";
+			}, 6000);
+			</script>';
+			} else {
 			$user_info = $user->check_user($user_id);
 			$useroffice = $user->show_office_data($user_info['office_id']);
 			switch ($user_info['position']){
@@ -118,6 +135,8 @@
 					break;
 			}
 		}
+		}
+		if(!$login_blocked){
 		echo '<center>
 		<div id="user-alert" class="alert-Danger" style="padding: 15px;">
 			<strong>User not Found!</strong>
@@ -131,20 +150,7 @@
 			}
 		}, 3000); // 10 seconds = 10000 milliseconds
 		</script>';
-	}
-	
-		if(isset($_GET['reason']) && $_GET['reason'] === 'kicked'){
-		echo '<center>
-		<div id="kicked-alert" style="background:#f8d7da;border:1px solid #f5c6cb;color:#721c24;padding:15px;border-radius:4px;">
-			<strong><i class="fa fa-exclamation-circle"></i> This account is being used on another device. You have been logged out.</strong>
-		</div>
-		</center>
-		<script>
-		setTimeout(function() {
-			var el = document.getElementById("kicked-alert");
-			if(el) el.style.display = "none";
-		}, 6000);
-		</script>';
+		}
 	}
 
 	if(isset($_REQUEST['save'])){

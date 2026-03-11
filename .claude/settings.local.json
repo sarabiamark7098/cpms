@@ -18,7 +18,14 @@
       "Bash(cygpath -w /tmp/patch_session.ps1)",
       "Bash(powershell.exe -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\MTSARA~1\\\\AppData\\\\Local\\\\Temp\\\\patch_session.ps1\")",
       "Bash(/tmp/check_endings.ps1:*)",
-      "Bash(/tmp/patch_session2.ps1:*)"
+      "Bash(/tmp/patch_session2.ps1:*)",
+      "Bash(/tmp/inspect2.ps1:*)",
+      "Bash(powershell.exe -File /tmp/inspect2.ps1)",
+      "Bash(powershell.exe -File /tmp/addmethods.ps1)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:/tmp/patch_index.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:/Windows/Temp/patch_index.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \":*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:/Windows/Temp/inspect_index.ps1\")"
     ]
   }
 }
