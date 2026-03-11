@@ -78,7 +78,7 @@
 			if ($user->isAccountAlreadyLoggedIn($user_id)) {
 				$login_blocked = true;
 				echo '<center>
-			<div id="blocked-alert" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:15px;border-radius:4px;margin:10px 0;">
+			<div id="blocked-alert" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:15px;border-radius:4px;">
 				<strong><i class="fa fa-lock"></i> This account is currently active on another device. Please wait for that session to expire or log out first.</strong>
 			</div>
 			</center>
