@@ -574,10 +574,10 @@
 			public function setSessionToken($empid, $token){
 				$empid = mysqli_real_escape_string($this->db, $empid);
 				$token = mysqli_real_escape_string($this->db, $token);
-				$now   = date('Y-m-d H:i:s');
+				
 				$query = "INSERT INTO active_sessions (empid, session_token, updated_at)
-						  VALUES ('{$empid}', '{$token}', '{$now}')
-						  ON DUPLICATE KEY UPDATE session_token = '{$token}', updated_at = '{$now}'";
+						  VALUES ('{$empid}', '{$token}', NOW())
+						  ON DUPLICATE KEY UPDATE session_token = '{$token}', updated_at = NOW()";
 				return mysqli_query($this->db, $query);
 			}
 
@@ -608,8 +608,8 @@
 
 			public function refreshSessionToken($empid){
 				$empid = mysqli_real_escape_string($this->db, $empid);
-				$now = date('Y-m-d H:i:s');
-				$query = "UPDATE active_sessions SET updated_at = '{$now}' WHERE empid = '{$empid}'";
+				
+				$query = "UPDATE active_sessions SET updated_at = NOW() WHERE empid = '{$empid}'";
 				return mysqli_query($this->db, $query);
 			}
 		
