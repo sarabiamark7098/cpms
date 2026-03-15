@@ -14,7 +14,7 @@ $user = new User();
 ?>
 	<script type="text/javascript" src="../js/PSGC.js"></script>
 	<div class="body">
-	  <form class="form-group" action="gis.php?id=<?php echo $_GET['id']?>" method="POST">
+	  <form id="clientUpdateForm" class="form-group" action="gis.php?id=<?php echo $_GET['id']?>" method="POST">
 			<div class="modal-body">
 				<div class="row form-group" >
 					<div class="col text-center">
@@ -63,8 +63,12 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input  name="bday" type="date" class="form-control" style="border: 1px solid #b1acac;" max= "<?php echo date('Y-m-d'); ?>" value="<?php echo $client['date_birth']?>" required>
+							<input id="c_bday" name="bday" type="date" class="form-control" style="border: 1px solid #b1acac;"
+							    max="<?php echo date('Y-m-d', strtotime('-18 years')); ?>"
+							    value="<?php echo $client['date_birth']?>" required onchange="validateClientAge(this)">
 							<label>Birth Date</label>
+							<small id="c_bday_error" style="color:#dc3545;display:none;font-weight:600;">&#9888; Client must be 18 years old or above.</small>
+							<small id="c_bday_age"   style="color:#28a745;display:none;font-weight:600;"></small>
 						</div>
 						<div class="form-group col-lg-6">
 							<select name="sex" type="text"  class="form-control" style="border: 1px solid #b1acac;" required>
@@ -78,7 +82,7 @@ $user = new User();
 				<h5><small><b>Address</b></small></h5>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input list="regionClist" name="region" type="text" id="creg" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_region']?>"  onChange="get_c_Region(this)" required>
+							<input list="regionClist" name="region" type="text" id="creg" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_region']?>"  onChange="get_c_Region(this)" required autocomplete="off">
 							<label>Region</label>
 							<datalist id="regionClist">
 								<?php
@@ -95,7 +99,7 @@ $user = new User();
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
-							<input list="provinceClist" name="province" type="text" id="cprov" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_province']?>" onChange="get_c_Province(this)" required>
+							<input list="provinceClist" name="province" type="text" id="cprov" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_province']?>" onChange="get_c_Province(this)" required autocomplete="off">
 							<label>Province</label>
 							<datalist id="provinceClist">
 				        	</datalist>
@@ -103,13 +107,13 @@ $user = new User();
 				</div>
 				<div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input list="municipalityClist" name="municipality" type="text" id="client_city" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_municipality']?>" onChange="get_c_Municipality(this)" required>
+							<input list="municipalityClist" name="municipality" type="text" id="client_city" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_municipality']?>" onChange="get_c_Municipality(this)" required autocomplete="off">
 							<label>Municipality</label>
 							<datalist id="municipalityClist">
 							</datalist>
 						</div>
 						<div class="form-group col-lg-6">
-							<input list="barangayClist" name="barangay" type="text" id="cbrgy" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_barangay']?>" onChange="get_c_Barangay(this)" required>
+							<input list="barangayClist" name="barangay" type="text" id="cbrgy" class="form-control" style="border: 1px solid #b1acac; text-transform:none;" value="<?php echo $client['client_barangay']?>" onChange="get_c_Barangay(this)" required autocomplete="off">
 							<label>Barangay</label>
 							<datalist id="barangayClist">
 							</datalist>
@@ -172,5 +176,55 @@ $user = new User();
 				}
 			}
 		}, 500);
+	});
+
+	// â”€â”€ Minor age validation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	function validateClientAge(input) {
+		var bday = input.value;
+		if (!bday) return true;
+
+		var today  = new Date();
+		var birth  = new Date(bday);
+		var age    = today.getFullYear() - birth.getFullYear();
+		var m      = today.getMonth() - birth.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+			age--;
+		}
+
+		var errEl = document.getElementById('c_bday_error');
+		var ageEl = document.getElementById('c_bday_age');
+
+		if (age < 18) {
+			input.setCustomValidity('Client must be 18 years old or above.');
+			if (errEl) errEl.style.display = 'block';
+			if (ageEl) { ageEl.style.display = 'none'; }
+			return false;
+		} else {
+			input.setCustomValidity('');
+			if (errEl) errEl.style.display = 'none';
+			if (ageEl) {
+				ageEl.textContent = 'Age: ' + age + ' year' + (age !== 1 ? 's' : '') + ' old';
+				ageEl.style.display = 'block';
+			}
+			return true;
+		}
+	}
+
+	// Guard form submission
+	$(document).on('submit', '#clientUpdateForm', function(e) {
+		var bdayInput = document.getElementById('c_bday');
+		if (bdayInput && !validateClientAge(bdayInput)) {
+			e.preventDefault();
+			alert('Cannot save. The client\'s birth date indicates an age below 18.\nOnly adults (age \u2265 18) are allowed.');
+			bdayInput.focus();
+		}
+	});
+
+	// Validate existing value on page load
+	$(function() {
+		var bdayInput = document.getElementById('c_bday');
+		if (bdayInput && bdayInput.value) {
+			validateClientAge(bdayInput);
+		}
 	});
 </script>

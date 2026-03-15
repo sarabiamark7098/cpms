@@ -80,7 +80,7 @@ $user = new User();
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input list="categories" name="category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Category" required>
+							<input list="categories" name="category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Category" required autocomplete="off">
 							<label>Category</label>
 							<datalist id="categories">
 								<option>Children in Need of Special Protection</option>
@@ -117,7 +117,7 @@ $user = new User();
 
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <input  list="regionBlist" name="region" id="breg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_b_Region(this)" required>
+                        <input  list="regionBlist" name="region" id="breg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_b_Region(this)" required autocomplete="off">
                         <label>Region</label>
                         <datalist id="regionBlist">
                             <?php
@@ -134,7 +134,7 @@ $user = new User();
                         </datalist>
                     </div>
 					<div class="form-group col-lg-6">
-                        <input list="provinceBlist" name="province" id="bprov" type="text" class="form-control" onChange="get_b_Province(this)" style="border: 1px solid #b1acac; text-transform: none;" required/>
+                        <input list="provinceBlist" name="province" id="bprov" type="text" class="form-control" onChange="get_b_Province(this)" style="border: 1px solid #b1acac; text-transform: none;" required autocomplete="off">
                         <label>Province</label>
                         <datalist id="provinceBlist">
 				        </datalist>
@@ -143,13 +143,13 @@ $user = new User();
 
 				<div class="row" style="margin-top: 2%; height:10%;">
 					<div class="form-group col-lg-6">
-						<input list="municipalityBlist" name="municipality" id="beneficiary_city" type="text" onChange="get_b_Municipality(this)" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
+						<input list="municipalityBlist" name="municipality" id="beneficiary_city" type="text" onChange="get_b_Municipality(this)" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required autocomplete="off">
 						<label>Municipality</label>
 						<datalist id="municipalityBlist">
 						</datalist>
 					</div>
 					<div class="form-group col-lg-6">
-						<input list="barangayBlist" name="barangay" id="bbrgy" type="text" class="form-control" onChange="get_b_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
+						<input list="barangayBlist" name="barangay" id="bbrgy" type="text" class="form-control" onChange="get_b_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required autocomplete="off">
 						<label>Barangay</label>
 						<datalist id="barangayBlist">
 						</datalist>

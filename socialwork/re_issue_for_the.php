@@ -407,7 +407,7 @@
                                                         <label for="email"> <b>Signatory: </b></label>
                                                     </div>
                                                     <div class="col-10">
-                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="<?php echo (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) ?>">
+                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="<?php echo (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) ?>" autocomplete="off">
                                                         <datalist id="signatory">
                                                         <?php
                                                             $data = $user->signatoryGIS();

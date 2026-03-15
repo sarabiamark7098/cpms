@@ -143,7 +143,7 @@
                 <h4 class="text-center">Address</h4>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="regionClist" id="creg" name="regions" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required>
+                    <input list="regionClist" id="creg" name="regions" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required autocomplete="off">
                         <datalist id="regionClist">
                         <?php
                             $getregions = $user->optionregion();
@@ -160,21 +160,21 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" required>
+                    <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" required autocomplete="off">
                     <datalist id="provinceClist">
                     </datalist>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required>
+                    <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required autocomplete="off">
                     <datalist id="municipalityClist">
                     </datalist>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required>
+                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required autocomplete="off">
                     <datalist id="barangayClist">
                     </datalist>
                     </div>  
@@ -312,7 +312,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
+                            <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category"  autocomplete="off">
                             <datalist id="b_categories">
                                 <option>Children in Need of Special Protection</option>
                                 <option>Persons Living with HIV/AIDS</option>
@@ -337,7 +337,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="regionBlist" id="breg" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)">
+                        <input list="regionBlist" id="breg" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)" autocomplete="off">
                         <datalist id="regionBlist">
                         <?php
                                 $getregions = $user->optionregion();
@@ -354,21 +354,21 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="provinceBlist" id="bprov" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)">
+                        <input list="provinceBlist" id="bprov" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)" autocomplete="off">
                         <datalist id="provinceBlist">
                         </datalist>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)">
+                        <input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)" autocomplete="off">
                         <datalist id="municipalityBlist">
                         </datalist>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="barangayBlist" id="bbrgy" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay" onChange="get_b_Barangay(this)">
+                        <input list="barangayBlist" id="bbrgy" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay" onChange="get_b_Barangay(this)" autocomplete="off">
                         <datalist id="barangayBlist">
                         </datalist>
                         </div>

@@ -51,7 +51,7 @@
             <div class="modal-body">
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-12">
-                        <input list="regionClist" id="creg" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" value="<?php echo (!empty($getregions)?$getregions['r_name']." /". $getregions['psgc_code']:"")?>" required>
+                        <input list="regionClist" id="creg" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" value="<?php echo (!empty($getregions)?$getregions['r_name']." /". $getregions['psgc_code']:"")?>" required autocomplete="off">
                         <datalist id="regionClist">
                         <?php
                             $getregions = $user->optionregion();
@@ -66,13 +66,13 @@
                         <label class="active" for="creg">Region</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" value="<?php echo (!empty($getprovince)?$getprovince['p_name']." /". $getprovince['psgc_code']:"")?>"  required>
+                        <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" value="<?php echo (!empty($getprovince)?$getprovince['p_name']." /". $getprovince['psgc_code']:"")?>"  required autocomplete="off">
                         <datalist id="provinceClist">
                         </datalist>
                         <label class="active" for="cprov">Province</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="Ccity" placeholder="City or Municipality" value="<?php echo (!empty($getmunicipal)?$getmunicipal['m_name']." /". $getmunicipal['psgc_code']:"")?>" required>
+                        <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="Ccity" placeholder="City or Municipality" value="<?php echo (!empty($getmunicipal)?$getmunicipal['m_name']." /". $getmunicipal['psgc_code']:"")?>" required autocomplete="off">
                         <datalist id="municipalityClist">
                         </datalist>
                         <label class="active" for="client_city">Municipality</label>

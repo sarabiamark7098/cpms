@@ -1075,7 +1075,7 @@ if (!$_SESSION['login']) {
                             <div class="row" style="margin-top: 15px">
                                 <label class="col-sm-2 label" style="font-size: 20px">Approved by:</label>
                                 <div class="col-sm-4">
-                                    <input list="signatory" type="text" class="form-control mr-sm-2" id="approved1" name="approved1" required value="<?php echo (empty($gis['signatory_id']) ? '' : $user->getSignatoryFullname($gis['signatory_id'])); ?>" required>
+                                    <input list="signatory" type="text" class="form-control mr-sm-2" id="approved1" name="approved1" required value="<?php echo (empty($gis['signatory_id']) ? '' : $user->getSignatoryFullname($gis['signatory_id'])); ?>" required autocomplete="off">
                                     <datalist id="signatory">
                                         <?php
                                             $data = $user->signatoryGIS();
@@ -1939,8 +1939,17 @@ if (!$_SESSION['login']) {
             $sex = mysqli_real_escape_string($user->db, ($_POST['sex']));
             
 
-            $user->updateClient($id, $lname, $mname, $fname, $exname, $bday, $sex, 
-                            $region, $province, $municipality, $barangay, $street, $district);
+            // â”€â”€ Adult age validation: client must be 18 or above â”€â”€
+            $clientBirthDate = new DateTime($bday);
+            $clientToday     = new DateTime();
+            $clientAge       = (int)$clientToday->diff($clientBirthDate)->y;
+            if ($clientAge < 18) {
+                echo "<script>alert('Update failed. The client must be 18 years old or above. Please correct the birth date.');</script>";
+                echo "<meta http-equiv='refresh' content='0'>";
+            } else {
+                $user->updateClient($id, $lname, $mname, $fname, $exname, $bday, $sex, 
+                                $region, $province, $municipality, $barangay, $street, $district);
+            }
         }
 
             //BENEFICIARY CLIENT
@@ -2418,13 +2427,13 @@ if (!$_SESSION['login']) {
 				$("#educational").prop('checked', false);
 				$("#casha").prop('checked', true);
 			} else if (type.toLowerCase()=="material assistance") {
-					$('#medical').prop('checked', false);
-					$("#transportation").prop('checked', false);
-					$("#food").prop('checked', false);
-					$("#fassist").prop('checked', false);
-					$("#educational").prop('checked', false);
-					$("#casha").prop('checked', false);
-				}
+                $('#medical').prop('checked', false);
+                $("#transportation").prop('checked', false);
+                $("#food").prop('checked', false);
+                $("#fassist").prop('checked', false);
+                $("#educational").prop('checked', false);
+                $("#casha").prop('checked', false);
+            }
 			
             $("#type1").on("change", function () {
                 var type = $("#type1").val();

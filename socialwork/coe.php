@@ -605,7 +605,7 @@
                                 Amount is more than Twenty Thousand Pesos (Php 50,000).
                                 <div>
                                 <label> Approved By : </label>&nbsp&nbsp&nbsp
-                                    <input style="text-transform: uppercase; width:50%" id="coesignatoryid1" list="coesign" name="coesignName1" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullnameCOE($client['signatory_GL']) ?>" required>
+                                    <input style="text-transform: uppercase; width:50%" id="coesignatoryid1" list="coesign" name="coesignName1" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullnameCOE($client['signatory_GL']) ?>" required autocomplete="off">
                                     <datalist id="coesign">
                                         <?php 
                                             $data = $user->signatoryGIS();
@@ -633,7 +633,7 @@
                             <div class="card-body">
                                 <div>
 									<label> Special Disbursing Officer : </label>&nbsp&nbsp&nbsp
-									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_officer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
+									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_officer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()"><br>
                                 </div>
                             </div>
                         </div> 
@@ -661,7 +661,7 @@
                                     <div class="row">
                                         <div>
                                             <input type="checkbox" class="lg" id="val_id" name="val_id" value="Valid ID:" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Valid ID") ?>> Valid ID Presented: 
-                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
+                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()" autocomplete="off">
                                             <datalist id="valid">
                                                 <option>School-ID</option>
                                                 <option>Voter's ID</option>
@@ -694,7 +694,7 @@
                                     </div> -->
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" id="coeother" name="others" value="Others"  <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Others") ?>> Others: 
-                                            <input type="text" class="text-left center-input" id="coeotherinput" name="others_input" value=" <?php echo (!empty($record['others_input'])?$record['others_input']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
+                                            <input type="text" class="text-left center-input" id="coeotherinput" name="others_input" value=" <?php echo (!empty($record['others_input'])?$record['others_input']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
                                         </div>
                                     </div>
                                 </div>

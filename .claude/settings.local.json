@@ -25,7 +25,23 @@
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:/tmp/patch_index.ps1\")",
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:/Windows/Temp/patch_index.ps1\")",
       "Bash(powershell -ExecutionPolicy Bypass -Command \":*)",
-      "Bash(powershell -ExecutionPolicy Bypass -File \"C:/Windows/Temp/inspect_index.ps1\")"
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:/Windows/Temp/inspect_index.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_showClientData.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\showClientData.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\check_bday.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\check_bday2.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_bday.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\showClientData.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_showClientData.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\showClientData.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_bday.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\showClientData.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_gis_cupdate.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\gis.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_gis_cupdate.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\gis.php\")",
+      "Bash(powershell -Command \"Remove-Item ''C:\\\\laragon\\\\www\\\\cpms\\\\patch_showClientData.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\patch_bday.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\patch_gis_cupdate.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\check_bday.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\check_bday2.ps1'' -Force -ErrorAction SilentlyContinue; Write-Host ''Cleaned''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_showClientData.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\showClientData.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_showClientData.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\showClientData.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_gis.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\gis.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_gis.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\gis.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\gis.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\gis.php\")",
+      "Bash(powershell -Command \"Remove-Item ''C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_showClientData.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_gis.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1'' -Force -ErrorAction SilentlyContinue; Write-Host ''Cleaned''\")"
     ]
   }
 }

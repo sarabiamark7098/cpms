@@ -289,7 +289,7 @@
                                                         <label for="email"> <b>SIGNATORY</b></label>
                                                     </div>
                                                     <div class="col-10">
-                                                        <input type="text" list="signatory" class="form-control text-dark" name="signatory_osap" value="<?php echo (!empty($osap['signatory'])?$osap['signatory']:'') ?>" placeholder="Signatory" required>
+                                                        <input type="text" list="signatory" class="form-control text-dark" name="signatory_osap" value="<?php echo (!empty($osap['signatory'])?$osap['signatory']:'') ?>" placeholder="Signatory" required autocomplete="off">
                                                         <datalist id="signatory">
                                                             <?php
                                                                 // $data = $user->signatoryGL();
