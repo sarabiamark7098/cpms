@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
     include('../php/class.user.php');
     $user = new User();
     if(isset($_GET['confirmdone'])){
@@ -242,9 +242,9 @@
                                             <h3>Providers Info</h3>
                                             <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required autocomplete="off"><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required readonly><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name" readonly><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required readonly><br>
                                             <div class="row">
                                                 <div class="checkbox col-3">
                                                     <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -272,9 +272,9 @@
                                         <h4 class="card-header text-success">CASH Information</h4>
                                         <div class="card-body">
                                             <h3>Cash Voucher Info</h3>
-                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required><br> 
-                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required><br>
+                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '."''".').toUpperCase()"><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required disabled><br> 
+                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required disabled><br>
                                         </div>
                                     </div>
                                 </div>';
@@ -308,9 +308,9 @@
                                             <h3>Providers Info</h3>
                                             <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(($gl['cname'])??"").'" placeholder="Providers Company Name" required autocomplete="off"><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required readonly><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name" readonly><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required readonly><br>
                                             <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.(($gl['to_mention'])??"").'" placeholder="Addressee to Mention in GL" hidden><br>
                                             <div class="row">
                                                 <div class="checkbox col-3">
@@ -340,9 +340,9 @@
                                         <h4 class="card-header text-success">CASH Information</h4>
                                         <div class="card-body">
                                             <h3>Cash Voucher Info</h3>
-                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required><br> 
-                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required><br>
+                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '."''".').toUpperCase()"><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required disabled><br> 
+                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required disabled><br>
                                         </div>
                                     </div>
                                 </div>';
@@ -545,6 +545,27 @@
                 document.body.innerHTML = oldPage;
 
             }
+    
+        /* disable-print-done-on-change */
+        (function () {
+            var form = document.querySelector('form');
+            if (!form) return;
+            function disablePrintDone() {
+                document.querySelectorAll('[name="printa"],[name="printgis"],[name="printis"],[name="printce"],[name="print"]').forEach(function (b) {
+                    b.disabled = true;
+                    b.classList.remove('btn-primary');
+                    b.classList.add('btn-secondary');
+                });
+                var done = document.getElementById('done');
+                if (done) {
+                    done.disabled = true;
+                    done.classList.remove('btn-success');
+                    done.classList.add('btn-secondary');
+                }
+            }
+            form.addEventListener('input', disablePrintDone);
+            form.addEventListener('change', disablePrintDone);
+        })();
     </script>
 
     <?php 

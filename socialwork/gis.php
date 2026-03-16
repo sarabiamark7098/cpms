@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include('../php/class.user.php');
 $user = new User();
     
@@ -1451,8 +1451,8 @@ if (!$_SESSION['login']) {
             if(!empty($_POST['swatype'])){
                 $gis_opt = mysqli_real_escape_string($user->db, $_POST["swatype"]);
             }
-            $prob = mysqli_real_escape_string($user->db, strtoupper($_POST["prob"]));
-            $ass = mysqli_real_escape_string($user->db, strtoupper($_POST["ass"]));
+            $prob = mysqli_real_escape_string($user->db, mb_strtoupper($_POST["prob"], "UTF-8"));
+            $ass = mysqli_real_escape_string($user->db, mb_strtoupper($_POST["ass"], "UTF-8"));
             
             $signatoryGIS = $_POST["approved"]; //signatory approved
             $fund1 = "";
@@ -1733,8 +1733,8 @@ if (!$_SESSION['login']) {
             if(!empty($_POST['swatype'])){
                 $gis_opt = mysqli_real_escape_string($user->db, $_POST["swatype"]);
             }
-            $prob = mysqli_real_escape_string($user->db, strtoupper($_POST["prob"]));
-            $ass = mysqli_real_escape_string($user->db, strtoupper($_POST["ass"]));
+            $prob = mysqli_real_escape_string($user->db, mb_strtoupper($_POST["prob"], "UTF-8"));
+            $ass = mysqli_real_escape_string($user->db, mb_strtoupper($_POST["ass"], "UTF-8"));
             
             $signatoryGIS = $_POST["approved"]; //signatory approved
             $fund1 = "";

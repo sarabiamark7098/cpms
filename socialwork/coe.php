@@ -566,7 +566,7 @@
 			</div>
     </nav>
     <br><br><br><br>
-        <form action="coe.php?id=<?php echo $_GET['id']?>" method="post">
+        <form id="coeForm" action="coe.php?id=<?php echo $_GET['id']?>" method="post">
             <div class="container">
                 <?php if($gis['program_type'] == '1'){?>
                 
@@ -647,7 +647,7 @@
                             <div class="card-header  border-secondary bg-secondary text-white">
                                 Records
                             </div>
-                            <div class="card-body">
+                            <div id="records-card-body" class="card-body">
                                 <div class="container">
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Referral") ?>> Referral Letter</div>
@@ -698,6 +698,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="records-error" style="color:#dc3545;font-weight:600;display:none;margin-top:8px;padding:6px 10px;border:1px solid #f5c6cb;background:#f8d7da;border-radius:4px;">&#9888; Please select at least one record.</div>
                             </div>
                         </div>
                     </div>
@@ -706,7 +707,7 @@
                             <div class="card-header border-secondary bg-secondary text-white">
                                 <?php echo $client_assistance[1]['type'] ?> Records
                             </div>
-                            <div class="card-body">
+                            <div id="records-card-body" class="card-body">
                                 <div class="container">
                                 <?php
                                     if(substr_count(strval($type), "Medic") > 0){
@@ -996,6 +997,36 @@
 
             ?>
         </div>
+
+    <script>
+    /* coeForm-records-validation */
+    (function () {
+        var form    = document.getElementById('coeForm');
+        var cardBody = document.getElementById('records-card-body');
+        var errDiv  = document.getElementById('records-error');
+
+        if (!form || !cardBody) return;
+
+        /* Hide error as soon as any checkbox is ticked */
+        cardBody.addEventListener('change', function (e) {
+            if (e.target.type === 'checkbox' && e.target.checked) {
+                if (errDiv) errDiv.style.display = 'none';
+            }
+        });
+
+        /* Block submit if no checkbox is checked */
+        form.addEventListener('submit', function (e) {
+            var checked = cardBody.querySelectorAll('input[type="checkbox"]:checked').length;
+            if (checked === 0) {
+                e.preventDefault();
+                if (errDiv) {
+                    errDiv.style.display = 'block';
+                    errDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    })();
+    </script>
     </body>
     <?php 
     if(isset($_POST["save"])){

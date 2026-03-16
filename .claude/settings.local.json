@@ -41,7 +41,13 @@
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_gis.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\gis.php\")",
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\gis.php\")",
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\gis.php\")",
-      "Bash(powershell -Command \"Remove-Item ''C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_showClientData.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_gis.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1'' -Force -ErrorAction SilentlyContinue; Write-Host ''Cleaned''\")"
+      "Bash(powershell -Command \"Remove-Item ''C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_showClientData.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\patch_adult_gis.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\fix_comment.ps1'' -Force -ErrorAction SilentlyContinue; Write-Host ''Cleaned''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\check_coe.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\check_coe2.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_coe.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\coe.php\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_coe.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\coe.php\")",
+      "Bash(powershell -Command \"Remove-Item ''C:\\\\laragon\\\\www\\\\cpms\\\\patch_coe.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\check_coe.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\check_coe2.ps1'' -Force -ErrorAction SilentlyContinue; Write-Host ''Cleaned''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_last_disable.ps1\")"
     ]
   }
 }
