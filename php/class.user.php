@@ -3542,7 +3542,7 @@
 				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
 		)
 		ORDER BY t.date_entered DESC
-		LIMIT 3
+		LIMIT 5
 		";
 
 		return mysqli_query($this->db, $query);
@@ -3580,7 +3580,7 @@
 				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
 		)
 		ORDER BY t.date_entered DESC
-		LIMIT 3
+		LIMIT 5
 		";
 
 		return mysqli_query($this->db, $query);
