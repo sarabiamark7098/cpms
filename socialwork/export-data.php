@@ -63,7 +63,7 @@ $headers = [
     "Sub-Category", "Pantawid Beneficiary",
     "CLient Birth Day", "Client Birth Month", "Client Birth Year", "Beneficiary Birth Day", "Beneficiary Birth Month", "Beneficiary Birth Year"
 ];
-fputcsv($output, $headers);
+fputcsv($output, $headers, ',', '"', '\\');
 
 while ($row = mysqli_fetch_assoc($result)) {
     $fullname = $user->getuserFullname($row['encoded_encoder']);
@@ -114,7 +114,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         $client_bday, $client_bmonth, $client_byear, $beneficiary_bday, $beneficiary_bmonth, $beneficiary_byear
     ];
 
-    fputcsv($output, $rowData);
+    fputcsv($output, $rowData, ',', '"', '\\');
 }
 
 fclose($output);
