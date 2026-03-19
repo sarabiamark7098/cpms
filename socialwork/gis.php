@@ -1063,13 +1063,13 @@ if (!$_SESSION['login']) {
                             <div class="row"> 
                                 <div class="col-lg-12"><br>
                                     <label>Problem Presented</label>
-                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="prob" name="prob" id="type" required><?php echo empty($gis['problem'])? "" : $gis['problem']; ?></textarea>
+                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="prob" name="prob" id="type" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')"><?php echo empty($gis['problem'])? "" : $gis['problem']; ?></textarea>
                                 </div>
                             </div>
                             <div class="row"> 
                                 <div class="col-lg-12"><br>
                                     <label>Social Work Assessment</label>
-                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="ass" name="ass" id="type" required><?php echo empty($gis['soc_ass'])? "" : $gis['soc_ass']; ?></textarea>
+                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="ass" name="ass" id="type" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')"><?php echo empty($gis['soc_ass'])? "" : $gis['soc_ass']; ?></textarea>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 15px">
