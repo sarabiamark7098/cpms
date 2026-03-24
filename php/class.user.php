@@ -1,14 +1,12 @@
-<?php
+﻿<?php
 	session_start();
 	include ("db_config.php");
-	include ("db_config2.php");
 	include ("api_config.php");
 
 
 	class User{
 
 		public $db;
-		public $db2;
 		public $name;
 		
 		public function __construct(){
@@ -20,24 +18,17 @@
 						" (" . mysqli_connect_errno() . ")"
 					);
 				}
-			$this->db2 =  mysqli_connect(DB_SERVER2, DB_USERNAME2, DB_PASSWORD2, DB_DATABASE2);
-				if(mysqli_connect_errno()) {
-					die("Database connection failed: " . 
-						mysqli_connect_error() . 
-						" (" . mysqli_connect_errno() . ")"
-					);
-				}
 			}
     
 			
 
 			public function check_login($user, $pass){
-				$username = mysqli_real_escape_string($this->db2,$user); 
-				$password = mysqli_real_escape_string($this->db2,$pass); 
+				$username = mysqli_real_escape_string($this->db,$user); 
+				$password = mysqli_real_escape_string($this->db,$pass); 
 				
-				$sqlquery="SELECT * from employee_info WHERE empuser='{$username}' and emppass='{$password}'";
+				$sqlquery="SELECT * FROM employees WHERE empuser='{$username}' AND emppass='{$password}'";
 		
-				$result = mysqli_query($this->db2,$sqlquery);
+				$result = mysqli_query($this->db,$sqlquery);
 				while($row = mysqli_fetch_assoc($result)) {
 						$user = $row['empuser'];
 						$pass = $row['emppass'];
@@ -52,14 +43,12 @@
 			}
 		
 			public function check_status($user, $pass){
-				$username = mysqli_real_escape_string($this->db2,$user); 
-				$password = mysqli_real_escape_string($this->db2,$pass); 
+				$username = mysqli_real_escape_string($this->db,$user); 
+				$password = mysqli_real_escape_string($this->db,$pass); 
 				
-				$query = "SELECT status FROM employee_info
-				LEFT JOIN tbl_employment USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empuser='{$username}' and emppass='{$password}';";
-				$result = mysqli_query($this->db2,$query);
+				$query = "SELECT status FROM employees
+				WHERE empuser='{$username}' AND emppass='{$password}';";
+				$result = mysqli_query($this->db,$query);
 
 				$row = mysqli_fetch_assoc($result);
 
@@ -74,16 +63,13 @@
 			}
 		
 			public function check_user($id){
-				$id = mysqli_real_escape_string($this->db2,$id);
+				$id = mysqli_real_escape_string($this->db,$id);
 
-				$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info  USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empid = '{$id}';";
-				
-				$result = mysqli_query($this->db2,$query);
+				$query = "SELECT * FROM employees WHERE empid = '{$id}';";
+
+				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
-				
+
 				$data['office_id'] = $row['office_id'];
 				$data['position'] = $row['position'];
 				$data['fullname'] = strtoupper($row['empfname'] ." ". (!empty($row['empmname'][0])?$row['empmname'][0] .". ":""). $row['emplname'] ." ". (!empty($row['empext'][0])?$row['empext'][0] .".":""));
@@ -125,11 +111,9 @@
 			}
 
 			public function getUserId($username, $password){
-				$query = "SELECT i.empnum, e.empid, i.emppass, i.empuser 
-				FROM tbl_employment e
-				LEFT JOIN employee_info i USING (empnum) 
-				WHERE empuser = '{$username}' and emppass='{$password}';";
-				$result = mysqli_query($this->db2,$query);
+				$query = "SELECT empnum, empid, emppass, empuser FROM employees
+				WHERE empuser = '{$username}' AND emppass='{$password}';";
+				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				$data = $row['empid'];
 				if($data){
@@ -141,12 +125,10 @@
 			}
 
 			public function getuserInfo($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id, e.emp_position, c.sw_license_no, c.sw_license_expiry  
-				FROM employee_info i
-				LEFT JOIN tbl_employment e USING (empnum)
-				LEFT JOIN cpms_account c USING (empid)
-				WHERE empid='{$id}';";
-				$result = mysqli_query($this->db2, $query);
+				$query = "SELECT empfname, empmname, emplname, empext, empsex, empstatus, empnum, empid,
+				position, status, office_id, emp_position, sw_license_no, sw_license_expiry
+				FROM employees WHERE empid='{$id}';";
+				$result = mysqli_query($this->db, $query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
 					return $row;
@@ -157,11 +139,8 @@
 			}
 
 			public function getuserFullname($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empnum, e.empid, c.*
-				FROM employee_info i
-				LEFT JOIN tbl_employment e USING (empnum) 
-				LEFT JOIN cpms_account c USING (empid) WHERE empid='{$id}';";
-				$result = mysqli_query($this->db2, $query);
+				$query = "SELECT * FROM employees WHERE empid='{$id}';";
+				$result = mysqli_query($this->db, $query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
 					$fullname = strtoupper($row['empfname'] ." ".(!empty($row['empmname'])?$row['empmname'][0] .". ":""). $row['emplname'] .' '. (!empty($row['empext'])?$row['empext'].".":"") );
@@ -293,21 +272,15 @@
 			}
 
 			public function getallEmployee(){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id 
-				FROM tbl_employment e
-				LEFT JOIN employee_info i using (empnum)
-				LEFT JOIN cpms_account c using (empid);";
-				$result = mysqli_query($this->db2, $query);
+				$query = "SELECT empfname, empmname, emplname, empext, empsex, empstatus, empnum, empid, position, status, office_id FROM employees;";
+				$result = mysqli_query($this->db, $query);
 				
 				return $result;
 			}
 			public function getEmpData($id){
-				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empsex, i.empstatus, i.empnum, e.empid, c.position, c.status, c.office_id, i.empuser, i.emppass
-				FROM tbl_employment e
-				LEFT JOIN employee_info i using (empnum)
-				LEFT JOIN cpms_account c using (empid)
-				WHERE empid = '{$id}';";
-				$result = mysqli_query($this->db2, $query);
+				$query = "SELECT empfname, empmname, emplname, empext, empsex, empstatus, empnum, empid,
+				position, status, office_id, empuser, emppass FROM employees WHERE empid = '{$id}';";
+				$result = mysqli_query($this->db, $query);
 				$row = mysqli_fetch_assoc($result);
 				
 				if($row){
@@ -360,18 +333,8 @@
 				$result = mysqli_query($this->db, $query);
 				$rowoffice = mysqli_fetch_assoc($result);
 
-				$query = "SELECT * FROM cpms_account WHERE empid = '{$empid}'";
-				$result = mysqli_query($this->db2, $query);
-				$row = mysqli_num_rows($result);
-
-				if($row <= 0){
-					$query = "INSERT INTO cpms_account(empid, position, status, office, office_id) VALUES 
-							('{$id}','{$position}','{$status}', '{$rowoffice['office_accronym']}','{$office}')";
-					$result = mysqli_query($this->db2, $query);
-				}else{
-					$query = "UPDATE cpms_account SET empid = '{$id}', position = '{$position}', status = '{$status}', office_id = '{$office}', office = '{$rowoffice['office_accronym']}' WHERE empid = '{$empid}'";
-					$result = mysqli_query($this->db2, $query);
-				}
+				$query = "UPDATE employees SET empid = '{$id}', position = '{$position}', status = '{$status}', office_id = '{$office}', office = '{$rowoffice['office_accronym']}' WHERE empid = '{$empid}'";
+				$result = mysqli_query($this->db, $query);
 				
 				return $result;
 			}
@@ -387,67 +350,48 @@
 
 			public function grantRequest($position, $id, $num, $office){
 				$datenow = date("Y-m-d H:i:s"); //serve as date_request
-				$query = "SELECT * FROM cpms_account WHERE empid = '{$id}'";
-				$result = mysqli_query($this->db2, $query);
+				$query = "SELECT * FROM employees WHERE empid = '{$id}'";
+				$result = mysqli_query($this->db, $query);
 				$rows = mysqli_fetch_assoc($result);
 				$row = mysqli_num_rows($result);
 				if($row <= 0){
-					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
-					$result = mysqli_query($this->db, $query);
+					echo "<script>alert('Error! Employee not found')</script>";
+					echo "<script>window.location='Employee.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
+				}elseif($rows['status'] === 'Activated' && $rows['position'] == $position && $rows['office_id'] == $office){
 
-					$query = "INSERT INTO cpms_account(empid, position, status, office, office_id) VALUES 
-							('{$id}','{$position}','Activated', '-', '{$office}')";
-					$result = mysqli_query($this->db2, $query);
-
-					if($result){
-						echo "<script>alert('Request Granted')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}else{
-						echo "<script>alert('Error! Please Try Again')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}
-				}elseif($rows['position'] == $position && $rows['office_id'] == $office){
-					
 					$query = "UPDATE user_request SET date_cancel = '{$datenow}' WHERE emp_num = '{$num}'";
 					$result = mysqli_query($this->db, $query);
 
 					echo "<script>alert('Employee is Already Activated with the same Request')</script>";
 					echo "<script>window.location='Employee.php';</script>";
 					echo "<meta http-equiv='refresh' content='0'>";
-					
-				}elseif($rows['position'] != $position || $rows['office_id'] != $office){
-					
-					$query = "UPDATE cpms_account SET ";
+
+				}else{
+
+					$query = "UPDATE employees SET ";
 					if($rows['position'] != $position){
 					$query .= "position = '{$position}', ";
 					}
-					if($rows['office_id'] != $office){	
-						$query .= "office_id = '{$office}', ";	
+					if($rows['office_id'] != $office){
+						$query .= "office_id = '{$office}', ";
 					}
-					$query .= "status = 'Activated' WHERE empid = '{$id}' ";
-					$result = mysqli_query($this->db2, $query);
+					$query .= "status = 'Activated' WHERE empid = '{$id}'";
+					$result = mysqli_query($this->db, $query);
 
-					if($rows['position'] != $position || $rows['office_id'] != $office){
-						$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
-						$result = mysqli_query($this->db, $query);
+					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
+					$result = mysqli_query($this->db, $query);
 
-						echo "<script>alert('Employee Request Granted')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}else{
-						echo "<script>alert('Error! Please Try Again')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}
+					echo "<script>alert('Employee Request Granted')</script>";
+					echo "<script>window.location='Employee.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
 				}
 			}
 
 			public function searchEmployeeforRequest($val){
-				$value = mysqli_real_escape_string($this->db2,$val); 
+				$value = mysqli_real_escape_string($this->db,$val); 
 		
-				$query = "SELECT empnum, empfname, emplname, empmname, empext FROM employee_info
+				$query = "SELECT empnum, empid, empfname, emplname, empmname, empext FROM employees
 				WHERE ((CONCAT
 				(empfname, ' ',empmname, ' ',emplname)
 				LIKE '%".$value."%') 
@@ -468,7 +412,7 @@
 				LIKE '%".$value."%')) 
 				LIMIT 5";
 		
-				$result = mysqli_query($this->db2, $query);
+				$result = mysqli_query($this->db, $query);
 		
 				if($result){
 					return $result;
@@ -479,13 +423,10 @@
 			}
 
 			public function get_employee_data($val){
-				$value = mysqli_real_escape_string($this->db2,$val); 
+				$value = mysqli_real_escape_string($this->db,$val); 
 		
-				$query = "SELECT * FROM tbl_employment
-					LEFT JOIN employee_info using (empnum)
-					LEFT JOIN cpms_account using (empid)
-					WHERE empnum = '{$value}';";
-				$result = mysqli_query($this->db2, $query);
+			$query = "SELECT * FROM employees WHERE empnum = '{$value}';";
+				$result = mysqli_query($this->db, $query);
 				$row = mysqli_fetch_assoc($result);
 				
 				if($row){
@@ -656,9 +597,9 @@
 			}
 
 			public function updatesw($id, $license, $expiry){
-				$query = "UPDATE cpms_account SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
+				$query = "UPDATE employees SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
 
-				$result = mysqli_multi_query($this->db2, $query);
+				$result = mysqli_query($this->db, $query);
 				if($result){
 					return true;
 				}
@@ -669,14 +610,11 @@
 		
 			public function show_user_data($id){
 				
-				$id = mysqli_real_escape_string($this->db2,$id);
+				$id = mysqli_real_escape_string($this->db,$id);
 				
-				$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info  USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empid = '{$id}';";
+				$query = "SELECT * FROM employees WHERE empid = '{$id}';";
 
-				$result = mysqli_query($this->db2,$query);
+				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				
 				if($row){
@@ -716,11 +654,8 @@
 		
 			public function updateProvider($addresseename, $addresseeposition, $companyid, $addresseetomention, $companyname, $companyaddress){
 				$id = $_SESSION['userId'];
-				$query1 = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info  USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empid = '{$id}';";
-				$result1 = mysqli_query($this->db2, $query1);
+				$query1 = "SELECT * FROM employees WHERE empid = '{$id}';";
+				$result1 = mysqli_query($this->db, $query1);
 				
 				$row1 = mysqli_fetch_assoc($result1);
 				$fullname = strtoupper($row1['empfname'] ." ". (!empty($row1['empmname'][0])?$row1['empmname'][0].'. ':''). $row1['emplname'] ." ". (!empty($row1['empext'][0])?$row1['empext'][0].'.':''));
@@ -752,10 +687,8 @@
 		
 			public function addCompany($addressee_name, $addressee_position, $addresseetomention, $company_name, $company_address){
 				$id = $_SESSION['userId'];
-				$query1 = "SELECT * FROM employee_info 
-				LEFT JOIN tbl_employment USING (empnum) 
-				LEFT JOIN cpms_account USING (empid) WHERE empid='{$id}';";
-				$result1 = mysqli_query($this->db2, $query1);
+				$query1 = "SELECT * FROM employees WHERE empid='{$id}';";
+				$result1 = mysqli_query($this->db, $query1);
 				
 				$row1 = mysqli_fetch_assoc($result1);
 				$fullname = strtoupper($row1['empfname'] ." ". (!empty($row1['empmname'][0])?$row1['empmname'][0].'. ':'') . $row1['emplname'] ." ". (!empty($row1['empext'])?$row1['empext'].'.':''));
@@ -1387,11 +1320,8 @@
 			}
 		
 			public function getsocialWork($id){
-				$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info  USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empid = '{$id}';";
-				$result = mysqli_query($this->db2,$query);
+				$query = "SELECT * FROM employees WHERE empid = '{$id}';";
+				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
 					return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext'].".");
@@ -1402,11 +1332,8 @@
 			}
 
 			public function getupdateby($id){
-				$query = "SELECT * FROM tbl_employment
-				LEFT JOIN employee_info  USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empid = '{$id}';";
-				$result = mysqli_query($this->db2,$query);
+				$query = "SELECT * FROM employees WHERE empid = '{$id}';";
+				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
 					return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext'].".");
@@ -1418,11 +1345,8 @@
 
 			public function getEncoder($id){
 				
-				$query = "SELECT * FROM employee_info 
-				LEFT JOIN tbl_employment USING (empnum)
-				LEFT JOIN cpms_account USING (empid)
-				WHERE empid='{$id}' LIMIT 1;";
-				$result = mysqli_query($this->db2,$query);
+				$query = "SELECT * FROM employees WHERE empid='{$id}' LIMIT 1;";
+				$result = mysqli_query($this->db,$query);
 				$row = mysqli_fetch_assoc($result);
 				if($row){
 					return $row['empfname'].' '.(!empty($row['empmname'][0])?$row['empmname'][0].'. ':'').$row['emplname'].' '.((empty($row['empext'])||($row['empext']=='none'))?"":$row['empext'].".");
@@ -2287,11 +2211,8 @@
 		}
 
 		public function signatoryosap(){
-			$query = "SELECT c.empid, t.empnum, e.empfname, c.position, e.emplname, e.empmname, e.empext FROM cpms_account c
-			LEFT JOIN tbl_employment t on c.empid = t.empid
-			LEFT JOIN employee_info e on t.empnum = e.empnum
-			WHERE c.position = 'Social Worker';";
-			$result = mysqli_query($this->db2,$query);
+			$query = "SELECT empid, empnum, empfname, position, emplname, empmname, empext FROM employees WHERE position = 'Social Worker';";
+			$result = mysqli_query($this->db,$query);
 			if($result){
 				return $result;
 			}
@@ -3685,12 +3606,9 @@
 		}
 	}
 	public function get_encoder_to_socialwork_summary($id){
-		$query = "SELECT * FROM tbl_employment
-		LEFT JOIN employee_info  USING (empnum)
-		LEFT JOIN cpms_account USING (empid)
-		WHERE empid = '{$id}';";
+	$query = "SELECT * FROM employees WHERE empid = '{$id}';";
 
-		$result = mysqli_query($this->db2, $query);
+		$result = mysqli_query($this->db, $query);
 		$row = mysqli_fetch_assoc($result);
 
 
@@ -3718,12 +3636,9 @@
 		}
 	}
 	public function get_socialwork_to_encoder_summary($id){
-		$query = "SELECT * FROM employee_info 
-			LEFT JOIN tbl_employment USING (empnum)
-			LEFT JOIN cpms_account USING (empid)
-			WHERE empid='{$id}';";
+	$query = "SELECT * FROM employees WHERE empid='{$id}';";
 
-		$result = mysqli_query($this->db2, $query);
+		$result = mysqli_query($this->db, $query);
 		$row = mysqli_fetch_assoc($result);
 
 		if($result){
@@ -3843,11 +3758,8 @@
 		}
 	}
 	public function getsocialWorkINI($id){
-		$query = "SELECT * FROM tbl_employment
-		LEFT JOIN employee_info  USING (empnum)
-		LEFT JOIN cpms_account USING (empid)
-		WHERE empid = '{$id}';";
-		$result = mysqli_query($this->db2,$query);
+	$query = "SELECT * FROM employees WHERE empid = '{$id}';";
+		$result = mysqli_query($this->db,$query);
 		$row = mysqli_fetch_assoc($result);
 		$data = $row['empfname'][0].'';
 		if(!empty($row['empmname'][0])){
@@ -3888,11 +3800,8 @@
 	}
 
 	public function getencoderINI($id){
-		$query = "SELECT * FROM tbl_employment
-		LEFT JOIN employee_info  USING (empnum)
-		LEFT JOIN cpms_account USING (empid)
-		WHERE empid = '{$id}';";
-		$result = mysqli_query($this->db2,$query);
+	$query = "SELECT * FROM employees WHERE empid = '{$id}';";
+		$result = mysqli_query($this->db,$query);
 		$row = mysqli_fetch_assoc($result);
 		$data = $row['empfname'][0].'';
 		if(!empty($row['empmname'][0])){
