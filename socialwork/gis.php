@@ -1013,7 +1013,7 @@ if (!$_SESSION['login']) {
                                 <div class="col-1 text-center"> </div> 
                             </div>
                             <div class="row"> 
-                                <div class="col"><input class="form-control" id="pur1" name="pur1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['purpose']; ?>"></div>
+                                <div class="col"><input class="form-control" id="pur1" name="pur1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['purpose']; ?>" oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-. ]/g, '')"></div>
                                 <div class="col-2"><input class="form-control currencyMaskedInput" id="a1" name="a1" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['amount']; ?>"></div>
                                 <div class="col-2">
                                     <select class="form-control" id="m1" name="m1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required>
@@ -1063,7 +1063,7 @@ if (!$_SESSION['login']) {
                             <div class="row"> 
                                 <div class="col-lg-12"><br>
                                     <label>Problem Presented</label>
-                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="prob" name="prob" id="type" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '')"><?php echo empty($gis['problem'])? "" : $gis['problem']; ?></textarea>
+                                    <textarea class="form-control"  style="height:120px;font-size:12px;margin-top:-8px" type="text" id="prob" name="prob" id="type" required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-. ]/g, '')"><?php echo empty($gis['problem'])? "" : $gis['problem']; ?></textarea>
                                 </div>
                             </div>
                             <div class="row"> 
