@@ -23,43 +23,62 @@
 			
 
 			public function check_login($user, $pass){
-				$username = mysqli_real_escape_string($this->db,$user); 
-				$password = mysqli_real_escape_string($this->db,$pass); 
-				
-				$sqlquery="SELECT * FROM employees WHERE empuser='{$username}' AND emppass='{$password}'";
-		
-				$result = mysqli_query($this->db,$sqlquery);
-				while($row = mysqli_fetch_assoc($result)) {
-						$user = $row['empuser'];
-						$pass = $row['emppass'];
-				
-				if(($user === $username) && ($pass === $password)){
-					return true;
-				}
-				else{
+				$username = mysqli_real_escape_string($this->db, $user);
+
+				// Fetch by username only — never compare passwords in SQL
+				$result = mysqli_query($this->db,
+				          "SELECT empid, empuser, emppass FROM employees WHERE empuser = '{$username}'");
+
+				if(!$result || mysqli_num_rows($result) === 0){
 					return false;
 				}
+
+				$row  = mysqli_fetch_assoc($result);
+				$hash = $row['emppass'];
+
+				// Primary: bcrypt / argon2 hash (new accounts)
+				if(password_verify($pass, $hash)){
+					// Upgrade cost factor if needed
+					if(password_needs_rehash($hash, PASSWORD_BCRYPT)){
+						$this->rehashPassword($row['empid'], $pass);
+					}
+					return true;
 				}
+
+				// Legacy fallback: plain-text password (pre-hash accounts)
+				// Auto-upgrade to bcrypt on successful login
+				if($hash === $pass){
+					$this->rehashPassword($row['empid'], $pass);
+					return true;
+				}
+
+				return false;
+			}
+
+			/**
+			 * Stores a fresh bcrypt hash for the given employee.
+			 * Called automatically when a legacy or outdated hash is detected.
+			 */
+			private function rehashPassword($empid, $plainPass){
+				$newHash = password_hash($plainPass, PASSWORD_BCRYPT);
+				$newHash = mysqli_real_escape_string($this->db, $newHash);
+				$empid   = mysqli_real_escape_string($this->db, $empid);
+				mysqli_query($this->db,
+				    "UPDATE employees SET emppass = '{$newHash}' WHERE empid = '{$empid}'");
 			}
 		
+			/**
+			 * Called after check_login() already verified the password.
+			 * Looks up only by username to return the account activation status.
+			 */
 			public function check_status($user, $pass){
-				$username = mysqli_real_escape_string($this->db,$user); 
-				$password = mysqli_real_escape_string($this->db,$pass); 
-				
-				$query = "SELECT status FROM employees
-				WHERE empuser='{$username}' AND emppass='{$password}';";
-				$result = mysqli_query($this->db,$query);
+				$username = mysqli_real_escape_string($this->db, $user);
 
-				$row = mysqli_fetch_assoc($result);
+				$query  = "SELECT status FROM employees WHERE empuser = '{$username}'";
+				$result = mysqli_query($this->db, $query);
+				$row    = mysqli_fetch_assoc($result);
 
-				$data = $row['status'];
-
-				if($data === 'Activated'){
-					return true;
-				}
-				else{
-					return false;
-				}
+				return ($row && $row['status'] === 'Activated');
 			}
 		
 			public function check_user($id){
@@ -110,18 +129,16 @@
 				}
 			}
 
+			/**
+			 * Returns the empid for the given username.
+			 * Password is intentionally NOT re-checked here — check_login() already verified it.
+			 */
 			public function getUserId($username, $password){
-				$query = "SELECT empnum, empid, emppass, empuser FROM employees
-				WHERE empuser = '{$username}' AND emppass='{$password}';";
-				$result = mysqli_query($this->db,$query);
-				$row = mysqli_fetch_assoc($result);
-				$data = $row['empid'];
-				if($data){
-					return $data;
-				}
-				else {
-					return false;
-				}
+				$username = mysqli_real_escape_string($this->db, $username);
+				$query    = "SELECT empid FROM employees WHERE empuser = '{$username}'";
+				$result   = mysqli_query($this->db, $query);
+				$row      = mysqli_fetch_assoc($result);
+				return ($row && !empty($row['empid'])) ? $row['empid'] : false;
 			}
 
 			public function getuserInfo($id){
@@ -596,7 +613,112 @@
 				}
 			}
 
-			public function updatesw($id, $license, $expiry){
+			/* -------------------------------------------------------
+		 * Account Registration
+		 * ------------------------------------------------------- */
+
+		public function checkUsernameAvailable($empuser, $empid = ''){
+			$empuser = mysqli_real_escape_string($this->db, $empuser);
+			$empid   = mysqli_real_escape_string($this->db, $empid);
+			$query   = "SELECT empid FROM employees WHERE empuser = '{$empuser}'";
+			if(!empty($empid)){
+				$query .= " AND empid != '{$empid}'";
+			}
+			$result = mysqli_query($this->db, $query);
+			return mysqli_num_rows($result) === 0; // true = available
+		}
+
+		public function lookupEmployeeById($empid){
+			$empid  = mysqli_real_escape_string($this->db, $empid);
+			$query  = "SELECT empid, empnum, empfname, empmname, emplname, empext,
+			           empsex, empstatus, emp_position, empuser
+			           FROM employees WHERE empid = '{$empid}'";
+			$result = mysqli_query($this->db, $query);
+			if(mysqli_num_rows($result) === 0) return 'not_found';
+			$row = mysqli_fetch_assoc($result);
+			// If already has a username, account exists
+			$row['account_exists'] = !empty($row['empuser']);
+			return $row;
+		}
+
+		public function registerAccount($empid, $empnum, $empfname, $empmname, $emplname,
+		                                $empext, $empsex, $empstatus, $emp_position,
+		                                $empuser, $emppass, $position, $office_id,
+		                                $status, $sw_license_no = '', $sw_license_expiry = ''){
+
+			$empid         = mysqli_real_escape_string($this->db, trim($empid));
+			$empnum        = intval($empnum);
+			$empfname      = mysqli_real_escape_string($this->db, strtoupper(trim($empfname)));
+			$empmname      = mysqli_real_escape_string($this->db, strtoupper(trim($empmname)));
+			$emplname      = mysqli_real_escape_string($this->db, strtoupper(trim($emplname)));
+			$empext        = mysqli_real_escape_string($this->db, strtoupper(trim($empext)));
+			$empsex        = mysqli_real_escape_string($this->db, $empsex);
+			$empstatus     = mysqli_real_escape_string($this->db, $empstatus);
+			$emp_position  = mysqli_real_escape_string($this->db, strtoupper(trim($emp_position)));
+			$empuser       = mysqli_real_escape_string($this->db, trim($empuser));
+			$emppass       = mysqli_real_escape_string($this->db, password_hash($emppass, PASSWORD_BCRYPT)); // bcrypt hash — never store plain text
+			$position      = mysqli_real_escape_string($this->db, $position);
+			$office_id     = mysqli_real_escape_string($this->db, $office_id);
+			$status        = mysqli_real_escape_string($this->db, $status);
+			$sw_license_no = mysqli_real_escape_string($this->db, trim($sw_license_no));
+			$sw_expiry_sql = (!empty($sw_license_expiry))
+			                 ? "'" . mysqli_real_escape_string($this->db, $sw_license_expiry) . "'"
+			                 : "NULL";
+
+			// Username must be unique across all other employees
+			if(!$this->checkUsernameAvailable($empuser, $empid)){
+				return 'username_taken';
+			}
+
+			// Fetch office acronym
+			$offResult = mysqli_query($this->db,
+			             "SELECT office_accronym FROM field_office WHERE office_id = '{$office_id}'");
+			$offRow    = mysqli_fetch_assoc($offResult);
+			$office    = $offRow ? mysqli_real_escape_string($this->db, $offRow['office_accronym']) : '';
+
+			// Determine INSERT vs UPDATE
+			$exists = mysqli_query($this->db, "SELECT empid FROM employees WHERE empid = '{$empid}'");
+			if(mysqli_num_rows($exists) === 0){
+				// Brand-new employee record
+				$query = "INSERT INTO employees
+				          (empid, empnum, empfname, empmname, emplname, empext, empsex,
+				           empstatus, emp_position, empuser, emppass, position,
+				           office_id, office, status, sw_license_no, sw_license_expiry)
+				          VALUES
+				          ('{$empid}', {$empnum}, '{$empfname}', '{$empmname}', '{$emplname}',
+				           '{$empext}', '{$empsex}', '{$empstatus}', '{$emp_position}',
+				           '{$empuser}', '{$emppass}', '{$position}',
+				           '{$office_id}', '{$office}', '{$status}',
+				           '{$sw_license_no}', {$sw_expiry_sql})";
+			} else {
+				// Existing employee — update personal info + set account/assignment
+				$query = "UPDATE employees SET
+				          empnum        = {$empnum},
+				          empfname      = '{$empfname}',
+				          empmname      = '{$empmname}',
+				          emplname      = '{$emplname}',
+				          empext        = '{$empext}',
+				          empsex        = '{$empsex}',
+				          empstatus     = '{$empstatus}',
+				          emp_position  = '{$emp_position}',
+				          empuser       = '{$empuser}',
+				          emppass       = '{$emppass}',
+				          position      = '{$position}',
+				          office_id     = '{$office_id}',
+				          office        = '{$office}',
+				          status        = '{$status}',
+				          sw_license_no = '{$sw_license_no}',
+				          sw_license_expiry = {$sw_expiry_sql}
+				          WHERE empid = '{$empid}'";
+			}
+
+			$result = mysqli_query($this->db, $query);
+			return $result ? 'success' : 'error';
+		}
+
+		/* ------------------------------------------------------- */
+
+		public function updatesw($id, $license, $expiry){
 				$query = "UPDATE employees SET sw_license_no = '{$license}', sw_license_expiry = '{$expiry}' WHERE empid = '{$id}';";
 
 				$result = mysqli_query($this->db, $query);

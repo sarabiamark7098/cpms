@@ -137,6 +137,14 @@
                 </div>
             </nav>
             <div class="container-fluid"  style="padding-left: 5%">
+
+                <!-- Register Account button -->
+                <div style="margin-bottom: 18px;">
+                    <a href="RegisterEmployee.php" class="btn btn-success">
+                        <i class="fa fa-user-plus"></i> &nbsp;Register Account
+                    </a>
+                </div>
+
                 <div class="table-responsive-lg" style="width: 48%; float: right">
                     <h5>Employees Request</h5>
                     <table id="admintable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width: 100%; margin: 2% 0% 0% 0%;">

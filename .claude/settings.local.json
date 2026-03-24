@@ -86,7 +86,13 @@
       "Bash(__NEW_LINE_68acfcec3298e092__ echo:*)",
       "Bash(find /c/laragon/www/cpms -type f \\\\\\(-name *.php -o -name *.js -o -name *.html -o -name *.sql -o -name *.txt \\\\\\) ! -path */.git/* ! -path */.claude/* ! -path */vendor/* ! -path */datatables/*)",
       "Bash(grep -r \"employee_info\\\\|tbl_employment\\\\|cpms_account\" /c/laragon/www/cpms --include=*.php --include=*.js --include=*.html --include=*.sql --include=*.txt --exclude-dir=.git --exclude-dir=.claude --exclude-dir=vendor --exclude-dir=datatables -n)",
-      "Bash(find /c/laragon/www/cpms -type f -not -path */.git/* -not -path */.claude/* -not -path */vendor/* -not -path */datatables/* -not -path */fonts/* -not -path */images/*)"
+      "Bash(find /c/laragon/www/cpms -type f -not -path */.git/* -not -path */.claude/* -not -path */vendor/* -not -path */datatables/* -not -path */fonts/* -not -path */images/*)",
+      "Bash(grep -A 3 \"public function.*Employee\\\\|private.*$table\\\\|describe employees\" /c/laragon/www/cpms/php/class.user.php)",
+      "Bash(grep -l \"form\\\\|step\\\\|wizard\\\\|modal\" /c/laragon/www/cpms/js/*.js)",
+      "Bash(php -l /c/laragon/www/cpms/php/class.user.php 2)",
+      "Bash(1 grep:*)",
+      "Read(//c/laragon/www/cpms/**)",
+      "Bash(1 __NEW_LINE_c502fc4acd8d29b6__ echo \"\" echo \"=== Confirm no plain-text SQL password comparison remains ===\" grep -n \"emppass=''''\\\\|AND emppass\" /c/laragon/www/cpms/php/class.user.php)"
     ]
   }
 }
