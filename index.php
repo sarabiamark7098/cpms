@@ -36,11 +36,17 @@
 	}
 
 	if(isset($_POST['close'])){
-		echo "<script>window.location='index.php';</script>";
+		if(isset($_SESSION['userId'])){
+			$user->clearSessionToken($_SESSION['userId']);
+		}
 		session_destroy();
+		echo "<script>window.location='index.php';</script>";
 	}elseif(isset($_POST['request_confirmation_cancel'])){
-		echo "<script>window.location='index.php';</script>";
+		if(isset($_SESSION['userId'])){
+			$user->clearSessionToken($_SESSION['userId']);
+		}
 		session_destroy();
+		echo "<script>window.location='index.php';</script>";
 	}
 
 	if(isset($_POST['proceedDesignation'])){
@@ -352,11 +358,13 @@
 			<form class="form-group" action="index.php" method="POST">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">User Access</h5>
-					<button type="button" name="close" class="close" data-dismiss="modal" aria-label="Close">
+					<button type="submit" name="close" class="close" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<?php $officedata = $user->show_office_data($_SESSION['f_office']);?>
+				<?php $officedata = $user->show_office_data($_SESSION['f_office']);
+				$empdata = $user->getEmpData($_SESSION['userId']);
+				?>
 				<div class="modal-body3">
 					<div class="container" style="padding:50px 70px">
 						<center><h3><?php echo "<b>". $_SESSION['userfullname'] ."</b> <br>you are currently assigned in <br><b style='color:red'>". $officedata['office_name'] ." </b><br> as <b style='color:red'>".$_SESSION['position'] ."</b>.<br><br>Do you want to <b>Proceed</b> or <br><b>Request</b> to change Office/User Type?" ?></h3></center>
@@ -365,7 +373,7 @@
 				<div class="modal-footer">
 					<button type='submit' name='proceedDesignation' class='btn btn-<?php echo (empty($_SESSION['f_office']) || empty($_SESSION['position']))?'dark':'success' ?>' style="font-size:20px" <?php echo empty($_SESSION['f_office'])?'disabled':'' ?>> Proceed </button>
 					<button type='submit' name='Request_change' class='btn btn-primary deep-sky' style="font-size:20px"> Request </button>
-					<button type="submit" name="close" class='btn btn-secondary' style="font-size:20px">Close</button>
+					<button type="submit" name="close" class='btn btn-secondary' style="font-size:20px" data-dismiss="modal">Close</button>
 				</div>
 				</div>
 			</form>
