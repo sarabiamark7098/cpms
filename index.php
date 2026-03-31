@@ -35,39 +35,6 @@
 		echo "<script>window.location='index.php';</script>";	
 	}
 
-	if(isset($_POST['close'])){
-		if(isset($_SESSION['userId'])){
-			$user->clearSessionToken($_SESSION['userId']);
-		}
-		session_destroy();
-		echo "<script>window.location='index.php';</script>";
-	}elseif(isset($_POST['request_confirmation_cancel'])){
-		if(isset($_SESSION['userId'])){
-			$user->clearSessionToken($_SESSION['userId']);
-		}
-		session_destroy();
-		echo "<script>window.location='index.php';</script>";
-	}
-
-	if(isset($_POST['proceedDesignation'])){
-		switch ($_SESSION['position']){
-			case 'Encoder': 
-					$user->login_log();
-					echo "<script>window.location='encoder/home.php'</script>";
-					break;
-			case 'Social Worker': 
-					$user->login_log();
-					echo "<script>window.location='socialwork/home.php'</script>";
-					break;
-			case 'Admin': 
-					$user->login_log();
-					echo "<script>window.location='admin/home.php'</script>";
-					break;
-			default:
-				 echo "<script>window.location='index.php';</script>";
-		}
-	}
-	
 	if (isset($_REQUEST['login'])) {
 		extract($_REQUEST);
 		
@@ -98,44 +65,47 @@
 			$user_info = $user->check_user($user_id);
 			$useroffice = $user->show_office_data($user_info['office_id']);
 			switch ($user_info['position']){
-				case 'Encoder': echo '<script>var x = true;
-					window.location="index.php?optionenc="+x</script>';
+				case 'Encoder':
 					$_SESSION['login'] = $login;
 					$_SESSION['userAccountusername'] = $username;
 					$_SESSION['userAccountpassword'] = $password;
 					$_SESSION['userId'] = $user_id;
 					$_SESSION['position'] = $user_info['position'];
 					$_SESSION['userfullname'] = $user_info['fullname'];
-					$_SESSION['f_office']=$user_info['office_id'];
+					$_SESSION['f_office'] = $user_info['office_id'];
 					$session_token = bin2hex(random_bytes(32));
 					$user->setSessionToken($user_id, $session_token);
 					$_SESSION['session_token'] = $session_token;
+					$user->login_log();
+					echo '<script>window.location="encoder/home.php"</script>';
 					break;
-				case 'Social Worker': echo '<script>var x = true;
-					window.location="index.php?optionsw="+x</script>';
+				case 'Social Worker':
 					$_SESSION['login'] = $login;
 					$_SESSION['userAccountusername'] = $username;
 					$_SESSION['userAccountpassword'] = $password;
 					$_SESSION['userId'] = $user_id;
 					$_SESSION['position'] = $user_info['position'];
 					$_SESSION['userfullname'] = $user_info['fullname'];
-					$_SESSION['f_office']=$user_info['office_id'];
+					$_SESSION['f_office'] = $user_info['office_id'];
 					$session_token = bin2hex(random_bytes(32));
 					$user->setSessionToken($user_id, $session_token);
 					$_SESSION['session_token'] = $session_token;
+					$user->login_log();
+					echo '<script>window.location="socialwork/home.php"</script>';
 					break;
-				case 'Admin': echo '<script>var x = true;
-					window.location="index.php?optionadmin="+x</script>';
+				case 'Admin':
 					$_SESSION['login'] = $login;
 					$_SESSION['userAccountusername'] = $username;
 					$_SESSION['userAccountpassword'] = $password;
 					$_SESSION['userId'] = $user_id;
 					$_SESSION['position'] = $user_info['position'];
 					$_SESSION['userfullname'] = $user_info['fullname'];
-					$_SESSION['f_office']=$user_info['office_id'];
+					$_SESSION['f_office'] = $user_info['office_id'];
 					$session_token = bin2hex(random_bytes(32));
 					$user->setSessionToken($user_id, $session_token);
 					$_SESSION['session_token'] = $session_token;
+					$user->login_log();
+					echo '<script>window.location="admin/home.php"</script>';
 					break;
 				default:
 					break;
@@ -241,6 +211,17 @@
 						</div>
 
 						<div class="text-center w-full p-t-23">
+						<?php if (isset($_GET['reason'])): ?>
+							<?php if ($_GET['reason'] === 'revoked'): ?>
+							<div style="background:#d4edda;border:1px solid #c3e6cb;color:#155724;padding:12px 16px;border-radius:4px;margin-top:10px;font-size:14px;">
+								<i class="fa fa-check-circle"></i> Your designation has been updated by the administrator. Please sign in again to continue.
+							</div>
+							<?php elseif ($_GET['reason'] === 'timeout'): ?>
+							<div style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:12px 16px;border-radius:4px;margin-top:10px;font-size:14px;">
+								<i class="fa fa-clock-o"></i> Your session has expired due to inactivity. Please sign in again.
+							</div>
+							<?php endif; ?>
+						<?php endif; ?>
 						</div>
 					</form>
 			</div>
@@ -332,119 +313,5 @@
         </div>
     </div>
 
-	<?php 
-		if(isset($_GET['optionenc'])||isset($_GET['optionsw'])||isset($_GET['optionadmin'])){
-			echo '<script>  var x=  1 </script>';
-		}else{
-
-			echo '<script>  var x=  0 </script>';
-		}
-		
-		if(isset($_POST['Request_change'])){
-			echo '<script>  var y=  1;</script>';
-		}else{
-			$_SESSION['Request_change'] = "";
-			echo '<script>  var y=  0; </script>';
-		}	 	
-	?>
-	<div class="container">
-  <!-- Trigger the modal with a button -->
-  
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <!-- Modal content-->
-		<div class="modal-content">
-			<form class="form-group" action="index.php" method="POST">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">User Access</h5>
-					<button type="submit" name="close" class="close" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<?php $officedata = $user->show_office_data($_SESSION['f_office']);
-				$empdata = $user->getEmpData($_SESSION['userId']);
-				?>
-				<div class="modal-body3">
-					<div class="container" style="padding:50px 70px">
-						<center><h3><?php echo "<b>". $_SESSION['userfullname'] ."</b> <br>you are currently assigned in <br><b style='color:red'>". $officedata['office_name'] ." </b><br> as <b style='color:red'>".$_SESSION['position'] ."</b>.<br><br>Do you want to <b>Proceed</b> or <br><b>Request</b> to change Office/User Type?" ?></h3></center>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type='submit' name='proceedDesignation' class='btn btn-<?php echo (empty($_SESSION['f_office']) || empty($_SESSION['position']))?'dark':'success' ?>' style="font-size:20px" <?php echo empty($_SESSION['f_office'])?'disabled':'' ?>> Proceed </button>
-					<button type='submit' name='Request_change' class='btn btn-primary deep-sky' style="font-size:20px"> Request </button>
-					<button type="submit" name="close" class='btn btn-secondary' style="font-size:20px" data-dismiss="modal">Close</button>
-				</div>
-				</div>
-			</form>
-		</div>
-    </div>
-  </div>
-  
-</div>
-<script>
-	if(x == 1){
-		$('#myModal').modal('show');
-	}
-</script>
-	<div class="modal fade" id="request_modal" role="dialog">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-            	<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Employee Request</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body4">
-					<?php $empdata = $user->getEmpData($_SESSION['userId']);?>
-					<form action='index.php?confirm_id=<?php echo $empdata["empnum"]; ?>&emp_id=<?php echo $empdata["empid"]; ?>' method='POST'>
-						<div class="modal-body">
-							<div class="container" style="padding:20px 40px">
-								<h5 style='text-align:center'><b>Employee Number:&nbsp <?php echo $empdata['empnum'] ?></b></h5><br>
-								<h5 style='text-align:center'><b>Name:&nbsp <?php echo $_SESSION['userfullname'] ?></b></h5><br>
-								<div class="row">
-									<div class="form-group col-lg-6">
-										<select id="designation" name="designation" type="text" class="form-control" required>
-											<option value="" <?php echo ($empdata['position'] == ''?"selected":"") ?>>Select Designation</option>
-											<?php if ($empdata['position'] == 'Admin'){ ?><option value=<?php echo ($empdata['position'] == 'Admin'?"Admin":"") ?> selected> <?php echo ($empdata['position'] == 'Admin'?"Admin":"") ?> </option><?php } ?>
-											<option value="Encoder" <?php echo ($empdata['position'] == 'Encoder'?"selected":"") ?>>Encoder</option>
-											<option value="Social Worker" <?php echo ($empdata['position'] == 'Social Worker'?"selected":"") ?>>Social Worker</option>
-										</select>
-										<label class="active" for="designation">Designate Position</label>
-									</div>
-									<div class="form-group col-lg-6">
-										<select id="office" name="office" type="text" class="form-control" required>
-										<option value="" selected></option>
-											<?php
-											$getoffice = $user->optionoffice();
-												//Loop through results
-											foreach($getoffice as $index => $value){
-												//Display info
-												echo '<option value="'. $value['office_id'] .'" '. (($empdata['office_id']==$value['office_id'])?"selected":"") .'> ';
-												echo $value['office_name'];
-												echo '</option>';
-											}
-										?>
-										</select>
-										<label class="active" for="office">Designate Office</label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class='modal-footer'>
-							<button type='submit' id="r_confirmation" name='request_confirmation' class='btn btn-primary deep-sky'> Confirm </button>		
-						</div>	
-					</form>
-				</div>
-			</div>
-        </div>
-    </div>
-<script>
-	if(y == 1){
-		$('#request_modal').modal('show');
-		
-	}
-</script>
 </body>
 </html>

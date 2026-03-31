@@ -3,7 +3,7 @@
 	$user = new User();
 
 	$empid = $_POST['empid'];
-	
+
 	if(!$_SESSION['login']){
 		header('Location:../index.php');
     }
@@ -22,19 +22,21 @@
             echo "<meta http-equiv='refresh' content='0'>";
         }
 
-
     }elseif(isset($_POST['confirmRequest'])){
         $position = $_POST['designation'];
         $num = $_POST['empnum'];
         $id = $_POST['empid'];
         $office = $_POST['office'];
-        
-        $user->grantRequest($position, $id, $num, $office);
 
+        $user->grantRequest($position, $id, $num, $office);
     }
 
     $getemp = $user->getEmpData($empid);
     $getrequest = $user->RequestData($getemp['empnum']);
+
+    $req_position = $getrequest['request_position'] ?? '';
+    $req_office   = $getrequest['request_office']   ?? '';
+    $valid_req    = in_array($req_position, ['Encoder', 'Social Worker', 'Admin']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -72,61 +74,50 @@
                         <input value="<?php echo $getemp['empext']; ?>" id="extraname" name="extraname" type="text" class="form-control" readonly>
                         <label class="active" for="extraname">Extraname</label>
                     </div>
-                    
-                    <label class="col-lg-12" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    <h5><small>&emsp;Employee Details&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</small></h5>
-                    </label>
-                    
-                    
-                    
-                    <label class="col-lg-12" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    <h5><small>&emsp;CPMS Field&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</small></h5>
-                    </label>
+
+                  
+
                     <div class="form-group col-lg-6">
-                        <select id="designation" name="designation" class="form-control" required readonly>
-                            <option value="" <?php echo ($getrequest['request_position'] == ''?"selected":"") ?>>Select Designation</option>
-                            <option value="Admin" <?php echo ($getrequest['request_position'] == 'Admin'?"selected":"") ?>>Admin</option>
-                            <option value="Encoder" <?php echo ($getrequest['request_position'] == 'Encoder'?"selected":"") ?>>Encoder</option>
-                            <option value="Social Worker" <?php echo ($getrequest['request_position'] == 'Social Worker'?"selected":"") ?>>Social Worker</option>
-										
+                        <select id="designation" name="designation" class="form-control" required>
+                            <option value="">Select Designation</option>
+                            <option value="Admin" <?php echo ($req_position == 'Admin' ? 'selected' : ''); ?>>Admin</option>
+                            <option value="Encoder" <?php echo ($req_position == 'Encoder' ? 'selected' : ''); ?>>Encoder</option>
+                            <option value="Social Worker" <?php echo ($req_position == 'Social Worker' ? 'selected' : ''); ?>>Social Worker</option>
                         </select>
-                        <label class="active" for="designation">Designate Position</label>
+                        <label class="active" for="designation">Approve Position</label>
                     </div>
                     <div class="form-group col-lg-6">
-                        <select id="office" name="office" class="form-control" required readonly>
-                            <option value="" selected></option>
+                        <select id="office" name="office" class="form-control" required>
+                            <option value="">Select Office</option>
                             <?php
                             $getoffice = $user->optionoffice();
-                                //Loop through results
                             foreach($getoffice as $index => $value){
-                                //Display info
-                                echo '<option value="'. $value['office_id'] .'" '. ($getrequest['request_office'] == $value['office_id']?'selected':'') .'> ';
+                                echo '<option value="'. $value['office_id'] .'" '. ($req_office == $value['office_id'] ? 'selected' : '') .'> ';
                                 echo $value['office_name'];
                                 echo '</option>';
                             }
-                        ?>
+                            ?>
                         </select>
-                        <label class="active" for="office">Designate Office</label>
+                        <label class="active" for="office">Approve Office</label>
                     </div>
                     <div class="form-group col-lg-6" hidden>
                         <input value="<?php echo $getemp['empnum']; ?>" id="empnum" name="empnum" type="text" class="form-control" readonly>
                         <label class="active" for="empnum">Employee Number</label>
                     </div>
                 </div>
-			</div>	
+			</div>
 			<div class="modal-footer">
                 <button type="submit" class="btn btn-danger" name="cancelRequest" id="cancelRequest">Cancel Request</button>
                 <button type="submit" class="btn btn-primary" name="confirmRequest">Confirm Request</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
-        </form> 		
+        </form>
 	</div>
 
     <script>
         $(function () {
             $("#cancelRequest").click(function () {
                 $("#designation").removeAttr('required');
-               
             });
         });
     </script>

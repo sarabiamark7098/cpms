@@ -32,19 +32,38 @@ function checkSessionTimeout(): void {
         }
     }
 
-    // Refresh last activity timestamp on every valid request
-    $_SESSION['last_activity'] = $now;
-
-    // Keep active_sessions heartbeat in sync so the single-device lock
-    // expires naturally when this session goes idle
-    if (isset($_SESSION['userId']) && class_exists('User')) {
+    // Validate session token against DB on every request.
+    // If the token has been cleared (e.g. admin granted a role change),
+    // the employee is forcefully logged out immediately.
+    if (isset($_SESSION['userId'], $_SESSION['session_token']) && class_exists('User')) {
         try {
             $checker = new User();
+            if (!$checker->validateSessionToken($_SESSION['userId'], $_SESSION['session_token'])) {
+                _doSessionRevoked();
+            }
+            // Token is valid — refresh heartbeat so the idle-lock stays in sync
             $checker->refreshSessionToken($_SESSION['userId']);
         } catch (Throwable $e) {
             // DB unavailable - fail open to avoid locking out all users
         }
     }
+
+    // Refresh last activity timestamp on every valid request
+    $_SESSION['last_activity'] = $now;
+}
+
+/**
+ * Force logout when the session token has been revoked externally
+ * (e.g. admin approved a designation change).
+ */
+function _doSessionRevoked(): void {
+    $_SESSION['login']   = false;
+    $_SESSION['revoked'] = true;
+    session_unset();
+    session_destroy();
+
+    header('Location: ' . SESSION_TIMEOUT_REDIRECT . '?reason=revoked');
+    exit;
 }
 
 /**

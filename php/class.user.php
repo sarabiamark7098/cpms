@@ -386,61 +386,44 @@
 			}
 
 			public function grantRequest($position, $id, $num, $office){
-				$datenow = date("Y-m-d H:i:s"); //serve as date_request
-				$query = "SELECT * FROM cpms_account WHERE empid = '{$id}'";
+				$id       = mysqli_real_escape_string($this->db, $id);
+				$position = mysqli_real_escape_string($this->db, $position);
+				$num      = mysqli_real_escape_string($this->db, $num);
+				$office   = mysqli_real_escape_string($this->db, $office);
+				$datenow  = date("Y-m-d H:i:s");
+
+				$valid_positions = ['Encoder', 'Social Worker', 'Admin'];
+				if (empty($position) || !in_array($position, $valid_positions) || empty($office)) {
+					echo "<script>alert('Error: Please select a valid Position and Office before confirming.')</script>";
+					echo "<script>window.location='Employee.php';</script>";
+					return;
+				}
+
+				// Fetch current employee data to detect changes
+				$query = "SELECT position, office_id, status FROM cpms_account WHERE empid = '{$id}'";
+				$rows  = mysqli_fetch_assoc(mysqli_query($this->db2, $query));
+
+				// Always apply whatever the admin selected — no "same" early-exit
+				$query  = "UPDATE cpms_account SET position = '{$position}', office_id = '{$office}', status = 'Activated' WHERE empid = '{$id}'";
 				$result = mysqli_query($this->db2, $query);
-				$rows = mysqli_fetch_assoc($result);
-				$row = mysqli_num_rows($result);
-				if($row <= 0){
-					$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
-					$result = mysqli_query($this->db, $query);
 
-					$query = "INSERT INTO cpms_account(empid, position, status, office, office_id) VALUES 
-							('{$id}','{$position}','Activated', '-', '{$office}')";
-					$result = mysqli_query($this->db2, $query);
+				$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
+				mysqli_query($this->db, $query);
 
-					if($result){
-						echo "<script>alert('Request Granted')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}else{
-						echo "<script>alert('Error! Please Try Again')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
+				if ($result) {
+					// Force logout whenever role OR office changed
+					$roleChanged   = !$rows || $rows['position']  !== $position;
+					$officeChanged = !$rows || $rows['office_id'] !== $office;
+					if ($roleChanged || $officeChanged) {
+						$this->clearSessionToken($id);
 					}
-				}elseif($rows['position'] == $position && $rows['office_id'] == $office){
-					
-					$query = "UPDATE user_request SET date_cancel = '{$datenow}' WHERE emp_num = '{$num}'";
-					$result = mysqli_query($this->db, $query);
-
-					echo "<script>alert('Employee is Already Activated with the same Request')</script>";
+					echo "<script>alert('Request Granted')</script>";
 					echo "<script>window.location='Employee.php';</script>";
 					echo "<meta http-equiv='refresh' content='0'>";
-					
-				}elseif($rows['position'] != $position || $rows['office_id'] != $office){
-					
-					$query = "UPDATE cpms_account SET ";
-					if($rows['position'] != $position){
-					$query .= "position = '{$position}', ";
-					}
-					if($rows['office_id'] != $office){	
-						$query .= "office_id = '{$office}', ";	
-					}
-					$query .= "status = 'Activated' WHERE empid = '{$id}' ";
-					$result = mysqli_query($this->db2, $query);
-
-					if($rows['position'] != $position || $rows['office_id'] != $office){
-						$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
-						$result = mysqli_query($this->db, $query);
-
-						echo "<script>alert('Employee Request Granted')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}else{
-						echo "<script>alert('Error! Please Try Again')</script>";
-						echo "<script>window.location='Employee.php';</script>";
-						echo "<meta http-equiv='refresh' content='0'>";
-					}
+				} else {
+					echo "<script>alert('Error! Please Try Again')</script>";
+					echo "<script>window.location='Employee.php';</script>";
+					echo "<meta http-equiv='refresh' content='0'>";
 				}
 			}
 

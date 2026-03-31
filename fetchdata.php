@@ -51,10 +51,10 @@
                             <h5 style='text-align:center'><b>Name:&nbsp ". $row['emplname'] .", ". $row['empfname'] ." ". (!empty($row['empmname'])?$row['empmname'][0].'.':'') ." ". (!empty($row['empext'])?$row['empext']:'') ."</b></h5><br>
                             <div class='row'>
                                 <div class='form-group col-lg-6'>
-                                    <select id='designation' name='designation' type='text' class='form-control' required>option
-                                        <option value=". ($row['position'] == 'Admin'?'Admin':'') ." selected>". ($row['position'] == 'Admin'?'Admin':'') ."</option>
-                                        <option value='Encoder' ".(!empty($row['position']) && $row['position'] == 'Encoder' ? 'selected' : '').">Encoder</option>
-                                        <option value='Social Worker' ". (!empty($row['position']) && $row['position'] == 'Social Worker'?'selected':'') .">Social Worker</option>
+                                    <select id='designation' name='designation' class='form-control' required>
+                                        <option value=''>Select Position</option>
+                                        <option value='Encoder' ".($row['position'] == 'Encoder' ? 'selected' : '').">Encoder</option>
+                                        <option value='Social Worker' ".($row['position'] == 'Social Worker' ? 'selected' : '').">Social Worker</option>
                                     </select>
                                     <label class='active' for='designation'>Designate Position</label>
                                 </div>

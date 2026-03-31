@@ -47,7 +47,25 @@
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_coe.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\coe.php\")",
       "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_coe.ps1\" -FilePath \"C:\\\\laragon\\\\www\\\\cpms\\\\socialwork\\\\socialworkupdate\\\\coe.php\")",
       "Bash(powershell -Command \"Remove-Item ''C:\\\\laragon\\\\www\\\\cpms\\\\patch_coe.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\check_coe.ps1'',''C:\\\\laragon\\\\www\\\\cpms\\\\check_coe2.ps1'' -Force -ErrorAction SilentlyContinue; Write-Host ''Cleaned''\")",
-      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_last_disable.ps1\")"
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\laragon\\\\www\\\\cpms\\\\patch_last_disable.ps1\")",
+      "Bash(find /c/laragon/www/cpms -name *.php -path */encoder/*)",
+      "Bash(php -l /c/laragon/www/cpms/index.php)",
+      "Bash(php -l /c/laragon/www/cpms/php/class.user.php)",
+      "Bash(php -l /c/laragon/www/cpms/php/request_change.php)",
+      "Bash(php -l /c/laragon/www/cpms/encoder/userAccount.php)",
+      "Bash(php -l /c/laragon/www/cpms/socialwork/userAccount.php)",
+      "Bash(mysql -u root -e \"DESCRIBE onse_cpms.user_request; SELECT * FROM onse_cpms.user_request WHERE date_granted IS NULL AND date_cancel IS NULL LIMIT 5;\")",
+      "Bash(sed -i \"54s/.*/                                    <select id=''designation'' name=''designation'' class=''form-control'' required>/\" /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -i \"55s/.*/                                        <option value=''''>Select Position<\\\\/option>/\" /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -i \"56s/.*/                                        <option value=''Encoder'' \"\".\\($row[''position''] == ''Encoder'' ? ''selected'' : ''''\\).\"\">>Encoder<\\\\/option>/\" /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -i \"57s/.*/                                        <option value=''Social Worker'' \"\".\\($row[''position''] == ''Social Worker'' ? ''selected'' : ''''\\).\"\">>Social Worker<\\\\/option>/\" /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -n '53,60p' /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(php -l /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -i \"56s/\"\">>Encoder/\"\">Encoder/\" /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -i \"57s/\"\">>Social Worker/\"\">Social Worker/\" /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(sed -n '54,59p' /c/laragon/www/cpms/fetchdata.php)",
+      "Bash(php -l /c/laragon/www/cpms/admin/ViewRequest.php)",
+      "Bash(php -l /c/laragon/www/cpms/php/session_timeout.php)"
     ]
   }
 }
