@@ -189,7 +189,7 @@
                             <th scope="col" style='width: 15%'>First Name</th>
                             <th scope="col" style='width: 15%'>Middle Name</th>
                             <th scope="col" style='width: 5%'>Ext.</th>
-                            <th scope="col" style="width: 20%">Action</th>
+                            <th scope="col" style="width: 10%">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,9 +203,8 @@
                                                 <td scope='row' style='width: 15%'>" . $value["empfname"] ." </td>
                                                 <td scope='row' style='width: 15%'>" . (!empty($value['empmname'])?$value["empmname"]:"") ." </td>
                                                 <td scope='row' style='width: 5%'>" . (!empty($value["empext"])?$value["empext"]:"") ." </td>
-                                                <td scope='row' style='width: 20%'>
+                                                <td scope='row' style='width: 10%'>
                                                 <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["empid"] . "' style='margin-right: 10px; margin: 10px 0px 10px 0px' data-target='#EmployeeInfo'> View </button>
-                                                <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["empid"]. "' style='margin-right: 10px;' data-target='#UpdateEmployee'> Update </button>
                                                 </td>
                                                 </tr>
                                             ";		
