@@ -415,7 +415,7 @@
 					$roleChanged   = !$rows || $rows['position']  !== $position;
 					$officeChanged = !$rows || $rows['office_id'] !== $office;
 					if ($roleChanged || $officeChanged) {
-						$this->clearSessionToken($id);
+						$this->revokeSessionToken($id);
 					}
 					echo "<script>alert('Request Granted')</script>";
 					echo "<script>window.location='Employee.php';</script>";
@@ -554,44 +554,105 @@
 				return true;
 			}
 
+			/**
+			 * Called at login. Writes a fresh active session row (clears any revoked flag).
+			 */
 			public function setSessionToken($empid, $token){
 				$empid = mysqli_real_escape_string($this->db, $empid);
 				$token = mysqli_real_escape_string($this->db, $token);
-				
-				$query = "INSERT INTO active_sessions (empid, session_token, updated_at)
-						  VALUES ('{$empid}', '{$token}', NOW())
-						  ON DUPLICATE KEY UPDATE session_token = '{$token}', updated_at = NOW()";
+				$query = "INSERT INTO active_sessions (empid, session_token, updated_at, revoked)
+						  VALUES ('{$empid}', '{$token}', NOW(), 0)
+						  ON DUPLICATE KEY UPDATE session_token = '{$token}', updated_at = NOW(), revoked = 0";
+				return mysqli_query($this->db, $query);
+			}
+			/**
+			 * Called on every page load. Re-inserts the row if the browser-close beacon deleted it,
+			 * or refreshes updated_at if the row is still valid. Ignores revoked rows.
+			 */
+			public function heartbeatSessionToken($empid, $token){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$token = mysqli_real_escape_string($this->db, $token);
+				$query = "INSERT INTO active_sessions (empid, session_token, updated_at, revoked)
+						  VALUES ('{$empid}', '{$token}', NOW(), 0)
+						  ON DUPLICATE KEY UPDATE
+						    updated_at = IF(revoked = 0 AND session_token = '{$token}', NOW(), updated_at)";
 				return mysqli_query($this->db, $query);
 			}
 
+			/**
+			 * Validates the session token.
+			 * - Row missing       -> true  (beacon cleared on navigation; PHP session still alive)
+			 * - Token matches, not revoked -> true
+			 * - revoked = 1       -> false (admin forced logout)
+			 * - Token mismatch    -> false (different session took over)
+			 */
 			public function validateSessionToken($empid, $token){
 				$empid = mysqli_real_escape_string($this->db, $empid);
 				$token = mysqli_real_escape_string($this->db, $token);
-				$query = "SELECT session_token FROM active_sessions WHERE empid = '{$empid}'";
+				$query = "SELECT session_token, revoked FROM active_sessions WHERE empid = '{$empid}'";
 				$result = mysqli_query($this->db, $query);
-				if($result && mysqli_num_rows($result) > 0){
+				if ($result && mysqli_num_rows($result) > 0) {
 					$row = mysqli_fetch_assoc($result);
+					if ($row['revoked']) return false;
 					return $row['session_token'] === $token;
 				}
-				return false;
+				return true; // row missing = browser-close beacon fired during navigation
 			}
 
-			public function clearSessionToken($empid){
+			/**
+			 * Records a session event in session_history for audit purposes.
+			 */
+			public function logSessionHistory($empid, $token, $ip, $hostname, $mac, $action = 'logout'){
+				$empid    = mysqli_real_escape_string($this->db, $empid);
+				$token    = mysqli_real_escape_string($this->db, $token ?? '');
+				$ip       = mysqli_real_escape_string($this->db, $ip ?? '');
+				$hostname = mysqli_real_escape_string($this->db, $hostname ?? '');
+				$mac      = mysqli_real_escape_string($this->db, $mac ?? '');
+				$action   = mysqli_real_escape_string($this->db, $action);
+				$query = "INSERT INTO session_history (empid, session_token, ip_address, hostname, mac_address, action, created_at)
+				          VALUES ('{$empid}', '{$token}', '{$ip}', '{$hostname}', '{$mac}', '{$action}', NOW())";
+				mysqli_query($this->db, $query);
+			}
+
+			/**
+			 * Marks session revoked (admin forced logout). Row kept so next page load detects it.
+			 */
+			public function revokeSessionToken($empid){
 				$empid = mysqli_real_escape_string($this->db, $empid);
-				$query = "DELETE FROM active_sessions WHERE empid = '{$empid}'";
-				return mysqli_query($this->db, $query);
+				$row_query = mysqli_query($this->db, "SELECT session_token FROM active_sessions WHERE empid = '{$empid}'");
+				if ($row_query && mysqli_num_rows($row_query) > 0) {
+					$row = mysqli_fetch_assoc($row_query);
+					$this->logSessionHistory($empid, $row['session_token'], null, null, null, 'logout');
+				}
+				return mysqli_query($this->db, "UPDATE active_sessions SET revoked = 1, updated_at = NOW() WHERE empid = '{$empid}'");
+			}
+			/**
+			 * Deletes the session row (normal logout or browser-close beacon).
+			 */
+			public function clearSessionToken($empid, $action = 'logout'){
+				$empid = mysqli_real_escape_string($this->db, $empid);
+				$row_query = mysqli_query($this->db, "SELECT session_token FROM active_sessions WHERE empid = '{$empid}'");
+				if ($row_query && mysqli_num_rows($row_query) > 0) {
+					$row = mysqli_fetch_assoc($row_query);
+					$this->logSessionHistory($empid, $row['session_token'], null, null, null, $action);
+				}
+				return mysqli_query($this->db, "DELETE FROM active_sessions WHERE empid = '{$empid}'");
 			}
 
+			/**
+			 * Blocks login if an active, non-revoked session exists within the last 120 seconds.
+			 */
 			public function isAccountAlreadyLoggedIn($empid){
 				$empid = mysqli_real_escape_string($this->db, $empid);
-				$query = "SELECT 1 FROM active_sessions WHERE empid = '{$empid}' AND updated_at > DATE_SUB(NOW(), INTERVAL 600 SECOND)";
+				$query = "SELECT 1 FROM active_sessions
+						  WHERE empid = '{$empid}' AND revoked = 0
+						  AND updated_at > DATE_SUB(NOW(), INTERVAL 120 SECOND)";
 				$result = mysqli_query($this->db, $query);
 				return $result && mysqli_num_rows($result) > 0;
 			}
 
 			public function refreshSessionToken($empid){
 				$empid = mysqli_real_escape_string($this->db, $empid);
-				
 				$query = "UPDATE active_sessions SET updated_at = NOW() WHERE empid = '{$empid}'";
 				return mysqli_query($this->db, $query);
 			}

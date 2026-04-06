@@ -65,7 +65,24 @@
       "Bash(sed -i \"57s/\"\">>Social Worker/\"\">Social Worker/\" /c/laragon/www/cpms/fetchdata.php)",
       "Bash(sed -n '54,59p' /c/laragon/www/cpms/fetchdata.php)",
       "Bash(php -l /c/laragon/www/cpms/admin/ViewRequest.php)",
-      "Bash(php -l /c/laragon/www/cpms/php/session_timeout.php)"
+      "Bash(php -l /c/laragon/www/cpms/php/session_timeout.php)",
+      "Bash(sed -n '388,392p' /c/laragon/www/cpms/encoder/home.php)",
+      "Bash(sed -n '195,199p' /c/laragon/www/cpms/socialwork/home.php)",
+      "Bash(sed -n '226,230p' /c/laragon/www/cpms/admin/home.php)",
+      "Bash(mysql -u root -e \":*)",
+      "Bash(mysql -u root -h 127.0.0.1 -e \":*)",
+      "Bash(mysql --socket=/tmp/mysql.sock -u root -e \"ALTER TABLE onse_cpms.active_sessions ADD COLUMN revoked TINYINT NOT NULL DEFAULT 0;\")",
+      "Bash(mysql -u root -P 3307 -e \"ALTER TABLE onse_cpms.active_sessions ADD COLUMN revoked TINYINT NOT NULL DEFAULT 0;\")",
+      "Bash(/c/laragon/bin/mysql/mysql-8.0.30-winx64/bin/mysql.exe -u root -e \"ALTER TABLE onse_cpms.active_sessions ADD COLUMN revoked TINYINT NOT NULL DEFAULT 0;\")",
+      "Bash(php -r \":*)",
+      "Bash(grep -n \"clearSessionToken\\($id\\)\" /c/laragon/www/cpms/php/class.user.php)",
+      "Bash(sed -i 's|</body>|<script src=\"\"../js/session_heartbeat.js\"\"></script>\\\\n</body>|' /c/laragon/www/cpms/encoder/home.php)",
+      "Bash(sed -i 's|</body>|<script src=\"\"../js/session_heartbeat.js\"\"></script>\\\\n</body>|' /c/laragon/www/cpms/socialwork/home.php)",
+      "Bash(sed -i 's|</body>|<script src=\"\"../js/session_heartbeat.js\"\"></script>\\\\n</body>|' /c/laragon/www/cpms/admin/home.php)",
+      "Bash(php -l /c/laragon/www/cpms/php/session_ping.php)",
+      "Bash(php -r:*)",
+      "Bash(grep -n \"getClientInfo\\\\|logSessionHistory\\\\|$client\" /c/laragon/www/cpms/index.php)",
+      "Bash(php -l C:/laragon/www/cpms/php/class.user.php)"
     ]
   }
 }

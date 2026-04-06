@@ -196,6 +196,7 @@
             });
         });
     </script>
+<script src="../js/session_heartbeat.js"></script>
 </body>
     <!-- Modal sa user Account -->
     <div class="modal fade in" id="userAccount" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">

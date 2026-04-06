@@ -32,17 +32,17 @@ function checkSessionTimeout(): void {
         }
     }
 
-    // Validate session token against DB on every request.
-    // If the token has been cleared (e.g. admin granted a role change),
-    // the employee is forcefully logged out immediately.
+    // Heartbeat + token validation on every page load.
     if (isset($_SESSION['userId'], $_SESSION['session_token']) && class_exists('User')) {
         try {
             $checker = new User();
+            // 1. Re-insert row if the browser-close beacon deleted it during navigation.
+            //    If row was revoked by admin, heartbeat does NOT refresh it (IF condition guards this).
+            $checker->heartbeatSessionToken($_SESSION['userId'], $_SESSION['session_token']);
+            // 2. Validate: if row is revoked or token mismatches, force logout.
             if (!$checker->validateSessionToken($_SESSION['userId'], $_SESSION['session_token'])) {
                 _doSessionRevoked();
             }
-            // Token is valid — refresh heartbeat so the idle-lock stays in sync
-            $checker->refreshSessionToken($_SESSION['userId']);
         } catch (Throwable $e) {
             // DB unavailable - fail open to avoid locking out all users
         }

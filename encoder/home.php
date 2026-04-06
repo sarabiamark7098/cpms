@@ -389,6 +389,7 @@
 		</div>
     </div>
 </div>
+<script src="../js/session_heartbeat.js"></script>
 </body>
     <script>
         //userAccount
