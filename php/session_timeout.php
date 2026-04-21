@@ -1,6 +1,6 @@
 <?php
 if (!defined('SESSION_TIMEOUT_SECONDS')) {
-    define('SESSION_TIMEOUT_SECONDS', 600); // 10 minutes
+    define('SESSION_TIMEOUT_SECONDS', 1800); // 30 minutes
 }
 
 if (!defined('SESSION_TIMEOUT_REDIRECT')) {

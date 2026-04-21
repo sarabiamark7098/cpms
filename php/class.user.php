@@ -402,10 +402,15 @@
 				// Fetch current employee data to detect changes
 				$query = "SELECT position, office_id, status FROM cpms_account WHERE empid = '{$id}'";
 				$rows  = mysqli_fetch_assoc(mysqli_query($this->db2, $query));
-
-				// Always apply whatever the admin selected — no "same" early-exit
-				$query  = "UPDATE cpms_account SET position = '{$position}', office_id = '{$office}', status = 'Activated' WHERE empid = '{$id}'";
-				$result = mysqli_query($this->db2, $query);
+				$num_rows = mysqli_num_rows(mysqli_query($this->db2, $query));
+				
+				if($num_rows > 0){
+					$query  = "UPDATE cpms_account SET position = '{$position}', office_id = '{$office}', status = 'Activated' WHERE empid = '{$id}'";
+					$result = mysqli_query($this->db2, $query);
+				} else {
+					$query  = "INSERT INTO cpms_account (empid, position, office_id, status) VALUES ('{$id}', '{$position}', '{$office}', 'Activated')";
+					$result = mysqli_query($this->db2, $query);
+				}
 
 				$query = "UPDATE user_request SET date_granted = '{$datenow}' WHERE emp_num = '{$num}'";
 				mysqli_query($this->db, $query);
