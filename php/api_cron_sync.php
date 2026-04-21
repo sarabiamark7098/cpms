@@ -1,13 +1,5 @@
 <?php
-/**
- * Nightly Cron Sync Script
- * Syncs yesterday's unsent assistance records to the Laravel API in batches of 200.
- *
- * Cron entry (run at 12:00 AM daily):
- * 0 0 * * * php /path/to/php/api_cron_sync.php >> /var/log/cpms_api_sync.log 2>&1
- */
 
-// Prevent session_start() error in CLI
 if(php_sapi_name() === 'cli'){
 	$_SESSION = [];
 }
@@ -20,7 +12,6 @@ $yesterday = date('Y-m-d', strtotime('-1 day'));
 logLine("=== CPMS API Cron Sync Started ===");
 logLine("Syncing records for date: {$yesterday}");
 
-// Check active types
 $activeTypes = $user->getActiveAssistanceTypes();
 
 if(empty($activeTypes)){
