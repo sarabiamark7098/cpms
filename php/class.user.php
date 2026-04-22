@@ -3583,16 +3583,15 @@
 		LEFT JOIN beneficiary_data b ON b.bene_id = t.bene_id
 		WHERE 
 			t.status_client IN ('Done','Decline')
-		AND (
-			MATCH(c.firstname, c.middlename, c.lastname)
-				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-			OR
-			MATCH(b.b_fname, b.b_mname, b.b_lname)
-				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-		)
-		ORDER BY t.date_entered DESC
-		LIMIT 5
-		";
+			AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+			AND (
+				MATCH(c.firstname, c.middlename, c.lastname)
+					AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+				OR
+				MATCH(b.b_fname, b.b_mname, b.b_lname)
+					AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+			)
+		ORDER BY t.date_entered DESC LIMIT 5";
 
 		return mysqli_query($this->db, $query);
 	}
@@ -3621,15 +3620,15 @@
 		LEFT JOIN beneficiary_data b ON b.bene_id = t.bene_id
 		WHERE 
 			t.status_client IN ('Done')
-		AND (
-			MATCH(c.firstname, c.middlename, c.lastname)
-				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-			OR
-			MATCH(b.b_fname, b.b_mname, b.b_lname)
-				AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-		)
-		ORDER BY t.date_entered DESC
-		LIMIT 5
+			AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+			AND (
+				MATCH(c.firstname, c.middlename, c.lastname)
+					AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+				OR
+				MATCH(b.b_fname, b.b_mname, b.b_lname)
+					AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+			)
+		ORDER BY t.date_entered DESC LIMIT 5
 		";
 
 		return mysqli_query($this->db, $query);
