@@ -3561,18 +3561,34 @@
 	public function searchServed($val)
     {
         $value = trim($val);
-        $safe = mysqli_real_escape_string($this->db, $value);
-        $words = preg_split('/\s+/', $value);
-
-        $booleanSearch = "";
-        $likeSearch = "";
+        $safe = mysqli_real_escape_string($this->db, strtolower($value));
+        $words = preg_split('/\s+/', $safe);
+        $clientConditions = [];
+        $beneConditions = [];
 
         foreach ($words as $word) {
             if (!empty($word)) {
-                $booleanSearch .= $word . "* ";
-                $likeSearch .= "%$word%";
+                $clientConditions[] = "
+                    LOWER(CONCAT_WS(' ',
+                        c.firstname,
+                        c.middlename,
+                        c.lastname,
+                        c.extraname
+                    )) LIKE '%$word%'
+                ";
+                $beneConditions[] = "
+                    LOWER(CONCAT_WS(' ',
+                        b.b_fname,
+                        b.b_mname,
+                        b.b_lname,
+                        b.b_exname
+                    )) LIKE '%$word%'
+                ";
             }
         }
+
+        $clientWhere = implode(' AND ', $clientConditions);
+        $beneWhere = implode(' AND ', $beneConditions);
 
         $query = "
             SELECT 
@@ -3580,83 +3596,89 @@
                 b.b_lname, b.b_fname, b.b_mname, b.b_exname,
                 t.status_client, t.trans_id, t.relation,
                 t.date_accomplished, t.clientonly, 
-                t.clientsamebene, t.benetoclient,
-                (
-                    MATCH(c.firstname, c.middlename, c.lastname)
-                        AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-                    +
-                    MATCH(b.b_fname, b.b_mname, b.b_lname)
-                        AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-                ) AS score
+                t.clientsamebene, t.benetoclient
             FROM client_data c
-            LEFT JOIN tbl_transaction t ON t.client_id = c.client_id
-            LEFT JOIN beneficiary_data b ON b.bene_id = t.bene_id
+            LEFT JOIN tbl_transaction t 
+                ON t.client_id = c.client_id
+            LEFT JOIN beneficiary_data b 
+                ON b.bene_id = t.bene_id
             WHERE 
                 t.status_client IN ('Done','Decline')
-                AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 7 MONTH)
+                AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 13 MONTH)
                 AND (
-                    MATCH(c.firstname, c.middlename, c.lastname)
-                        AGAINST ('$booleanSearch' IN BOOLEAN MODE)
+                    ($clientWhere)
                     OR
-                    MATCH(b.b_fname, b.b_mname, b.b_lname)
-                        AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-                    OR
-                    CONCAT(
-                        c.firstname, ' ',
-                        IFNULL(c.middlename, ''), ' ',
-                        c.lastname, ' ',
-                        IFNULL(c.extraname, '')
-                    ) LIKE '%$safe%'
-                    OR
-                    CONCAT(
-                        b.b_fname, ' ',
-                        IFNULL(b.b_mname, ''), ' ',
-                        b.b_lname, ' ',
-                        IFNULL(b.b_exname, '')
-                    ) LIKE '%$safe%'
+                    ($beneWhere)
                 )
-            ORDER BY 
-                score DESC, 
-                t.date_entered DESC
+            ORDER BY t.date_entered DESC
             LIMIT 5
         ";
 
         return mysqli_query($this->db, $query);
     }
 	
-	public function searchServedforReissue($val){
-		$value = mysqli_real_escape_string($this->db, $val);
-
-		$words = explode(" ", trim($value));
-		$booleanSearch = "";
+	public function searchServedforReissue($val)
+	{
+		$value = trim($val);
+		$safe = mysqli_real_escape_string($this->db, strtolower($value));
+		
+		// Split input into individual words
+		$words = preg_split('/\s+/', $safe);
+		
+		$clientConditions = [];
+		$beneConditions = [];
 
 		foreach ($words as $word) {
 			if (!empty($word)) {
-				$booleanSearch .= "+" . $word . "* ";
+				// Logic for Client Names
+				$clientConditions[] = "
+					LOWER(CONCAT_WS(' ',
+						c.firstname,
+						c.middlename,
+						c.lastname,
+						c.extraname
+					)) LIKE '%$word%'
+				";
+				
+				// Logic for Beneficiary Names
+				$beneConditions[] = "
+					LOWER(CONCAT_WS(' ',
+						b.b_fname,
+						b.b_mname,
+						b.b_lname,
+						b.b_exname
+					)) LIKE '%$word%'
+				";
 			}
 		}
 
+		// Join conditions with AND so that every word must be present 
+		// somewhere in the concatenated name string.
+		$clientWhere = !empty($clientConditions) ? implode(' AND ', $clientConditions) : '1';
+		$beneWhere = !empty($beneConditions) ? implode(' AND ', $beneConditions) : '1';
+
 		$query = "
-		SELECT 
-			c.lastname, c.firstname, c.middlename, c.extraname,
-			b.b_lname, b.b_fname, b.b_mname, b.b_exname,
-			t.status_client, t.trans_id, t.relation,
-			t.date_accomplished, t.clientonly, 
-			t.clientsamebene, t.benetoclient
-		FROM client_data c
-		LEFT JOIN tbl_transaction t ON t.client_id = c.client_id
-		LEFT JOIN beneficiary_data b ON b.bene_id = t.bene_id
-		WHERE 
-			t.status_client IN ('Done')
-			AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
-			AND (
-				MATCH(c.firstname, c.middlename, c.lastname)
-					AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-				OR
-				MATCH(b.b_fname, b.b_mname, b.b_lname)
-					AGAINST ('$booleanSearch' IN BOOLEAN MODE)
-			)
-		ORDER BY t.date_entered DESC LIMIT 5
+			SELECT 
+				c.lastname, c.firstname, c.middlename, c.extraname,
+				b.b_lname, b.b_fname, b.b_mname, b.b_exname,
+				t.status_client, t.trans_id, t.relation,
+				t.date_accomplished, t.clientonly, 
+				t.clientsamebene, t.benetoclient
+			FROM client_data c
+			LEFT JOIN tbl_transaction t 
+				ON t.client_id = c.client_id
+			LEFT JOIN beneficiary_data b 
+				ON b.bene_id = t.bene_id
+			WHERE 
+				t.status_client IN ('Done')
+				AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 13 MONTH)
+				AND (
+					($clientWhere)
+					OR
+					($beneWhere)
+				)
+			ORDER BY t.date_entered DESC 
+			LIMIT 5
 		";
 
 		return mysqli_query($this->db, $query);
