@@ -1,6 +1,6 @@
 <?php
 if (!defined('SESSION_TIMEOUT_SECONDS')) {
-    define('SESSION_TIMEOUT_SECONDS', 7200); // 2 hours
+    define('SESSION_TIMEOUT_SECONDS', 14400); // 4 hours
 }
 
 if (!defined('SESSION_TIMEOUT_REDIRECT')) {

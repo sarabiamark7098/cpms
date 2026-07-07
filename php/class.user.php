@@ -3238,13 +3238,16 @@
 						
 			$result = mysqli_query($this->db, $query);
 			$row = mysqli_fetch_assoc($result);
-			$wage = floatval(str_replace(',','',$row['wage']));
-			$profit = floatval(str_replace(',','',$row['profit']));
-			$domestic = floatval(str_replace(',','',$row['domestic_source']));
-			$abroad = floatval(str_replace(',','',$row['abroad']));
-			$transfer = floatval(str_replace(',','',$row['government_transfer']));
-			$pension = floatval(str_replace(',','',$row['pension']));
-			$other_income = floatval(str_replace(',','',$row['other_income']));
+			
+
+
+			$wage = floatval(str_replace(',', '', $row['wage'] ?? ''));
+			$profit = floatval(str_replace(',', '', $row['profit'] ?? ''));
+			$domestic = floatval(str_replace(',', '', $row['domestic_source'] ?? ''));
+			$abroad = floatval(str_replace(',', '', $row['abroad'] ?? ''));
+			$transfer = floatval(str_replace(',', '', $row['government_transfer'] ?? ''));
+			$pension = floatval(str_replace(',', '', $row['pension'] ?? ''));
+			$other_income = floatval(str_replace(',', '', $row['other_income'] ?? ''));
 			$total = $wage + $profit + $domestic + $abroad + $transfer + $pension + $other_income;
 
 			$data = number_format($total, 2);
@@ -3604,7 +3607,7 @@
                 ON b.bene_id = t.bene_id
             WHERE 
                 t.status_client IN ('Done','Decline')
-                AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 13 MONTH)
+                AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 43 MONTH)
                 AND (
                     ($clientWhere)
                     OR
@@ -3671,7 +3674,7 @@
 				ON b.bene_id = t.bene_id
 			WHERE 
 				t.status_client IN ('Done')
-				AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 13 MONTH)
+				AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 43 MONTH)
 				AND (
 					($clientWhere)
 					OR
