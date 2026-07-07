@@ -48,20 +48,6 @@
 		if ($login) {
 			$user_id = $user->getUserId($username, $password);
 
-			if ($user->isAccountAlreadyLoggedIn($user_id)) {
-				$login_blocked = true;
-				echo '<center>
-			<div id="blocked-alert" style="background:#fff3cd;border:1px solid #ffc107;color:#856404;padding:15px;border-radius:4px;">
-				<strong><i class="fa fa-lock"></i> Warning: Your account is already logged in on another device. Please log out from that device to proceed.</strong>
-			</div>
-			</center>
-			<script>
-			setTimeout(function() {
-				var el = document.getElementById("blocked-alert");
-				if(el) el.style.display = "none";
-			}, 6000);
-			</script>';
-			} else {
 			$user_info = $user->check_user($user_id);
 			$useroffice = $user->show_office_data($user_info['office_id']);
 			switch ($user_info['position']){
@@ -110,7 +96,6 @@
 				default:
 					break;
 			}
-		}
 		}
 		if(!$login_blocked){
 		echo '<center>

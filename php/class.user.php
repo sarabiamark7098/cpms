@@ -580,28 +580,27 @@
 				$query = "INSERT INTO active_sessions (empid, session_token, updated_at, revoked)
 						  VALUES ('{$empid}', '{$token}', NOW(), 0)
 						  ON DUPLICATE KEY UPDATE
-						    updated_at = IF(revoked = 0 AND session_token = '{$token}', NOW(), updated_at)";
+						    updated_at = IF(revoked = 0, NOW(), updated_at)";
 				return mysqli_query($this->db, $query);
 			}
 
 			/**
-			 * Validates the session token.
-			 * - Row missing       -> true  (beacon cleared on navigation; PHP session still alive)
-			 * - Token matches, not revoked -> true
-			 * - revoked = 1       -> false (admin forced logout)
-			 * - Token mismatch    -> false (different session took over)
+			 * Validates the session token. Multi-device is allowed, so the token
+			 * itself is no longer required to match — only the admin revoke flag
+			 * ends a session.
+			 * - Row missing -> true  (beacon cleared on navigation; PHP session still alive)
+			 * - revoked = 0 -> true  (any device with a live PHP session stays valid)
+			 * - revoked = 1 -> false (admin forced logout, e.g. role/office change)
 			 */
 			public function validateSessionToken($empid, $token){
 				$empid = mysqli_real_escape_string($this->db, $empid);
-				$token = mysqli_real_escape_string($this->db, $token);
-				$query = "SELECT session_token, revoked FROM active_sessions WHERE empid = '{$empid}'";
+				$query = "SELECT revoked FROM active_sessions WHERE empid = '{$empid}'";
 				$result = mysqli_query($this->db, $query);
 				if ($result && mysqli_num_rows($result) > 0) {
 					$row = mysqli_fetch_assoc($result);
 					if ($row['revoked']) return false;
-					return $row['session_token'] === $token;
 				}
-				return true; // row missing = browser-close beacon fired during navigation
+				return true; // no revoked row = session valid (multi-device allowed)
 			}
 
 			/**
@@ -642,18 +641,6 @@
 					$this->logSessionHistory($empid, $row['session_token'], null, null, null, $action);
 				}
 				return mysqli_query($this->db, "DELETE FROM active_sessions WHERE empid = '{$empid}'");
-			}
-
-			/**
-			 * Blocks login if an active, non-revoked session exists within the last 120 seconds.
-			 */
-			public function isAccountAlreadyLoggedIn($empid){
-				$empid = mysqli_real_escape_string($this->db, $empid);
-				$query = "SELECT 1 FROM active_sessions
-						  WHERE empid = '{$empid}' AND revoked = 0
-						  AND updated_at > DATE_SUB(NOW(), INTERVAL 120 SECOND)";
-				$result = mysqli_query($this->db, $query);
-				return $result && mysqli_num_rows($result) > 0;
 			}
 
 			public function refreshSessionToken($empid){
