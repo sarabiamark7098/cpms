@@ -294,4 +294,10 @@
         </div>
     </div>
 
+    <script>
+        $('#logoutmodal').appendTo("body").on('show.bs.modal', function (event) {
+            var modal = $(this);
+        })
+    </script>
+
 </html>

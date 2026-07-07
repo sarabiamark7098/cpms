@@ -708,6 +708,62 @@
 			}
 
 			/**
+			 * Clients served ('Done' transactions) per system user, broken down into
+			 * time buckets: today, yesterday, last 3 days, this week, this month and
+			 * this year (based on date_accomplished). A user is credited whether they
+			 * handled the client as the encoder or the social worker.
+			 *
+			 * Returns an array keyed by empid => [
+			 *   'today','yesterday','last3','week','month','year' => int
+			 * ].
+			 *
+			 * All requested windows fall within the current year, so the queries are
+			 * filtered to year-to-date and aggregated per (user, day). This keeps them
+			 * on the covering index (idx_served_enc / idx_served_sw) and returns a
+			 * small result set that PHP folds into the period buckets. Per-day distinct
+			 * counts are summed across days for multi-day windows.
+			 */
+			public function getClientsServedPerUser(){
+				$today      = date('Y-m-d');
+				$yesterday  = date('Y-m-d', strtotime('-1 day'));
+				$threeStart = date('Y-m-d', strtotime('-2 day')); // last 3 days incl. today
+				$weekStart  = date('Y-m-d', strtotime('-6 day')); // last 7 days incl. today
+				$monthStart = date('Y-m-01');
+				$yearStart  = date('Y-01-01');
+				$yearStartEsc = mysqli_real_escape_string($this->db, $yearStart);
+
+				$empty   = ['today'=>0,'yesterday'=>0,'last3'=>0,'week'=>0,'month'=>0,'year'=>0];
+				$buckets = [];
+
+				foreach (['encoded_encoder', 'encoded_socialWork'] as $col) {
+					$query = "SELECT {$col} AS empid, DATE(date_accomplished) AS d, COUNT(DISTINCT client_id) AS served
+							   FROM tbl_transaction
+							  WHERE status_client = 'Done' AND {$col} <> ''
+							    AND date_accomplished >= '{$yearStartEsc} 00:00:00'
+							  GROUP BY {$col}, DATE(date_accomplished)";
+					$result = mysqli_query($this->db, $query);
+					if (!$result) {
+						continue;
+					}
+					while ($r = mysqli_fetch_assoc($result)) {
+						$empid  = $r['empid'];
+						$d      = $r['d'];
+						$served = (int) $r['served'];
+						if (!isset($buckets[$empid])) {
+							$buckets[$empid] = $empty;
+						}
+						$buckets[$empid]['year'] += $served;                       // query is year-to-date
+						if ($d >= $monthStart) { $buckets[$empid]['month'] += $served; }
+						if ($d >= $weekStart)  { $buckets[$empid]['week']  += $served; }
+						if ($d >= $threeStart) { $buckets[$empid]['last3'] += $served; }
+						if ($d === $yesterday) { $buckets[$empid]['yesterday'] += $served; }
+						if ($d === $today)     { $buckets[$empid]['today'] += $served; }
+					}
+				}
+				return $buckets;
+			}
+
+			/**
 			 * Number of logins recorded today.
 			 */
 			public function getTodayLoginCount(){

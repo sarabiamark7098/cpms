@@ -31,6 +31,49 @@ if ($employees) {
 $activeSessions = $user->getActiveSessionCount();
 $todayLogins    = $user->getTodayLoginCount();
 
+// ── Clients served per user (with office) ───────────────────────────────────
+$servedCounts = $user->getClientsServedPerUser();
+
+// Office id -> readable name lookup
+$officeMap = [];
+$offices = $user->optionoffice();
+if ($offices) {
+    while ($o = mysqli_fetch_assoc($offices)) {
+        $officeMap[$o['office_id']] = $o['office_name'] ?? ($o['office_accronym'] ?? $o['office_id']);
+    }
+}
+
+// Build one row per provisioned user of the system
+$emptyBuckets = ['today'=>0,'yesterday'=>0,'last3'=>0,'week'=>0,'month'=>0,'year'=>0];
+$servedRows = [];
+$employees2 = $user->getallEmployee();
+if ($employees2) {
+    while ($row = mysqli_fetch_assoc($employees2)) {
+        $pos = trim($row['position'] ?? '');
+        if ($pos === '') {
+            continue; // only users with a CPMS account
+        }
+        $empid = $row['empid'];
+        $servedRows[] = [
+            'empid'   => $empid,
+            'name'    => trim(($row['emplname'] ?? '') . ', ' . ($row['empfname'] ?? '') . ' ' . ($row['empmname'] ?? '') . ' ' . ($row['empext'] ?? '')),
+            'role'    => $pos,
+            'office'  => $officeMap[$row['office_id']] ?? ($row['office_id'] ?? '-'),
+            'periods' => $servedCounts[$empid] ?? $emptyBuckets,
+        ];
+    }
+}
+// Sort by clients served this year, highest first
+usort($servedRows, function ($a, $b) { return $b['periods']['year'] - $a['periods']['year']; });
+
+// Distinct office list for the filter dropdown
+$officeFilterList = array_values(array_unique(array_map(function ($r) { return $r['office']; }, $servedRows)));
+sort($officeFilterList);
+
+// Distinct role list for the filter dropdown
+$roleFilterList = array_values(array_unique(array_map(function ($r) { return $r['role']; }, $servedRows)));
+sort($roleFilterList);
+
 $pageTitle = 'Dashboard';
 $active    = 'dashboard';
 require_once(__DIR__ . "/inc/header.php");
@@ -61,27 +104,83 @@ require_once(__DIR__ . "/inc/header.php");
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="ph-card" style="background:#6b5eae;">
-                            <i class="fa fa-sign-in"></i>
+                            <i class="fa fa-user"></i>
                             <div class="ph-num"><?php echo $todayLogins; ?></div>
                             <div class="ph-label">Logins Today</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="table-responsive-lg" style="max-width:520px;margin-top:15px;">
-                    <h5>Accounts by Role</h5>
-                    <table class="table table-striped table-hover" style="width:100%;">
-                        <thead>
-                            <tr><th>Role</th><th style="width:30%">Count</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($roleCounts as $role => $count): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($role); ?></td>
-                                <td><?php echo $count; ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div style="margin-top:10px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+                        <h5 style="margin:0;">Clients Served per User</h5>
+                        <div>
+                            <label for="roleFilter" style="margin-right:6px;font-weight:600;">Filter by Role:</label>
+                            <select id="roleFilter" class="form-control" style="display:inline-block;width:auto;min-width:160px;margin-right:16px;">
+                                <option value="">All Roles</option>
+                                <?php foreach ($roleFilterList as $rl): ?>
+                                <option value="<?php echo htmlspecialchars($rl, ENT_QUOTES); ?>"><?php echo htmlspecialchars($rl); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label for="officeFilter" style="margin-right:6px;font-weight:600;">Filter by Office:</label>
+                            <select id="officeFilter" class="form-control" style="display:inline-block;width:auto;min-width:220px;">
+                                <option value="">All Offices</option>
+                                <?php foreach ($officeFilterList as $off): ?>
+                                <option value="<?php echo htmlspecialchars($off, ENT_QUOTES); ?>"><?php echo htmlspecialchars($off); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive-lg">
+                        <table id="servedTable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Office</th>
+                                    <th>Today</th>
+                                    <th>Yesterday</th>
+                                    <th>Last 3 Days</th>
+                                    <th>This Week</th>
+                                    <th>This Month</th>
+                                    <th>This Year</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($servedRows)): ?>
+                                <tr><td colspan="10">NO DATA</td></tr>
+                                <?php else: foreach ($servedRows as $r): $p = $r['periods']; ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($r['empid']); ?></td>
+                                    <td><?php echo htmlspecialchars($r['name']); ?></td>
+                                    <td><?php echo htmlspecialchars($r['role']); ?></td>
+                                    <td><?php echo htmlspecialchars($r['office']); ?></td>
+                                    <td><?php echo number_format($p['today']); ?></td>
+                                    <td><?php echo number_format($p['yesterday']); ?></td>
+                                    <td><?php echo number_format($p['last3']); ?></td>
+                                    <td><?php echo number_format($p['week']); ?></td>
+                                    <td><?php echo number_format($p['month']); ?></td>
+                                    <td><?php echo number_format($p['year']); ?></td>
+                                </tr>
+                                <?php endforeach; endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
+                <script>
+                    $(function () {
+                        var table = $('#servedTable').dataTable();
+                        // Role column is index 2, Office column is index 3; filter via dropdowns
+                        $('#roleFilter').on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            $('#servedTable').DataTable().column(2).search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        $('#officeFilter').on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            $('#servedTable').DataTable().column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                    });
+                </script>
 <?php require_once(__DIR__ . "/inc/footer.php"); ?>
