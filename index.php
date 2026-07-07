@@ -48,6 +48,20 @@
 		if ($login) {
 			$user_id = $user->getUserId($username, $password);
 
+			if (!$user->check_status($username, $password)) {
+				$login_blocked = true;
+				echo '<center>
+			<div id="blocked-alert" style="background:#f8d7da;border:1px solid #dc3545;color:#721c24;padding:15px;border-radius:4px;">
+				<strong><i class="fa fa-ban"></i> Your account is deactivated. Please contact the administrator.</strong>
+			</div>
+			</center>
+			<script>
+			setTimeout(function() {
+				var el = document.getElementById("blocked-alert");
+				if(el) el.style.display = "none";
+			}, 6000);
+			</script>';
+			} else {
 			$user_info = $user->check_user($user_id);
 			$useroffice = $user->show_office_data($user_info['office_id']);
 			switch ($user_info['position']){
@@ -93,9 +107,24 @@
 					$user->login_log();
 					echo '<script>window.location="admin/home.php"</script>';
 					break;
+				case 'Program Head':
+					$_SESSION['login'] = $login;
+					$_SESSION['userAccountusername'] = $username;
+					$_SESSION['userAccountpassword'] = $password;
+					$_SESSION['userId'] = $user_id;
+					$_SESSION['position'] = $user_info['position'];
+					$_SESSION['userfullname'] = $user_info['fullname'];
+					$_SESSION['f_office'] = $user_info['office_id'];
+					$session_token = bin2hex(random_bytes(32));
+					$user->setSessionToken($user_id, $session_token);
+					$_SESSION['session_token'] = $session_token;
+					$user->login_log();
+					echo '<script>window.location="programhead/home.php"</script>';
+					break;
 				default:
 					break;
 			}
+		}
 		}
 		if(!$login_blocked){
 		echo '<center>

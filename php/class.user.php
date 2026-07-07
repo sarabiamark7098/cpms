@@ -392,7 +392,7 @@
 				$office   = mysqli_real_escape_string($this->db, $office);
 				$datenow  = date("Y-m-d H:i:s");
 
-				$valid_positions = ['Encoder', 'Social Worker', 'Admin'];
+				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Program Head'];
 				if (empty($position) || !in_array($position, $valid_positions) || empty($office)) {
 					echo "<script>alert('Error: Please select a valid Position and Office before confirming.')</script>";
 					echo "<script>window.location='Employee.php';</script>";
@@ -648,7 +648,75 @@
 				$query = "UPDATE active_sessions SET updated_at = NOW() WHERE empid = '{$empid}'";
 				return mysqli_query($this->db, $query);
 			}
-		
+
+			/**
+			 * Activate / deactivate a CPMS account. Accepts only 'Activated' or
+			 * 'Deactivated'. Deactivating also revokes any live session so the
+			 * account loses access immediately (can't reach its home page).
+			 */
+			public function setAccountStatus($empid, $status){
+				$allowed = ['Activated', 'Deactivated'];
+				if (!in_array($status, $allowed, true)) {
+					return false;
+				}
+				$empidEsc  = mysqli_real_escape_string($this->db2, $empid);
+				$statusEsc = mysqli_real_escape_string($this->db2, $status);
+				$ok = mysqli_query($this->db2, "UPDATE cpms_account SET status = '{$statusEsc}' WHERE empid = '{$empidEsc}'");
+				if ($ok && $status === 'Deactivated') {
+					$this->revokeSessionToken($empid);
+				}
+				return $ok;
+			}
+
+			// ── Program Head dashboards / reports ────────────────────────────────
+
+			/**
+			 * Session audit trail (login/logout events) newest first.
+			 * Names are resolved separately from the hr_employee DB by the caller.
+			 */
+			public function getAuditLogs($limit = 300){
+				$limit = (int) $limit;
+				$query = "SELECT empid, session_token, ip_address, hostname, mac_address, action, created_at
+						  FROM session_history
+						  ORDER BY created_at DESC
+						  LIMIT {$limit}";
+				$result = mysqli_query($this->db, $query);
+				return $result ?: false;
+			}
+
+			/**
+			 * Login/logout history from user_log, newest first.
+			 */
+			public function getLoginHistory($limit = 300){
+				$limit = (int) $limit;
+				$query = "SELECT empid, office_id, login_datetime, logout_datetime
+						  FROM user_log
+						  ORDER BY login_datetime DESC
+						  LIMIT {$limit}";
+				$result = mysqli_query($this->db, $query);
+				return $result ?: false;
+			}
+
+			/**
+			 * Number of currently active (non-revoked) sessions.
+			 */
+			public function getActiveSessionCount(){
+				$query = "SELECT COUNT(*) AS c FROM active_sessions WHERE revoked = 0";
+				$result = mysqli_query($this->db, $query);
+				$row = $result ? mysqli_fetch_assoc($result) : null;
+				return $row ? (int) $row['c'] : 0;
+			}
+
+			/**
+			 * Number of logins recorded today.
+			 */
+			public function getTodayLoginCount(){
+				$query = "SELECT COUNT(*) AS c FROM user_log WHERE DATE(login_datetime) = CURDATE()";
+				$result = mysqli_query($this->db, $query);
+				$row = $result ? mysqli_fetch_assoc($result) : null;
+				return $row ? (int) $row['c'] : 0;
+			}
+
 			public function cleardup() {
 				$query = "UPDATE client_data SET client_id = '-1' WHERE client_id = ''";
 				$result = mysqli_query($this->db,$query);
