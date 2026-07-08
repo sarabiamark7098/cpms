@@ -120,7 +120,10 @@
                     <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="AccountsManagement.php" style="font-weight:bold;background:rgba(0,0,0,0.15);">Accounts Management <i style="float: right;font-size:25px" class="fa fa-user-cog"></i></a>
+                    <a href="AccountsManagement.php">Accounts Management <i style="float: right;font-size:25px" class="fa fa-user-cog"></i></a>
+                </li>
+                <li>
+                    <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
                 </li>
             </ul>
         </nav>
