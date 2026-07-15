@@ -11,7 +11,7 @@ $phOfficeName = $phOffice !== '' ? ($user->get_office_name($phOffice) ?: $phOffi
  * Returns the same board shape used by the public dashboard, but restricted so
  * a Program Head only ever sees their own office's social workers.
  */
-function buildOfficeBoards($user, $onlyOfficeId, $perOffice = 20) {
+function buildOfficeBoards($user, $onlyOfficeId, $perOffice = 30) {
     if ($onlyOfficeId === '') {
         return [];
     }
@@ -68,7 +68,7 @@ function buildOfficeBoards($user, $onlyOfficeId, $perOffice = 20) {
     return $boards;
 }
 
-$boards = buildOfficeBoards($user, $phOffice, 20);
+$boards = buildOfficeBoards($user, $phOffice, 30);
 
 // AJAX endpoint: return the current board as JSON so the page can refresh
 // itself without reloading (reactive to newly served clients).
@@ -90,11 +90,41 @@ require_once(__DIR__ . "/inc/header.php");
                     /* Scoped so the leaderboard's dark theme stays inside its panel
                        and does not affect the rest of the Program Head area. */
                     .tsw-panel {
+                        position: relative;
                         background: radial-gradient(circle at 20% 0%, #7b2ff7 0%, #4a1e9e 45%, #2a0d5e 100%);
                         border-radius: 18px; color: #fff;
                         padding: 26px 20px 30px; margin: 10px 0 20px;
                         box-shadow: 0 6px 20px rgba(0,0,0,0.18);
                     }
+                    /* Fullscreen / cast button */
+                    .tsw-fs-btn {
+                        position: absolute; top: 16px; right: 16px; z-index: 3;
+                        display: inline-flex; align-items: center; gap: 7px;
+                        background: rgba(255,255,255,.16); color: #fff;
+                        border: 1px solid rgba(255,255,255,.30);
+                        border-radius: 22px; padding: 7px 15px;
+                        font-size: 12.5px; font-weight: 700; cursor: pointer;
+                        transition: background .2s ease;
+                    }
+                    .tsw-fs-btn:hover { background: rgba(255,255,255,.30); }
+                    /* When the panel is cast fullscreen, fill the screen and centre
+                       the board so it reads well on a TV/projector. */
+                    .tsw-panel:fullscreen,
+                    .tsw-panel:-webkit-full-screen {
+                        width: 100%; height: 100%; margin: 0; border-radius: 0;
+                        padding: 46px 40px; overflow: auto;
+                        display: flex; flex-direction: column; justify-content: safe center;
+                    }
+                    .tsw-panel:fullscreen .tsw-head h3 { font-size: 40px; }
+                    .tsw-panel:fullscreen .tsw-head .as-of { font-size: 16px; }
+                    .tsw-panel:fullscreen .office-rows { columns: 3 320px; }
+                    .tsw-panel:fullscreen .rank-row { padding: 11px 18px 11px 10px; margin-bottom: 12px; }
+                    .tsw-panel:fullscreen .rank-info .name { font-size: 18px; }
+                    .tsw-panel:fullscreen .rank-info .empid { font-size: 13px; }
+                    .tsw-panel:fullscreen .rank-count .num { font-size: 27px; }
+                    .tsw-panel:fullscreen .rank-badge { flex: 0 0 48px; height: 48px; }
+                    .tsw-panel:fullscreen .rank-badge svg { width: 48px; height: 48px; }
+                    .tsw-panel:fullscreen .rank-badge span { font-size: 19px; }
                     .tsw-panel .tsw-head { text-align: center; margin-bottom: 24px; }
                     .tsw-panel .tsw-head h3 {
                         font-size: 26px; font-weight: 800; margin: 0 0 8px;
@@ -166,6 +196,9 @@ require_once(__DIR__ . "/inc/header.php");
                 </p>
 
                 <div class="tsw-panel">
+                    <button type="button" id="tswFsBtn" class="tsw-fs-btn" onclick="tswToggleFullscreen()">
+                        <i class="fa fa-expand"></i> <span id="tswFsLabel">Fullscreen</span>
+                    </button>
                     <div class="tsw-head">
                         <h3><?php echo htmlspecialchars($phOfficeName !== '' ? $phOfficeName : 'Your Office'); ?></h3>
                         <div class="as-of">
@@ -240,5 +273,28 @@ require_once(__DIR__ . "/inc/header.php");
                             .catch(function () { /* keep last good render on transient errors */ });
                     }
                     setInterval(tswRefresh, 15000); // poll every 15s
+
+                    // Fullscreen / cast: pop the leaderboard panel full-screen so it
+                    // can be cast to a display. The live refresh keeps running.
+                    function tswToggleFullscreen() {
+                        var el = document.querySelector('.tsw-panel');
+                        var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+                        if (!fsEl) {
+                            var req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+                            if (req) { req.call(el); }
+                        } else {
+                            var exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+                            if (exit) { exit.call(document); }
+                        }
+                    }
+                    function tswOnFsChange() {
+                        var on = document.fullscreenElement || document.webkitFullscreenElement;
+                        var lbl = document.getElementById('tswFsLabel');
+                        var icon = document.querySelector('#tswFsBtn i');
+                        if (lbl)  { lbl.textContent = on ? 'Exit Fullscreen' : 'Fullscreen'; }
+                        if (icon) { icon.className = on ? 'fa fa-compress' : 'fa fa-expand'; }
+                    }
+                    document.addEventListener('fullscreenchange', tswOnFsChange);
+                    document.addEventListener('webkitfullscreenchange', tswOnFsChange);
                 </script>
 <?php require_once(__DIR__ . "/inc/footer.php"); ?>
