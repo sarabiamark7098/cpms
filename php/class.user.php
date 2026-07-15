@@ -777,10 +777,11 @@
 			 * Number of 'Done' transactions catered TODAY, grouped by the social
 			 * worker who handled them (encoded_socialWork). Returns an associative
 			 * array empid => transaction count. Names/roles live in the hr_employee
-			 * DB, so the caller resolves those separately (see dashboard.php) and
-			 * keeps only Social Worker accounts. Feeds the public "Top Social
-			 * Workers for the Day" leaderboard, which polls this via AJAX so the
-			 * ranking stays reactive as new clients are served.
+			 * DB, so the caller resolves those separately (see
+			 * programhead/Dashboard.php) and keeps only Social Worker
+			 * accounts. Feeds the Program Head "Top Social Workers of the Day"
+			 * leaderboard, which polls this via AJAX so the ranking stays reactive
+			 * as new clients are served.
 			 */
 			public function getTransactionsCateredTodayPerSW(){
 				$today    = mysqli_real_escape_string($this->db, date('Y-m-d'));

@@ -59,7 +59,10 @@ function ph_nav_style($current, $active) {
 
             <ul class="list-unstyled components">
                 <li>
-                    <a href="home.php" style="<?php echo ph_nav_style('dashboard', $active); ?>">Dashboard <i style="float: right;font-size:25px" class="fa fa-chart-bar"></i></a>
+                    <a href="home.php" style="<?php echo ph_nav_style('dashboard', $active); ?>">Home <i style="float: right;font-size:25px" class="fa fa-chart-bar"></i></a>
+                </li>
+                <li>
+                    <a href="Dashboard.php" style="<?php echo ph_nav_style('dashboardsw', $active); ?>">Dashboard <i style="float: right;font-size:25px" class="fa fa-trophy"></i></a>
                 </li>
                 <li>
                     <a href="AccountsManagement.php" style="<?php echo ph_nav_style('accounts', $active); ?>">Accounts Management <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
