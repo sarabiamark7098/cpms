@@ -773,6 +773,32 @@
 				return $row ? (int) $row['c'] : 0;
 			}
 
+			/**
+			 * Number of 'Done' transactions catered TODAY, grouped by the social
+			 * worker who handled them (encoded_socialWork). Returns an associative
+			 * array empid => transaction count. Names/roles live in the hr_employee
+			 * DB, so the caller resolves those separately (see dashboard.php) and
+			 * keeps only Social Worker accounts. Feeds the public "Top Social
+			 * Workers for the Day" leaderboard, which polls this via AJAX so the
+			 * ranking stays reactive as new clients are served.
+			 */
+			public function getTransactionsCateredTodayPerSW(){
+				$today    = mysqli_real_escape_string($this->db, date('Y-m-d'));
+				$counts   = [];
+				$query = "SELECT encoded_socialWork AS empid, COUNT(*) AS catered
+						  FROM tbl_transaction
+						  WHERE status_client = 'Done' AND encoded_socialWork <> ''
+							AND DATE(date_accomplished) = '{$today}'
+						  GROUP BY encoded_socialWork";
+				$result = mysqli_query($this->db, $query);
+				if ($result) {
+					while ($r = mysqli_fetch_assoc($result)) {
+						$counts[$r['empid']] = (int) $r['catered'];
+					}
+				}
+				return $counts;
+			}
+
 			public function cleardup() {
 				$query = "UPDATE client_data SET client_id = '-1' WHERE client_id = ''";
 				$result = mysqli_query($this->db,$query);

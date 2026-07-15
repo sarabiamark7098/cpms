@@ -225,6 +225,12 @@
 						</div>
 
 						<div class="text-center w-full p-t-23">
+							<a href="dashboard.php" class="txt1" style="font-weight:600;">
+								<i class="fa fa-trophy" aria-hidden="true"></i>&nbsp;Dashboard
+							</a>
+						</div>
+
+						<div class="text-center w-full p-t-23">
 						<?php if (isset($_GET['reason'])): ?>
 							<?php if ($_GET['reason'] === 'revoked'): ?>
 							<div style="background:#d4edda;border:1px solid #c3e6cb;color:#155724;padding:12px 16px;border-radius:4px;margin-top:10px;font-size:14px;">
