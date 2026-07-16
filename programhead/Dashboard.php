@@ -89,13 +89,17 @@ require_once(__DIR__ . "/inc/header.php");
                 <style>
                     /* Scoped so the leaderboard's dark theme stays inside its panel
                        and does not affect the rest of the Program Head area. */
-                    .tsw-panel {
-                        position: relative;
-                        background: radial-gradient(circle at 20% 0%, #7b2ff7 0%, #4a1e9e 45%, #2a0d5e 100%);
-                        border-radius: 18px; color: #fff;
-                        padding: 26px 20px 30px; margin: 10px 0 20px;
-                        box-shadow: 0 6px 20px rgba(0,0,0,0.18);
-                    }
+                    .tsw-panel { 
+  position: relative; 
+  /* Reduced blue-light slate gradient to prevent digital eye strain */
+  background: radial-gradient(circle at 20% 0%, #3a415a 0%, #2b3043 40%, #1a1d29 100%); 
+  border-radius: 18px; 
+  /* Soft off-white to eliminate the "halation" blurring effect */
+  color: #e2e5ec; 
+  padding: 26px 20px 30px; 
+  margin: 10px 0 20px; 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18); 
+}
                     /* Fullscreen / cast button */
                     .tsw-fs-btn {
                         position: absolute; top: 16px; right: 16px; z-index: 3;
@@ -166,7 +170,7 @@ require_once(__DIR__ . "/inc/header.php");
                         margin-bottom: 12px;
                     }
                     .tsw-panel .office-head .office-name { font-size: 16px; font-weight: 800; text-transform: uppercase; line-height: 1.2; }
-                    .tsw-panel .office-head .office-total { flex: 0 0 auto; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #dcc6ff; white-space: nowrap; }
+                    .tsw-panel .office-head .office-total { flex: 0 0 auto; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: #dbe2f6; white-space: nowrap; }
                     .tsw-panel .rank-row {
                         display: flex; align-items: center; gap: 10px;
                         background: rgba(255,255,255,.06);
@@ -182,11 +186,11 @@ require_once(__DIR__ . "/inc/header.php");
                     .tsw-panel .rank-badge span { position: relative; font-size: 17px; font-weight: 800; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.4); }
                     .tsw-panel .rank-info { flex: 1 1 auto; min-width: 0; }
                     .tsw-panel .rank-info .name { font-size: 15px; font-weight: 700; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                    .tsw-panel .rank-info .empid { font-size: 11.5px; color: #cdb6ff; font-weight: 600; }
+                    .tsw-panel .rank-info .empid { font-size: 11.5px; color: #c3cdee; font-weight: 600; }
                     .tsw-panel .rank-count { flex: 0 0 auto; text-align: center; padding-left: 4px; }
                     .tsw-panel .rank-count .num { font-size: 22px; font-weight: 800; line-height: 1; }
-                    .tsw-panel .rank-count .lbl { font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: #dcc6ff; font-weight: 700; }
-                    .tsw-panel .empty-state { text-align: center; padding: 44px 20px; font-size: 15px; background: rgba(255,255,255,.08); border-radius: 20px; color: #e9d9ff; width: 100%; }
+                    .tsw-panel .rank-count .lbl { font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: #dbe2f6; font-weight: 700; }
+                    .tsw-panel .empty-state { text-align: center; padding: 44px 20px; font-size: 15px; background: rgba(255,255,255,.08); border-radius: 20px; color: #e4e9f8; width: 100%; }
                 </style>
 
                 <h4 style="margin:10px 0 4px;">Dashboard</h4>
@@ -211,7 +215,7 @@ require_once(__DIR__ . "/inc/header.php");
 
                 <script>
                     function tswBadge(rank) {
-                        var fill = '#7c4dff';
+                        var fill = '#4a5aa8';
                         if (rank === 1) fill = '#ffce3a';
                         else if (rank === 2) fill = '#cfd4e0';
                         else if (rank === 3) fill = '#e08b3a';

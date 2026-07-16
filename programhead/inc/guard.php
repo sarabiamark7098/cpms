@@ -19,6 +19,7 @@ if (($_SESSION['position'] ?? '') !== 'Program Head') {
         case 'Encoder':       header('Location: ../encoder/home.php');    break;
         case 'Social Worker': header('Location: ../socialwork/home.php'); break;
         case 'Admin':         header('Location: ../admin/home.php');      break;
+        case 'Program Head':   header('Location: ../programhead/home.php'); break;
         default:              header('Location: ../index.php');
     }
     exit;
