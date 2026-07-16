@@ -109,12 +109,27 @@
 				}
 			}
 
-			public function logout_log(){
+			/**
+			 * Stamp the logout time on the user's most recent still-open login row
+			 * in user_log. Called from every session-end path: manual logout,
+			 * inactivity timeout, admin revoke, and the browser-close beacon (so a
+			 * session that simply expires is recorded as a logout too). Only the
+			 * latest open row is closed, and it is idempotent — re-running finds no
+			 * open row to update, so calling it from multiple paths is safe.
+			 *
+			 * @param string|null $empid  Defaults to the current session's user.
+			 */
+			public function logout_log($empid = null){
+				$empid = $empid ?? ($_SESSION['userId'] ?? null);
+				if (empty($empid)) {
+					return false;
+				}
+				$empid   = mysqli_real_escape_string($this->db, $empid);
 				$datenow = date("Y-m-d H:i:s");
-				$now = date("Y-m-d");
 
-				$query = "UPDATE user_log SET logout_datetime = '{$datenow}' 
-				WHERE empid = '{$_SESSION['userId']}' AND login_datetime LIKE '%{$now}%' AND logout_datetime IS NULL";
+				$query = "UPDATE user_log SET logout_datetime = '{$datenow}'
+				WHERE empid = '{$empid}' AND logout_datetime IS NULL
+				ORDER BY login_datetime DESC LIMIT 1";
 				$result = mysqli_query($this->db, $query);
 
 				if($result){
@@ -550,6 +565,7 @@
 		
 			public function user_logout() {
 				if(isset($_SESSION['userId'])){
+					$this->logout_log($_SESSION['userId']);   // stamp logout time in user_log
 					$this->clearSessionToken($_SESSION['userId']);
 				}
 				$_SESSION['login'] = FALSE;

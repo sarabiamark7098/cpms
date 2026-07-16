@@ -47,6 +47,14 @@ function checkSessionTimeout(): void {
 
 
 function _doSessionRevoked(): void {
+    if (class_exists('User') && isset($_SESSION['userId'])) {
+        try {
+            $user = new User();
+            $user->logout_log($_SESSION['userId']); // record logout on admin force-logout
+        } catch (Throwable $e) {
+        }
+    }
+
     $_SESSION['login']   = false;
     $_SESSION['revoked'] = true;
     session_unset();

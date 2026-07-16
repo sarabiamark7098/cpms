@@ -16,6 +16,7 @@ $token  = $_SESSION['session_token'];
 $action = $_POST['action'] ?? 'ping';
 
 if ($action === 'end') {
+    $user->logout_log($empid);              // record logout when the session ends (browser close / expire)
     $user->clearSessionToken($empid, 'logout');
     session_write_close();
 } elseif ($action === 'ping') {
