@@ -1,7 +1,7 @@
 <?php
 /**
  * Shared header + sidebar for the Program Head area.
- * Pages must set $pageTitle and $active ('dashboard'|'accounts'|'audit'|'history')
+ * Pages must set $pageTitle and $active ('dashboard'|'dashboardsw'|'accounts'|'history')
  * before including this file.
  */
 $pageTitle = $pageTitle ?? 'Program Head';
@@ -66,9 +66,6 @@ function ph_nav_style($current, $active) {
                 </li>
                 <li>
                     <a href="AccountsManagement.php" style="<?php echo ph_nav_style('accounts', $active); ?>">Accounts Management <i style="float: right;font-size:25px" class="fa fa-users"></i></a>
-                </li>
-                <li>
-                    <a href="AuditLogs.php" style="<?php echo ph_nav_style('audit', $active); ?>">Audit Logs <i style="float: right;font-size:25px" class="fa fa-list-alt"></i></a>
                 </li>
                 <li>
                     <a href="History.php" style="<?php echo ph_nav_style('history', $active); ?>">History <i style="float: right;font-size:25px" class="fa fa-history"></i></a>
