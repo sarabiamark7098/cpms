@@ -1,14 +1,20 @@
 <?php
 require_once(__DIR__ . "/inc/guard.php");
 
+// Program Head only manages accounts within their own assigned office.
+$phOffice = $_SESSION['f_office'] ?? '';
+
 // ── Handle status change (activate / deactivate) ────────────────────────────
 $flash = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
     $targetEmp    = $_POST['empid'] ?? '';
     $targetStatus = $_POST['new_status'] ?? '';
+    $officeEmpids = $user->getOfficeEmpids($phOffice);
     if ($targetEmp === ($_SESSION['userId'] ?? '')) {
         $flash = "You cannot change your own account status.";
-    } elseif ($targetEmp !== '' && $user->setAccountStatus($targetEmp, $targetStatus)) {
+    } elseif ($targetEmp === '' || !in_array($targetEmp, $officeEmpids, true)) {
+        $flash = "You can only manage accounts within your own office.";
+    } elseif ($user->setAccountStatus($targetEmp, $targetStatus)) {
         $flash = "Account {$targetEmp} set to {$targetStatus}.";
     } else {
         $flash = "Unable to update account status.";
@@ -55,6 +61,9 @@ require_once(__DIR__ . "/inc/header.php");
                                     $pos = trim($row['position'] ?? '');
                                     if ($pos === '') {
                                         continue; // only show provisioned CPMS accounts
+                                    }
+                                    if (($row['office_id'] ?? '') !== $phOffice) {
+                                        continue; // only this Program Head's office
                                     }
                                     $hasRows = true;
                                     $empid    = $row['empid'];

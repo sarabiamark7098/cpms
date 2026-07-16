@@ -1,6 +1,9 @@
 <?php
 require_once(__DIR__ . "/inc/guard.php");
 
+// Program Head only sees data for their own assigned office.
+$phOffice = $_SESSION['f_office'] ?? '';
+
 // ── Gather dashboard figures ────────────────────────────────────────────────
 $roleCounts = [
     'Admin'         => 0,
@@ -10,6 +13,7 @@ $roleCounts = [
 ];
 $totalAccounts = 0;
 $activatedCount = 0;
+$officeEmpids = [];
 
 $employees = $user->getallEmployee();
 if ($employees) {
@@ -18,6 +22,10 @@ if ($employees) {
         if ($pos === '') {
             continue; // employee without a provisioned CPMS account
         }
+        if (($row['office_id'] ?? '') !== $phOffice) {
+            continue; // only this Program Head's office
+        }
+        $officeEmpids[] = $row['empid'];
         $totalAccounts++;
         if (isset($roleCounts[$pos])) {
             $roleCounts[$pos]++;
@@ -28,8 +36,8 @@ if ($employees) {
     }
 }
 
-$activeSessions = $user->getActiveSessionCount();
-$todayLogins    = $user->getTodayLoginCount();
+$activeSessions = $user->getActiveSessionCountForEmpids($officeEmpids);
+$todayLogins    = $user->getTodayLoginCountByOffice($phOffice);
 
 // ── Clients served per user (with office) ───────────────────────────────────
 $servedCounts = $user->getClientsServedPerUser();
@@ -52,6 +60,15 @@ if ($employees2) {
         $pos = trim($row['position'] ?? '');
         if ($pos === '') {
             continue; // only users with a CPMS account
+        }
+        if (($row['office_id'] ?? '') !== $phOffice) {
+            continue; // only this Program Head's office
+        }
+        if ($pos !== 'Social Worker' && $pos !== 'Encoder') {
+            continue; // exclude Program Head / Admin roles
+        }
+        if (($row['status'] ?? '') !== 'Activated') {
+            continue; // only activated accounts
         }
         $empid = $row['empid'];
         $servedRows[] = [
@@ -116,17 +133,10 @@ require_once(__DIR__ . "/inc/header.php");
                         <h5 style="margin:0;">Clients Served per User</h5>
                         <div>
                             <label for="roleFilter" style="margin-right:6px;font-weight:600;">Filter by Role:</label>
-                            <select id="roleFilter" class="form-control" style="display:inline-block;width:auto;min-width:160px;margin-right:16px;">
+                            <select id="roleFilter" class="form-control" style="display:inline-block;width:auto;min-width:160px;">
                                 <option value="">All Roles</option>
                                 <?php foreach ($roleFilterList as $rl): ?>
                                 <option value="<?php echo htmlspecialchars($rl, ENT_QUOTES); ?>"><?php echo htmlspecialchars($rl); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <label for="officeFilter" style="margin-right:6px;font-weight:600;">Filter by Office:</label>
-                            <select id="officeFilter" class="form-control" style="display:inline-block;width:auto;min-width:220px;">
-                                <option value="">All Offices</option>
-                                <?php foreach ($officeFilterList as $off): ?>
-                                <option value="<?php echo htmlspecialchars($off, ENT_QUOTES); ?>"><?php echo htmlspecialchars($off); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -176,10 +186,6 @@ require_once(__DIR__ . "/inc/header.php");
                         $('#roleFilter').on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
                             $('#servedTable').DataTable().column(2).search(val ? '^' + val + '$' : '', true, false).draw();
-                        });
-                        $('#officeFilter').on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            $('#servedTable').DataTable().column(3).search(val ? '^' + val + '$' : '', true, false).draw();
                         });
                     });
                 </script>

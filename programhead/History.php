@@ -1,6 +1,9 @@
 <?php
 require_once(__DIR__ . "/inc/guard.php");
 
+// Program Head only sees login history for their own assigned office.
+$phOffice = $_SESSION['f_office'] ?? '';
+
 // empid -> full name lookup
 $nameMap = [];
 $employees = $user->getallEmployee();
@@ -28,7 +31,7 @@ $active    = 'history';
 require_once(__DIR__ . "/inc/header.php");
 ?>
                 <h4 style="margin:10px 0 20px;">Login History</h4>
-                <p style="color:#666;">Login / logout history across all accounts.</p>
+                <p style="color:#666;">Login / logout history for accounts in your office.</p>
                 <div class="table-responsive-lg">
                     <table id="historyTable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width:100%;">
                         <thead>
@@ -42,10 +45,13 @@ require_once(__DIR__ . "/inc/header.php");
                         </thead>
                         <tbody>
                             <?php
-                            $history = $user->getLoginHistory(500);
+                            $history = $user->getLoginHistoryByOffice($phOffice, 500);
                             $hasRows = false;
                             if ($history) {
                                 while ($h = mysqli_fetch_assoc($history)) {
+                                    if (($h['office_id'] ?? '') !== $phOffice) {
+                                        continue; // only this Program Head's office
+                                    }
                                     $hasRows = true;
                                     $name   = $nameMap[$h['empid']] ?? '-';
                                     $office = $officeMap[$h['office_id']] ?? ($h['office_id'] ?? '-');

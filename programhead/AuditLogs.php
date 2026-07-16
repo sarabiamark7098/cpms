@@ -1,8 +1,13 @@
 <?php
 require_once(__DIR__ . "/inc/guard.php");
 
-// empid -> full name lookup (accounts live in the hr_employee DB)
+// Program Head only sees audit logs for their own assigned office.
+$phOffice = $_SESSION['f_office'] ?? '';
+
+// empid -> full name lookup (accounts live in the hr_employee DB), plus the set
+// of empids that belong to this Program Head's office.
 $nameMap = [];
+$officeEmpids = [];
 $employees = $user->getallEmployee();
 if ($employees) {
     while ($row = mysqli_fetch_assoc($employees)) {
@@ -11,6 +16,9 @@ if ($employees) {
             ($row['empfname'] ?? '') . ' ' .
             ($row['empmname'] ?? '')
         );
+        if (($row['office_id'] ?? '') === $phOffice && trim($row['position'] ?? '') !== '') {
+            $officeEmpids[$row['empid']] = true;
+        }
     }
 }
 
@@ -19,7 +27,7 @@ $active    = 'audit';
 require_once(__DIR__ . "/inc/header.php");
 ?>
                 <h4 style="margin:10px 0 20px;">Audit Logs</h4>
-                <p style="color:#666;">Session events (login / logout) recorded across all accounts.</p>
+                <p style="color:#666;">Session events (login / logout) recorded for accounts in your office.</p>
                 <div class="table-responsive-lg">
                     <table id="auditTable" class="table table-fixed table-striped table-hover highlight responsive-table" style="width:100%;">
                         <thead>
@@ -38,6 +46,9 @@ require_once(__DIR__ . "/inc/header.php");
                             $hasRows = false;
                             if ($logs) {
                                 while ($log = mysqli_fetch_assoc($logs)) {
+                                    if (!isset($officeEmpids[$log['empid']])) {
+                                        continue; // only accounts in this Program Head's office
+                                    }
                                     $hasRows = true;
                                     $name   = $nameMap[$log['empid']] ?? '-';
                                     $action = ucfirst($log['action'] ?? '');

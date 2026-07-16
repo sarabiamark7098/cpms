@@ -698,10 +698,82 @@
 			}
 
 			/**
+			 * Login/logout history for a single office (user_log stores office_id),
+			 * newest first. Scoping in SQL keeps the row limit within the office.
+			 */
+			public function getLoginHistoryByOffice($officeId, $limit = 300){
+				$limit    = (int) $limit;
+				$officeId = mysqli_real_escape_string($this->db, (string) $officeId);
+				if ($officeId === '') {
+					return false;
+				}
+				$query = "SELECT empid, office_id, login_datetime, logout_datetime
+						  FROM user_log
+						  WHERE office_id = '{$officeId}'
+						  ORDER BY login_datetime DESC
+						  LIMIT {$limit}";
+				$result = mysqli_query($this->db, $query);
+				return $result ?: false;
+			}
+
+			/**
 			 * Number of currently active (non-revoked) sessions.
 			 */
 			public function getActiveSessionCount(){
 				$query = "SELECT COUNT(*) AS c FROM active_sessions WHERE revoked = 0";
+				$result = mysqli_query($this->db, $query);
+				$row = $result ? mysqli_fetch_assoc($result) : null;
+				return $row ? (int) $row['c'] : 0;
+			}
+
+			/**
+			 * List of empids that belong to a single office (provisioned CPMS
+			 * accounts only). Used to scope the Program Head views to their own
+			 * office. Employee/office data lives in the hr_employee DB.
+			 */
+			public function getOfficeEmpids($officeId){
+				$ids = [];
+				if ($officeId === '' || $officeId === null) {
+					return $ids;
+				}
+				$res = $this->getallEmployee();
+				if ($res) {
+					while ($r = mysqli_fetch_assoc($res)) {
+						if (($r['office_id'] ?? '') === $officeId && trim($r['position'] ?? '') !== '') {
+							$ids[] = $r['empid'];
+						}
+					}
+				}
+				return $ids;
+			}
+
+			/**
+			 * Number of currently active (non-revoked) sessions belonging to the
+			 * given set of empids (i.e. a single office).
+			 */
+			public function getActiveSessionCountForEmpids(array $empids){
+				$empids = array_values(array_filter(array_map('strval', $empids), function ($v) { return $v !== ''; }));
+				if (empty($empids)) {
+					return 0;
+				}
+				$escaped = array_map(function ($e) { return "'" . mysqli_real_escape_string($this->db, $e) . "'"; }, $empids);
+				$in = implode(',', $escaped);
+				$query = "SELECT COUNT(*) AS c FROM active_sessions WHERE revoked = 0 AND empid IN ({$in})";
+				$result = mysqli_query($this->db, $query);
+				$row = $result ? mysqli_fetch_assoc($result) : null;
+				return $row ? (int) $row['c'] : 0;
+			}
+
+			/**
+			 * Number of logins recorded today for a single office (user_log stores
+			 * the office_id at login time).
+			 */
+			public function getTodayLoginCountByOffice($officeId){
+				$officeId = mysqli_real_escape_string($this->db, (string) $officeId);
+				if ($officeId === '') {
+					return 0;
+				}
+				$query = "SELECT COUNT(*) AS c FROM user_log WHERE office_id = '{$officeId}' AND DATE(login_datetime) = CURDATE()";
 				$result = mysqli_query($this->db, $query);
 				$row = $result ? mysqli_fetch_assoc($result) : null;
 				return $row ? (int) $row['c'] : 0;
