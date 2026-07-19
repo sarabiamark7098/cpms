@@ -1,8 +1,6 @@
 <?php
 	session_start();
-	include ("db_config.php");
-	include ("db_config2.php");
-	include ("api_config.php");
+	include ("config.php");
 
 
 	class User{
