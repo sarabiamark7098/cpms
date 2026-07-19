@@ -4758,6 +4758,13 @@
 		$inClause = implode(',', $escaped);
 		$limit = intval($limit);
 
+		// Restrict to records within the configured number of months (0 = no limit)
+		$monthsClause = '';
+		$syncMonths = defined('API_SYNC_MONTHS') ? intval(API_SYNC_MONTHS) : 0;
+		if($syncMonths > 0){
+			$monthsClause = "AND t.date_accomplished >= DATE_SUB(NOW(), INTERVAL {$syncMonths} MONTH)";
+		}
+
 		$query = "SELECT
 			a.trans_id,
 			a.type,
@@ -4790,6 +4797,7 @@
 		AND t.status_client = 'Done'
 		AND c.firstname IS NOT NULL AND c.firstname != ''
 		AND c.lastname IS NOT NULL AND c.lastname != ''
+		{$monthsClause}
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
 			WHERE asl.trans_id = a.trans_id
