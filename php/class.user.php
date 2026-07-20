@@ -4709,8 +4709,9 @@
 
 	public function getAssistanceCounts(){
 		$activeTypes = $this->getActiveAssistanceTypes();
+		$syncMonths = defined('API_SYNC_MONTHS') ? intval(API_SYNC_MONTHS) : 0;
 		if(empty($activeTypes)){
-			return ['unsent' => 0, 'sent' => 0];
+			return ['unsent' => 0, 'sent' => 0, 'unsent_in_window' => 0, 'sync_months' => $syncMonths];
 		}
 
 		$escaped = [];
@@ -4719,9 +4720,16 @@
 		}
 		$inClause = implode(',', $escaped);
 
+		// Records within the configured months window (0 = no limit, counts all unsent)
+		$inWindowExpr = '1';
+		if($syncMonths > 0){
+			$inWindowExpr = "(t.date_accomplished >= DATE_SUB(NOW(), INTERVAL {$syncMonths} MONTH))";
+		}
+
 		$query = "SELECT
-			SUM(CASE WHEN asl.id IS NULL THEN 1 ELSE 0 END) AS unsent_count,
-			SUM(CASE WHEN asl.id IS NOT NULL THEN 1 ELSE 0 END) AS sent_count
+			COUNT(DISTINCT CASE WHEN asl.id IS NULL THEN a.ass_id END) AS unsent_count,
+			COUNT(DISTINCT CASE WHEN asl.id IS NOT NULL THEN a.ass_id END) AS sent_count,
+			COUNT(DISTINCT CASE WHEN asl.id IS NULL AND {$inWindowExpr} THEN a.ass_id END) AS unsent_in_window_count
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
@@ -4738,10 +4746,12 @@
 			$row = mysqli_fetch_assoc($result);
 			return [
 				'unsent' => intval($row['unsent_count']),
-				'sent' => intval($row['sent_count'])
+				'sent' => intval($row['sent_count']),
+				'unsent_in_window' => intval($row['unsent_in_window_count']),
+				'sync_months' => $syncMonths
 			];
 		}else{
-			return ['unsent' => 0, 'sent' => 0];
+			return ['unsent' => 0, 'sent' => 0, 'unsent_in_window' => 0, 'sync_months' => $syncMonths];
 		}
 	}
 
@@ -4785,14 +4795,12 @@
 			t.date_accomplished,
 			t.program_type,
 			t.other_program,
-			g.control_no,
-			cs.sd_officer
+			(SELECT g.control_no FROM gl g WHERE g.trans_id = a.trans_id LIMIT 1) AS control_no,
+			(SELECT cs.sd_officer FROM cash cs WHERE cs.trans_id = a.trans_id LIMIT 1) AS sd_officer
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN beneficiary_data b USING (bene_id)
-		LEFT JOIN gl g USING (trans_id)
-		LEFT JOIN cash cs USING (trans_id)
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
 		AND c.firstname IS NOT NULL AND c.firstname != ''
@@ -4851,14 +4859,12 @@
 			t.date_accomplished,
 			t.program_type,
 			t.other_program,
-			g.control_no,
-			cs.sd_officer
+			(SELECT g.control_no FROM gl g WHERE g.trans_id = a.trans_id LIMIT 1) AS control_no,
+			(SELECT cs.sd_officer FROM cash cs WHERE cs.trans_id = a.trans_id LIMIT 1) AS sd_officer
 		FROM assistance a
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN beneficiary_data b USING (bene_id)
-		LEFT JOIN gl g USING (trans_id)
-		LEFT JOIN cash cs USING (trans_id)
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
 		AND c.firstname IS NOT NULL AND c.firstname != ''

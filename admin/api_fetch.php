@@ -17,7 +17,13 @@ if(isset($_POST['save_sync_config'])){
 
 if(isset($_POST['load_counts'])){
 	$counts = $user->getAssistanceCounts();
-	echo json_encode(['status' => 'success', 'unsent' => $counts['unsent'], 'sent' => $counts['sent']]);
+	echo json_encode([
+		'status' => 'success',
+		'unsent' => $counts['unsent'],
+		'sent' => $counts['sent'],
+		'unsent_in_window' => $counts['unsent_in_window'],
+		'sync_months' => $counts['sync_months']
+	]);
 	exit;
 }
 
