@@ -48,14 +48,6 @@
                         <input value="<?php echo $getemp['empid']; ?>" id="empid" name="empid" type="text" class="form-control" readonly>
                         <label class="active" for="empid">Employee ID</label>
                     </div>
-                    <div class="form-group col-lg-6">
-                        <input value="<?php echo $getemp['empuser']; ?>" id="username" name="username" type="text" class="form-control" readonly>
-                        <label class="active" for="username">Employee Username</label>
-                    </div>
-                    <div class="form-group col-lg-6">
-                        <input value="<?php echo $getemp['emppass']; ?>" id="password" name="password" type="text" class="form-control" readonly>
-                        <label class="active" for="password">Employee Password</label>
-                    </div>
                     
                     <?php if(!empty($getemp['position'])){ ?>
                     <label class="col-lg-12" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">

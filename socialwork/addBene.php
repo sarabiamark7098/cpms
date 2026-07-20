@@ -14,7 +14,6 @@ $user = new User();
             <h1 class="text-center">Beneficiary Information</h1> <br>
                 <div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <!-- <input  name="relation" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Relation to Client" required> -->
 						<select name="relation" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
 							<option value="" disabled selected>Relation With Beneficiary</option>
                             <?php
@@ -31,7 +30,6 @@ $user = new User();
                         <label>Relationship with the client</label>
                     </div>
                 </div>
-                <!---->
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
                         <input  name="lname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Last Name" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
@@ -48,8 +46,7 @@ $user = new User();
 							<label>Middlename</label>
 						</div>
 						<div class="form-group col-lg-6">
-							<!-- <input name="exname" type="text" class="form-control" style="border: 1px solid #b1acac;" placeholder="Extra Name"> -->
-							<select name="exname" class="form-control" style="border: 1px solid #b1acac;">
+								<select name="exname" class="form-control" style="border: 1px solid #b1acac;">
 								<option value="" selected> Extension Name</option>
 								<option value="JR">JR</option>
 								<option value="SR">SR</option>
@@ -83,7 +80,7 @@ $user = new User();
 				</div>
                 <div class="row" style="margin-top: 2%; height:10%;">
 						<div class="form-group col-lg-6">
-							<input list="categories" name="category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Category" required>
+							<input list="categories" name="category" type="text"  class="form-control" style="border: 1px solid #b1acac; text-transform: none;" placeholder="Category" required autocomplete="off">
 							<label>Category</label>
 							<datalist id="categories">
 								<option>Children in Need of Special Protection</option>
@@ -120,7 +117,7 @@ $user = new User();
 
 				<div class="row" style="margin-top: 2%; height:10%;">
                     <div class="form-group col-lg-6">
-                        <input  list="regionBlist" name="region" id="breg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_b_Region(this)" required>
+                        <input  list="regionBlist" name="region" id="breg" type="text" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" onChange="get_b_Region(this)" required autocomplete="off">
                         <label>Region</label>
                         <datalist id="regionBlist">
                             <?php
@@ -137,7 +134,7 @@ $user = new User();
                         </datalist>
                     </div>
 					<div class="form-group col-lg-6">
-                        <input list="provinceBlist" name="province" id="bprov" type="text" class="form-control" onChange="get_b_Province(this)" style="border: 1px solid #b1acac; text-transform: none;" required/>
+                        <input list="provinceBlist" name="province" id="bprov" type="text" class="form-control" onChange="get_b_Province(this)" style="border: 1px solid #b1acac; text-transform: none;" required autocomplete="off">
                         <label>Province</label>
                         <datalist id="provinceBlist">
 				        </datalist>
@@ -146,13 +143,13 @@ $user = new User();
 
 				<div class="row" style="margin-top: 2%; height:10%;">
 					<div class="form-group col-lg-6">
-						<input list="municipalityBlist" name="municipality" id="beneficiary_city" type="text" onChange="get_b_Municipality(this)" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required>
+						<input list="municipalityBlist" name="municipality" id="beneficiary_city" type="text" onChange="get_b_Municipality(this)" class="form-control" style="border: 1px solid #b1acac; text-transform: none;" required autocomplete="off">
 						<label>Municipality</label>
 						<datalist id="municipalityBlist">
 						</datalist>
 					</div>
 					<div class="form-group col-lg-6">
-						<input list="barangayBlist" name="barangay" id="bbrgy" type="text" class="form-control" onChange="get_b_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required>
+						<input list="barangayBlist" name="barangay" id="bbrgy" type="text" class="form-control" onChange="get_b_Barangay(this)" style="border: 1px solid #b1acac; text-transform: none;" required autocomplete="off">
 						<label>Barangay</label>
 						<datalist id="barangayBlist">
 						</datalist>

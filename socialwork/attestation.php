@@ -16,7 +16,6 @@
             <img src="../images/DSWD Field Office XI.png" alt="" width="230px" height="80px">
         </div>
         <div class="col-6 ml-md-auto" style="color: #000000; ">
-            <!-- <p class="text-center" style="font-size: 14px; margin-top: 0px;">DSWD-PMB-GF-015 | REV 02 | 08 JAN 2024</p> -->
         </div>
     </div>
     <div class="row">
@@ -82,9 +81,6 @@
                 DSWD Field Office XI, Ramon Magsaysay Avenue, corner Damaso Suazo Street, Davao City, Philippines 8000<br>
                 Website: http://fo11.dswd.gov.ph Tel Nos.: (082) 227 1964 </p>
         </div>
-        <!-- <div class="col-2">
-            <img src="../images/dswd-ISO.png" alt="" width="110px" height="60px">
-        </div> -->
     </div>
     <!--Container-->
 </div>

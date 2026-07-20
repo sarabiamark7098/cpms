@@ -1,5 +1,6 @@
 <?php
 	include("../php/class.user.php");
+    require_once("../php/session_timeout.php");
 	$user = new User();
 	
 	if(!$_SESSION['login']){
@@ -72,7 +73,6 @@
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -107,6 +107,12 @@
                 </li>
                 <li>
                     <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="AccountsManagement.php">Accounts Management <i style="float: right;font-size:25px" class="fa fa-user-cog"></i></a>
+                </li>
+                <li>
+                    <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
                 </li>
             </ul>
         </nav>
@@ -157,9 +163,6 @@
                                     foreach($getemployees as $index => $value){
                                         $compare = $user->compareEmpNum($value['empnum']);
 										
-                                        /*if($_SESSION['userId'] == '11-Sample'){
-                                            $compare = $user->compareEmpNumSA($value['empnum'], $_SESSION['f_office']);
-                                        }*/
                                         if($compare > 0){
                                             echo "<tr>
                                                 <td scope='row' style='width: 15%'>" . $value["empid"] . "</td> 
@@ -192,7 +195,7 @@
                             <th scope="col" style='width: 15%'>First Name</th>
                             <th scope="col" style='width: 15%'>Middle Name</th>
                             <th scope="col" style='width: 5%'>Ext.</th>
-                            <th scope="col" style="width: 20%">Action</th>
+                            <th scope="col" style="width: 10%">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -206,9 +209,8 @@
                                                 <td scope='row' style='width: 15%'>" . $value["empfname"] ." </td>
                                                 <td scope='row' style='width: 15%'>" . (!empty($value['empmname'])?$value["empmname"]:"") ." </td>
                                                 <td scope='row' style='width: 5%'>" . (!empty($value["empext"])?$value["empext"]:"") ." </td>
-                                                <td scope='row' style='width: 20%'>
+                                                <td scope='row' style='width: 10%'>
                                                 <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["empid"] . "' style='margin-right: 10px; margin: 10px 0px 10px 0px' data-target='#EmployeeInfo'> View </button>
-                                                <button type='button' name='view' class='btn btn-primary deep-sky' data-toggle='modal' data-id='" . $value["empid"]. "' style='margin-right: 10px;' data-target='#UpdateEmployee'> Update </button>
                                                 </td>
                                                 </tr>
                                             ";		
@@ -254,26 +256,22 @@
 </div>
 </body>
     <script>
-        //userAccount
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "adminuserAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
     </script>
 
@@ -295,18 +293,15 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "Employee.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })
@@ -341,11 +336,9 @@
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    // console.log(data);
                     modal.find('.r_body').html(data);
                 },
                 error: function(err) {
-                    // console.log(err);
                 }
 				
             });  
@@ -388,18 +381,15 @@
 						var empid = button.data('id') // Extract info from data-* attributes
 						var modal = $(this);
 						var dataString = 'empid=' + empid;
-                        // console.log(dataString);
 							$.ajax({
 									type: "POST",
 									url: "EmployeeInfo.php",
 									data: dataString,
 									cache: false,
 									success: function (data) {
-											// console.log(data);
 											modal.find('.Viewbody').html(data);
 									},
 									error: function(err) {
-											// console.log(err);
 									}
 					
 							});  
@@ -418,11 +408,9 @@
 									data: dataString,
 									cache: false,
 									success: function (data) {
-											// console.log(data);
 											modal.find('.Updatebody').html(data);
 									},
 									error: function(err) {
-											// console.log(err);
 									}
 					
 							});  

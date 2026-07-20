@@ -69,7 +69,6 @@
 //GIS PART HERE
 function printGIS() {
     var arr = getGISvalue();
-    //console.log(arr);
     setContentGIS(arr);
     //var divElements = document.getElementById('gis_sheet').innerHTML;
     //Get the HTML of whole page
@@ -121,7 +120,6 @@ function getGISvalue() {
     var approved = $('#approved').val();
     var ref_name = $('#ref_name').val();
     var service = checkbox(); // Type of services checked
-    //console.log(approved);
     /*if(service.length == 1){ //para mawala ang fucking error, wa pod ko kbalo nganu pag print na error
         service[1] = '';
     }*/
@@ -243,9 +241,6 @@ function setContentGIS(arr) {
     document.getElementById('s_position').innerHTML = str[1];
     service = arr["service"];
     //document.getElementById('theNum').value = arr["c_num"];
-    //console.log(arr["c_num"]);
-    //console.log(document.getElementById('theNum').value);
-    //console.log(document.getElementById('signature').value);
     //Checkbox
     //$("#referral").attr("checked", true);
     if ($.inArray('Referral', service) > -1) {
@@ -342,7 +337,6 @@ function setContentGIS(arr) {
 //LAST PART IS HERE
 function printGLNow() {
     var arr = getGLvalue(); //hold ang mga value sa input text
-    //console.log(arr);
     setContentGL(arr);
     //If isa lng xa, kani nga div iyang e print
     var divElements = document.getElementById('gl').innerHTML;
@@ -364,7 +358,6 @@ function printGLNow() {
 //LAST PART IS HERE
 function printCAVNow() {
     var arr = getCAVvalue(); //hold ang mga value sa input text
-    //console.log(arr);
     setContentCAV(arr);
     //If isa lng xa, kani nga div iyang e print
     var divElements = document.getElementById('cav').innerHTML;

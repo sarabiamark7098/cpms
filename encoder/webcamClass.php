@@ -1,5 +1,5 @@
 <?php
-include('../php/db_config.php');
+include('../php/config.php');
 
 class Webcam {
     private $db;

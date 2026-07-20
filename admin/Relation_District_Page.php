@@ -1,7 +1,6 @@
 <?php
 	include("../php/class.user.php");
 	$user = new User();
-	///////////////
 	if(!$_SESSION['login']){
 		header('location:../index.php');
 		}
@@ -72,7 +71,6 @@
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -107,6 +105,12 @@
                 </li>
                 <li>
                     <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                </li>
+                <li>
+                    <a href="AccountsManagement.php">Accounts Management <i style="float: right;font-size:25px" class="fa fa-user-cog"></i></a>
+                </li>
+                <li>
+                    <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
                 </li>
             </ul>
         </nav>
@@ -232,26 +236,22 @@
 </div>
 </body>
     <script>
-        //userAccount
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "adminuserAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
     </script>
 
@@ -273,18 +273,15 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "GISassessment.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })
@@ -355,37 +352,31 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=relation';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "Relation_District_Page.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.Addbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
         $('#Adddistrict').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=district';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "Relation_District_Page.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.Addbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })

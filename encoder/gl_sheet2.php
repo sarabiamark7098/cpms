@@ -79,7 +79,6 @@
 				$SignatureINI = $user->getsignatoryINI($signatory['signatory_id']);
 				$socialWorkINI = $user->getencoderINI($client['encoded_socialWork']);
 				$EncoderINI = $user->getencoderINI($client['encoded_encoder']);
-                // echo '<small>'.($CEINIAprroved!=""?strtoupper($CEINIAprroved).'/':""). strtolower($socialWorkINI) .'/'. strtolower($EncoderINI) .'</small>';
                 echo '<small>'.($SignatureINI!=""?strtoupper($SignatureINI).'/':""). strtolower($socialWorkINI) .'/'. strtolower($EncoderINI) .'</small>';
             ?>
         </p> 

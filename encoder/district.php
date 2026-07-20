@@ -27,7 +27,6 @@
 
 			$getdistrict = $user->getdistrictlist();
 			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
 				//Display info
@@ -39,7 +38,6 @@
 		else{
 			$getdistrict = $user->getdistrictlist();
 			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
 				//Display info
@@ -70,7 +68,6 @@
 
 			$getdistrict = $user->getdistrictlist();
 			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
 				//Display info
@@ -82,7 +79,6 @@
 		else{
 			$getdistrict = $user->getdistrictlist();
 			// Loop through results
-			// echo "<option value='".(!empty($district)?$district:'Select District')."'>".(!empty($district)?$district:'Select District')."</option>";
 			echo "<option value=''>Select District</option>";
 			foreach($getdistrict as $index => $value){
 				//Display info

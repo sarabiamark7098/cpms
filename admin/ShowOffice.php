@@ -21,15 +21,15 @@
                 <div class="row form-group" style="margin-top: 2%; height:10%;">
                 <div class="form-group col-lg-12">
                         <input value="<?php echo (!empty($getregions)?$getregions['r_name']." / ". $getregions['psgc_code']:"")?>" class="form-control mr-sm-2 b" placeholder="Region" readonly>
-                        
+                        <label class="active" for="creg">Region</label>
                     </div>
                     <div class="form-group col-lg-12">
                         <input value="<?php echo (!empty($getprovince)?$getprovince['p_name']." / ". $getprovince['psgc_code']:"")?>" type="text" class="form-control mr-sm-2 b" placeholder="Province" readonly>
-                        
+                        <label class="active" for="cprov">Province</label>
                     </div>
                     <div class="form-group col-lg-12">
                         <input type="text" value="<?php echo (!empty($getmunicipal)?$getmunicipal['m_name']." / ". $getmunicipal['psgc_code']:"")?>" class="form-control mr-sm-2 b"  placeholder="City or Municipality" readonly>
-                        
+                        <label class="active" for="client_city">Municipality</label>
                     </div>
                     <div class="form-group col-lg-12">
                         <input placeholder="Office Name" id="officename" value="<?php echo (!empty($getinfo)?$getinfo['office_name']:"")?>"  name="officename" type="text" class="form-control" readonly>
@@ -48,7 +48,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" name="Add">Save</button>
             </div>
         </form>
 	</div>

@@ -10,7 +10,6 @@
         $gis = $user->getGISData($client['trans_id']);
         $timeentry = $user->theTime($client['date_entered']);//kwaun ang time
         $client_fam = $user->getclientFam($_GET['id']);
-        // print_r($client_fam);
         $GISsignatoryName = "";
         $GISsignatoryPosition = "";
         if(!empty($gis['signatory_id'])){
@@ -69,7 +68,6 @@
 			$amountToWord2 = $user->toWord($client_assistance[2]['amount']);
 			$am2 = (str_replace(",","",$client_assistance[2]['amount']));
         }
-        //print_r($record);
         $fund2 = "";
         
         if(!empty($client_assistance[2]['fund'])){
@@ -254,38 +252,24 @@
                         total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
                         total = parseFloat(totaldist - total);
                         
-                        // total = parseFloat(Number(total).toFixed(2))
                         $("#totalamount").val(CurrencyFormat(total));
                         total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
-                        // total2 = parseFloat(Number(total2).toFixed(2));
                         $("#dtotalamount").val(CurrencyFormat(total2));
                     }
 
                     $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
                         amount1 = parseFloat(0);
-                        // console.log(amount1);
                         amount2 = parseFloat(0);
-                        // console.log(amount2);
                         amount3 = parseFloat(0);
-                        // console.log(amount3);
                         amount4 = parseFloat(0);
-                        // console.log(amount4);
                         amount5 = parseFloat(0);
-                        // console.log(amount5);
                         amount6 = parseFloat(0);
-                        // console.log(amount5);
                         amount7 = parseFloat(0);
-                        // console.log(amount5);
                         amount8 = parseFloat(0);
-                        // console.log(amount3);
                         amount9 = parseFloat(0);
-                        // console.log(amount4);
                         amount10 = parseFloat(0);
-                        // console.log(amount5);
                         amount11 = parseFloat(0);
-                        // console.log(amount5);
                         amount12 = parseFloat(0);
-                        // console.log(amount5);
                         if(document.getElementById("amountf1").value.length > 0){
                             amount1 = document.getElementById("amountf1").value;
                             amount1 = parseFloat(amount1.replace(",",""));
@@ -358,14 +342,11 @@
                         }
                         total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
                         total = parseFloat(totaldist - total);
-                        // total = parseFloat(Number(total).toFixed(2))
-                        // console.log(amount1);console.log(amount2);
                         $("#totalamount").val(CurrencyFormat(total));
                     });
 
                     $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
                         total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
-                        // total2 = parseF-loat(Number(total2).toFixed(2));
                         $("#dtotalamount").val(CurrencyFormat(total2));
                     });
                     
@@ -420,7 +401,6 @@
                 $(document).ready(function() { 
                     var totalamount = document.getElementById("totalamount");
                     if(totalamount !== null && document.getElementById("totalamount").value !== 0.00){
-                        // console.log("dri ra");
                         $('#update').attr('disabled','disabled');
                         $('#save').attr('disabled','disabled');
                         $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -428,7 +408,6 @@
                         $('#update').removeClass('btn-primary').addClass('btn-dark ');
                         $(this).addClass('btn-default').removeClass('btn-primary ');
                     } else {
-                        // console.log("dd2 ra");
                         $('#update').removeAttr('disabled');
                         $('#save').removeAttr('disabled');
                         $('#save').removeClass('btn-dark').addClass('btn-primary');
@@ -438,7 +417,6 @@
                     }
                     $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
                         if(document.getElementById("totalamount").value != 0.00){
-                            // console.log("dri");
                             $('#update').attr('disabled','disabled');
                             $('#save').attr('disabled','disabled');
                             $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -446,7 +424,6 @@
                             $('#update').removeClass('btn-primary').addClass('btn-dark ');
                             $(this).addClass('btn-default').removeClass('btn-primary ');
                         } else {
-                            // console.log("dd2");
                             $('#update').removeAttr('disabled');
                             $('#save').removeAttr('disabled');
                             $('#save').removeClass('btn-dark').addClass('btn-primary ');
@@ -456,7 +433,7 @@
                         }
                     });
                 });
-                $(document).ready(function() { 
+                $(document).ready(function() {
                     $("#coesignatoryid1").keyup(function() {
 
                         var inputValue = document.getElementById("coesignatoryid").value.trim();
@@ -483,7 +460,6 @@
             
             $("#coesignatoryid").ready(function() {
                 if(document.getElementById("coesignatoryid").value == ""){
-                    // console.log("dri sa");
                     $('#update').attr('disabled','disabled');
                     $('#save').attr('disabled','disabled');
                     $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -491,7 +467,6 @@
                     $('#update').removeClass('btn-primary').addClass('btn-dark ');
                     $(this).addClass('btn-default').removeClass('btn-primary ');
                 } else {
-                    // console.log("dd2 sa");
                     $('#update').removeAttr('disabled');
                     $('#save').removeAttr('disabled');
                     $('#save').removeClass('btn-dark').addClass('btn-primary ');
@@ -501,7 +476,6 @@
                 }
                 $("#coesignatoryid").keyup(function() {
                     if(document.getElementById("coesignatoryid").value == ""){
-                        // console.log("dri sa");
                         $('#update').attr('disabled','disabled');
                         $('#save').attr('disabled','disabled');
                         $('#save').removeClass('btn-primary').addClass('btn-dark ');
@@ -509,7 +483,6 @@
                         $('#update').removeClass('btn-primary').addClass('btn-dark ');
                         $(this).addClass('btn-default').removeClass('btn-primary ');
                     } else {
-                        // console.log("dd2 sa");
                         $('#update').removeAttr('disabled');
                         $('#save').removeAttr('disabled');
                         $('#save').removeClass('btn-dark').addClass('btn-primary ');
@@ -592,7 +565,7 @@
 			</div>
     </nav>
         <br><br><br><br>
-        <form action="coe.php?id=<?php echo $_GET['id']?>" method="post">
+        <form id="coeForm" action="coe.php?id=<?php echo $_GET['id']?>" method="post">
         <div class="container">
                 <?php if($gis['program_type'] == '1'){?>
                 
@@ -631,7 +604,7 @@
                                 Amount is more than Twenty Thousand Pesos (Php 50,000).
                                 <div>
                                 <label> Approved By : </label>&nbsp&nbsp&nbsp
-                                    <input style="text-transform: uppercase; width:50%" id="coesignatoryid1" list="coesign" name="coesignName1" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullnameCOE($client['signatory_GL']) ?>" required>
+                                    <input style="text-transform: uppercase; width:50%" id="coesignatoryid1" list="coesign" name="coesignName1" value="<?php echo empty($client['signatory_GL'])?"":$user->getSignatoryFullnameCOE($client['signatory_GL']) ?>" required autocomplete="off">
                                     <datalist id="coesign">
                                         <?php 
                                             $data = $user->signatoryGIS();
@@ -673,7 +646,7 @@
                             <div class="card-header  border-secondary bg-secondary text-white">
                                 Records
                             </div>
-                            <div class="card-body">
+                            <div id="records-card-body" class="card-body">
                                 <div class="container">
                                     <div class="row">
                                         <div><input type="checkbox" class="lg" name="ref" value="Referral Letter" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Referral") ?>> Referral Letter</div>
@@ -687,7 +660,7 @@
                                     <div class="row">
                                         <div>
                                             <input type="checkbox" class="lg" id="val_id" name="val_id" value="Valid ID:" <?php echo $user->checkCheck((!empty($record['document'])?$record['document']:""), "", "Valid ID") ?>> Valid ID Presented: 
-                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()">
+                                            <input list="valid" type="text" id="pres_id" class="text-left center-input" name="pres_id" value=" <?php echo (!empty($record['id_presented'])?$record['id_presented']:"") ?>" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-. ]/g, '').toUpperCase()" autocomplete="off">
                                             <datalist id="valid">
                                                 <option>School-ID</option>
                                                 <option>Voter's ID</option>
@@ -724,6 +697,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="records-error" style="color:#dc3545;font-weight:600;display:none;margin-top:8px;padding:6px 10px;border:1px solid #f5c6cb;background:#f8d7da;border-radius:4px;">&#9888; Please select at least one record.</div>
                             </div>
                         </div>
                     </div>
@@ -732,7 +706,7 @@
                             <div class="card-header border-secondary bg-secondary text-white">
                                 <?php echo $client_assistance[1]['type'] ?> Records
                             </div>
-                            <div class="card-body">
+                            <div id="records-card-body" class="card-body">
                                 <div class="container">
                                 <?php
                                     if(substr_count(strval($type), "Medic") > 0){
@@ -982,11 +956,7 @@
                 <div class="container">
                     <div class="form-group row" >
                         <div class="col"><a href="gis.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> GIS</a></div>
-                        <!--
-						<div class="col"><input type="button" class="btn btn-<?php //echo (empty($record))?"secondary":"primary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()"<?php //echo (empty($record))?"disabled":"" ?> ></div>
-                        <div class="col"><input type="button" class="btn btn-<?php //echo (empty($record))?"secondary":"primary" ?> btn-block" value="Print CE" name="printce" onclick="printCOE()"<?php //echo (empty($record))?"disabled":"" ?> ></div>
-                        -->
-						<?php 
+						<?php
                             if($record){
                         ?>
                             <div class="col"><input type="submit" class="btn btn-primary btn-block"  value="Update" id="update" name="update"></div>
@@ -1001,37 +971,43 @@
             </div>
         </form>
         <div id="gisce" hidden>
-        <?php 
-            // include("gis_sheet_in_coe.php"); 
-            //  include("gisv2_print.php"); 
+        <?php
         ?>
         </div>
         <div id="coe" class="printable" hidden>
-        <?php 
-			/* if(substr_count(strval($type), "Medic") > 0){
-                include("coe_med.php"); 
-            }elseif(substr_count(strval($type), "Trans") > 0){
-                include("coe_trans.php");
-            }elseif(substr_count(strval($type), "Food Sub") > 0){
-                include("coe_food.php");
-            }elseif(substr_count(strval($type), "Burial") > 0){
-                include("coe_burial.php");
-            }elseif(substr_count(strval($type), "Educ") > 0){
-                include("coe_educ.php");
-            }elseif(substr_count(strval($type), "Cash") > 0){
-				include("coe_cash.php");
-			}elseif(substr_count(strval($type), "Non") > 0){
-				include("coe_non_food.php");
-			}
-
-            if(!empty($client_assistance[2]['type'])){
-                include("coe_food2.php");
-            }  */ 
-
-			// include("coev2_print.php"); 
-			
+        <?php
             ?>
         </div>
+
+    <script>
+    /* coeForm-records-validation */
+    (function () {
+        var form    = document.getElementById('coeForm');
+        var cardBody = document.getElementById('records-card-body');
+        var errDiv  = document.getElementById('records-error');
+
+        if (!form || !cardBody) return;
+
+        /* Hide error as soon as any checkbox is ticked */
+        cardBody.addEventListener('change', function (e) {
+            if (e.target.type === 'checkbox' && e.target.checked) {
+                if (errDiv) errDiv.style.display = 'none';
+            }
+        });
+
+        /* Block submit if no checkbox is checked */
+        form.addEventListener('submit', function (e) {
+            var checked = cardBody.querySelectorAll('input[type="checkbox"]:checked').length;
+            if (checked === 0) {
+                e.preventDefault();
+                if (errDiv) {
+                    errDiv.style.display = 'block';
+                    errDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+    })();
+    </script>
     </body>
     <?php 
     if(isset($_POST["save"])){
@@ -1056,6 +1032,9 @@
         $amount12 = "";
 		$sdo = "";
             $id_sign = $client['signatory_id'];
+            $client_work = "";
+            $client_salary = "";
+            $client_agency = "";
         if(isset($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);
         }
@@ -1142,7 +1121,6 @@
         }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
-        //echo $docu ."-". $id_pres ."-". $others_input ."-". $signName;
         $user->insertCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
         $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
     }
@@ -1177,6 +1155,10 @@
         $amount10 = "";
         $amount11 = "";
         $amount12 = "";
+        
+        $client_work = "";
+        $client_salary = "";
+        $client_agency = "";
         foreach($_POST as $key => $value) {
                 $docu .=   $value . '-';
         }
@@ -1255,10 +1237,8 @@
         if(isset($_POST['amountf12'])){
             $amount12 = $_POST['amountf12'];
         }
-        // print_r($_POST);
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
-        // echo $signName;
         $user->updateCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
         $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
     }

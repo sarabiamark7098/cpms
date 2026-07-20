@@ -14,12 +14,12 @@
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
         $otherinfo = $user->getOtherInformations($_GET['id']);
         $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
-        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation']);
-        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3']);
-        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability']);
-        $externalResources = $user->ParseInputs($otherinfo['externalResources']);
-        $selfHelp = $user->ParseInputs($otherinfo['selfHelp']);
-        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor']);
+        $otherClientInformation = $user->ParseInputs($otherinfo['otherClientInformation'] ?? '');
+        $crisisSeverityQuestion3 = $user->ParseInputs($otherinfo['crisisSeverityQuestion3'] ?? '');
+        $supportSystemAvailability = $user->ParseInputs($otherinfo['supportSystemAvailability'] ?? '');
+        $externalResources = $user->ParseInputs($otherinfo['externalResources'] ?? '');
+        $selfHelp = $user->ParseInputs($otherinfo['selfHelp'] ?? '');
+        $vulnerability_riskFactor = $user->ParseInputs($otherinfo['vulnerability_riskFactor'] ?? '');
     
         $fundsourcedata = $user->getfundsourcedata($_GET['id']);
 			
@@ -65,9 +65,9 @@
         $city = explode("/", $client['client_municipality']);
         $brgy = explode("/", $client['client_barangay']);
         $province = explode("/", $client['client_province']);
-        $bcity = explode("/", $client['b_municipality']); 
-        $bbrgy = explode("/", $client['b_barangay']);
-        $bprovince = explode("/", $client['b_province']);
+        $bcity = $client['b_municipality'] ? explode("/", $client['b_municipality']) : ''; 
+        $bbrgy = $client['b_barangay'] ? explode("/", $client['b_barangay']) : '';
+        $bprovince = $client['b_province'] ? explode("/", $client['b_province']) : '';
 
         //if street kay way sulod ma blank lg sta
 		if(!empty($client['b_street'])){
@@ -79,7 +79,22 @@
             $cash_add .= $client['client_street'] .", ";
 		}
         
-        $b_add .= $bbrgy[0] .", ". $bcity[0].", ". $bprovince[0]; //client final address
+        if(!empty($bbrgy[0])){
+            $b_add .= $bbrgy[0];
+            if(!empty($bcity[0])){
+                $b_add .=  ", " . $bcity[0];
+                if(!empty($bprovince[0])){
+                    $b_add .= ", " . $bprovince[0]; //client final address
+                }
+            }
+        }elseif(!empty($bcity[0])){
+            $b_add .=  ", " . $bcity[0];
+            if(!empty($bprovince[0])){
+                $b_add .= ", " . $bprovince[0]; //client final address
+            }
+        }else{
+            $b_add .= $bprovince[0]; //client final address
+        }
         $c_add .= $brgy[0] .", ". $city[0] .", ". $province[0]; //client final address
         $cash_add .= $brgy[0] .", ". $city[0]; //address for CAV
         

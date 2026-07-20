@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
     include('../php/class.user.php');
     $user = new User();
     if(isset($_GET['confirmdone'])){
@@ -240,11 +240,11 @@
                                                 <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required><br>
+                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required autocomplete="off"><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required ><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name" ><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required ><br>
                                             <div class="row">
                                                 <div class="checkbox col-3">
                                                     <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -252,7 +252,7 @@
                                                     </label>
                                                 </div>
                                                 <div id="collapseOne" aria-expanded="false" class="collapse col-9">
-                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'">
+                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'" autocomplete="off">
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
                                                         foreach ($data as $index => $value) {
@@ -272,9 +272,9 @@
                                         <h4 class="card-header text-success">CASH Information</h4>
                                         <div class="card-body">
                                             <h3>Cash Voucher Info</h3>
-                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required><br> 
-                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required><br>
+                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '."''".').toUpperCase()"><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required disabled><br> 
+                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required disabled><br>
                                         </div>
                                     </div>
                                 </div>';
@@ -306,11 +306,11 @@
                                                 <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
                                             </div><br>
                                             <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(($gl['cname'])??"").'" placeholder="Providers Company Name" required><br>
+                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(($gl['cname'])??"").'" placeholder="Providers Company Name" required autocomplete="off"><br>
                                             <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required ><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name" ><br>
+                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required ><br>
                                             <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.(($gl['to_mention'])??"").'" placeholder="Addressee to Mention in GL" hidden><br>
                                             <div class="row">
                                                 <div class="checkbox col-3">
@@ -319,7 +319,7 @@
                                                     </label>
                                                 </div>
                                                 <div id="collapseOne" aria-expanded="false" class="collapse col-9">
-                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'">
+                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'" autocomplete="off">
                                                     <datalist id="signatory">';
                                                         $data = $user->signatoryGIS();
                                                         
@@ -340,9 +340,9 @@
                                         <h4 class="card-header text-success">CASH Information</h4>
                                         <div class="card-body">
                                             <h3>Cash Voucher Info</h3>
-                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required><br> 
-                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required><br>
+                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '."''".').toUpperCase()"><br>
+                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required disabled><br> 
+                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required disabled><br>
                                         </div>
                                     </div>
                                 </div>';
@@ -461,10 +461,8 @@
         $(function () {
             $("#radiobutton").click(function () {
                 if ($(this).is(":checked")) {
-                    // console.log("require");
                     $(".for_the").attr('required', '');
                 } else {
-                    // console.log("wla na require");
                     $(".for_the").removeAttr('required');
                 }
             });
@@ -479,7 +477,6 @@
     	$(document).ready(function(){
              $('#comp_name').keyup(function(){  //On pressing a key on "Search box". This function will be called
                 var txt = $('#comp_name').val(); //Assigning search box value to javascript variable.
-                //console.log(txt);
                 if(txt != ''){ //Validating, if "name" is empty.
                     $.ajax({
                         type: "post", //method to use
@@ -548,6 +545,27 @@
                 document.body.innerHTML = oldPage;
 
             }
+    
+        /* disable-print-done-on-change */
+        (function () {
+            var form = document.querySelector('form');
+            if (!form) return;
+            function disablePrintDone() {
+                document.querySelectorAll('[name="printa"],[name="printgis"],[name="printis"],[name="printce"],[name="print"]').forEach(function (b) {
+                    b.disabled = true;
+                    b.classList.remove('btn-primary');
+                    b.classList.add('btn-secondary');
+                });
+                var done = document.getElementById('done');
+                if (done) {
+                    done.disabled = true;
+                    done.classList.remove('btn-success');
+                    done.classList.add('btn-secondary');
+                }
+            }
+            form.addEventListener('input', disablePrintDone);
+            form.addEventListener('change', disablePrintDone);
+        })();
     </script>
 
     <?php 
@@ -567,7 +585,6 @@
                 $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
                                                                                         
                                                                                             
-                //print_r($_POST);
                 $user->insertCash($_GET['id'], $sd_officer);
             }
 
@@ -588,7 +605,6 @@
                 $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
                 $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
                 $tomention= mysqli_real_escape_string($user->db,$_POST['tomention']); 
-                //print_r($_POST);
                  $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
             }
         }
@@ -607,8 +623,7 @@
             $if2= (strtolower($mode1) == "cav" && strtolower($mode2) == "gl");
 
             if( $if1 || $if2 ){
-                //GL 
-                // print_r($_POST["c_no"]);
+                //GL
                 $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
                 $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
                 $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));

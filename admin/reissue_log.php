@@ -1,5 +1,6 @@
 <?php
      include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
      $user = new User();
 
     if(isset($_POST)){
@@ -64,15 +65,13 @@
                 data : {page:1},
                 success:function(data){
                     $('#page_data').html(data);
-                    //console.log(data);
-                } 
+                }
                 })
             }
     </script>
     </head>
 
     <body>
-        <?php //echo $_SESSION['userfullname'] ?>
         <div class="wrapper">
             <!-- Sidebar Holder -->
             <nav id="sidebar">
@@ -107,6 +106,12 @@
                     </li>
                     <li>
                         <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    </li>
+                    <li>
+                        <a href="AccountsManagement.php">Accounts Management <i style="float: right;font-size:25px" class="fa fa-user-cog"></i></a>
+                    </li>
+                    <li>
+                        <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
                     </li>
                 </ul>
             </nav>
@@ -182,7 +187,6 @@
                         //if naa nay value
                         $('#search_text').keyup(function(){  //On pressing a key on "Search box". This function will be called
                             var txt = $('#search_text').val(); //Assigning search box value to javascript variable.
-                            // console.log(txt);
                             if(txt != ''){ //Validating, if "name" is empty.
                                 $.ajax({
                                     type: "post", //method to use
@@ -234,18 +238,15 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
             });  
         })

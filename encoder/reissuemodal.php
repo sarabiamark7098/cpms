@@ -21,7 +21,6 @@ $user = new User();
 	<body>
     <script type="text/javascript">
         function reissuance(id){
-            // console.log(id);
             window.location.href = "socialwork/gis.php?id="+ id +"&stat=0";
         }
     </script>

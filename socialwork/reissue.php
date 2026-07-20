@@ -1,5 +1,6 @@
 <?php
-     include('../php/class.user.php');
+    include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
      $user = new User();
 
     if(isset($_POST)){
@@ -64,15 +65,20 @@
                 data : {page:1},
                 success:function(data){
                     $('#page_data').html(data);
-                    //console.log(data);
-                } 
+                }
                 })
             }
     </script>
+    <style type="text/css">
+        #search_text:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            border-color: #d1d1d1;
+        }
+    </style>
     </head>
 
     <body>
-        <?php //echo $_SESSION['userfullname'] ?>
         <div class="wrapper">
             <!-- Sidebar Holder -->
             <nav id="sidebar">
@@ -171,47 +177,49 @@
                         }
 
                         $(document).ready(function () {
+                            let isSearching = false;
+
                             const debouncedSearch = debounce(function () {
                                 var txt = $('#search_text').val();
+                                
                                 if (txt !== '') {
                                     $.ajax({
                                         type: "post",
                                         url: "fetch.php",
                                         data: { search_client: txt },
+                                        beforeSend: function() {
+                                            $('#search_text').prop('disabled', true);
+                                            $('body').css('cursor', 'progress');
+                                        },
                                         success: function (html) {
                                             $('#search_result').html(html).show();
+                                        },
+                                        complete: function() {
+                                            isSearching = false;
+                                            $('#search_text').prop('disabled', false);
+                                            $('body').css('cursor', 'default');
+                                            
+                                            $('#search_text').focus();
                                         }
                                     });
                                 } else {
                                     $('#search_result').html("");
+                                    isSearching = false;
                                 }
                             }, 1000); 
 
-                            $('#search_text').keyup(debouncedSearch);
+                            $('#search_text').on('keydown', function (e) {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault(); 
+                                    if (isSearching) return;
+
+                                    isSearching = true;
+                                    debouncedSearch(); 
+                                }
+                            });
                         });
                     </script>
-                <script>
-                    // $(document).ready(function(){
-                    //     $('#search_text').keyup(function(){  //On pressing a key on "Search box". This function will be called
-                    //         var txt = $('#search_text').val(); //Assigning search box value to javascript variable.
-                    //         // console.log(txt);
-                    //         if(txt != ''){ //Validating, if "name" is empty.
-                    //             $.ajax({
-                    //                 type: "post", //method to use
-                    //                 url: "fetch.php", //ginapasa  sa diri nga file and data
-                    //                 data: {search_client:txt}, //mao ni nga data
-                    //                 success: function(html){  //If result found, this funtion will be called.
-                    //                     $('#search_result').html(html).show();  //Assigning result to "#result" div.
-                    //                 }
-                    //             });
-                    //         }else{
-                    //         $('#search_result').html(""); //Assigning no result to "result" div.
-                    //         }
-                    //     });
-                    // });
-                    
-                </script>
-            </div>
+                </div>
             </div>
         </div>
     </body>
@@ -271,45 +279,39 @@
     </div>
     
 	<script type="text/javascript">
-        //userAccount   
+        //userAccount
         $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
         $('#logoutmodal').appendTo("body").on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
 	</script>
 </html>

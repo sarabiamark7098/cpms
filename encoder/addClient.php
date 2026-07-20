@@ -39,7 +39,6 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <!-- <input type="text" class="form-control mr-sm-2 b" name="extraname" style="text-transform:uppercase" placeholder="Extension Name"> -->
                         <select name="extraname" class="form-control mr-sm-2 b">
                             <option value="" selected> Extension Name</option>
                             <option value="JR">JR</option>
@@ -144,7 +143,7 @@
                 <h4 class="text-center">Address</h4>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="regionClist" id="creg" name="regions" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required>
+                    <input list="regionClist" id="creg" name="regions" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required autocomplete="off">
                         <datalist id="regionClist">
                         <?php
                             $getregions = $user->optionregion();
@@ -152,7 +151,6 @@
                             foreach($getregions as $index => $value){
                                 //Display info
                                 echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-                                //echo $value['psgc_code'];
                                 echo '</option>';
                             }
                         ?>
@@ -162,21 +160,21 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" required>
+                    <input list="provinceClist" id="cprov" type="text" class="form-control mr-sm-2 b" name="province" placeholder="Province" onChange="get_c_Province(this)" required autocomplete="off">
                     <datalist id="provinceClist">
                     </datalist>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required>
+                    <input list="municipalityClist" type="text" class="form-control mr-sm-2 b" id="client_city" name="city" placeholder="City or Municipality" onChange="get_c_Municipality(this)" required autocomplete="off">
                     <datalist id="municipalityClist">
                     </datalist>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required>
+                    <input list="barangayClist" id="cbrgy" type="text" class="form-control mr-sm-2 b" name="barangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required autocomplete="off">
                     <datalist id="barangayClist">
                     </datalist>
                     </div>  
@@ -186,8 +184,6 @@
                         <select class="form-control mr-sm-2 b" name="district" id="client_district">
                             <?php
                                 $getdistrict = $user->getdistrictlist();
-                                // print_r($getdistrict);
-                                // Loop through results
                                 echo "<option value=''>Select District</option>";
                                 foreach($getdistrict as $index => $value){
                                     //Display info
@@ -221,7 +217,6 @@
                     <h4 class="text-center">Beneficiary Info</h4>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <!-- <input id="foo" type="text" name="relation" class="form-control mr-sm-2 b benerequire" placeholder="Relationship with Beneficiary"> -->
                             <select name="relation" class="form-control mr-sm-2 b benerequire">
                                 <option value="" disabled selected>Relation With Beneficiary</option>
                                 <?php
@@ -254,7 +249,6 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <!-- <input type="text" class="form-control mr-sm-2 b" name="b_exname" style="text-transform:uppercase" placeholder="Beneficiary Extension Name"> -->
                         <select name="b_exname" class="form-control mr-sm-2 b">
                             <option value="" selected>Beneficiary Extension Name</option>
                             <option value="JR">JR</option>
@@ -318,7 +312,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
+                            <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category"  autocomplete="off">
                             <datalist id="b_categories">
                                 <option>Children in Need of Special Protection</option>
                                 <option>Persons Living with HIV/AIDS</option>
@@ -343,7 +337,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="regionBlist" id="breg" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)">
+                        <input list="regionBlist" id="breg" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)" autocomplete="off">
                         <datalist id="regionBlist">
                         <?php
                                 $getregions = $user->optionregion();
@@ -351,7 +345,6 @@
                                 foreach($getregions as $index => $value){
                                     //Display info
                                     echo '<option value="'. $value['r_name'] .' /'. $value['psgc_code'] .'"> ';
-                                    //echo $value['psgc_code'];
                                     echo '</option>';
                                 }
                             ?>
@@ -361,21 +354,21 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="provinceBlist" id="bprov" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)">
+                        <input list="provinceBlist" id="bprov" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)" autocomplete="off">
                         <datalist id="provinceBlist">
                         </datalist>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)">
+                        <input list="municipalityBlist" type="text" class="form-control mr-sm-2 b benerequire" id="beneficiary_city" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)" autocomplete="off">
                         <datalist id="municipalityBlist">
                         </datalist>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
-                        <input list="barangayBlist" id="bbrgy" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay" onChange="get_b_Barangay(this)">
+                        <input list="barangayBlist" id="bbrgy" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay" onChange="get_b_Barangay(this)" autocomplete="off">
                         <datalist id="barangayBlist">
                         </datalist>
                         </div>
@@ -422,7 +415,6 @@
             var years = age_dt.getUTCFullYear() - 1970; // Calculate the number of years
             var months = age_dt.getUTCMonth() + 1; // Get the number of months
             var days = age_dt.getUTCDate() - 1; // Get the number of days
-            // console.log("Age: "+ years+ " years, "+ months + " months, and " + days + " days");
             if (years >= 0 && months > 11 && days > 0 ) {
                 years += 1;
             }
@@ -508,10 +500,8 @@
         $(function () {
             $("#radiobutton").click(function () {
                 if ($(this).is(":checked")) {
-                    // console.log("require");
                     $(".benerequire").attr('required', '');
                 } else {
-                    // console.log("wla na require");
                     $(".benerequire").removeAttr('required');
                 }
             });
@@ -524,8 +514,6 @@
             brgy = document.getElementById('cbrgy').value;
             dist = document.getElementById('client_district').value.trim();
             str = document.getElementById('cstr').value;
-            // console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
-
             get_b_Region(document.getElementById('creg'));
             get_b_Province(document.getElementById('cprov'));
             get_b_Municipality(document.getElementById('client_city'));

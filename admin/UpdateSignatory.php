@@ -26,12 +26,15 @@ $user = new User();
 		$setid = $_GET['id'];
 		$result = $user->updatesignatory($settitle, $setfirstname, $setlastname, $setmiddleI, $setinitials, $setposition, $setoptionsgis, $setoptionsgl, $set_s_tree, $set_s_signatory, $setid);
 	
-		if($result){
+		if($result == "success"){
 			echo "<script>alert('Successfully Updating Signatory!');</script>";
 			echo "<script>window.location='SignatoryPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
-		}
-		else{
+		}else if($result == "exists"){
+			echo "<script>alert('Signatory with the same name already exists!');</script>";
+			echo "<script>window.location='SignatoryPage.php';</script>";
+			echo "<meta http-equiv='refresh' content='0'>";
+		}else{
 			echo "<script>alert('Error Updating Signatory!');</script>";
 			echo "<script>window.location='SignatoryPage.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
@@ -72,7 +75,7 @@ $user = new User();
 				<!-- <div class="form-group col-lg-3">
 				</div> 
 				<div class="form-group col-lg-6">
-				  <input value="<?php //echo $getsignatory['signatory_id']; ?>" placeholder="Signatory ID" id="empid" name="empid" type="text" class="form-control text-center">
+				  <input value="" placeholder="Signatory ID" id="empid" name="empid" type="text" class="form-control text-center">
 				  <label class="active" for="empid">Employee ID(Signatory)</label>
 				</div>
 				<div class="form-group col-lg-3">
@@ -90,7 +93,7 @@ $user = new User();
 				  <label class="active" for="lname">Last Name</label>
 				</div>
 				<div class="form-group col-lg-6">
-				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
+				  <input value="<?php echo $getsignatory['middle_I']; ?>" placeholder="Middle Initial" id="mi" name="mi" type="text" class="form-control" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '')">
 				  <label class="active" for="mi">Middle Initial</label>
 				</div>
 				<div class="form-group col-lg-6">
@@ -110,18 +113,6 @@ $user = new User();
                             <input type="checkbox" name="gl_check" id="gl_check" <?php echo ($getsignatory['option_GL'] == 1?"checked":"") ?>><label for="gl_check">GL</label>
                             </div>
                         </div>
-					<!-- <select placeholder="Options" id="option" name="option" type="text" class="form-control " required>
-						<?php 
-							// if($getsignatory['options'] == 'GL'){
-							// 	echo '<option value="GL" selected>Guarantee Letter</option>';
-							// 	echo '<option value="GIS / CE">GIS / CE</option>';
-							// }else if($getsignatory['options'] == 'GIS / CE'){
-							// 	echo '<option value="GL" selected>Guarantee Letter</option>';
-							// 	echo '<option value="GIS / CE" selected>GIS / CE</option>';
-							// }
-						?>
-					</select>
-					 <label class="active" for="position">Options</label> -->
 				</div>
                 <div class="form-group col-lg-6">
                     <select placeholder="SIGNATORY TREE" id="s_tree" name="s_tree" type="text" class="form-control" required>

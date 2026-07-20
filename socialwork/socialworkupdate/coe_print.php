@@ -95,9 +95,9 @@
                         <p class="text-center">Date:</p>
                     </div>
                     <div class="col-sm-10">
-                        <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m") ?>'>
-                        <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d") ?>'>
-                        <input class="text-center" style="width: 70px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y") ?>'>
+                        <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client["date_accomplished"])) ?>'>
+                        <input class="text-center" style="width: 70px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client["date_accomplished"])) ?>'>
                     </div>
                     <div class="col-sm-2 center">
                     </div>
@@ -275,7 +275,7 @@
                         <div class="col-12" style="text-align: justify; text-indent: 85px; float:left; line-height: 40px;">
                         <?php
                             if($mode1 == "CAV" || (!empty($mode2) && $mode2 == "CAV")){
-                                echo "The client is hereby recommended to receive <u>&emsp;". (strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]) == "cash"? "Financial":ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]))) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u>.";
+                                echo "The client is hereby recommended to receive <u>&emsp;". (strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]) == "cash"? "Cash Relief":ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]))) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u>.";
                             }elseif($mode1 == "GL" || (!empty($mode2) && $mode2 == "GL")){
                                 echo "The client is hereby recommended to receive <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> assistance for <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> in the amount of <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> Php<u>&emsp;&emsp;&emsp;&emsp;&emsp;</u>.";
                             }
@@ -301,7 +301,7 @@
                         <div class="col-12" style="text-align: justify; text-indent: 85px; float:left; line-height: 30px;">
                         <?php
                             if($mode1 == "GL" || (!empty($mode2) && $mode2== "GL")){
-                                echo "The client is hereby recommended to receive <u>&emsp;". ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0])) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u> payable to <u>&emsp;". ucwords(strtolower($gl['cname'])) ."&emsp;</u>, <u>&emsp;".ucwords(strtolower($gl['caddress']))."&emsp;</u>.";
+                                echo "The client is hereby recommended to receive <u>&emsp;". (strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]) == "cash"? "Cash Relief":ucwords(strtolower(explode(" ", strtoupper($client_assistance[1]['type']))[0]))) ."&emsp;</u> assistance for <u>&emsp;". ucwords(strtolower(!empty($client_assistance[1]['purpose'])?$client_assistance[1]['purpose']:"")) ."&emsp;</u> in the amount of <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&nbsp;". $client_assistance[1]['amount'] ."&emsp;</u> payable to <u>&emsp;". ucwords(strtolower($gl['cname'])) ."&emsp;</u>, <u>&emsp;".ucwords(strtolower($gl['caddress']))."&emsp;</u>.";
                             }elseif($mode1 == "CAV" || (!empty($mode2) && $mode2 == "CAV")){
                                 echo "The client is hereby recommended to receive <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> assistance for <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> in the amount of <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u> Php<u>&emsp;&emsp;&emsp;&emsp;&emsp;</u> payable to <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u>, <u>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</u>.";
                             }
@@ -326,11 +326,11 @@
                 <b>Social Worker</b>
                 <p>(Signature Over Printed Name)</p>
                 <div style="margin-top: -10px;">
-                    <label>License no.:</label><input class="text-center" style="width: 20%; border-bottom: 1px solid black;" type="text" value='<?php echo $soc_worker['sw_license_no']; ?>'><br>
+                    <label>License no.:</label><input class="text-center" style="width: 20%; border-bottom: 1px solid black;" type="text" value='<?php echo $soc_worker["sw_license_no"]; ?>'><br>
                 </div>
             </div>
             <div class="col text-center">
-                <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value='<?php echo (strtolower($mode1) == "cav"?$GISsignatoryName:$GLsignatoryName) ?>'>
+                <input class="text-center" style="width: 100%; font-size: 16px; padding:0; border:none; border-bottom: 1px solid black;" type="text" height="30px" value="<?php echo (strtolower($mode1) == 'cav' ? $GISsignatoryName : $GLsignatoryName); ?>">
                 <b>Approving Authority</b>
                 <p>(Signature Over Printed Name)</p>
             </div>
@@ -349,9 +349,9 @@
                                 <p class="text-center">Date:</p>
                             </div>
                             <div class="col-sm-10">
-                                <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m") ?>'>
-                                <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d") ?>'>
-                                <input class="text-center" style="width: 70px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y") ?>'>
+                                <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("m", strtotime($client["date_accomplished"])) ?>'>
+                                <input class="text-center" style="width: 50px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("d", strtotime($client["date_accomplished"])) ?>'>
+                                <input class="text-center" style="width: 70px; font-size: 14px; padding:0; border: 1px solid black;" type="text" value='<?php echo date("Y", strtotime($client["date_accomplished"])) ?>'>
                             </div>
                             <div class="col-sm-2 center">
                             </div>

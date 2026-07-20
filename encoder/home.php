@@ -1,5 +1,6 @@
 <?php
 	include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
     $user = new User();
 ?>
 <?php
@@ -22,7 +23,6 @@
 <?php
     if(!isset($_POST['wbeneficiary'])){
 		if(isset($_POST['addClient'])){
-            // print_r($_POST);
 			//client the one that process the transaction
 			$fname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['firstname'])," "));
 			$mname = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['middlename'])," "));
@@ -201,11 +201,16 @@
 			}
 			.dropdown .dropdown-menu .dropdown-item:active, .dropdown 
 			.dropdown-menu .dropdown-item:hover{background-color: skyblue  !important;}
+
+            #search_text:disabled {
+                background-color: #e9ecef;
+                cursor: not-allowed;
+                border-color: #d1d1d1;
+            }
         </style>
     </head>
 
 <body>
-    <?php //echo $_SESSION['userfullname'] ?>
     <div class="wrapper">
         <!-- Sidebar Holder -->
         <nav id="sidebar">
@@ -308,32 +313,49 @@
                         }
 
                         $(document).ready(function () {
+                            let isSearching = false;
+
                             const debouncedSearch = debounce(function () {
                                 var txt = $('#search_text').val();
+                                
                                 if (txt !== '') {
                                     $.ajax({
                                         type: "post",
                                         url: "fetch.php",
                                         data: { search: txt },
+                                        beforeSend: function() {
+                                            $('#search_text').prop('disabled', true);
+                                            $('body').css('cursor', 'progress');
+                                        },
                                         success: function (html) {
                                             $('#search_result').html(html).show();
+                                        },
+                                        complete: function() {
+                                            isSearching = false;
+                                            $('#search_text').prop('disabled', false);
+                                            $('body').css('cursor', 'default');
+                                            
+                                            $('#search_text').focus();
                                         }
                                     });
                                 } else {
                                     $('#search_result').html("");
+                                    isSearching = false;
                                 }
                             }, 1000); 
 
-                            $('#search_text').keyup(debouncedSearch);
-                            // $('#search_text').on('keydown', function (e) {
-                            //     if (e.key === 'Enter') {
-                            //         e.preventDefault();     // stop form submit if inside form
-                            //         debouncedSearch();     // run debounced search
-                            //     }
-                            // });
+                            $('#search_text').on('keydown', function (e) {
+                                if (e.key === 'Enter') {
+                                    e.preventDefault(); 
+                                    if (isSearching) return;
+
+                                    isSearching = true;
+                                    debouncedSearch(); 
+                                }
+                            });
                         });
                     </script>
-            </div>
+                </div>
             </div>
         </div>
     <script type="text/javascript">
@@ -367,6 +389,7 @@
 		</div>
     </div>
 </div>
+<script src="../js/session_heartbeat.js"></script>
 </body>
     <script>
         //userAccount
@@ -375,20 +398,17 @@
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            //console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "userAccount.php",
                     data: dataString,
                     cache: false,
                     success: function (data) {
-                        //console.log(data);
                         modal.find('.useraccount').html(data);
                     },
                     error: function(err) {
-                        //console.log(err);
                     }
-                });  
+                });
         })
     </script>
 
@@ -410,20 +430,17 @@
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var modal = $(this);
           var dataString = 'id=logout';
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "home.php",
                 data: dataString,
                 cache: false,
                 success: function (data) {
-                    //console.log(data);
                     modal.find('.logoutbody');
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
     </script>
     <div class="modal hide fade" id="cancelGL" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -539,7 +556,6 @@ $('#clientdata').appendTo("body").on('show.bs.modal', function (event) {
           var userid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + userid;
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "showClientData.php",
@@ -549,9 +565,8 @@ $('#clientdata').appendTo("body").on('show.bs.modal', function (event) {
                     modal.find('.showClientData').html(data);
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
     })
 $(".clientdata").appendTo("body").on("hidden.bs.modal", function(){
     $(".showClientData").html("");
@@ -563,7 +578,6 @@ $('#cancelGL').appendTo("body").on('show.bs.modal', function (event) {
           var userid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + userid;
-		    // console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "cancelclientGL.php",
@@ -573,9 +587,8 @@ $('#cancelGL').appendTo("body").on('show.bs.modal', function (event) {
                     modal.find('.cancelbody').html(data);
                 },
                 error: function(err) {
-                    // console.log(err);
                 }
-            });  
+            });
     });
 
 //jscript pass Client
@@ -584,7 +597,6 @@ $('#passclient').appendTo("body").on('show.bs.modal', function (event) {
           var userid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + userid;
-		    // console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "passclient.php",
@@ -594,9 +606,8 @@ $('#passclient').appendTo("body").on('show.bs.modal', function (event) {
                     modal.find('.passClientData').html(data);
                 },
                 error: function(err) {
-                    // console.log(err);
                 }
-            });  
+            });
     });
 //jscript pass With Beneficiary
 $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
@@ -604,7 +615,6 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
           var userid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + userid;
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "passwithbene.php",
@@ -614,9 +624,8 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
                     modal.find('.passClientDatawithBene').html(data);
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
     })
 //jscript pass With Beneficiary
         $('#passbenetoclient').appendTo("body").on('show.bs.modal', function (event) {
@@ -624,7 +633,6 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
           var userid = button.data('id') // Extract info from data-* attributes
           var modal = $(this);
           var dataString = 'id=' + userid;
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "passbenetoclient.php",
@@ -634,9 +642,8 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
                     modal.find('.passBeneToClient').html(data);
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
     });
 		$(document).ready(function(){
              $('#client_city').keyup(function(){  //On pressing a key on "Search box". This function will be called
@@ -679,7 +686,6 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            // console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "reissuemodal.php",
@@ -688,16 +694,14 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
                         modal.find('.proceedbody').html(data);
                     },
                     error: function(err) {
-                        // console.log(err);
                     }
-                });  
+                });
         });
         $('#reissueexpired').appendTo("body").on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var userid = button.data('id') // Extract info from data-* attributes
             var modal = $(this);
             var dataString = 'id=' + userid;
-            // console.log(dataString);
                 $.ajax({
                     type: "GET",
                     url: "reissuemodalexpired.php",
@@ -706,9 +710,8 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
                         modal.find('.proceedbodyexpired').html(data);
                     },
                     error: function(err) {
-                        // console.log(err);
                     }
-                });  
+                });
         });
 </script>
 
@@ -734,7 +737,6 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
           var button = $(event.relatedTarget) // Button that triggered the modal
           var modal = $(this);
           var dataString = "New Data";
-		  //console.log(dataString);
             $.ajax({
                 type: "GET",
                 url: "addClient.php",
@@ -744,9 +746,8 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
                     modal.find('#addclientbody').html(data);
                 },
                 error: function(err) {
-                    //console.log(err);
                 }
-            });  
+            });
         })
         function re_print(id){
             window.location.href = "reprint.php?id=" + id;
@@ -805,10 +806,8 @@ $('#passwithbene').appendTo("body").on('show.bs.modal', function (event) {
         $(function () {
             $("#radiobutton").click(function () {
                 if ($(this).is(":checked")) {
-                    // console.log("require");
                     $(".benerequire").attr('required', '');
                 } else {
-                    // console.log("wla na require");
                     $(".benerequire").removeAttr('required');
                 }
             });

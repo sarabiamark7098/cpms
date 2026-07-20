@@ -160,10 +160,6 @@ include('../php/class.user.php');
 					  <input value="<?php echo $getClient['amount']; ?>" id="amount1" name="amount1" type="text" class="form-control" readonly>
 					  <label class="active" for="amount1">Amount </label>
 					</div>
-					<!-- <div class="form-group col-lg-6" hidden>
-					  <input value="<?php // echo empty($fundsourcedata[1]['fundsource'])? "" : (empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[1]['fundsource'].'-'.$fundsourcedata[1]['fs_amount']:$fundsourcedata[1]['fundsource'].'-'.$fundsourcedata[1]['fs_amount'].'/'.$fundsourcedata[2]['fundsource'].'-'.$fundsourcedata[2]['fs_amount'].''.(!empty($fundsourcedata[3]['fundsource'])?'/'.$fundsourcedata[3]['fundsource']:"").'-'.$fundsourcedata[3]['fs_amount'].''.(!empty($fundsourcedata[4]['fundsource'])?'/'.$fundsourcedata[4]['fundsource'].'-'.$fundsourcedata[4]['fs_amount']:"").''.(!empty($fundsourcedata[5]['fundsource'])?'/'.$fundsourcedata[5]['fundsource'].'-'.$fundsourcedata[5]['fs_amount']:"")) ?>" id="sourceoffund" name="sourceoffund" type="text" class="form-control" readonly>
-					  <label class="active" for="sourceoffund">Source of Fund </label>
-					</div> -->
 					<br><br>
 					<div class="form-group col-lg-12">
 					  <label class="active" for="sourceoffund">Referral Division</label>

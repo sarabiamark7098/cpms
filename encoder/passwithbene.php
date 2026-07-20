@@ -165,7 +165,6 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<!-- <input type="text" value="<?php //echo $getClient['extraname'] ?>" class="form-control mr-sm-2 b" name="extraname" style="text-transform:uppercase" placeholder="Extension Name"> -->
 					<select name="extraname" class="form-control mr-sm-2 b">
 						<option value=""  <?php echo empty($getClient['extraname'])?"selected":"" ?>> Extension Name</option>
 						<option value="JR" <?php echo ($getClient['extraname']=="JR")?"selected":"" ?>>JR</option>
@@ -194,7 +193,7 @@ $user = new User();
 			
 			<div class="form-group row">
 			<div class="col-sm-6">
-					<input list="sexs" name="sex" value="<?php echo $getClient['sex'] ?>" class="form-control mr-sm-2 b" placeholder="Sex" required>
+					<input list="sexs" name="sex" value="<?php echo $getClient['sex'] ?>" class="form-control mr-sm-2 b" placeholder="Sex" required autocomplete="off">
 						<datalist id="sexs">
 							<option value="Male">
 							<option value="Female">
@@ -274,7 +273,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-					<input list="categories" type="text" value="<?php echo $getClient['category'] ?>" class="form-control mr-sm-2 b" name="category" placeholder="Category" required>
+					<input list="categories" type="text" value="<?php echo $getClient['category'] ?>" class="form-control mr-sm-2 b" name="category" placeholder="Category" required autocomplete="off">
 					<datalist id="categories">
 						<option>Children in Need of Special Protection</option>
 						<option>Persons Living with HIV/AIDS</option>
@@ -316,7 +315,7 @@ $user = new User();
 			<h4 class="text-center">Address</h4>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="regionClist" id="creg" value="<?php echo $getClient['client_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required>
+				<input list="regionClist" id="creg" value="<?php echo $getClient['client_region'] ?>" name="Cregion" class="form-control mr-sm-2 b" placeholder="Region" onChange="get_c_Region(this)" required autocomplete="off">
 					<datalist id="regionClist">
 					<?php
 						$getregions = $user->optionregion();
@@ -334,7 +333,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="provinceClist" id="cprov" value="<?php echo $getClient['client_province'] ?>" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required>
+				<input list="provinceClist" id="cprov" value="<?php echo $getClient['client_province'] ?>" type="text" class="form-control mr-sm-2 b" name="Cprovince" placeholder="Province" onChange="get_c_Province(this)" required autocomplete="off">
 				<datalist id="provinceClist">
 				</datalist>
 				<label>Province</label>
@@ -350,7 +349,7 @@ $user = new User();
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-12">
-				<input list="barangayClist" id="cbrgy" value="<?php echo $getClient['client_barangay'] ?>" type="text" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required>
+				<input list="barangayClist" id="cbrgy" value="<?php echo $getClient['client_barangay'] ?>" type="text" class="form-control mr-sm-2 b" name="Cbarangay" placeholder="Barangay" onChange="get_c_Barangay(this)" required autocomplete="off">
 				<datalist id="barangayClist">
 				</datalist>
 				<label>Barangay</label>
@@ -424,7 +423,6 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<!-- <input type="text" value="<?php //echo $getClient['b_exname']; ?>" class="form-control mr-sm-2 b" name="b_exname" style="text-transform:uppercase" placeholder="Beneficiary Extension Name"> -->
 						<select name="b_exname" class="form-control mr-sm-2 b">
 							<option value=""  <?php echo empty($getClient['b_exname'])?"selected":"" ?>> Extension Name</option>
 							<option value="JR" <?php echo ($getClient['b_exname']=="JR")?"selected":"" ?>>JR</option>
@@ -450,7 +448,7 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-6">
-					<input list="sexs" name="b_sex" value="<?php echo $getClient['b_sex'] ?>" class="form-control mr-sm-2 b benerequire" placeholder="Beneficiary Sex">
+					<input list="sexs" name="b_sex" value="<?php echo $getClient['b_sex'] ?>" class="form-control mr-sm-2 b benerequire" placeholder="Beneficiary Sex" autocomplete="off">
 						<datalist id="sexs">
 							<option value="Male">
 							<option value="Female">
@@ -514,7 +512,7 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-						<input list="b_categories" type="text" value="<?php echo $getClient['b_category'] ?>" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category" >
+						<input list="b_categories" type="text" value="<?php echo $getClient['b_category'] ?>" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category"  autocomplete="off">
 						<datalist id="b_categories">
 							<option>Children in Need of Special Protection</option>
 							<option>Persons Living with HIV/AIDS</option>
@@ -541,7 +539,7 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input list="regionBlist" id="breg" value="<?php echo $getClient['b_region'] ?>" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)">
+					<input list="regionBlist" id="breg" value="<?php echo $getClient['b_region'] ?>" type="text" class="form-control mr-sm-2 b benerequire" name="b_region" placeholder="Beneficiary Region" onChange="get_b_Region(this)" autocomplete="off">
 					<datalist id="regionBlist">
 					<?php
 						$getregions = $user->optionregion();
@@ -558,21 +556,21 @@ $user = new User();
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input list="provinceBlist" id="bprov" value="<?php echo $getClient['b_province'] ?>" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)" >
+					<input list="provinceBlist" id="bprov" value="<?php echo $getClient['b_province'] ?>" type="text" class="form-control mr-sm-2 b benerequire" name="b_province" placeholder="Beneficiary Province" onChange="get_b_Province(this)"  autocomplete="off">
 					<datalist id="provinceBlist">
 					</datalist>
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input list="municipalityBlist" value="<?php echo $getClient['b_municipality'] ?>" type="text" id="beneficiary_city" class="form-control mr-sm-2 b benerequire" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)">
+					<input list="municipalityBlist" value="<?php echo $getClient['b_municipality'] ?>" type="text" id="beneficiary_city" class="form-control mr-sm-2 b benerequire" name="b_city" placeholder="Beneficiary City or Municipality" onChange="get_b_Municipality(this)" autocomplete="off">
 					<datalist id="municipalityBlist">
 					</datalist>
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-12">
-					<input list="barangayBlist" id="bbrgy" value="<?php echo $getClient['b_barangay'] ?>" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay"onChange="get_b_Barangay(this)">
+					<input list="barangayBlist" id="bbrgy" value="<?php echo $getClient['b_barangay'] ?>" type="text" class="form-control mr-sm-2 b benerequire" name="b_barangay" placeholder="Beneficiary Barangay"onChange="get_b_Barangay(this)" autocomplete="off">
 					<datalist id="barangayBlist">
 					</datalist>
 					</div>
@@ -693,7 +691,6 @@ $user = new User();
 		brgy = document.getElementById('cbrgy').value;
 		dist = document.getElementById('client_district').value.trim();
 		str = document.getElementById('cstr').value;
-		// console.log(reg);console.log(prov);console.log(muni);console.log(brgy);console.log(dist);console.log(str);
 
 		get_b_Region(document.getElementById('creg'));
 		get_b_Province(document.getElementById('cprov'));
