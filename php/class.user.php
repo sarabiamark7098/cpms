@@ -3831,7 +3831,7 @@
                 ON b.bene_id = t.bene_id
             WHERE 
                 t.status_client IN ('Done','Decline')
-                AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 43 MONTH)
+                AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 30 MONTH)
                 AND (
                     ($clientWhere)
                     OR
@@ -3898,7 +3898,7 @@
 				ON b.bene_id = t.bene_id
 			WHERE 
 				t.status_client IN ('Done')
-				AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 43 MONTH)
+				AND t.date_entered >= DATE_SUB(NOW(), INTERVAL 30 MONTH)
 				AND (
 					($clientWhere)
 					OR
