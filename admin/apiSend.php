@@ -53,6 +53,7 @@
 			.count-card .count-number { font-size: 48px; font-weight: bold; }
 			.count-card .count-label { font-size: 16px; margin-top: 5px; }
 			.count-card.unsent { background-color: #fff3cd; border: 1px solid #ffc107; color: #856404; }
+			.count-card.window { background-color: #cce5ff; border: 1px solid #007bff; color: #004085; }
 			.count-card.sent { background-color: #d4edda; border: 1px solid #28a745; color: #155724; }
 			#dataLoader { text-align: center; padding: 30px 0; }
 			#dataLoader .fa-spinner { font-size: 24px; color: #007bff; }
@@ -168,7 +169,13 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="count-card unsent">
                                 <div class="count-number" id="unsentNumber">0</div>
-                                <div class="count-label"><i class="fa fa-clock-o"></i> Unsent Records</div>
+                                <div class="count-label"><i class="fa fa-envelope"></i> Overall Unsent Records</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="count-card window">
+                                <div class="count-number" id="unsentWindowNumber">0</div>
+                                <div class="count-label"><i class="fa fa-calendar-alt"></i> Unsent <span id="unsentWindowLabel">(within window)</span></div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
@@ -187,7 +194,7 @@
                         </div>
                         <div class="col-lg-2">
                             <button id="btnRefresh" class="btn btn-outline-secondary btn-lg">
-                                <i class="fa fa-refresh"></i> Refresh
+                                <i class="fa fa-redo"></i> Refresh
                             </button>
                         </div>
                     </div>
@@ -307,8 +314,16 @@
                     if(response.status === 'success'){
                         $('#unsentNumber').text(response.unsent);
                         $('#sentNumber').text(response.sent);
+                        $('#unsentWindowNumber').text(response.unsent_in_window);
 
-                        if(response.unsent > 0){
+                        var months = parseInt(response.sync_months);
+                        if(months > 0){
+                            $('#unsentWindowLabel').text('(last ' + months + ' month' + (months > 1 ? 's' : '') + ')');
+                        } else {
+                            $('#unsentWindowLabel').text('(no month limit)');
+                        }
+
+                        if(response.unsent_in_window > 0){
                             $('#btnSendAll').prop('disabled', false);
                         }
 
