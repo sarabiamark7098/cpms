@@ -4734,7 +4734,7 @@
 		LEFT JOIN tbl_transaction t USING (trans_id)
 		LEFT JOIN client_data c USING (client_id)
 		LEFT JOIN api_send_log asl ON a.trans_id = asl.trans_id
-			AND a.type_description = asl.assist_type_desc
+			AND a.type = asl.assistance_type
 			AND asl.status = 'success'
 		WHERE a.type IN ({$inClause})
 		AND t.status_client = 'Done'
@@ -4809,7 +4809,7 @@
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
 			WHERE asl.trans_id = a.trans_id
-			AND asl.assist_type_desc = a.type_description
+			AND asl.assistance_type = a.type
 			AND asl.status = 'success'
 		)
 		ORDER BY t.date_accomplished ASC
@@ -4873,7 +4873,7 @@
 		AND NOT EXISTS (
 			SELECT 1 FROM api_send_log asl
 			WHERE asl.trans_id = a.trans_id
-			AND asl.assist_type_desc = a.type_description
+			AND asl.assistance_type = a.type
 			AND asl.status = 'success'
 		)
 		ORDER BY t.date_accomplished ASC
@@ -4889,17 +4889,18 @@
 		return $data;
 	}
 
-	public function logApiSend($trans_id, $type_desc, $status, $response_code, $response_body){
+	public function logApiSend($trans_id, $assistance_type, $status, $response_code, $response_body, $batch_id = null){
 		$now = date("Y-m-d H:i:s");
 		$sent_by = $_SESSION['userId'];
 		$trans_id = mysqli_real_escape_string($this->db, $trans_id);
-		$type_desc = mysqli_real_escape_string($this->db, $type_desc);
+		$assistance_type = mysqli_real_escape_string($this->db, $assistance_type);
 		$status = mysqli_real_escape_string($this->db, $status);
 		$response_code = intval($response_code);
 		$response_body = mysqli_real_escape_string($this->db, $response_body);
+		$batch_id = mysqli_real_escape_string($this->db, $batch_id);
 
-		$query = "INSERT INTO api_send_log (trans_id, assist_type_desc, sent_at, status, response_code, response_body, sent_by)
-				  VALUES ('{$trans_id}', '{$type_desc}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
+		$query = "INSERT INTO api_send_log (sync_batch_id, trans_id, assistance_type, sent_at, status, response_code, response_body, sent_by)
+				  VALUES ('{$batch_id}', '{$trans_id}', '{$assistance_type}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
 
 		$result = mysqli_query($this->db, $query);
 		if($result){
@@ -4909,17 +4910,18 @@
 		}
 	}
 
-	public function logApiSendCron($trans_id, $type_desc, $status, $response_code, $response_body, $sent_by = 'CRON'){
+	public function logApiSendCron($trans_id, $assistance_type, $status, $response_code, $response_body, $sent_by = 'CRON', $batch_id = null){
 		$now = date("Y-m-d H:i:s");
 		$trans_id = mysqli_real_escape_string($this->db, $trans_id);
-		$type_desc = mysqli_real_escape_string($this->db, $type_desc);
+		$assistance_type = mysqli_real_escape_string($this->db, $assistance_type);
 		$status = mysqli_real_escape_string($this->db, $status);
 		$response_code = intval($response_code);
 		$response_body = mysqli_real_escape_string($this->db, $response_body);
 		$sent_by = mysqli_real_escape_string($this->db, $sent_by);
+		$batch_id = mysqli_real_escape_string($this->db, $batch_id);
 
-		$query = "INSERT INTO api_send_log (trans_id, assist_type_desc, sent_at, status, response_code, response_body, sent_by)
-				  VALUES ('{$trans_id}', '{$type_desc}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
+		$query = "INSERT INTO api_send_log (sync_batch_id, trans_id, assistance_type, sent_at, status, response_code, response_body, sent_by)
+				  VALUES ('{$batch_id}', '{$trans_id}', '{$assistance_type}', '{$now}', '{$status}', '{$response_code}', '{$response_body}', '{$sent_by}')";
 
 		$result = mysqli_query($this->db, $query);
 		if($result){
@@ -4927,6 +4929,121 @@
 		}else{
 			return false;
 		}
+	}
+
+	/**
+	 * Generate a unique identifier for one sync attempt (one API POST batch).
+	 * Stored on every api_send_log row belonging to that batch so the Records
+	 * module can group rows into a single transaction.
+	 */
+	public function generateSyncBatchId(){
+		return date('YmdHis') . '-' . bin2hex(random_bytes(5));
+	}
+
+	/**
+	 * RDV sync transaction history. Each row = one sync attempt, aggregating the
+	 * beneficiaries sent in that batch. Legacy rows (sync_batch_id IS NULL,
+	 * logged before batch tracking) are grouped per minute so they still appear.
+	 * Only transactions whose sync timestamp falls within the last $months
+	 * months are returned (0 = no limit). DataTables handles paging client-side.
+	 */
+	public function getSyncTransactions($months = 3){
+		$months = intval($months);
+
+		$whereClause = '';
+		if($months > 0){
+			$whereClause = "WHERE sent_at >= DATE_SUB(NOW(), INTERVAL {$months} MONTH)";
+		}
+
+		$query = "SELECT
+			COALESCE(sync_batch_id, CONCAT('legacy-', DATE_FORMAT(sent_at, '%Y%m%d%H%i'))) AS batch_key,
+			MIN(sent_at) AS started_at,
+			MAX(sent_at) AS ended_at,
+			COUNT(*) AS bene_count,
+			status,
+			MAX(response_code) AS response_code,
+			MAX(sent_by) AS sent_by
+		FROM api_send_log
+		{$whereClause}
+		GROUP BY batch_key, status
+		ORDER BY started_at DESC";
+
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	/**
+	 * List the beneficiaries included in a single sync transaction (batch).
+	 * Accepts the batch_key produced by getSyncTransactions(): either a real
+	 * sync_batch_id, or a "legacy-YYYYMMDDHHmm" key for pre-tracking rows.
+	 */
+	public function getSyncBatchBeneficiaries($batch_key, $status = null, $limit = 0, $offset = 0){
+		$whereClause = $this->buildSyncBatchWhere($batch_key, $status);
+
+		$limitClause = '';
+		$limit = intval($limit);
+		$offset = intval($offset);
+		if($limit > 0){
+			$limitClause = " LIMIT {$limit} OFFSET {$offset}";
+		}
+
+		$query = "SELECT
+			asl.trans_id,
+			asl.assistance_type,
+			asl.sent_at,
+			asl.status,
+			asl.response_code,
+			c.firstname,
+			c.middlename,
+			c.lastname,
+			c.extraname,
+			t.date_accomplished
+		FROM api_send_log asl
+		LEFT JOIN tbl_transaction t ON t.trans_id = asl.trans_id
+		LEFT JOIN client_data c ON c.client_id = t.client_id
+		WHERE {$whereClause}
+		ORDER BY c.lastname ASC, c.firstname ASC{$limitClause}";
+
+		$result = mysqli_query($this->db, $query);
+		$data = [];
+		if($result){
+			while($row = mysqli_fetch_assoc($result)){
+				$data[] = $row;
+			}
+		}
+		return $data;
+	}
+
+	/**
+	 * Build the WHERE condition that identifies one sync transaction (batch)
+	 * in api_send_log. Accepts either a real sync_batch_id or a
+	 * "legacy-YYYYMMDDHHmm" key for pre-tracking rows, optionally filtered by
+	 * status. Returns a SQL fragment referencing the `asl` alias.
+	 */
+	private function buildSyncBatchWhere($batch_key, $status = null){
+		$batch_key = mysqli_real_escape_string($this->db, $batch_key);
+
+		if(strpos($batch_key, 'legacy-') === 0){
+			$minute = substr($batch_key, 7); // YYYYMMDDHHmm
+			$minute = mysqli_real_escape_string($this->db, $minute);
+			$whereBatch = "asl.sync_batch_id IS NULL AND DATE_FORMAT(asl.sent_at, '%Y%m%d%H%i') = '{$minute}'";
+		}else{
+			$whereBatch = "asl.sync_batch_id = '{$batch_key}'";
+		}
+
+		$whereStatus = '';
+		if($status !== null && $status !== ''){
+			$status = mysqli_real_escape_string($this->db, $status);
+			$whereStatus = " AND asl.status = '{$status}'";
+		}
+
+		return $whereBatch . $whereStatus;
 	}
 
 	public function sendAssistanceDataToApi($records){
@@ -4977,10 +5094,14 @@
 		curl_setopt($ch, CURLOPT_URL, API_ENDPOINT_URL);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+		$headers = [
 			'Content-Type: application/json',
 			'Accept: application/json'
-		]);
+		];
+		if(defined('API_AUTH_TOKEN') && API_AUTH_TOKEN !== ''){
+			$headers[] = 'Authorization: Bearer ' . API_AUTH_TOKEN;
+		}
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, API_TIMEOUT);
 
