@@ -43,6 +43,7 @@ if(isset($_POST['send_unsent_batch'])){
 	}
 
 	$apiResult = $user->sendAssistanceDataToApi($records);
+	$batchId = $user->generateSyncBatchId();
 
 	$sentCount = 0;
 	$failCount = 0;
@@ -51,10 +52,11 @@ if(isset($_POST['send_unsent_batch'])){
 		foreach($records as $row){
 			$logged = $user->logApiSend(
 				$row['trans_id'],
-				$row['type_description'],
+				$row['type'],
 				'success',
 				$apiResult['http_code'],
-				$apiResult['response']
+				$apiResult['response'],
+				$batchId
 			);
 			if($logged){
 				$sentCount++;
@@ -76,10 +78,11 @@ if(isset($_POST['send_unsent_batch'])){
 		foreach($records as $row){
 			$user->logApiSend(
 				$row['trans_id'],
-				$row['type_description'],
+				$row['type'],
 				'failed',
 				$apiResult['http_code'],
-				!empty($apiResult['error']) ? $apiResult['error'] : $apiResult['response']
+				!empty($apiResult['error']) ? $apiResult['error'] : $apiResult['response'],
+				$batchId
 			);
 		}
 		// Show response body for validation errors (422), curl error for connection issues

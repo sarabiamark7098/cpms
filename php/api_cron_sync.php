@@ -38,17 +38,19 @@ do {
 	logLine("Batch {$batchNum}: Found " . count($records) . " record(s). Sending to API...");
 
 	$apiResult = $user->sendAssistanceDataToApi($records);
+	$batchId = $user->generateSyncBatchId();
 
 	if($apiResult['success']){
 		$sentCount = 0;
 		foreach($records as $row){
 			$logged = $user->logApiSendCron(
 				$row['trans_id'],
-				$row['type_description'],
+				$row['type'],
 				'success',
 				$apiResult['http_code'],
 				$apiResult['response'],
-				'CRON'
+				'CRON',
+				$batchId
 			);
 			if($logged) $sentCount++;
 		}
@@ -58,11 +60,12 @@ do {
 		foreach($records as $row){
 			$user->logApiSendCron(
 				$row['trans_id'],
-				$row['type_description'],
+				$row['type'],
 				'failed',
 				$apiResult['http_code'],
 				!empty($apiResult['error']) ? $apiResult['error'] : $apiResult['response'],
-				'CRON'
+				'CRON',
+				$batchId
 			);
 		}
 		logLine("Batch {$batchNum}: API FAILED. HTTP Code: {$apiResult['http_code']}. Error: {$apiResult['error']}");

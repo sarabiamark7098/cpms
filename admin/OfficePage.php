@@ -135,6 +135,9 @@
                 <li>
                     <a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a>
                 </li>
+                <li>
+                    <a href="Records.php">Records <i style="float: right;font-size:25px" class="fa fa-database"></i></a>
+                </li>
             </ul>
         </nav>
 
