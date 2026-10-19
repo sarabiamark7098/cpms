@@ -405,7 +405,7 @@
 				$office   = mysqli_real_escape_string($this->db, $office);
 				$datenow  = date("Y-m-d H:i:s");
 
-				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Program Head'];
+				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Program Head', 'Finance'];
 				if (empty($position) || !in_array($position, $valid_positions) || empty($office)) {
 					echo "<script>alert('Error: Please select a valid Position and Office before confirming.')</script>";
 					echo "<script>window.location='Employee.php';</script>";
@@ -2383,8 +2383,11 @@
 			$query .= ";";
 			
 			$sign_id = $signatoryGIS;
-			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', program_type = '{$program}', encoded_socialWork='{$empid}'";
-			if($m1 == "GL"){ 
+			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', program_type = '{$program}'";
+			if (($_SESSION['position'] ?? '') !== 'Finance') {
+				$query .= ", encoded_socialWork='{$empid}'";
+			}
+			if($m1 == "GL"){
 				$amountcon = str_replace(",","", $a1);
 				if($amountcon < 50001){ $query .= ", signatory_GL = '{$sign_id}'"; }
 				elseif($amountcon >= 50001){ $query .= ", signatory_GL = ''"; }
@@ -3924,8 +3927,27 @@
 		}
 	}
 
+	/**
+	 * All reissued clients (newest first) for the Finance Re-issue Logs table,
+	 * which renders them into a DataTable (client-side search/paging) to match
+	 * the Fund Source page layout.
+	 */
+	public function getReissueLogAll(){
+		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname,
+		                 b.b_lname, b.b_fname, b.b_mname, b.b_exname,
+		                 t.relation, t.trans_id, r.date_reissued, r.empid
+		          FROM client_data c
+		          LEFT JOIN tbl_transaction t USING (client_id)
+		          LEFT JOIN beneficiary_data b USING (bene_id)
+		          LEFT JOIN reissuelog r USING (trans_id)
+		          WHERE t.status_client = 'Done' AND r.date_reissued IS NOT NULL
+		          ORDER BY r.date_reissued DESC";
+		$result = mysqli_query($this->db, $query);
+		return $result ?: false;
+	}
+
 	public function searchReissue_log($val){
-		$value = mysqli_real_escape_string($this->db,$val); 
+		$value = mysqli_real_escape_string($this->db,$val);
 
 		$query = "SELECT c.lastname, c.firstname, c.middlename, c.extraname, b.b_lname, b.b_fname, b.b_mname, b.b_exname, t.relation, t.trans_id, t.status_client, r.* 
 		FROM client_data c
@@ -5118,6 +5140,182 @@
 		];
 
 		return $result;
+	}
+
+	// ── Finance dashboard aggregates ─────────────────────────────────────────
+	//
+	// Guarantee Letters are assistance rows with mode = 'GL', Outright Cash are
+	// mode = 'CAV' (same mapping used by the social-work data exports). An
+	// office is the first 9 characters of a trans_id (field_office.office_id),
+	// and the reporting window is driven by tbl_transaction.date_accomplished of
+	// released ('Done') transactions. Amounts are stored comma-formatted
+	// (e.g. "9,640.00"), so they are stripped before CAST for the SUMs.
+
+	/**
+	 * Translate a Finance dashboard filter into an inclusive-start /
+	 * exclusive-end datetime window so queries stay range-based.
+	 *
+	 * @param string $granularity 'day' | 'month' | 'year'
+	 * @param string $value       day: 'YYYY-MM-DD', month: 'YYYY-MM', year: 'YYYY'
+	 * @return array{0:string,1:string} [start, end] as 'Y-m-d H:i:s'
+	 */
+	public function financePeriodBounds($granularity, $value){
+		$value = trim((string) $value);
+		switch ($granularity) {
+			case 'day':
+				$ts = strtotime($value);
+				if ($ts === false) { $ts = time(); }
+				$start = date('Y-m-d 00:00:00', $ts);
+				$end   = date('Y-m-d 00:00:00', strtotime('+1 day', $ts));
+				break;
+			case 'year':
+				$year = (int) substr($value, 0, 4);
+				if ($year < 1970 || $year > 9999) { $year = (int) date('Y'); }
+				$start = sprintf('%04d-01-01 00:00:00', $year);
+				$end   = sprintf('%04d-01-01 00:00:00', $year + 1);
+				break;
+			case 'month':
+			default:
+				$ts = strtotime(strlen($value) === 7 ? $value . '-01' : $value);
+				if ($ts === false) { $ts = time(); }
+				$firstOfMonth = strtotime(date('Y-m-01', $ts));
+				$start = date('Y-m-01 00:00:00', $firstOfMonth);
+				$end   = date('Y-m-01 00:00:00', strtotime('+1 month', $firstOfMonth));
+				break;
+		}
+		return [$start, $end];
+	}
+
+	/**
+	 * Guarantee Letter (GL) and Outright Cash (CAV) counts + total amounts per
+	 * office for released transactions inside [$start, $end), computed in a
+	 * single pass. Pass $officeId to restrict to one office.
+	 *
+	 * Driving from tbl_transaction lets the (status_client, date_accomplished)
+	 * index range-scan only the period's rows, then join assistance by
+	 * (trans_id, mode); one query returns both modes via conditional sums.
+	 *
+	 * @return array{gl:array<int,array{office_id:string,office_name:string,cnt:int,total_amount:float}>,
+	 *               cav:array<int,array{office_id:string,office_name:string,cnt:int,total_amount:float}>}
+	 */
+	public function financeAssistanceByOfficePair($start, $end, $officeId = ''){
+		$start = mysqli_real_escape_string($this->db, $start);
+		$end   = mysqli_real_escape_string($this->db, $end);
+
+		$officeFilter = '';
+		if ($officeId !== '') {
+			$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
+			$officeFilter = " AND LEFT(t.trans_id, 9) = '{$officeIdEsc}' ";
+		}
+
+		$amtGL  = "CASE WHEN a.mode='GL'  THEN CAST(REPLACE(REPLACE(a.amount, ',', ''), ' ', '') AS DECIMAL(15,2)) END";
+		$amtCAV = "CASE WHEN a.mode='CAV' THEN CAST(REPLACE(REPLACE(a.amount, ',', ''), ' ', '') AS DECIMAL(15,2)) END";
+
+		$query = "SELECT LEFT(t.trans_id, 9) AS office_id,
+						 fo.office_name AS office_name,
+						 SUM(a.mode = 'GL')  AS gl_cnt,
+						 COALESCE(SUM({$amtGL}), 0)  AS gl_amt,
+						 SUM(a.mode = 'CAV') AS cav_cnt,
+						 COALESCE(SUM({$amtCAV}), 0) AS cav_amt
+					FROM tbl_transaction t
+					INNER JOIN assistance a ON a.trans_id = t.trans_id AND a.mode IN ('GL','CAV')
+					LEFT JOIN field_office fo ON fo.office_id = LEFT(t.trans_id, 9)
+				   WHERE t.status_client = 'Done'
+					 AND t.date_accomplished >= '{$start}'
+					 AND t.date_accomplished <  '{$end}'
+					 {$officeFilter}
+				   GROUP BY LEFT(t.trans_id, 9), fo.office_name";
+
+		$gl = [];
+		$cav = [];
+		$result = mysqli_query($this->db, $query);
+		if ($result) {
+			while ($r = mysqli_fetch_assoc($result)) {
+				$officeName = ($r['office_name'] !== null && $r['office_name'] !== '')
+					? $r['office_name']
+					: $r['office_id'];
+				if ((int) $r['gl_cnt'] > 0) {
+					$gl[] = [
+						'office_id'    => $r['office_id'],
+						'office_name'  => $officeName,
+						'cnt'          => (int) $r['gl_cnt'],
+						'total_amount' => (float) $r['gl_amt'],
+					];
+				}
+				if ((int) $r['cav_cnt'] > 0) {
+					$cav[] = [
+						'office_id'    => $r['office_id'],
+						'office_name'  => $officeName,
+						'cnt'          => (int) $r['cav_cnt'],
+						'total_amount' => (float) $r['cav_amt'],
+					];
+				}
+			}
+		}
+		$byCnt = function ($a, $b) { return $b['cnt'] - $a['cnt']; };
+		usort($gl, $byCnt);
+		usort($cav, $byCnt);
+		return ['gl' => $gl, 'cav' => $cav];
+	}
+
+	/**
+	 * Fund sources charged for a given assistance mode ('GL' or 'CAV'), with
+	 * usage count and summed amount, for released transactions inside
+	 * [$start, $end). Ordered by total amount; limited to the heaviest $limit.
+	 *
+	 * The period's transactions for the mode are resolved first in a derived
+	 * table (range-scan on the (status_client, date_accomplished) index, joined
+	 * to assistance by (trans_id, mode)); tbl_coe_fund is then joined to that
+	 * small set by trans_id. This avoids a full-table semijoin hash over the
+	 * ~630k-row assistance table that a correlated EXISTS plan produced.
+	 *
+	 * @return array<int,array{fundsource:string,cnt:int,total_amount:float}>
+	 */
+	public function financeFundSourcesByMode($mode, $start, $end, $officeId = '', $limit = 25){
+		$mode  = mysqli_real_escape_string($this->db, $mode);
+		$start = mysqli_real_escape_string($this->db, $start);
+		$end   = mysqli_real_escape_string($this->db, $end);
+		$limit = (int) $limit;
+		if ($limit < 1)   { $limit = 25; }
+		if ($limit > 200) { $limit = 200; }
+
+		$officeFilter = '';
+		if ($officeId !== '') {
+			$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
+			$officeFilter = " AND LEFT(a.trans_id, 9) = '{$officeIdEsc}' ";
+		}
+
+		$query = "SELECT cf.fundsource AS fundsource,
+						 COUNT(*) AS cnt,
+						 COALESCE(SUM(CAST(REPLACE(REPLACE(cf.fs_amount, ',', ''), ' ', '') AS DECIMAL(15,2))), 0) AS total_amount
+					FROM (
+						 SELECT DISTINCT a.trans_id
+						   FROM assistance a
+						   INNER JOIN tbl_transaction t ON t.trans_id = a.trans_id
+						  WHERE a.mode = '{$mode}'
+							AND t.status_client = 'Done'
+							AND t.date_accomplished >= '{$start}'
+							AND t.date_accomplished <  '{$end}'
+							{$officeFilter}
+						 ) g
+					INNER JOIN tbl_coe_fund cf ON cf.trans_id = g.trans_id
+				   WHERE cf.fundsource IS NOT NULL AND cf.fundsource <> ''
+				   GROUP BY cf.fundsource
+				   ORDER BY total_amount DESC, cnt DESC
+				   LIMIT {$limit}";
+
+		$result = mysqli_query($this->db, $query);
+		$rows = [];
+		if ($result) {
+			while ($r = mysqli_fetch_assoc($result)) {
+				$rows[] = [
+					'fundsource'   => $r['fundsource'],
+					'cnt'          => (int) $r['cnt'],
+					'total_amount' => (float) $r['total_amount'],
+				];
+			}
+		}
+		return $rows;
 	}
 
 }

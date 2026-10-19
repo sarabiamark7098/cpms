@@ -28,6 +28,7 @@ switch ($_SESSION['position']) {
     case 'Encoder':      $home = '../encoder/home.php';     break;
     case 'Social Worker': $home = '../socialwork/home.php'; break;
     case 'Admin':        $home = '../admin/home.php';       break;
+    case 'Finance':      $home = '../finance/home.php';     break;
     default:             $home = '../index.php';
 }
 

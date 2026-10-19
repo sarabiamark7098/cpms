@@ -90,6 +90,18 @@
 		
     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
+    <style type="text/css">
+        .exp-wrap { padding: 10px 0 40px; }
+        .exp-wrap > h5 { font-weight:700; margin-bottom:16px; }
+        .exp-card { background:#fff; border:1px solid #e3e6ea; border-radius:8px; padding:18px 22px; margin-bottom:18px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+        .exp-title { font-weight:700; font-size:16px; margin-bottom:2px; }
+        .exp-sub { color:#6c757d; font-size:13px; margin-bottom:14px; }
+        .exp-form { display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px; }
+        .exp-field { display:flex; flex-direction:column; }
+        .exp-field label { font-size:12px; font-weight:600; color:#555; margin-bottom:4px; }
+        .exp-field input[type=date] { height:42px; width:190px; max-width:100%; }
+        .exp-btn { height:42px; white-space:nowrap; }
+    </style>
     </head>
 
 <body>
@@ -146,7 +158,8 @@
             </nav>
 
 
-                <div class="container"  style="width: 50%">
+                <div class="container-fluid exp-wrap">
+                    <h5>Export Reports</h5>
                     <!-- Export/Report
                     <br><br>
                     <form action="export.php" method="POST">
@@ -170,66 +183,43 @@
                                 <button class="btn btn-success" id="export" name="export" type="submit">Export to Excel &nbsp <span class='fa fa-file-excel'></span></button><br><br><br>
                         </div>
                     </form> -->
-                    <div>
-                        Export Client's Served<br><br>
-                        
-                        <form action="export.php" method="POST">
-                            <div class="container">
-                                <div class="input-group input-group-lg">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px; text-align:center">Date:</span>
-                                    </div>
-                                    <input id="export_date" name="export_date" type="date" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required>
-                                </div> <br>
-                                <div class="input-group input-group-lg">
-                                    <button class="btn btn-success" id="export-date" name="export-date" type="submit">Served Clients Export to Excel &nbsp <span class='fa fa-file-excel'></span></button>
-                                </div>
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export Served Clients</h5>
+                        <p class="exp-sub">All clients served on a specific date.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="export_date">Date</label>
+                                <input id="export_date" name="export_date" type="date" class="form-control" required>
                             </div>
+                            <button class="btn btn-success exp-btn" name="export-date" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
                         </form>
                     </div>
                     <?php if( $_SESSION['f_office'] == "112402-01" ){ ?>
-                    <div>
-                        <br><br>
-                        Export Client's Served in All offices
-                        <br><br>
-                        <form action="export.php" method="POST">
-                            <div class="container">
-                                <div class="input-group input-group-lg">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px; text-align:center">Date:</span>
-                                    </div>
-                                    <input id="export_date_all" name="export_date_all" type="date" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required>
-                                </div> <br>
-                                <div class="input-group input-group-lg">
-                                    <button class="btn btn-success" id="export-date-all" name="export-date-all" type="submit">Served Clients Export to Excel &nbsp <span class='fa fa-file-excel'></span></button>
-                                </div>
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export Served Clients &mdash; All Offices</h5>
+                        <p class="exp-sub">All clients served on a specific date across every office.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="export_date_all">Date</label>
+                                <input id="export_date_all" name="export_date_all" type="date" class="form-control" required>
                             </div>
+                            <button class="btn btn-success exp-btn" name="export-date-all" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
                         </form>
                     </div>
                     <?php } ?>
-                    <div>
-                        <br><br>
-                        Export/Report
-                        <br><br>
-                        <form action="export.php" method="POST">
-                            <div class="container">
-                                    <div class="input-group input-group-lg">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px; text-align:center">From:</span>
-                                        </div>
-                                        <input id="from_date" name="from_date" type="date" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required>
-                                    </div> 
-                                    <br>
-                                    <div class="input-group input-group-lg">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px;">To:</span>
-                                        </div>
-                                        <input id="to_date" type="date" class="form-control" name="to_date" aria-label="Large" aria-describedby="inputGroup-sizing-sm" 
-                                        required >
-                                    </div> 
-                                    <br>
-                                    <button class="btn btn-success" id="export_from_to" name="export_from_to" type="submit">Export to Excel &nbsp <span class='fa fa-file-excel'></span></button><br>
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export by Date Range</h5>
+                        <p class="exp-sub">All clients served between two dates.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="from_date">From</label>
+                                <input id="from_date" name="from_date" type="date" class="form-control" required>
                             </div>
+                            <div class="exp-field">
+                                <label for="to_date">To</label>
+                                <input id="to_date" name="to_date" type="date" class="form-control" required>
+                            </div>
+                            <button class="btn btn-success exp-btn" name="export_from_to" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
                         </form>
                     </div>
                 <div>
