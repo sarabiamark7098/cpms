@@ -84,6 +84,7 @@
                             <option value="Encoder" <?php echo ($getemp['position'] == 'Encoder'?"selected":"") ?>>Encoder</option>
                             <option value="Social Worker" <?php echo ($getemp['position'] == 'Social Worker'?"selected":"") ?>>Social Worker</option>
                             <option value="Admin" <?php echo ($getemp['position'] == 'Admin'?"selected":"") ?>>Admin</option>
+                            <option value="Finance" <?php echo ($getemp['position'] == 'Finance'?"selected":"") ?>>Finance</option>
                         </select>
                         <label class="active" for="designation">Designate Position</label>
                     </div>

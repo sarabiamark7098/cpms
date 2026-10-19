@@ -1,0 +1,328 @@
+<?php
+    include('../php/class.user.php');
+    require_once("../php/session_timeout.php");
+     $user = new User();
+
+    if(isset($_POST['export'])){
+        $location = "export-data.php?";
+        //month
+        if(isset($_POST['month'])){
+            
+            $location.= "m=". $user->getMonth($_POST['month']);
+        } 
+        $location .="&";
+         //year
+        if(isset($_POST['year'])){
+            $location.= "y=".$_POST['year'];
+        }  
+       
+        header("Location:" . $location);
+    }
+    if(isset($_POST['export_date'])){
+        $location = "export-data-today.php?date=".$_POST['export_date'];
+        header("Location:" . $location);
+    }
+    
+    if(isset($_POST['export_date_all'])){
+        $location = "export-data.php?date=".$_POST['export_date_all'];
+        header("Location:" . $location);
+    }
+    if(isset($_POST['export_from_to'])){
+        $location = "export-data-from-to.php?";
+        if(isset($_POST['from_date'])){
+            
+            $location.= "fromdate=".$_POST['from_date'];
+        } 
+        $location .="&";
+         //year
+        if(isset($_POST['to_date'])){
+            $location.= "todate=".$_POST['to_date'];
+        }  
+       
+        header("Location:" . $location);
+    }
+    
+	if(!$_SESSION['login']){
+		header('Location:../index.php');
+		}
+	if($_SESSION['position'] != 'Finance'){
+		switch ($_SESSION['position']){
+			case 'Encoder': header("Location: ../encoder/home.php");
+							break;
+			case 'Social Worker': header("Location: ../socialwork/home.php");
+							break;
+			case 'Admin': header("Location: ../admin/home.php");
+							break;
+			case 'Program Head': header("Location: ../programhead/home.php");
+							break;
+			default:
+				echo "<script>window.location='../index.php';</script>";
+		}
+	}
+?>
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Finance Export</title>
+
+    
+    <link rel="icon" type="image/png" href="../images/icons/ciu.ico"/>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../style5.css">
+    <link rel="stylesheet" type="text/css" href="../css/finance.css?v=2">
+    <!-- Font Awesome JS -->
+    <script defer src="../js/solid.js"></script>
+    <script defer src="../js/fontawesome.js"></script>
+    <script src="../js/jquery.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="../js/main.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <!-- added -->
+		
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
+    <style type="text/css">
+        .exp-wrap { padding: 20px 5% 40px; }
+        .exp-wrap > h5 { font-weight:700; margin-bottom:16px; }
+        .exp-card { background:#fff; border:1px solid #e3e6ea; border-radius:8px; padding:18px 22px; margin-bottom:18px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+        .exp-title { font-weight:700; font-size:16px; margin-bottom:2px; }
+        .exp-sub { color:#6c757d; font-size:13px; margin-bottom:14px; }
+        .exp-form { display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px; }
+        .exp-field { display:flex; flex-direction:column; }
+        .exp-field label { font-size:12px; font-weight:600; color:#555; margin-bottom:4px; }
+        .exp-field input[type=date] { height:42px; width:190px; max-width:100%; }
+        .exp-btn { height:42px; white-space:nowrap; }
+    </style>
+    </head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/logo.png" alt="dswd logo" width="100px" height="100px" s>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="Dashboard.php">Dashboard <i style="float: right;font-size:25px" class="fa fa-chart-bar"></i></a>
+                </li>
+                <li>
+                    <a href="home.php">List of Served Clients<i style="float: right;font-size:25px" class="fa fa-child"></i> </a>
+                </li>
+                <li>
+                    <a href="ProviderPage.php">Providers <i style="float: right;font-size:25px" class="fa fa-handshake"></i></a>
+                </li>
+                <li>
+                    <a href="OfficePage.php">Offices <i style="float: right;font-size:25px" class="fa fa-building"></i></a>
+                </li>
+                <li>
+                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-coins"></i></a>
+                </li>
+                <li>
+                    <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-clone"></i></a>
+                </li>
+                <li>
+                    <a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-ban"></i></a>
+                </li>
+                <li>
+
+                    <a href="export.php">Export <i style="float: right;font-size:25px" class="fa fa-file-excel"></i></a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-blue">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" style="margin-left: 10px;" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
+                        <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
+                    </a>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link tohover" data-toggle="modal" data-target="#logoutmodal">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+
+                <div class="container-fluid exp-wrap">
+                    <h5>Export Reports</h5>
+                    <!-- Export/Report
+                    <br><br>
+                    <form action="export.php" method="POST">
+                        <div class="container">
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px; text-align:center">Month</span>
+                                    </div>
+                                    <input list="months" id="month" name="month" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required value="<?php if(isset($_POST['month']))
+                                    {echo $_POST['month'];}?>"> <?php echo $user->listOfMonths();?></select>
+                                </div> 
+                                <br>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-lg" style="width: 100px;">Year</span>
+                                    </div>
+                                    <input id="year" type="text" class="form-control" name="year" aria-label="Large" aria-describedby="inputGroup-sizing-sm" 
+                                    required >
+                                </div> 
+                                <br>
+                                <button class="btn btn-success" id="export" name="export" type="submit">Export to Excel &nbsp <span class='fa fa-file-excel'></span></button><br><br><br>
+                        </div>
+                    </form> -->
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export Served Clients</h5>
+                        <p class="exp-sub">All clients served on a specific date.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="export_date">Date</label>
+                                <input id="export_date" name="export_date" type="date" class="form-control" required>
+                            </div>
+                            <button class="btn btn-success exp-btn" name="export-date" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
+                        </form>
+                    </div>
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export Served Clients &mdash; All Offices</h5>
+                        <p class="exp-sub">All clients served on a specific date across every office.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="export_date_all">Date</label>
+                                <input id="export_date_all" name="export_date_all" type="date" class="form-control" required>
+                            </div>
+                            <button class="btn btn-success exp-btn" name="export-date-all" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
+                        </form>
+                    </div>
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export by Date Range</h5>
+                        <p class="exp-sub">All clients served between two dates.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="from_date">From</label>
+                                <input id="from_date" name="from_date" type="date" class="form-control" required>
+                            </div>
+                            <div class="exp-field">
+                                <label for="to_date">To</label>
+                                <input id="to_date" name="to_date" type="date" class="form-control" required>
+                            </div>
+                            <button class="btn btn-success exp-btn" name="export_from_to" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
+                        </form>
+                    </div>
+                <div>
+            </div>
+        </div>
+    
+    
+    <script type="text/javascript">
+         $(document).ready(function () {
+            $('#sidebar').toggleClass('active');
+            $('#sidebarCollapse').toggleClass('active');
+        });
+
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+    <div class="module">
+        <div class="modal fade in" id="userAccount" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">User Account</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="useraccount">
+                    
+                    </div>
+                </div>	
+            </div>
+        </div>
+    </div>
+</body>
+<!-- Modal sa user Account -->
+	 	 <!-- Modal sa user Account -->
+
+    <script>
+        $('#userAccount').appendTo("body").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var userid = button.data('id') // Extract info from data-* attributes
+            var modal = $(this);
+            var dataString = 'id=' + userid;
+                $.ajax({
+                    type: "GET",
+                    url: "userAccount.php",
+                    data: dataString,
+                    cache: false,
+                    success: function (data) {
+                        modal.find('.useraccount').html(data);
+                    },
+                    error: function(err) {
+                    }
+                });
+        })
+    </script>
+	
+    <div class="modal hide fade" id="logoutmodal" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button></div>
+            <div class="modal-body logoutbody"><i class="fa fa-question-circle"></i> Are you sure you want to log-out?</div>
+            <div class="modal-footer"><a href="../php/logout.php" class="btn btn-primary btn-block">Logout</a></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#logoutmodal').appendTo("body").on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal = $(this);
+        var dataString = 'id=logout';
+            $.ajax({
+                type: "GET",
+                url: "export.php",
+                data: dataString,
+                cache: false,
+                success: function (data) {
+                    modal.find('.logoutbody');
+                },
+                error: function(err) {
+                }
+            });
+        })
+    </script>
+
+
+</html>

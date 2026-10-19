@@ -121,6 +121,20 @@
 					$user->login_log();
 					echo '<script>window.location="programhead/home.php"</script>';
 					break;
+				case 'Finance':
+					$_SESSION['login'] = $login;
+					$_SESSION['userAccountusername'] = $username;
+					$_SESSION['userAccountpassword'] = $password;
+					$_SESSION['userId'] = $user_id;
+					$_SESSION['position'] = $user_info['position'];
+					$_SESSION['userfullname'] = $user_info['fullname'];
+					$_SESSION['f_office'] = $user_info['office_id'];
+					$session_token = bin2hex(random_bytes(32));
+					$user->setSessionToken($user_id, $session_token);
+					$_SESSION['session_token'] = $session_token;
+					$user->login_log();
+					echo '<script>window.location="finance/Dashboard.php"</script>';
+					break;
 				default:
 					break;
 			}

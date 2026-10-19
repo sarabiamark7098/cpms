@@ -1,0 +1,66 @@
+/* ------------------------------------------------------------------
+   Finance area layout overrides: fixed top navbar + fixed side menu.
+
+   Loaded only on the Finance pages (after style5.css) so the shared
+   dashboard layout used by the other roles stays unchanged. The side
+   menu is pinned to the left for the full viewport height while the
+   page content scrolls, and the top navbar stays pinned to the top.
+------------------------------------------------------------------ */
+
+/* The shared .wrapper sets `perspective` (for the sidebar's 3D collapse
+   animation), which would make it the containing block for the fixed
+   sidebar and cause it to scroll away. Neutralise it so position:fixed
+   is resolved against the viewport. The collapse still animates fine. */
+.wrapper {
+    perspective: none;
+}
+
+/* Side menu stays put, full height, with its own scroll if it ever
+   grows taller than the viewport. */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1030;
+}
+
+/* Content column sits to the right of the fixed sidebar. The sidebar is
+   position:fixed (out of the flex flow), so #content is the lone flex item;
+   flex-grow:1 makes it fill the whole row instead of shrinking to its content
+   width. width:auto + min-width:0 keep it from overflowing by the 250px margin
+   or by wide tables. */
+#content {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    margin-left: 250px;
+}
+
+/* Hamburger toggle collapses the sidebar (adds .active) -> reclaim
+   the full width for the content. */
+#sidebar.active + #content {
+    margin-left: 0;
+}
+
+/* Top navbar stays pinned while the content scrolls underneath it.
+   It keeps the shared opaque .navbar background so content does not
+   show through. Below Bootstrap modals (z-index ~1050). */
+#content > .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+/* On small screens the sidebar overlays the content (it is hidden by
+   default and slid in by the hamburger), so the content takes the
+   full width and the sidebar floats above it. */
+@media (max-width: 768px) {
+    #content {
+        margin-left: 0;
+    }
+    #sidebar {
+        z-index: 1040;
+    }
+}
