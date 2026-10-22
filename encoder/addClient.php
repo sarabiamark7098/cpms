@@ -102,21 +102,6 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-12">
-                        <select list="categories" class="form-control mr-sm-2 b" type="text" name="category" placeholder="Category" name="category" required>
-                            <option value="" disabled selected>Category</option>
-                            <option  value="Children in Need of Special Protection">Children in Need of Special Protection</option>
-                            <option value="Persons Living with HIV/AIDS">Persons Living with HIV/AIDS</option>
-                            <option value="Youth">Youth</option>
-                            <option  value="Men/Women in Specially Difficult Circumstances">Men/Women in Specially Difficult Circumstances</option>
-                            <option value="Persons with Disabilities">Persons with Disabilities</option>
-                            <option value="Senior Citizens">Senior Citizens</option>
-                            <option  value="Family Heads and Other Needy Adult">Family Heads and Other Needy Adult</option>
-                            <option value="None of the Above" >None of the Above</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group row">
                     <label class="col-sm-3 label" style="font-size: 20px">4Ps Beneficiary: </label>
                     <div class="checkbox col-1">
                         <label for='radiobutton-y'>
@@ -310,22 +295,6 @@
                         <input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category"  autocomplete="off">
-                            <datalist id="b_categories">
-                                <option>Children in Need of Special Protection</option>
-                                <option>Persons Living with HIV/AIDS</option>
-                                <option>Youth</option>
-                                <option>Men/Women in Specially Difficult Circumstances</option>
-                                <option>Persons with Disabilities</option>
-                                <option>Senior Citizens (no subcategories)</option>
-                                <option>Family Heads and Other Needy Adult</option>
-                                <option>None of the Above</option>
-                            </datalist>
-                        </div>
-                    </div>
-                    
                     <!--Address-->
                     <h4 class="text-center">Beneficiary Address</h4>
                     <div class="row" style="margin-bottom: 2%;">

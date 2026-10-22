@@ -2118,10 +2118,58 @@
 			}
 		}
 
+		// Reference list for the GIS form's Gender Identity dropdowns.
+		public function getGenderIdentities(){
+			$list = [];
+			$result = mysqli_query($this->db, "SELECT gender_identity FROM gender_identities ORDER BY gender_id");
+			if($result){ while($row = mysqli_fetch_assoc($result)){ $list[] = $row['gender_identity']; } }
+			return $list;
+		}
+
+		// Reference list for the GIS form's Sub-category dropdowns (full list).
+		public function getSubCategories(){
+			$list = [];
+			$result = mysqli_query($this->db, "SELECT sub_category FROM sub_categories ORDER BY subcat_id");
+			if($result){ while($row = mysqli_fetch_assoc($result)){ $list[] = $row['sub_category']; } }
+			return $list;
+		}
+
+		/**
+		 * Persist the GIS Client & Beneficiary section selections that are not
+		 * threaded through insertGIS/updateGIS. Called after those methods.
+		 * Client  -> client_data.category / subCategory(via $csubcat) / type_of_disability /
+		 *            gender_identity / below_monthly_income / others_subcat
+		 * Bene    -> beneficiary_data.b_category / b_subCategory / b_type_of_disability /
+		 *            b_gender_identity / b_below_monthly_income / b_others_subcat
+		 *            (written only when there is a separate beneficiary; Self keeps all on client_data)
+		 * All entity attributes are kept on the entity tables (segregated from assessment);
+		 * the numeric assessment.target_sector / subcat_ass / type_of_disability the official
+		 * GIS print decodes are still written by insertGIS/updateGIS.
+		 */
+		public function saveGISClientBene($trans_id, $clientCategory, $clientDisability, $clientGender, $beneCategory, $beneSubcat, $beneDisability, $beneGender, $beneBelowIncome='', $beneOthers='', $clientBelowIncome='', $clientOthers=''){
+			// flush any result sets left by a preceding multi_query (insertGIS/updateGIS)
+			while(mysqli_more_results($this->db)){ mysqli_next_result($this->db); }
+			$e = function($v){ return mysqli_real_escape_string($this->db, $v ?? ''); };
+			$trans = $e($trans_id);
+			$r = mysqli_query($this->db, "SELECT client_id, bene_id FROM tbl_transaction WHERE trans_id='{$trans}' LIMIT 1");
+			$ids = $r ? mysqli_fetch_assoc($r) : null;
+			if(!$ids){ return false; }
+			$cid = $e($ids['client_id']);
+			$bid = $e($ids['bene_id']);
+			mysqli_query($this->db, "UPDATE client_data SET category='".$e($clientCategory)."', gender_identity='".$e($clientGender)."', type_of_disability='".$e($clientDisability)."', below_monthly_income='".$e($clientBelowIncome)."', others_subcat='".$e($clientOthers)."' WHERE client_id='{$cid}'");
+			// Only when there is a SEPARATE beneficiary (relation != Self) do we store
+			// the beneficiary columns. For Self the client IS the beneficiary, so the
+			// selections are kept on client_data only (written above).
+			if($bid !== ''){
+				mysqli_query($this->db, "UPDATE beneficiary_data SET b_category='".$e($beneCategory)."', b_subCategory='".$e($beneSubcat)."', b_type_of_disability='".$e($beneDisability)."', b_gender_identity='".$e($beneGender)."', b_below_monthly_income='".$e($beneBelowIncome)."', b_others_subcat='".$e($beneOthers)."' WHERE bene_id='{$bid}'");
+			}
+			return true;
+		}
+
 		public function insertGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
 									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
-									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
 									$SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
 			
 			if(strtolower($mode_ad) == "walk-in"){
@@ -2177,15 +2225,17 @@
 				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
 					('{$trans_id}', '{$f1}', '{$a1}');";
 			}
-			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, financial, material, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
+			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, free_funeral_service, financial, material, amount, mode, fund, purpose, type_description) 
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$free_funeral_service}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
 					if($type2 !=""){
 						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 					}
 			$query .= ";";
 			
-			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, below_monthly_income, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
-			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$belowMonthly}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			// below_monthly_income / others_subcat are segregated onto client_data /
+			// beneficiary_data (written by saveGISClientBene), not the assessment table.
+			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, gis_option, problem, soc_ass, mode_admission, client_num)
+			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});";
 			
 			$query .= "INSERT INTO other_client_information (trans_id, otherClientInformation, crisisSeverityQuestion1, crisisSeverityQuestion2, crisisSeverityQuestion3, supportSystemAvailability, externalResources, selfHelp, vulnerability_riskFactor) 
 			VALUES ('{$trans_id}', '{$docu_otherinfo}', '{$severity}', '{$crisis}', '{$crisis1}', '{$support}', '{$external}', '{$selfhelp}', '{$vulnerability}');"; 
@@ -2279,7 +2329,7 @@
 		public function updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
 			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
 			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
-			$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+			$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
             $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
 				
 			if(strtolower($mode_ad) == "walk-in"){
@@ -2320,12 +2370,14 @@
 						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$s5}', '{$s6}','{$ref_name}', '{$rl1}','{$rl2}', '{$rl3}');";
 
 			$query .= "DELETE FROM assessment WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, below_monthly_income, others_subcat, gis_option, problem, soc_ass, mode_admission, client_num) 
-			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$belowMonthly}', '{$others_subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});"; 
+			// below_monthly_income / others_subcat are segregated onto client_data /
+			// beneficiary_data (written by saveGISClientBene), not the assessment table.
+			$query .= "INSERT INTO assessment (trans_id, target_sector, type_of_disability, subcat_ass, gis_option, problem, soc_ass, mode_admission, client_num)
+			VALUES ('{$trans_id}', '{$targets}', '{$c_disability}', '{$subcat}', '{$gis_opt}','{$prob}', '{$ass}', '{$mode_ad}', {$num});";
 		
 			$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, financial, material, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
+			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, free_funeral_service, financial, material, amount, mode, fund, purpose, type_description) 
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$free_funeral_service}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
 					if($type2 !=""){
 						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
 					}
@@ -3377,8 +3429,53 @@
 			}
 		}
 
+		public function getTotalFamilyIncome($id) {
+			// Sanitize input to prevent SQL injection
+			$id = mysqli_real_escape_string($this->db, $id);
+			
+			// Remove commas from formatted numeric strings and cast to DECIMAL for summation
+			$query = "SELECT SUM(CAST(REPLACE(salary, ',', '') AS DECIMAL(15,2))) AS total_salary 
+					FROM family 
+					WHERE trans_id = '{$id}'";
+					
+			$result = mysqli_query($this->db, $query);
+			
+			if ($result && $row = mysqli_fetch_assoc($result)) {
+				return $row['total_salary'] ?? 0;
+			}
+			
+			return 0;
+		}
+
+		// Assistance Received from DSWD (records table) -- one row per assistance received.
+		public function getRecords($id){
+			$id = mysqli_real_escape_string($this->db, $id);
+			$result = mysqli_query($this->db, "SELECT received, other_specify FROM records WHERE trans_id = '{$id}' ORDER BY record_id ASC");
+			$rows = array();
+			if ($result) { while ($row = mysqli_fetch_assoc($result)) { $rows[] = $row; } }
+			return $rows; // array of rows (may be empty)
+		}
+
+		// $items: array of received assistance tokens (e.g. ['oo','aics','wgp']). Each is
+		// stored as its own row (same trans_id, new record_id); the "Others" free text, if
+		// any, is stored as a row with received = 'others'.
+		public function saveRecords($id, $items, $other_specify){
+			$id = mysqli_real_escape_string($this->db, $id);
+			// replace any existing rows for this transaction
+			mysqli_query($this->db, "DELETE FROM records WHERE trans_id = '{$id}'");
+			if (!is_array($items)) { $items = ($items === null || $items === '') ? array() : array($items); }
+			$other_specify = mysqli_real_escape_string($this->db, $other_specify);
+			foreach ($items as $it) {
+				$it = mysqli_real_escape_string($this->db, trim($it));
+				if ($it === '') { continue; }
+				$os = ($it === 'other') ? "'{$other_specify}'" : "NULL";
+				mysqli_query($this->db, "INSERT INTO records (trans_id, received, other_specify) VALUES ('{$id}', '{$it}', {$os})");
+			}
+			return true;
+		}
+
 		public function getGISAssistance($id){
-			$query = "SELECT type, if_medical, if_burial, cause_of_death, financial, material, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
+			$query = "SELECT type, if_medical, if_burial, cause_of_death, free_funeral_service, financial, material, amount, mode, fund, purpose FROM assistance WHERE trans_id = '{$id}';";
 			$result = mysqli_query($this->db, $query);
 			$num = 0;
 			while($row = mysqli_fetch_assoc($result)){
@@ -3415,19 +3512,28 @@
 	
 		public function getGISData($id){
 			$query =  " SELECT gis_option, problem, soc_ass, mode_admission, client_num, service1, service2, service3, service4, service5, service6,
-								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, below_monthly_income, target_sector, type_of_disability, others_subcat, pantawid_bene, program_type from assessment 
-						LEFT JOIN service USING (trans_id) 
-						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'"; 
-						
+								ref_name, refer1, refer2, refer3, signatory_id, subcat_ass, target_sector, type_of_disability, pantawid_bene, program_type from assessment
+						LEFT JOIN service USING (trans_id)
+						LEFT JOIN tbl_transaction USING (trans_id) WHERE trans_id='{$id}'";
+
 			$result = mysqli_query($this->db, $query);
-			
+
 			$data = mysqli_fetch_assoc($result);
 			if(empty($data)){
-				return null; 
-			}else{
-				return $data;
+				return null;
 			}
-
+			// below_monthly_income / others_subcat are segregated onto the entity tables;
+			// merge them in so existing prints/forms keep reading $gis['below_monthly_income']
+			// (client) and $gis['b_below_monthly_income'] (beneficiary).
+			$tid = mysqli_real_escape_string($this->db, $id);
+			$ent = mysqli_fetch_assoc(mysqli_query($this->db,
+				"SELECT cd.below_monthly_income, cd.others_subcat, bd.b_below_monthly_income, bd.b_others_subcat
+				 FROM tbl_transaction t
+				 LEFT JOIN client_data cd ON cd.client_id = t.client_id
+				 LEFT JOIN beneficiary_data bd ON bd.bene_id = t.bene_id
+				 WHERE t.trans_id='{$tid}'"));
+			if($ent){ $data = array_merge($data, $ent); }
+			return $data;
 		}
 		public function getClientData($id){
 			$query = "SELECT client_id FROM tbl_transaction WHERE trans_id='{$id}'";

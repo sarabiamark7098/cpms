@@ -133,9 +133,6 @@
 		
         $amountToWord = $user->toWord($client_assistance[1]['amount']);
   
-		$soc_worker = $user->getuserInfo($_SESSION['userId']);
-        //fullname of social worker
-        $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
         $GISsignatoryName = "";
         $GISsignatoryPosition = "";
         if(!empty($gis['signatory_id'])){
@@ -146,7 +143,7 @@
         $GLsignatoryName = "";
         $GLsignatoryPosition = "";
         if(!empty($client['signatory_GL'])){
-            $GLsignatory=$user->getsignatory($client['signatory_GL']); //get data sa GIS na signatory
+            $GLsignatory = $signatoryGL; 
             $GLsignatoryName = strtoupper((!empty($GLsignatory['name_title'])?($GLsignatory['name_title'] != " "?$GLsignatory['name_title'] ." ":""):""). $GLsignatory['first_name'] ." ". (!empty($GLsignatory['middle_I'])?($GLsignatory['middle_I'] != " "?$GLsignatory['middle_I'] .". ":""):""). $GLsignatory['last_name']);
             $GLsignatoryPosition = $GLsignatory['position'];
         }
@@ -155,6 +152,8 @@
         //fullname of social worker
         $soc_workFullname = $soc_worker['empfname'] .' '.(!empty($soc_worker['empmname'][0])?$soc_worker['empmname'][0] . '. ':''). $soc_worker['emplname'] . (!empty($soc_worker['empext'])? ' ' . $soc_worker['empext'] . '.' : '');
        
+        $total_family_income = $user->getTotalFamilyIncome($_GET['id']);
+        $records = $user->getRecords($_GET['id']); // Assistance Received from DSWD
     }
 
 	if(!$_SESSION['login']){
@@ -184,7 +183,6 @@
         <script type="text/javascript" src="../js/maince.js"></script>
 		
         <script type="text/javascript" src="../js/jquery-3.2.1.slim.min.js"></script>
-        <script type="text/javascript" src="../js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../js/jquery.min.js"></script>
 		<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
         <title>LAST</title>
@@ -391,6 +389,7 @@
                         ?>
                     <div class="col"><input type="button" class="btn btn-success btn-block no-print" id="done" value="Done" onclick="confirmdone(<?php echo "'".$id."','".$_GET['id']."'" ?>)"/></div>
                 </div>
+
             </form>
         <?php  
             $printables = [
@@ -568,7 +567,7 @@
         })();
     </script>
 
-    <?php 
+    <?php
         //SAVA NA PART
         if(isset($_POST['save'])){
             $mode1 = "";

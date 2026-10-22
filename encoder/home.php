@@ -42,7 +42,7 @@
             }elseif(!empty($_POST['pantawid_n'])){
                 $pantawid = "No";
             }
-			$category = mysqli_real_escape_string($user->db,$_POST['category']);
+			$category = mysqli_real_escape_string($user->db,$_POST['category'] ?? '');
 			$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 			$contact = mysqli_real_escape_string($user->db,$_POST['contact']);
 			
@@ -97,7 +97,7 @@
             }elseif($_POST['pantawid_n']){
                 $pantawid = "No";
             }
-            $category = mysqli_real_escape_string($user->db,$_POST['category']);
+            $category = mysqli_real_escape_string($user->db,$_POST['category'] ?? '');
             $civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
             $contact = mysqli_real_escape_string($user->db,$_POST['contact']);
             $region = mysqli_real_escape_string($user->db,$_POST['regions']);
@@ -124,7 +124,7 @@
             $b_sex = mysqli_real_escape_string($user->db,$_POST['b_sex']);
             $b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
             $b_contact = mysqli_real_escape_string($user->db,$_POST['b_contact']);
-            $b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
+            $b_category = mysqli_real_escape_string($user->db,$_POST['b_category'] ?? '');
             $b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
             $b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
             $b_city_mun = mysqli_real_escape_string($user->db,$_POST['b_city']);

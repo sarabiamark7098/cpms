@@ -11,6 +11,8 @@
         $record = $user->getCOEData($_GET['id']); //kwaun ang data sa coe table
 		$timeentry = $user->theTime($client['date_entered']);//kwaun ang time
 		$client_fam = $user->getclientFam($_GET['id']);
+		$records = $user->getRecords($_GET['id']); // Assistance Received from DSWD
+		$total_family_income = $user->getTotalFamilyIncome($_GET['id']);
 		$gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
         $otherinfo = $user->getOtherInformations($_GET['id']);
         $totalSourceofIncome = $user->totalSourceOfIncome($_GET['id']);
