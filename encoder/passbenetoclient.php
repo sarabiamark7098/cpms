@@ -27,7 +27,7 @@ $user = new User();
 				}elseif($_POST['pantawid_n']){
 					$pantawid = "No";
 				}
-				$category = mysqli_real_escape_string($user->db,$_POST['category']);
+				$category = mysqli_real_escape_string($user->db,$_POST['category'] ?? '');
 				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
 				$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 				$contact = $_POST['contact'];
@@ -83,7 +83,7 @@ $user = new User();
 				}elseif($_POST['pantawid_n']){
 					$pantawid = "No";
 				}
-				$category = mysqli_real_escape_string($user->db,$_POST['category']);
+				$category = mysqli_real_escape_string($user->db,$_POST['category'] ?? '');
 				$subCategory = mysqli_real_escape_string($user->db,$_POST['subcategory']);
 				$civilStatus = mysqli_real_escape_string($user->db,$_POST['civilstatus']);
 				$contact = $_POST['contact'];
@@ -105,7 +105,7 @@ $user = new User();
 				$b_sex = mysqli_real_escape_string($user->db,$_POST['b_sex']);
 				$b_civilStatus = mysqli_real_escape_string($user->db,$_POST['b_cstatus']);
 				$b_contact = $_POST['b_contact'];
-				$b_category = mysqli_real_escape_string($user->db,$_POST['b_category']);
+				$b_category = mysqli_real_escape_string($user->db,$_POST['b_category'] ?? '');
 				$b_subCat = mysqli_real_escape_string($user->db,$_POST['b_subcat']);
 				$b_region = mysqli_real_escape_string($user->db,$_POST['b_region']);
 				$b_province = mysqli_real_escape_string($user->db,$_POST['b_province']);
@@ -336,22 +336,6 @@ $user = new User();
 				</div>
 			</div>
 			<div class="form-group row">
-				<div class="col-sm-12">
-					<input list="categories" type="text" value="<?php echo $getClient['b_category'] ?>" class="form-control mr-sm-2 b" name="category" placeholder="Category" required  autocomplete="off">
-						<datalist id="categories">
-							<option>Children in Need of Special Protection</option>
-							<option>Persons Living with HIV/AIDS</option>
-							<option>Youth</option>
-							<option>Men/Women in Specially Difficult Circumstances</option>
-							<option>Persons with Disabilities</option>
-							<option>Senior Citizens (no subcategories)</option>
-							<option>Family Heads and Other Needy Adult</option>
-							<option>None of the Above</option>
-						</datalist>
-					<label>Category</label>
-				</div>	
-			</div>
-			<div class="form-group row">
 				<label class="col-sm-3 label" style="font-size: 20px">4Ps Beneficiary: </label>
 				<div class="checkbox col-1">
 					<label for='radiobutton-y'>
@@ -530,21 +514,6 @@ $user = new User();
 					<div class="form-group row">
 					<div class="col-sm-12">
 					<input type="text" class="form-control mr-sm-2 b" name="b_contact" placeholder="Beneficiary Contact Number" onKeyPress="if(this.value.length==11) return false;"  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,11);">
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-sm-12">
-						<input list="b_categories" type="text" class="form-control mr-sm-2 b benerequire" name="b_category" placeholder="Beneficiary Category"  autocomplete="off">
-							<datalist id="b_categories">
-								<option>Children in Need of Special Protection</option>
-								<option>Persons Living with HIV/AIDS</option>
-								<option>Youth</option>
-								<option>Men/Women in Specially Difficult Circumstances</option>
-								<option>Persons with Disabilities</option>
-								<option>Senior Citizens (no subcategories)</option>
-								<option>Family Heads and Other Needy Adult</option>
-								<option>None of the Above</option>
-							</datalist>
 					</div>
 				</div>
 				

@@ -37,13 +37,24 @@ if (isset($_GET['id'])) {
     }
     
     $gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+    $genders = $user->getGenderIdentities(); // Gender Identity options for the Client/Beneficiary sections
+    $subCategories = $user->getSubCategories(); // full Sub-category list for the dropdowns
+    $subcatTextToCode = [
+        'Solo Parent' => 1, 'Indigenous People' => 2, 'Recovering Person who used drugs' => 3,
+        '4Ps Beneficiaries' => 4, 'Street Dwellers' => 5, 'Others Specify' => 8,
+        'Killed in Action (KIA)' => 9, 'Wounded in Action (WIA)' => 9, 'Minimum Wage Earners' => 10,
+        'Below Minimum Wage Earners' => 11, 'No Regular Income' => 12,
+        'Person of Concerns - Stateless Persons' => 13, 'Person of Concerns - Asylum Seeker' => 14,
+        'Person of Concerns – Refugees' => 15,
+    ];
+    $isSelf = strtolower($client['relation'] ?? '') === 'self'; // client is their own beneficiary -> show only the Beneficiary section
     $otherinfo = $user->getOtherInformations($_GET['id']);
     $otherclientinfo = $otherinfo['otherClientInformation'] ?? null;
     $crisisSeverityQ = $otherinfo['crisisSeverityQuestion3'] ?? null;
     $supportSystemAv = $otherinfo['supportSystemAvailability'] ?? null;
     $externalRes = $otherinfo['externalResources'] ?? null;
     $selfH = $otherinfo['selfHelp'] ?? null;
-    $vulnerability_risk = $otherinfo['vulnerability_risk'] ?? null;
+    $vulnerability_risk = $otherinfo['vulnerability_riskFactor'] ?? null;
     $otherClientInformation = $user->ParseInputs($otherclientinfo);
     $crisisSeverityQuestion3 = $user->ParseInputs($crisisSeverityQ);
     $supportSystemAvailability = $user->ParseInputs($supportSystemAv);
@@ -183,138 +194,64 @@ if (!$_SESSION['login']) {
             
                 <!-- Beneficiary Additional Information -->
                 <small>(Please Save/Update before printing)</small>
-                <div class="row">
-                    <div class="col-12" >
+<?php
+                // ---- GIS Client / Beneficiary section option data ----
+                $gisCats = ["Children in Need of Special Protection","Persons Living with HIV/AIDS","Youth","Men/Women in Specially Difficult Circumstances","Persons with Disabilities","Senior Citizens","Family Heads and Other Needy Adult","None of the Above"];
+                $gisDis  = ["SPEECH IMPAIRMENT","LEARNING DISABILITY","PSYCHOSOCIAL DISABILITY","DEAF/HARD-OF-HEARING","CANCER","MENTAL DISABILITY","VISUAL DISABILITY","INTELLECTUAL DISABILITY","PHYSICAL DISABILITY","RARE DISEASE"];
+                $gisSectors = [1=>"FAMILY HEADS, AND OTHER NEEDY ADULTS (FHONA)",2=>"WOMEN IN ESPECIALLY DIFFICULT CIRCUMSTANCES (WEDC)",3=>"PERSON WITH DISABILITIES (PWD)",4=>"YOUTH IN NEED OF SPECIAL PROTECTION (YNSP)",5=>"SENIOR CITIZEN (SC)",6=>"PERSON LIVING WITH HIV (PLHIV)",7=>"CHILDREN IN NEED OF SPECIAL PROTECTION (CNSP)"];
+                $gisSubcats = [1=>"SOLO PARENT",2=>"INDIGENOUS PEOPLE",3=>"RECOVERING PERSON WHO USED DRUGS",4=>"4PS DSWD BENEFICIARY",5=>"STREET DWELLERS",9=>"KIA/WIA",10=>"MINIMUM WAGE EARNER",11=>"BELOW MINIMUM WAGE EARNER",12=>"NO REGULAR INCOME",13=>"STATELESS PERSONS",14=>"ASYLUM SEEKERS",15=>"REFUGEES",8=>"OTHERS"];
+                $gisSubcatMap = [
+                    "Family Heads and Other Needy Adult" => ["Victims of Disaster","Internally Displaced Family","Solo Parent","Victims of Illegal Recruitment","Surrendered drug users","Repatriated OFW","Killed in Action (KIA)","Wounded in Action (WIA)","Indigenous People","Individuals with Cancer","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Tuberculosis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                    "Men/Women in Specially Difficult Circumstances" => ["Sexually-abused","Physically-abused/maltreated/battered","Victims of Illegal Recruitment","Victims of involuntary prostitution","Victims of armed conflict","Victims of trafficking","Surrendered drug users","Repatriated OFW","Killed in Action (KIA)","Wounded in Action (WIA)","Indigenous People","Individuals with Cancer","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Tuberculosis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                    "Children in Need of Special Protection" => ["Abandoned","Neglected","Voluntary Committed/Surrendered","Sexually-Abused","Sexually-Exploited","Physically-abused/maltreated/battered","Children in Situations of Armed Conflict","Victims of Child Labor","Victims of Child Trafficking","Street Children","Victims of Illegal Recruitment","Children with HIV/AIDS","Children with Disabilities","Children in Conflict with the Law (CICL)","Surrendered drug users","Repatriated OFW","Killed in Action (KIA)","Wounded in Action (WIA)","Indigenous People","Individuals with Cancer","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Tuberculosis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                    "Youth" => ["Children in Conflict with the Law (9 to < 18 yrs. old)","Out of School Youth","Pre-delinquent Youth","Victims of Illegal Recruitment","Surrendered drug users","Repatriated OFW","Killed in Action (KIA)","Wounded in Action (WIA)","Student","Indigenous People","Individuals with Cancer","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Tuberculosis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                    "Senior Citizens" => ["Indigenous People","Individuals with Cancer","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Tuberculosis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                    "Persons with Disabilities" => ["Orthopedically handicapped","Hearing/Speech impaired","Visually impaired","Mentally challenged","Victims of Illegal Recruitment","Surrendered drug users","Repatriated OFW","Killed in Action (KIA)","Wounded in Action (WIA)","Mental Disabilities","Indigenous People","Individuals with Cancer","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Tuberculosis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                    "Persons Living with HIV/AIDS" => ["Individuals with Cancer","Indigenous People","Tuberculosis Patients","Person of Concerns - Asylum Seeker","Former Rebels","Dialysis Patients","Person of Concerns - Refugees","Person of Concerns - Stateless Persons"],
+                ];
+                ?>
+                <div class="row" id="gisClientSection" <?php echo $isSelf ? 'style="display:none;"' : '' ?>>
+                    <div class="col-12">
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
-                                <h5 class="card-header text-success">CLIENT SUB-CATEGORY</h5>
+                                <h5 class="card-header text-success">CLIENT</h5>
                                 <div class="card-body">
                                     <div class="container" style="font-size: 15px;">
-                                        <div class="row">
-                                            <label class="col-sm-3 label" style="font-size: 18px">Sub-category:</label>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Category:</label>
                                             <div class="col">
-                                                <select type="text" id="c_subcat" class="form-control" name="c_subcat" required>
-                                                    <option value="" <?php echo (empty($client['subCategory'])) ? "selected" : "" ?>>Select Client Subcategory </option>
-                                                    <?php if($client["category"] == "Family Heads and Other Needy Adult"){ ?>
-                                                    <option value="Victims of Disaster" <?php echo (($client['subCategory']) == "Victims of Disaster") ? "selected" : "" ?>>Victims of Disaster</option>
-                                                    <option value="Internally Displaced Family" <?php echo (($client['subCategory']) == "Internally Displaced Family") ? "selected" : "" ?>>Internally Displaced Family</option>
-                                                    <option value="Solo Parent" <?php echo (($client['subCategory']) == "Solo Parent") ? "selected" : "Solo Parent" ?>></option>
-                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client['subCategory']) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
-                                                    <option value="Surrendered drug users" <?php echo (($client['subCategory']) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
-                                                    <option value="Repatriated OFW" <?php echo (($client['subCategory']) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
-                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
-                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php } elseif ($client["category"] == "Men/Women in Specially Difficult Circumstances"){?>
-                                                    <option value="Sexually-abused" <?php echo (($client["subCategory"]) == "Sexually-abused") ? "selected" : "" ?>>Sexually-abused</option>
-                                                    <option value="Physically-abused/maltreated/battered" <?php echo (($client["subCategory"]) == "Physically-abused/maltreated/battered") ? "selected" : "" ?>>Physically-abused/maltreated/battered</option>
-                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
-                                                    <option value="Victims of involuntary prostitution" <?php echo (($client["subCategory"]) == "Victims of involuntary prostitution") ? "selected" : "" ?>>Victims of involuntary prostitution</option>
-                                                    <option value="Victims of armed conflict" <?php echo (($client["subCategory"]) == "Victims of armed conflict") ? "selected" : "" ?>>Victims of armed conflict</option>
-                                                    <option value="Victims of trafficking" <?php echo (($client["subCategory"]) == "Victims of trafficking") ? "selected" : "" ?>>Victims of trafficking</option>
-                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
-                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
-                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
-                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php } elseif ($client["category"] == "Children in Need of Special Protection"){?>
-                                                    <option value="Abandoned" <?php echo (($client["subCategory"]) == "Abandoned") ? "selected" : "" ?>>Abandoned</option>
-                                                    <option value="Neglected" <?php echo (($client["subCategory"]) == "Neglected") ? "selected" : "" ?>>Neglected</option>
-                                                    <option value="Voluntary Committed/Surrendered" <?php echo (($client["subCategory"]) == "Voluntary Committed/Surrendered") ? "selected" : "" ?>>Voluntary Committed/Surrendered</option>
-                                                    <option value="Sexually-Abused" <?php echo (($client["subCategory"]) == "Sexually-Abused") ? "selected" : "" ?>>Sexually-Abused</option>
-                                                    <option value="Sexually-Exploited" <?php echo (($client["subCategory"]) == "Sexually-Exploited") ? "selected" : "" ?>>Sexually-Exploited</option>
-                                                    <option value="Physically-abused/maltreated/battered" <?php echo (($client["subCategory"]) == "Physically-abused/maltreated/battered") ? "selected" : "" ?>>Physically-abused/maltreated/battered</option>
-                                                    <option value="Children in Situations of Armed Conflict" <?php echo (($client["subCategory"]) == "Children in Situations of Armed Conflict") ? "selected" : "" ?>>Children in Situations of Armed Conflict</option>
-                                                    <option value="Victims of Child Labor" <?php echo (($client["subCategory"]) == "Victims of Child Labor") ? "selected" : "" ?>>Victims of Child Labor</option>
-                                                    <option value="Victims of Child Trafficking" <?php echo (($client["subCategory"]) == "Victims of Child Trafficking") ? "selected" : "" ?>>Victims of Child Trafficking</option>
-                                                    <option value="Street Children" <?php echo (($client["subCategory"]) == "Street Children") ? "selected" : "" ?>>Street Children</option>
-                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
-                                                    <option value="Children with HIV/AIDS" <?php echo (($client["subCategory"]) == "Children with HIV/AIDS") ? "selected" : "" ?>>Children with HIV/AIDS</option>
-                                                    <option value="Children with Disabilities" <?php echo (($client["subCategory"]) == "Children with Disabilities") ? "selected" : "" ?>>Children with Disabilities</option>
-                                                    <option value="Children in Conflict with the Law (CICL)" <?php echo (($client["subCategory"]) == "Children in Conflict with the Law (CICL)") ? "selected" : "" ?>>Children in Conflict with the Law (CICL)</option>
-                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
-                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
-                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
-                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php } elseif ($client["category"] == "Youth"){?>
-                                                    <option value="Children in Conflict with the Law (9 to < 18 yrs. old)" <?php echo (($client["subCategory"]) == "Children in Conflict with the Law (9 to < 18 yrs. old)") ? "selected" : "" ?>>Children in Conflict with the Law (9 to < 18 yrs. old)</option>
-                                                    <option value="Out of School Youth" <?php echo (($client["subCategory"]) == "Out of School Youth") ? "selected" : "" ?>>Out of School Youth</option>
-                                                    <option value="Pre-delinquent Youth" <?php echo (($client["subCategory"]) == "Pre-delinquent Youth") ? "selected" : "" ?>>Pre-delinquent Youth</option>
-                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
-                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
-                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
-                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
-                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
-                                                    <option value="Student" <?php echo (($client["subCategory"]) == "Student") ? "selected" : "" ?>>Student</option>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php } elseif ($client["category"] == "Senior Citizens" || ($client["category"] == "Senior Citizens (no subcategories)")){?>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php } elseif ($client["category"] == "Persons with Disabilities"){?>
-                                                    <option value="Orthopedically handicapped" <?php echo (($client["subCategory"]) == "Orthopedically handicapped") ? "selected" : "" ?>>Orthopedically handicapped</option>
-                                                    <option value="Hearing/Speech impaired" <?php echo (($client["subCategory"]) == "Hearing/Speech impaired") ? "selected" : "" ?>>Hearing/Speech impaired</option>
-                                                    <option value="Visually impaired" <?php echo (($client["subCategory"]) == "Visually impaired") ? "selected" : "" ?>>Visually impaired</option>
-                                                    <option value="Mentally challenged" <?php echo (($client["subCategory"]) == "Mentally challenged") ? "selected" : "" ?>>Mentally challenged</option>
-                                                    <option value="Victims of Illegal Recruitment" <?php echo (($client["subCategory"]) == "Victims of Illegal Recruitment") ? "selected" : "" ?>>Victims of Illegal Recruitment</option>
-                                                    <option value="Surrendered drug users" <?php echo (($client["subCategory"]) == "Surrendered drug users") ? "selected" : "" ?>>Surrendered drug users</option>
-                                                    <option value="Repatriated OFW" <?php echo (($client["subCategory"]) == "Repatriated OFW") ? "selected" : "" ?>>Repatriated OFW</option>
-                                                    <option value="Killed in Action (KIA)" <?php echo (($client["subCategory"]) == "Killed in Action (KIA)") ? "selected" : "" ?>>Killed in Action (KIA)</option>
-                                                    <option value="Wounded in Action (WIA)" <?php echo (($client["subCategory"]) == "Wounded in Action (WIA)") ? "selected" : "" ?>>Wounded in Action (WIA)</option>
-                                                    <option value="Mental Disabilities" <?php echo (($client["subCategory"]) == "Mental Disabilities") ? "selected" : "" ?>>Mental Disabilities</option>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php } elseif ($client["category"] == "Persons Living with HIV/AIDS"){?>
-                                                    <option value="Individuals with Cancer" <?php echo (($client["subCategory"]) == "Individuals with Cancer") ? "selected" : "" ?>>Individuals with Cancer</option>
-                                                    <option value="Indigenous People" <?php echo (($client["subCategory"]) == "Indigenous People") ? "selected" : "" ?>>Indigenous People</option>
-                                                    <option value="Tuberculosis Patients" <?php echo (($client["subCategory"]) == "Tuberculosis Patients") ? "selected" : "" ?>>Tuberculosis Patients</option>
-                                                    <option value="Person of Concerns - Asylum Seeker" <?php echo (($client["subCategory"]) == "Person of Concerns - Asylum Seeker") ? "selected" : "" ?>>Person of Concerns - Asylum Seeker</option>
-                                                    <option value="Former Rebels" <?php echo (($client["subCategory"]) == "Former Rebels") ? "selected" : "" ?>>Former Rebels</option>
-                                                    <option value="Dialysis Patients" <?php echo (($client["subCategory"]) == "Dialysis Patients") ? "selected" : "" ?>>Dialysis Patients</option>
-                                                    <option value="Person of Concerns - Refugees" <?php echo (($client["subCategory"]) == "Person of Concerns - Refugees") ? "selected" : "" ?>>Person of Concerns - Refugees</option>
-                                                    <option value="Person of Concerns - Stateless Persons" <?php echo (($client["subCategory"]) == "Person of Concerns - Stateless Persons") ? "selected" : "" ?>>Person of Concerns - Stateless Persons</option>
-                                                    <?php }?>
-                                                    <option value="NONE OF THE ABOVE" <?php echo (($client["subCategory"]) == "NONE OF THE ABOVE") ? "selected" : "" ?>>NONE OF THE ABOVE</option>
+                                                <select id="client_category" name="client_category" class="form-control" <?php echo $isSelf ? '' : 'required' ?>>
+                                                    <option value="">Select Category</option>
+                                                    <?php $ccat = $client['category'] ?? ''; foreach($gisCats as $gc){ echo "<option value=\"".htmlspecialchars($gc)."\" ".($ccat==$gc?"selected":"").">".htmlspecialchars($gc)."</option>"; } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Sub-category:</label>
+                                            <div class="col">
+                                                <select id="c_subcat" name="c_subcat" class="form-control" <?php echo $isSelf ? '' : 'required' ?> onchange="gisToggleClientExtra()">
+                                                    <option value="">Select Sub-category</option>
+                                                    <?php $csub = $client['subCategory'] ?? ''; foreach($subCategories as $sc){ echo "<option value=\"".htmlspecialchars($sc)."\" ".($csub==$sc?"selected":"").">".htmlspecialchars($sc)."</option>"; } ?>
+                                                </select>
+                                                <div id="clientBelowWrap" style="display:none; margin-top:7px;">Approx. Monthly Income: <input type="text" class="currencyMaskedInput" style="width:40%;" name="belowMonthly" id="belowMonthly" value="<?php echo htmlspecialchars($gis['below_monthly_income'] ?? '') ?>"></div>
+                                                <div id="clientOscWrap" style="display:none; margin-top:7px;">Others: <input type="text" style="width:60%;" name="osc_val" id="osc_val" value="<?php echo htmlspecialchars($gis['others_subcat'] ?? '') ?>"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Type of Disability:</label>
+                                            <div class="col">
+                                                <select id="client_disability" name="client_disability" class="form-control">
+                                                    <option value="">Not applicable</option>
+                                                    <?php $cdis = $client['type_of_disability'] ?? ''; foreach($gisDis as $gd){ echo "<option value=\"".htmlspecialchars($gd)."\" ".($cdis==$gd?"selected":"").">".htmlspecialchars($gd)."</option>"; } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Gender Identity:</label>
+                                            <div class="col">
+                                                <select id="client_gender" name="client_gender" class="form-control" <?php echo $isSelf ? '' : 'required' ?>>
+                                                    <option value="">Select Gender Identity</option>
+                                                    <?php $cgen = $client['gender_identity'] ?? ''; foreach($genders as $g){ echo "<option value=\"".htmlspecialchars($g)."\" ".($cgen==$g?"selected":"").">".htmlspecialchars($g)."</option>"; } ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -324,178 +261,72 @@ if (!$_SESSION['login']) {
                         </div>
                     </div>
                 </div><br>
-                
                 <div class="row">
-                    <div class=col-12>
+                    <div class="col-12">
                         <div class="card">
                             <div class="card border-info mb3" style="width:100%;">
-                                <h5 class="card-header text-success">TARGET SECTOR <label style="font-size: 13px;">(Beneficiary)</label></h5>
+                                <h5 class="card-header text-success">BENEFICIARY</h5>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-6 container" style="font-size: 15px;">
-                                            <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fhona" id="fhona" value="1" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==1? "checked": ""; ?>></div>
-                                                <div class="col-11"> FAMILY HEADS, AND OTHER NEEDY ADULTS (FHONA)</div>
-                                            </div>
-                                            <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="wedc" id="wedc" value="2" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==2? "checked": ""; ?>></div>
-                                                <div class="col-11"> WOMEN IN ESPECIALLY DIFFICULT CIRCUMSTRANCES (WEDC)</div>
-                                            </div>
-                                            <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="pwd" id="pwd" value="3" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==3? "checked": ""; ?>></div>
-                                                <div class="col-11"> PERSON WITH DISABILITIES (PWD)</div>
-                                            </div>
-                                            <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="youth" id="youth" value="4" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==4? "checked": ""; ?>></div>
-                                                <div class="col-11"> YOUTH IN NEED OF SPECIAL PROTECTION (YNSP)</div>
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Category <small>(Target Sector)</small>:</label>
+                                            <div class="col">
+                                                <select id="bene_sector" name="bene_sector" class="form-control" required>
+                                                    <option value="">Select Category</option>
+                                                    <?php $bsec = $gis['target_sector'] ?? ''; foreach($gisSectors as $sv=>$sl){ echo "<option value=\"".$sv."\" ".($bsec==$sv?"selected":"").">".$sl."</option>"; } ?>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-6 container" style="font-size: 15px;">
-                                            <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="sc" id="sc" value="5" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==5? "checked": ""; ?>></div>
-                                                <div class="col-11"> SENIOR CITIZEN (SC)</div>
-                                            </div>
-                                            <div class="row" style="margin-bottom:7px;">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="plhiv" id="plhiv" value="6" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==6? "checked": ""; ?>></div>
-                                                <div class="col-11"> PERSON LIVING WITH HIV(PLHIV)</div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="cnsp" id="cnsp" value="7" <?php echo !empty($gis['target_sector']) && $gis['target_sector']==7? "checked": ""; ?>></div>
-                                                <div class="col-11"> CHILDREN IN NEED OF SPECIAL PROTECTION (CNSP)</div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Sub-category:</label>
+                                            <div class="col">
+                                                <select id="bene_subcat" name="bene_subcat" class="form-control" required onchange="gisToggleBeneExtra()">
+                                                    <option value="">Select Sub-category</option>
+                                                    <?php $bsub = $isSelf ? ($client['subCategory'] ?? '') : ($client['b_subCategory'] ?? ''); foreach($subCategories as $sc){ echo "<option value=\"".htmlspecialchars($sc)."\" ".($bsub==$sc?"selected":"").">".htmlspecialchars($sc)."</option>"; } ?>
+                                                </select>
+                                                <div id="beneBelowWrap" style="display:none; margin-top:7px;">Approx. Monthly Income: <input type="text" class="currencyMaskedInput" style="width:40%;" name="b_belowMonthly" id="b_belowMonthly" value="<?php echo htmlspecialchars($isSelf ? ($gis['below_monthly_income'] ?? '') : ($gis['b_below_monthly_income'] ?? '')) ?>"></div>
+                                                <div id="beneOscWrap" style="display:none; margin-top:7px;">Others: <input type="text" style="width:60%;" name="b_osc_val" id="b_osc_val" value="<?php echo htmlspecialchars($isSelf ? ($gis['others_subcat'] ?? '') : ($gis['b_others_subcat'] ?? '')) ?>"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                </div><br>
-                <div class="row">
-                    <div class=col-6>
-                        <div class="card">
-                            <div class="card border-info mb3" style="width:100%;">
-                                <h5 class="card-header text-success">SPECIFY SUB-CATEGORY <label style="font-size: 13px;">(Beneficiary)</label></h5>
-                                <div class="card-body">
-                                    <div class="container">
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="solo" id="solo" value="1" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==1? "checked": ""; ?>></div>
-                                            <div class="col-11"> SOLO PARENT</div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Type of Disability:</label>
+                                            <div class="col">
+                                                <select id="bene_disability" name="bene_disability" class="form-control">
+                                                    <option value="">Not applicable</option>
+                                                    <?php $bdis = $gis['type_of_disability'] ?? ''; foreach($gisDis as $i=>$gd){ $dv=$i+1; echo "<option value=\"".$dv."\" ".($bdis==$dv?"selected":"").">".$gd."</option>"; } ?>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="ip" id="ip" value="2" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==2? "checked": ""; ?>></div>
-                                            <div class="col-11"> INDIGENOUS PEOPLE</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="drug" id="drug" value="3" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==3? "checked": ""; ?>></div>
-                                            <div class="col-11"> RECOVERING PERSON WHO USED DRUGS</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="kia_wia" id="kia_wia" value="9" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==9? "checked": ""; ?>></div>
-                                            <div class="col-11"> KIA/WIA</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="4ps" id="4ps" value="4" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==4? "checked": ""; ?>></div>
-                                            <div class="col-11"> 4PS DSWD BENEFICIARY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg"  name="dwell" id="dwell" value="5" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==5? "checked": ""; ?>></div>
-                                            <div class="col-11"> STREET DWELLERS</div>
-                                        </div>
-                                        <!-- <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="mental" id="mental" value="6" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==6? "checked": ""; ?>></div>
-                                            <div class="col-11"> PSYCHOSOCIAL/MENTAL/LEARNING DISABILITY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="asylum" id="asylum" value="7" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==7? "checked": ""; ?>></div>
-                                            <div class="col-11"> STATELESS PERSONS/ASYLUM SEEKERS/REFUGEES</div>
-                                        </div> -->
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="stateless" id="stateless" value="13" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==13? "checked": ""; ?>></div>
-                                            <div class="col-11"> STATELESS PERSONS</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="asylum" id="asylum" value="14" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==14? "checked": ""; ?>></div>
-                                            <div class="col-11"> ASYLUM SEEKERS</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="refugees" id="refugees" value="15" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==15? "checked": ""; ?>></div>
-                                            <div class="col-11"> REFUGEES</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="min_wage" id="min_wage" value="10" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==10? "checked": ""; ?>></div>
-                                            <div class="col-11"> MINIMUM WAGE EARNER</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="below_min_wage" id="below_min_wage" value="11" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==11? "checked": ""; ?>></div>
-                                            <div class="col-11"> BELOW MINIMUM WAGE EARNER</div>
-                                            <div class="col-11"> Specify Approximate Monthly Income <input type="text" class="lg currencyMaskedInput" style="border-radius: 3px 3px 3px 3px; width: 35%; height: 23px;" name="belowMonthly" id="belowMonthly" value="<?php echo !empty($gis['below_monthly_income'])? $gis['below_monthly_income']: ""; ?>" disabled></div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="no_regular_income" id="no_regular_income" value="12" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==12? "checked": ""; ?>></div>
-                                            <div class="col-11"> No Regular Income</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" style="padding" class="lg" name="osc" id="osc" value="8" <?php echo !empty($gis['subcat_ass']) && $gis['subcat_ass']==8? "checked": ""; ?>></div>
-                                            <div class="col-11"> OTHERS: <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 60%; height: 23px;" name="osc_val" id="osc_val" value="<?php echo !empty($gis['others_subcat'])? $gis['others_subcat']: ""; ?>" disabled></div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 label" style="font-size:18px">Gender Identity:</label>
+                                            <div class="col">
+                                                <select id="bene_gender" name="bene_gender" class="form-control" required>
+                                                    <option value="">Select Gender Identity</option>
+                                                    <?php $bgen = $isSelf ? ($client['gender_identity'] ?? '') : ($client['b_gender_identity'] ?? ''); foreach($genders as $g){ echo "<option value=\"".htmlspecialchars($g)."\" ".($bgen==$g?"selected":"").">".htmlspecialchars($g)."</option>"; } ?>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class=col-6>
-                        <div class="card">
-                            <div class="card border-info mb3" style="width:100%;">
-                                <h5 class="card-header text-success">TYPE OF DISABILITY <small>(Note: do not check if not applicable)</small></h5>
-                                <div class="card-body">
-                                    <div class="container">
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_speech" id="d_speech" value="1" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==1? "checked": ""; ?>></div>
-                                            <div class="col-11"> SPEECH IMPAIRMENT</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_learning" id="d_learning" value="2" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==2? "checked": ""; ?>></div>
-                                            <div class="col-11"> LEARNING DISABILITY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_psychosocial" id="d_psychosocial" value="3" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==3? "checked": ""; ?>></div>
-                                            <div class="col-11">PSYCHOSOCIAL DISABILITY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_deaf" id="d_deaf" value="4" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==4? "checked": ""; ?>></div>
-                                            <div class="col-11"> DEAF/HARD-OF-HEARING</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg"  name="d_cancer" id="d_cancer" value="5" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==5? "checked": ""; ?>></div>
-                                            <div class="col-11"> CANCER</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_mental" id="d_mental" value="6" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==6? "checked": ""; ?>></div>
-                                            <div class="col-11"> MENTAL DISABILITY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_visual" id="d_visual" value="7" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==7? "checked": ""; ?>></div>
-                                            <div class="col-11"> VISUAL DISABILITY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_intellectual" id="d_intellectual" value="8" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==8? "checked": ""; ?>></div>
-                                            <div class="col-11"> INTELLECTUAL DISABILITY</div>
-                                        </div>
-                                        <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_physical" id="d_physical" value="9" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==9? "checked": ""; ?>></div>
-                                            <div class="col-11"> PHYSICAL DISABILITY</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-1" style="margin-top:5px;"><input type="checkbox" class="lg" name="d_rare" id="d_rare" value="10" <?php echo !empty($gis['type_of_disability']) && $gis['type_of_disability']==10? "checked": ""; ?>></div>
-                                            <div class="col-11"> RARE DISEASE</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
                 </div><br>
-
+                <script>
+                    // The Sub-category dropdown now lists the full sub_categories table
+                    // (server-rendered), so no category-dependent repopulation is needed.
+                    function gisToggleClientExtra(){
+                        var v = document.getElementById('c_subcat').value;
+                        document.getElementById('clientBelowWrap').style.display = (v === 'Below Minimum Wage Earners') ? 'block' : 'none';
+                        document.getElementById('clientOscWrap').style.display = (v === 'Others Specify') ? 'block' : 'none';
+                    }
+                    function gisToggleBeneExtra(){
+                        var v = document.getElementById('bene_subcat').value;
+                        document.getElementById('beneBelowWrap').style.display = (v === 'Below Minimum Wage Earners') ? 'block' : 'none';
+                        document.getElementById('beneOscWrap').style.display = (v === 'Others Specify') ? 'block' : 'none';
+                    }
+                    document.addEventListener('DOMContentLoaded', function(){ gisToggleClientExtra(); gisToggleBeneExtra(); });
+                </script>
                 <div class="row">
                     <div class=col-12>
                         <div class="card">
@@ -897,9 +728,6 @@ if (!$_SESSION['login']) {
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
 								</div> 
-                                <div class="col-12" style="margin-bottom: 12px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==0)?'checked':'') ?>> &nbsp; Not Applicable 
-								</div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">In the past three (3) months, did the family experience at least one crisis?</label>
                                 <div class="col-1"></div>
                                 <div class="col-2" style="margin-bottom: 8px;">
@@ -934,9 +762,6 @@ if (!$_SESSION['login']) {
                             <div class="row">
 								<label class="col-sm-12 label text-left" style="font-size: 17px">AVAILABILITY OF SUPPORT SYSTEMS</label>
                                 <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="support1" name="support1" value="1" <?php echo (isset($supportSystemAvailability[1])?'checked':'') ?>> &nbsp; Family 
-								</div> 
-                                <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="support2" name="support2" value="2" <?php echo (isset($supportSystemAvailability[2])?'checked':'') ?>> &nbsp; Relatives
 								</div> 
                                 <div class="col-12" style="margin-bottom: 8px;">
@@ -968,8 +793,7 @@ if (!$_SESSION['login']) {
 								</div> 
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="external6" name="external6" value="6" <?php echo (isset($externalResources[6])?'checked':'') ?>> &nbsp; PWD Discount
-                                    <input type="text" class="col-lg-5" style="border-radius: 4px; width: 100%;" id="external6_discount" name="external6_discount" value="<?php echo (isset($externalResources[6])?$externalResources[6]:'') ?>">
-								</div> 
+                                </div> 
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="external7" name="external7" value="7" <?php echo (isset($externalResources[7])?'checked':'') ?>> &nbsp; Others, specify
                                     <input type="text" class="col-lg-5" style="border-radius: 4px; width: 100%;" id="external7_discount" name="external7_discount" value="<?php echo (isset($externalResources[7])?$externalResources[7]:'') ?>">
@@ -1361,7 +1185,7 @@ if (!$_SESSION['login']) {
         if (isset($_POST['update'])) {
             $empid = $_SESSION['userId']; // id sa social worker
             $trans_id = $_GET['id'];
-            $csubcat = $_POST['c_subcat'];
+            $csubcat = $isSelf ? ($_POST['bene_subcat'] ?? '') : ($_POST['c_subcat'] ?? '');
             // Initialize ALL optional variables
             $docu_otherinfo = "";
             $material = "";
@@ -1511,45 +1335,21 @@ if (!$_SESSION['login']) {
             }
             
             // new data
-            if(isset($_POST['fhona'])){$targets = 1;}
-            if(isset($_POST['wedc'])){$targets = 2;}
-            if(isset($_POST['pwd'])){$targets = 3;}
-            if(isset($_POST['youth'])){$targets = 4;}
-            if(isset($_POST['sc'])){$targets = 5;}
-            if(isset($_POST['plhiv'])){$targets = 6;}
-            if(isset($_POST['cnsp'])){$targets = 7;}
-            
-            if(isset($_POST['solo'])){$subcat = 1;}
-            if(isset($_POST['ip'])){$subcat = 2;}
-            if(isset($_POST['drug'])){$subcat = 3;}
-            if(isset($_POST['4ps'])){$subcat = 4;}
-            if(isset($_POST['dwell'])){$subcat = 5;}
-            if(isset($_POST['mental'])){$subcat = 6;}
-            // if(isset($_POST['asylum'])){$subcat = 7;}
-            if(isset($_POST['osc'])){$subcat = 8;}
-            if(isset($_POST['kia_wia'])){$subcat = 9;}
-            if(isset($_POST['min_wage'])){$subcat = 10;}
-            if(isset($_POST['below_min_wage'])){$subcat = 11;
-            $belowMonthly = $_POST["belowMonthly"];}
-            if(isset($_POST['no_regular_income'])){$subcat = 12;}
-            if(isset($_POST['stateless'])){$subcat = 13;}
-            if(isset($_POST['asylum'])){$subcat = 14;}
-            if(isset($_POST['refugees'])){$subcat = 15;}
-                
-            $others_subcat = "";
-            if (!empty($_POST['osc_val'])){$others_subcat = trim($_POST['osc_val']);}
-			
-			$c_disability = "";
-            if(isset($_POST['d_speech'])){$c_disability = 1;}
-            if(isset($_POST['d_learning'])){$c_disability = 2;}
-            if(isset($_POST['d_psychosocial'])){$c_disability = 3;}
-            if(isset($_POST['d_deaf'])){$c_disability = 4;}
-            if(isset($_POST['d_cancer'])){$c_disability = 5;}
-            if(isset($_POST['d_mental'])){$c_disability = 6;}
-            if(isset($_POST['d_visual'])){$c_disability = 7;}
-            if(isset($_POST['d_intellectual'])){$c_disability = 8;}
-            if(isset($_POST['d_physical'])){$c_disability = 9;}
-            if(isset($_POST['d_rare'])){$c_disability = 10;}
+            // Beneficiary Category / Sub-category / Type of Disability come from the
+            // single-select dropdowns; values map to the numeric target_sector / subcat_ass /
+            // type_of_disability codes the official GIS print decodes.
+            $targets = $_POST['bene_sector'] ?? "";
+
+            $beneSubcatText = $_POST['bene_subcat'] ?? "";
+            $subcat = $subcatTextToCode[$beneSubcatText] ?? "";
+            // CLIENT below-income / others -> below_monthly_income / others_subcat
+            $belowMonthly = (($_POST['c_subcat'] ?? '') === 'Below Minimum Wage Earners') ? ($_POST["belowMonthly"] ?? "") : "";
+            $others_subcat = (($_POST['c_subcat'] ?? '') === 'Others Specify' && !empty($_POST['osc_val'])) ? trim($_POST['osc_val']) : "";
+            // BENEFICIARY below-income / others -> b_below_monthly_income / b_others_subcat
+            $b_belowMonthly = ($beneSubcatText === 'Below Minimum Wage Earners') ? ($_POST["b_belowMonthly"] ?? "") : "";
+            $b_others_subcat = ($beneSubcatText === 'Others Specify' && !empty($_POST['b_osc_val'])) ? trim($_POST['b_osc_val']) : "";
+
+            $c_disability = $_POST['bene_disability'] ?? "";
 
 			if(strtolower($type1) == "medical assistance"){
 				if(isset($_POST['hb'])){$if_medical = 1;}
@@ -1619,7 +1419,7 @@ if (!$_SESSION['login']) {
             if(isset($_POST["external3"])){$external.=$_POST["external3"]."-";}
             if(isset($_POST["external4"])){$external.=$_POST["external4"]."-";}
             if(isset($_POST["external5"])){$external.=$_POST["external5"]."-";}
-            if(isset($_POST["external6"])){$external.=$_POST["external6"]."=".$_POST["external6_discount"]."-";}
+            if(isset($_POST["external6"])){$external.=$_POST["external6"]."-";}
             if(isset($_POST["external7"])){$external.=$_POST["external7"]."=".$_POST["external7_discount"]."-";}
             if(isset($_POST["external8"])){$external.=$_POST["external8"];}
 
@@ -1643,6 +1443,26 @@ if (!$_SESSION['login']) {
             $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
             $docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
             $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome);
+            // Persist the Client/Beneficiary section selections (category, disability, gender).
+            // When relation is Self the client IS the beneficiary, so the Beneficiary section
+            // drives the client's own category/disability/gender.
+            $beneDisabilityText = (($c_disability !== '' && isset($gisDis[$c_disability-1])) ? $gisDis[$c_disability-1] : '');
+            $sectorToCategory = [1=>"Family Heads and Other Needy Adult",2=>"Men/Women in Specially Difficult Circumstances",3=>"Persons with Disabilities",4=>"Youth",5=>"Senior Citizens",6=>"Persons Living with HIV/AIDS",7=>"Children in Need of Special Protection"];
+            if($isSelf){
+                $gisClientCategory   = $sectorToCategory[$targets] ?? '';
+                $gisClientDisability = $beneDisabilityText;
+                $gisClientGender     = $_POST['bene_gender'] ?? '';
+                $gisClientBelow      = $b_belowMonthly;
+                $gisClientOthers     = $b_others_subcat;
+            } else {
+                $gisClientCategory   = $_POST['client_category'] ?? '';
+                $gisClientDisability = $_POST['client_disability'] ?? '';
+                $gisClientGender     = $_POST['client_gender'] ?? '';
+                $gisClientBelow      = $belowMonthly;
+                $gisClientOthers     = $others_subcat;
+            }
+            $user->saveGISClientBene($trans_id, $gisClientCategory, $gisClientDisability, $gisClientGender,
+                ($gisSectors[$targets] ?? ''), $beneSubcatText, $beneDisabilityText, $_POST['bene_gender'] ?? '', $b_belowMonthly, $b_others_subcat, $gisClientBelow, $gisClientOthers);
         }
 
             //UPDATE CLIENT
@@ -2558,13 +2378,6 @@ if (!$_SESSION['login']) {
         });
 
         $(function () {
-            if ($("#external6").prop("checked")) {
-                $("#external6_discount").prop("disabled", false);
-                $("#external6_discount").prop("required", true);
-            }else{
-                $("#external6_discount").prop("disabled", true);
-                $("#external6_discount").prop("required", false);
-            }
             if ($("#external7").prop("checked")) {
                 $("#external7_discount").prop("disabled", false);
                 $("#external7_discount").prop("required", true);
@@ -2572,9 +2385,6 @@ if (!$_SESSION['login']) {
                 $("#external7_discount").prop("disabled", true);
                 $("#external7_discount").prop("required", false);
             }
-            $("#external6").click(function () {
-                $("#external6_discount").prop("disabled", !$(this).prop("checked")).prop("required", $(this).prop("checked")).val($(this).prop("checked") ? $("#external6_discount").val() : "");
-		    });
             $("#external7").click(function () {
                 $("#external7_discount").prop("disabled", !$(this).prop("checked")).prop("required", $(this).prop("checked")).val($(this).prop("checked") ? $("#external7_discount").val() : "");
 		    });
