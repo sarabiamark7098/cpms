@@ -673,6 +673,7 @@
                                                 <option>Philippine Passport</option>
                                                 <option>SSS UMID Card</option>
                                                 <option>TIN Card</option>
+                                                <option>Philippine ID</option>
                                                 <option>PRC ID</option>
                                             </datalist>
                                         </div> 
@@ -714,6 +715,9 @@
                                         echo '
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "MEDICAL").'> Medical Certificate/Abstract</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="alagang_pinoy" id="alagang_pinoy" value="ALAGANG PINOY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "ALAGANG PINOY").'> Alagang Pinoy Tagubilin</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH SUMMARY").'> Death Summary</div>
