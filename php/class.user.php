@@ -3722,6 +3722,28 @@
 			}
 		}
 
+		public function coe_check_any($subs, $str){
+			$str = strtolower(strval($str));
+			foreach((array)$subs as $sub){
+				if(substr_count($str, strtolower($sub)) > 0){
+					return "&#x2714;";
+				}
+			}
+			return "";
+		}
+
+		// Shrink-to-fit font size: keeps the input box a fixed width/height
+		// and only reduces the font size so longer values still fit.
+		public function coe_fit_font($str, $width_px, $base_px = 15, $min_px = 8){
+			$len = strlen(trim(strval($str)));
+			if($len <= 0){
+				return $base_px;
+			}
+			$fit = $width_px / (0.55 * $len);
+			$size = min($base_px, $fit);
+			return round(max($size, $min_px), 1);
+		}
+
 		public function casestudy($sub, $str, $amount){
 			$sub = strtolower($sub);
 			$str = strtolower($str);
