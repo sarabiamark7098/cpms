@@ -3744,6 +3744,18 @@
 			return round(max($size, $min_px), 1);
 		}
 
+		public function gl_fit_font($str, $width_px, $height_px, $min_px = 8){
+			$cap = $height_px * 0.6;
+			$len = strlen(trim(strval($str)));
+			if($len <= 0){
+				return round($cap, 1);
+			}
+			$usable = max($width_px - 8, 1);
+			$fit = $usable / (0.62 * $len);
+			$size = min($cap, $fit);
+			return round(max($size, $min_px), 1);
+		}
+
 		public function casestudy($sub, $str, $amount){
 			$sub = strtolower($sub);
 			$str = strtolower($str);

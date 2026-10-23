@@ -128,15 +128,22 @@
 				<div class="col-2">
                 </div>
             <?php if(!empty($gl['for_the_id'])){ ?>
-				<div class="col-4" style="padding-top: 60px;">
+				<div class="col-4" style="padding-top: 60px; margin-left: -50px;">
 					For the <?php echo $forthepositiongl ?>,
                 </div>
             <?php }?>
             </div>
+            <?php
+                $gl_signatory_name = strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']);
+                $gl_forthe_name = !empty($signatoryforthe) ? strtoupper((!empty($signatoryforthe['name_title'])?$signatoryforthe['name_title']." ":"").$signatoryforthe['first_name']." ".(!empty($signatoryforthe['middle_I'])?$signatoryforthe['middle_I'].". ":"").$signatoryforthe['last_name']) : "";
+                
+                $sig_w = 500; // width in px
+                $sig_h = 40;  // height in px
+            ?>
             <?php if(empty($gl['for_the_id'])){ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:<?php echo $sig_w ?>px;height:<?php echo $sig_h ?>px; border: solid 1px black; font-size:<?php echo $user->gl_fit_font($gl_signatory_name, $sig_w, $sig_h) ?>px;" value="<?php echo $gl_signatory_name ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>"><br>
 					<br>
 					<p class="">Valid within 7 working days upon receipt.</p>
@@ -152,14 +159,13 @@
             <?php }else{ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:<?php echo $sig_w ?>px;height:<?php echo $sig_h ?>px; border:none; font-size:<?php echo $user->gl_fit_font($gl_signatory_name, $sig_w, $sig_h) ?>px;" value="<?php echo $gl_signatory_name ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>">                  
                 </div>
-                <div class="col-1"></div>
-                <div class="col-5"><br>
+                <div class="col-6" style="padding-left: 100px;"><br>
 
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryforthe['name_title'])?$signatoryforthe['name_title']." ":"").$signatoryforthe['first_name']." ".(!empty($signatoryforthe['middle_I'])?$signatoryforthe['middle_I'].". ":"").$signatoryforthe['last_name']) ?>"><br>
-					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryforthe['position'] ?>"><br>
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:<?php echo $sig_w ?>px;height:<?php echo $sig_h ?>px; border:none; margin-left: -50px; font-size:<?php echo $user->gl_fit_font($gl_forthe_name, $sig_w, $sig_h) ?>px;" value="<?php echo $gl_forthe_name ?>"><br>
+					<input id="s_position" style="border: none;width:100%; margin-left: -50px;" value="<?php echo $signatoryforthe['position'] ?>"><br>
 
                 </div>
             </div><br>
@@ -173,10 +179,6 @@
 				<span>Not valid without seal<span><br>
             <?php } ?>
         </div>
-        <br style="page-break-after:always ">
-        <div style="page-break-after:always "></div>
-        <div>&nbsp;</div>
-        <br>
     </div>
 
 </div>

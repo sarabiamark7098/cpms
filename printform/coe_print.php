@@ -210,7 +210,7 @@
                         <b>Other Offices:</b>
                         <div class="row">
                             <div class="col-4" style="padding-right:0;">
-                                <input class="text-center" type="text" style="font-size:16px;width:16px;height:16px;border:1px solid black;" value="<?php echo $user->coe_check_any(['medical certificate', 'abstract', 'discharge summary', 'certificate of confinement', 'death summary', 'alagang pinoy tagubilin'], $record['document'])?>" />&emsp;Medical Certificate/<br>&emsp;&emsp;&emsp;Abstract/Discharge<br>&emsp;&emsp;&emsp;Summary/Certificate of<br>&emsp;&emsp;&emsp;Confinement/Death<br>&emsp;&emsp;&emsp;Summary/Alagang Pinoy<br>&emsp;&emsp;&emsp;Tagubilin<br>
+                                <input class="text-center" type="text" style="font-size:16px;width:16px;height:16px;border:1px solid black;" value="<?php echo $user->coe_check_any(['medical certificate', 'abstract', 'discharge summary', 'certificate of confinement', 'death summary', 'alagang pinoy tagubilin'], $record['document'])?>" />&emsp;Medical Certificate/Abstract/<br>&emsp;&emsp;&emsp;Discharge Summary/<br>&emsp;&emsp;&emsp;Certificate of Confinement/<br>&emsp;&emsp;&emsp;Death Summary/<br>&emsp;&emsp;&emsp;Alagang Pinoy Tagubilin<br>
                                 <input class="text-center" type="text" style="font-size:16px;width:16px;height:16px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('prescription', $record['document'])?>" />&emsp;Prescriptions<br>
                                 <input class="text-center" type="text" style="font-size:16px;width:16px;height:16px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('lab request', $record['document'])?>" />&emsp;Laboratory Request<br>
                                 <input class="text-center" type="text" style="font-size:16px;width:16px;height:16px;margin-top:1px;border:1px solid black;" value="<?php echo $user->coe_check('treatment', $record['document'])?>" />&emsp;Treatment Protocol
@@ -335,7 +335,7 @@
                 </div>
                 <div class="row" style="margin-top: 10px;">
                     <div class="col">
-                        <?php echo "<p style='text-indent: 50px; padding: 0px 50px 0px 100px;'>I acknowledge receipt of assistance in the amount of  <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&emsp;". $client_assistance[1]['amount'] ."&emsp;</u>.</p>" ?>
+                        <?php echo "<p style='padding: 0px 50px 0px 100px;'>I acknowledge receipt of assistance in the amount of  <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&emsp;". $client_assistance[1]['amount'] ."&emsp;</u>.</p>" ?>
                     </div>
                 </div>
                 <div class="row text-center" style="font-size: 16px;">

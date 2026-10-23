@@ -299,7 +299,7 @@
                 </div>
                 <div class="row" style="margin-top: 10px;">
                     <div class="col">
-                        <?php echo "<p style='text-indent: 50px; padding: 0px 50px 0px 100px;'>I acknowledge receipt of assistance in the amount of  <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&emsp;". $client_assistance[1]['amount'] ."&emsp;</u>.</p>" ?>
+                        <?php echo "<p style='padding: 0px 50px 0px 100px;'>I acknowledge receipt of assistance in the amount of  <u>&emsp;". ucwords(strtolower($amountToWord)) ."&emsp;</u> Php<u>&emsp;". $client_assistance[1]['amount'] ."&emsp;</u>.</p>" ?>
                     </div>
                 </div>
                 <div class="row text-center" style="font-size: 16px;">

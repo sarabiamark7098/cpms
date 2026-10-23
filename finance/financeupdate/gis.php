@@ -37,6 +37,11 @@ if (isset($_GET['id'])) {
     }
     
     $gis = $user->getGISData($_GET['id']); //kwaun ang mga data if ever naa na xay inputed data sa assessment/service only
+    // Assistance Received from DSWD (records table, one row per assistance)
+    $assistance_record = $user->getRecords($_GET['id']);
+    $assistanceList = array_map(function($__r){ return strtolower($__r['received'] ?? ''); }, $assistance_record ?? array());
+    $assistanceOther = '';
+    foreach(($assistance_record ?? array()) as $__r){ if(strtolower($__r['received'] ?? '')==='other'){ $assistanceOther = $__r['other_specify']; } }
     $genders = $user->getGenderIdentities(); // Gender Identity options for the Client/Beneficiary sections
     $subCategories = $user->getSubCategories(); // full Sub-category list for the dropdowns
     $subcatTextToCode = [
@@ -373,7 +378,7 @@ if (!$_SESSION['login']) {
                         </div>
                     </div>
                 </div><br>
-
+                
                 <!-- Family Composition -->
                 <div class="row">
                     <div class="col-12">
@@ -513,7 +518,7 @@ if (!$_SESSION['login']) {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                     <div class="col-6" id="burial_show"><br>
@@ -522,7 +527,7 @@ if (!$_SESSION['login']) {
                                 <h5 class="card-header text-success">IF FUNERAL</h5>
                                 <div class="card-body">
                                     <div class="container" style="font-size: 15px;">
-                                    <div class="row" style="margin-bottom:17px;">
+                                        <div class="row" style="margin-bottom:17px;">
                                             <div class="col-12">Diagnosis/Cause of Death</div>
                                             <div class="col-12" style="margin-top:3px;"><input type="text" class="form-control lg" name="diagnosis_cod" id="diagnosis_cod" value="<?php echo empty($client_assistance[1]['cause_of_death']) ? "" : $client_assistance[1]['cause_of_death'] ?>"/></div>
                                         </div>
@@ -540,6 +545,21 @@ if (!$_SESSION['login']) {
                                         </div>
                                     </div>
                                 </div>
+                                <h5 class="card-header text-success">FREE FUNERAL SERVICE</h5>
+                                <div class="card-body">
+                                    <div class="container" style="font-size: 15px;">
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;">
+                                                <input type="checkbox" class="lg" name="free_funeral_service_burial" id="free_funeral_service_burial" value="burial" <?php echo (!empty($client_assistance[1]['type']) && strtolower($client_assistance[1]['type']) =="funeral assistance"?((($client_assistance[1]['free_funeral_service']=='burial-') || ($client_assistance[1]['free_funeral_service']=='burial-cremation-')) ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Burial</div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:7px;">
+                                            <div class="col-1" style="margin-top:3px;">
+                                                <input type="checkbox" class="lg" name="free_funeral_service_cremation" id="free_funeral_service_cremation" value="cremation" <?php echo (!empty($client_assistance[1]['type']) && strtolower($client_assistance[1]['type']) =="funeral assistance"?((($client_assistance[1]['free_funeral_service']=='cremation-') || ($client_assistance[1]['free_funeral_service']=='burial-cremation-')) ? "checked": ""):"") ?>></div>
+                                            <div class="col-11"> Cremation</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div> 
                         </div>
                     </div>
@@ -553,29 +573,29 @@ if (!$_SESSION['login']) {
                             <div class="card border-info mb3" style="width:100%;">
                                 <h5 class="card-header text-success">FINANCIAL ASSISTANCE</h5>
                                 <div class="card-body">
-                                <div class="container" style="font-size: 15px;">
+                                    <div class="container" style="font-size: 15px;">
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="medical" id="medical" value="1" <?php echo (!empty($client_assistance[1]['financial'])==1 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="medical" id="medical" value="1" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==1 ? "checked": "") ?>></div>
                                             <div class="col-11"> Medical Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="transportation" id="transportation" value="2" <?php echo (!empty($client_assistance[1]['financial'])==2 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="transportation" id="transportation" value="2" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==2 ? "checked": "") ?>></div>
                                             <div class="col-11"> Transportation Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="food" id="food" value="3" <?php echo (!empty($client_assistance[1]['financial'])==3 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="food" id="food" value="3" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==3 ? "checked": "") ?>></div>
                                             <div class="col-11"> Food Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fassist" id="fassist" value="4" <?php echo (!empty($client_assistance[1]['financial'])==4 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg" name="fassist" id="fassist" value="4" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==4 ? "checked": "") ?>></div>
                                             <div class="col-11"> Funeral Assistance</div>
                                         </div>
                                         <div class="row" style="margin-bottom:7px;">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="educational" id="educational" value="5" <?php echo (!empty($client_assistance[1]['financial'])==5 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="educational" id="educational" value="5" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==5 ? "checked": "") ?>></div>
                                             <div class="col-11"> Educational Assistance</div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="casha" id="casha" value="6" <?php echo (!empty($client_assistance[1]['financial'])==6 ? "checked": "") ?>></div>
+                                            <div class="col-1" style="margin-top:3px;"><input type="checkbox" class="lg"  name="casha" id="casha" value="6" <?php echo (!empty($client_assistance[1]['financial']) && $client_assistance[1]['financial']==6 ? "checked": "") ?>></div>
                                             <div class="col-11"> Cash Relief Assistance</div>
                                         </div>
                                     </div>
@@ -616,6 +636,65 @@ if (!$_SESSION['login']) {
                     </div>
                 </div><br>
 
+                <!-- Assistance Received from DSWD -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card border-info mb3" style="width:100%;">
+                                <h5 class="card-header text-success" style="background:#f0edff">ASSISTANCE RECEIVED FROM DSWD</h5>
+                                <div class="card-body text-dark">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    <input type="checkbox" class="lg" name="assistance_aics" id="assistance_aics" value="aics" <?php echo (in_array('aics',$assistanceList) ? "checked": "") ?>>
+                                                </div>
+                                                <div class="col-11" style="margin-bottom: 12px; font-size: 15px;">
+                                                    Assistance to Individual in Crisis Situations (AICS)
+                                                </div>
+                                                <div class="col-1">
+                                                    <input type="checkbox" class="lg" name="assistance_wgp" id="assistance_wgp" value="wgp" <?php echo (in_array('wgp',$assistanceList) ? "checked": "") ?>>
+                                                </div>
+                                                <div class="col-11" style="margin-bottom: 12px; font-size: 15px;">
+                                                    Walang Gutom Program (WGP)
+                                                </div>
+                                                <div class="col-1">
+                                                    <input type="checkbox" class="lg" name="assistance_4ps" id="assistance_4ps" value="4ps" <?php echo (in_array('4ps',$assistanceList) ? "checked": "") ?>>
+                                                </div>
+                                                <div class="col-11" style="font-size: 15px;">
+                                                    Pantawid Pamilyang Pilipino Program (4Ps)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    <input type="checkbox" class="lg" name="assistance_slp" id="assistance_slp" value="slp" <?php echo (in_array('slp',$assistanceList) ? "checked": "") ?>>
+                                                </div>
+                                                <div class="col-11" style="margin-bottom: 12px; font-size: 15px;">
+                                                    Sustainable Livelihood Program (SLP)
+                                                </div>
+                                                <div class="col-1">
+                                                    <input type="checkbox" class="lg" name="assistance_kalahicidss" id="assistance_kalahicidss" value="kalahicidss" <?php echo (in_array('kalahi',$assistanceList) ? "checked": "") ?>>
+                                                </div>
+                                                <div class="col-11" style="margin-bottom: 12px; font-size: 15px;">
+                                                    Kapit Bisig Laban Sa Kahirapan-Comprehensive and Integrated Delivery of Social Services (KALAHI-CIDSS)
+                                                </div>
+                                                <div class="col-1">
+                                                    <input type="checkbox" class="lg" name="assistance_others" id="assistance_others" value="other" <?php echo (in_array('other',$assistanceList) ? "checked": "") ?>>
+                                                </div>
+                                                <div class="col-11" style="font-size: 15px;">
+                                                    Others: <input type="text" class="lg" style="border-radius: 3px 3px 3px 3px; width: 80%; height: 23px;" name="assistance_other_specify" id="assistance_other_specify" value="<?php echo htmlspecialchars($assistanceOther, ENT_QUOTES); ?>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+
                 <!-- ASSESSMENT OF SOCIAL WORKER -->
                 <div class="card">
                     <div class="card border-info mb3" style="width:100%;">
@@ -636,26 +715,29 @@ if (!$_SESSION['login']) {
                                 </div>
                             </div><br>
                             <div class="row">
-								<label class="col-sm-3 label text-left" style="font-size: 17px">PROGRAM INTERVENTION :</label>
-                                <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo (($client['program_type']==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS Program
+								<label class="col-sm-3 label text-left" style="font-size: 15px">PROGRAM INTERVENTION :</label>
+                                <div class="col-2">
+									<input type="checkbox" class="col-lg-1" id="aics" name="aics" value="0" <?php echo (($client['program_type']==0)||((empty($client['program_type']))&&(isset($gis['amount'])))? "checked": ""); ?> required> &nbsp; AICS
+								</div>
+                                <div class="col-2">
+									<input type="checkbox" class="col-lg-1" id="ffs" name="ffs" value="ffs" <?php echo (($client['program_type']=="ffs")? "checked": ""); ?> required> &nbsp; FFS
+								</div>
+                                <div class="col-2">
+									<input type="checkbox" class="col-lg-1" id="wisupport" name="wisupport" value="wisupport" <?php echo (($client['program_type']=="wisupport")? "checked": ""); ?> required> &nbsp; Wi-Support
 								</div>
                                 <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="akap" name="akap" value="1" <?php echo (($client['program_type']==1)? "checked": ""); ?> required> &nbsp; AKAP Program
-                                    </div>
-                                <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="otherProgram" name="otherProgram" value="other" <?php echo ((($client['program_type'])=="other")? "checked": ""); ?> required> &nbsp; Other Program
-                                    <input type="text" class="form-control" style="margin-top:12px;" id="otherProgramItem" name="otherProgramItem" value="<?php echo ((($client['program_type'])=="other")? $client['other_program']: ""); ?>" hidden required/>
+									<input type="checkbox" class="col-lg-1" id="otherProgram" name="otherProgram" value="other" <?php echo (($client['program_type']=="other" || $client['program_type']==1)? "checked": ""); ?> required> &nbsp; Other Program
+                                    <input type="text" class="form-control" style="margin-top:12px;" id="otherProgramItem" name="otherProgramItem" value="<?php echo ($client['program_type']=="other" ? $client['other_program'] : ($client['program_type']==1 ? "AKAP" : "")); ?>" hidden required/>
 								</div>
                             </div><br>
-                            <div class="row">
-								<label class="col-sm-3 label text-left" style="font-size: 17px">PSYCHOSOCIAL SUPPORT:</label>
+							<div class="row">
+								<label class="col-sm-3 label text-left" style="font-size: 15px">PSYCHOSOCIAL SUPPORT:</label>
                                 <div class="col-3">
-									<input type="checkbox" id="pfa" class="col-lg-1" name="pfa" value="pfa" <?php echo ((!empty($gis['service5'])==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
+									<input type="checkbox" id="pfa" class="col-lg-1" name="pfa" value="pfa" <?php echo ((!empty($gis['service5']) && $gis['service5']==0)? "": "checked"); ?> required> &nbsp; Psychological First Aid (PFA)
 								</div>&nbsp;
                                 <div class="col-1"></div>
                                 <div class="col-3">
-									<input type="checkbox" id="counseling" class="col-lg-1" name="counseling" value="Counseling" <?php echo ((!empty($gis['service6'])==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
+									<input type="checkbox" id="counseling" class="col-lg-1" name="counseling" value="Counseling" <?php echo ((!empty($gis['service6']) && $gis['service6']==0)? "": "checked"); ?> required> &nbsp; Social Work Counseling
 								</div>
                             </div><br>
 							<div class="row">
@@ -670,10 +752,9 @@ if (!$_SESSION['login']) {
 									<input type="text" id="refer3" class="col-lg-12 form-control" style="width: 100%;" name="rl3" placeholder="Refer Office" value="<?php echo empty($gis['refer3']) ? "" : $gis['refer3'] ?>">
 								</div>
                                 
-                                </div><br>
-                            <!-- AKAP only -->
+                            </div><br>
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">INCOME AND FINANCIAL RESOURCES</label>
+								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">INCOME AND FINANCIAL RESOURCES</label>
                             </div>
                             <div class="row">
 								<label class="col-sm-12 label text-left" style="font-size: 17px">Occupations of Family Member</label>
@@ -683,58 +764,57 @@ if (!$_SESSION['login']) {
                                 <div class="col-6">
 									<input type="number" id="number_of_seasonal" class="col-lg-12 form-control" style="width: 100%;" name="number_of_seasonal" placeholder="Number of Seasonal Employee" value="<?php echo (isset($otherClientInformation['seasonal']) ? $otherClientInformation['seasonal'] : '') ?>">
 								</div>
-								<label class="col-sm-6 label text-left" style="font-size: 17px">Number of Employed</label>
-                                <label class="col-sm-6 label text-left" style="font-size: 17px">Number of Seasonal Employee</label>
+								<label class="col-sm-6 label text-left" style="font-size: 17px">Number of Fixed income</label>
+                                <label class="col-sm-6 label text-left" style="font-size: 17px">Number of Non-fixed income</label>
                                 
                                 <div class="col-6">
 									<input type="text" id="familyIncome" class="col-lg-12 form-control currencyMaskedInput" style="width: 100%;" name="familyIncome" placeholder="Family Income" value="<?php echo (isset($otherClientInformation['familyincome']) ? $otherClientInformation['familyincome'] : '') ?>">
 								</div>
-                                <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="insurance" name="insurance" value="1" <?php echo (isset($otherClientInformation['insurance'])?'checked':'') ?>> &nbsp; Insurance Coverage
-								</div> 
-                                <div class="col-3">
-									<input type="checkbox" class="col-lg-1" id="savings" name="savings" value="2" <?php echo (isset($otherClientInformation['savings'])?'checked':'') ?>> &nbsp; Savings
-								</div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">Combined Family Income</label>
+                                <div class="col-6">
+                                    <div class="row" style="margin-bottom: 8px;">
+                                        <div class="col-12">
+                                            <input type="checkbox" class="col-lg-1" id="insurance" name="insurance" value="1" <?php echo (isset($otherClientInformation['insurance'])?'checked':'') ?>> Insurance Coverage
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-bottom: 8px;">
+                                        <div class="col-12">
+                                            <input type="checkbox" class="col-lg-1" id="savings" name="savings" value="2" <?php echo (isset($otherClientInformation['savings'])?'checked':'') ?>> Savings
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input type="checkbox" class="col-lg-1" id="pension" name="pension" value="3" <?php echo (isset($otherClientInformation['pension'])?'checked':'') ?>> Pension
+                                        </div>
+                                    </div>
+								</div>
                                 
                             </div><br>
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">BUDGET AND EXPENSES</label>
+								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">BUDGET AND EXPENSES</label>
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-6">
 									<input type="text" id="monthlyexpense" class="col-lg-12 form-control currencyMaskedInput" style="width: 100%;" name="monthlyexpense" placeholder="Monthly Expense" value="<?php echo (isset($otherClientInformation['monthlyexpense']) ? $otherClientInformation['monthlyexpense'] : '') ?>">
 								</div>
-                                <div class="col-1">
+                                <label class="col-sm-12 label text-left" style="font-size: 17px">Monthly Expenses of the Family</label>
+                                <div class="col-12">
                                 </div> 
-                                <div class="col-4">
+                                <div class="col-12" style="margin-top: 20px;">
                                     <input type="checkbox" class="col-lg-1" id="emergencyfund" name="emergencyfund" value="1" <?php echo (isset($otherClientInformation['emergencyfund'])?'checked':'') ?>> &nbsp; Availability of Emergency Fund 
 								</div> 
-                                <div class="col-3">
-                                </div> 
-                                <label class="col-sm-12 label text-left" style="font-size: 17px">Monthly Expenses of the Family</label>
                             </div><br>
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">SEVERITY OF THE CRISIS</label>
+								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">SEVERITY OF THE CRISIS</label>
                             </div>
                             <div class="row">
-                            <label class="col-sm-12 label text-left" style="font-size: 17px">How long does the patient suffer from the disease?</label>
-                                <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity1" name="severity1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==1)?'checked':'') ?>> &nbsp; Recently Diagnosed (3 months & below) 
-								</div> 
-                                <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity2" name="severity2" value="2" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==2)?'checked':'') ?>> &nbsp; 3 Months to a Year 
-								</div> 
-                                <div class="col-12" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1'])==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
-								</div> 
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">In the past three (3) months, did the family experience at least one crisis?</label>
                                 <div class="col-1"></div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2'])==1)?'checked':'') ?>> &nbsp; YES
+                                    <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2']) && $otherinfo['crisisSeverityQuestion2']==1)?'checked':'') ?>> &nbsp; YES
 								</div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2'])==0)?'checked':'') ?>> &nbsp; NO
+                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2']) && $otherinfo['crisisSeverityQuestion2']==0)?'checked':'') ?>> &nbsp; NO
 								</div>
                                 <div class="col-7"></div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">If yes, which among the following crises did the family experience in the past three (3) months (check all that apply):</label>
@@ -758,9 +838,21 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-1" id="crisis1_6" name="crisis1_6" value="6" <?php echo (isset($crisisSeverityQuestion3[6])?'checked':'') ?>> &nbsp; Others, specify
                                     <input type="text" class="col-lg-5" style="border-radius: 4px; width: 100%;" id="crisis1_6others" name="crisis1_6others" value="<?php echo (isset($crisisSeverityQuestion3[6])?$crisisSeverityQuestion3[6]:'') ?>">
                                 </div>
+                                <div class="col-12" style="margin-top: 10px;">
+                                </div>
+                                 <label class="col-sm-12 label text-left" style="font-size: 17px">How long does the patient suffer from the disease?</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="severity1" name="severity1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==1)?'checked':'') ?>> &nbsp; Recently Diagnosed (3 months & below) 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="severity2" name="severity2" value="2" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==2)?'checked':'') ?>> &nbsp; 3 Months to a Year 
+								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
+								</div> 
                             </div><br>
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">AVAILABILITY OF SUPPORT SYSTEMS</label>
+								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">AVAILABILITY OF SUPPORT SYSTEMS</label>
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="support2" name="support2" value="2" <?php echo (isset($supportSystemAvailability[2])?'checked':'') ?>> &nbsp; Relatives
 								</div> 
@@ -775,7 +867,7 @@ if (!$_SESSION['login']) {
 								</div> 
                             </div><br>
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">EXTERNAL RESOURCES TAPPED BY THE FAMILY</label>
+								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">EXTERNAL RESOURCES TAPPED BY THE FAMILY</label>
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="external1" name="external1" value="1" <?php echo (isset($externalResources[1])?'checked':'') ?>> &nbsp; Philhealth
 								</div> 
@@ -803,7 +895,7 @@ if (!$_SESSION['login']) {
 								</div> 
                             </div><br>
                             <div class="row">
-                                <label class="col-12 text-left font-weight-bold" style="font-size: 17px;">SELF HELP AND CLIENT EFFORTS</label>
+                                <label class="col-12 text-left" style="font-size: 17px; font-weight: bold;">SELF HELP AND CLIENT EFFORTS</label>
 
                                 <!-- First Item -->
                                 <div class="col-12 col-md-1 d-flex justify-content-center align-items-start mb-2 mb-md-0"></div>
@@ -827,8 +919,9 @@ if (!$_SESSION['login']) {
                                     </label>
                                 </div>
                             </div>
+
                             <div class="row">
-								<label class="col-sm-12 label text-left" style="font-size: 17px">VULNERABILITY AND RISK FACTORS</label>
+								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">VULNERABILITY AND RISK FACTORS</label>
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="vulnerability1" name="vulnerability1" value="1" <?php echo (isset($vulnerability_riskFactor[1])?'checked':'') ?>> &nbsp; There are elderly/ Child in need/ PWD/ Pregnant in the household
 								</div> 
@@ -839,7 +932,7 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-1" id="vulnerability3" name="vulnerability3" value="3" <?php echo (isset($vulnerability_riskFactor[3])?'checked':'') ?>> &nbsp; Inability to secure stable employment
 								</div> 
                             </div><br>
-                            <h5 class="text-dark">Assistance: </h5>
+                            <h5 class="text-dark" style="font-weight: bold;">Assistance: </h5>
                             <div class="row"> 
                                 <div class="col text-center">PURPOSE</div>
                                 <div class="col-2 text-center">AMOUNT</div>
@@ -1212,6 +1305,7 @@ if (!$_SESSION['login']) {
             $if_burial = "";
             $financial = "";
             $diagnosis_cause_of_death = "";
+            $free_funeral_service = "";
 
             //FAMILY DATA's
             $familyData = json_decode($_POST['family_data'], true);
@@ -1252,11 +1346,14 @@ if (!$_SESSION['login']) {
             if (isset($_POST['aics'])) {
                 $program = 0;
                 $otherProgram = "";
-            } elseif (isset($_POST['akap'])) {
-                $program = 1;
+            } elseif (isset($_POST['wisupport'])) {
+                $program = 'wisupport';
+                $otherProgram = "";
+            } elseif (isset($_POST['ffs'])){
+                $program = 'ffs';
                 $otherProgram = "";
             } elseif (isset($_POST['otherProgram'])) {
-                $program = "other";
+                $program = ($otherProgram === "AKAP") ? 1 : "other";
                 $otherProgram = strtoupper($_POST['otherProgramItem']);
             }
 
@@ -1368,6 +1465,8 @@ if (!$_SESSION['login']) {
 				if(isset($_POST['fb'])){$if_burial = 1;}
 				if(isset($_POST['toc'])){$if_burial = 2;}
 				if(isset($_POST['interment'])){$if_burial = 3;}
+				if(isset($_POST['free_funeral_service_burial'])){$free_funeral_service .= "burial-";}
+				if(isset($_POST['free_funeral_service_cremation'])){$free_funeral_service .= "cremation-";}
 			} else {
 				$if_burial = "";
 			}
@@ -1390,8 +1489,18 @@ if (!$_SESSION['login']) {
             if(isset($_POST["familyIncome"])){$docu_otherinfo.="familyincome=".$_POST["familyIncome"]."-";}
             if(isset($_POST["insurance"])){$docu_otherinfo.="insurance-";}
             if(isset($_POST["savings"])){$docu_otherinfo.="savings-";}
+            if(isset($_POST["pension"])){$docu_otherinfo.="pension-";}
             if(isset($_POST["monthlyexpense"])){$docu_otherinfo.="monthlyexpense=".$_POST["monthlyexpense"]."-";}
             if(isset($_POST["emergencyfund"])){$docu_otherinfo.="emergencyfund=".$_POST["emergencyfund"];}
+            // Assistance Received from DSWD (checkboxes -> records table)
+            $received = array();
+            if(isset($_POST['assistance_aics'])){ $received[] = 'aics'; }
+            if(isset($_POST['assistance_wgp'])){ $received[] = 'wgp'; }
+            if(isset($_POST['assistance_4ps'])){ $received[] = '4ps'; }
+            if(isset($_POST['assistance_slp'])){ $received[] = 'slp'; }
+            if(isset($_POST['assistance_kalahicidss'])){ $received[] = 'kalahi'; }
+            if(isset($_POST['assistance_others'])){ $received[] = 'other'; }
+            $user->saveRecords($trans_id, $received, $_POST['assistance_other_specify'] ?? "");
 
             if(isset($_POST["severity1"])){$severity=$_POST["severity1"];}
             elseif(isset($_POST["severity2"])){$severity=$_POST["severity2"];}
@@ -1441,7 +1550,7 @@ if (!$_SESSION['login']) {
             $user->updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
             $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
             $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
-            $docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+            $docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
             $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome);
             // Persist the Client/Beneficiary section selections (category, disability, gender).
             // When relation is Self the client IS the beneficiary, so the Beneficiary section

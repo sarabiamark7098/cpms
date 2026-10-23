@@ -130,7 +130,11 @@
             </div>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:100%;border:none;" value="<?php echo strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']) ?>"><br>
+					<?php
+						$gl_signatory_name = strtoupper((!empty($signatoryGL['name_title'])?$signatoryGL['name_title']." ":"").$signatoryGL['first_name']." ".(!empty($signatoryGL['middle_I'])?$signatoryGL['middle_I'].". ":"").$signatoryGL['last_name']);
+						$sig_w = 500; // width in px
+						$sig_h = 40;  // height in px
+					?><input id="signatory" style="font-weight: bold;text-transform:uppercase;width:<?php echo $sig_w ?>px;height:<?php echo $sig_h ?>px; border: solid 1px black; font-size:<?php echo $user->gl_fit_font($gl_signatory_name, $sig_w, $sig_h) ?>px;" value="<?php echo $gl_signatory_name ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>"><br>
 					<br>
 					<p class="">Valid within 7 working days upon receipt.</p>

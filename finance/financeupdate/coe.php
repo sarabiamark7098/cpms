@@ -20,7 +20,7 @@
         
 		$name =  $client["firstname"]." ". (!empty($client["middlename"][0])?($client["middlename"][0] != " "?strtoupper($client["middlename"][0]) .". ":""):""). $client["lastname"]." ". (!empty($client['extraname'])?$client['extraname'].".":"");
         $bname = "";
-        if(!empty($client['b_fname'])){
+        if(!empty($client["b_lname"])){
             $bname =  $client["b_fname"]." ". (!empty($client["b_mname"][0])?($client["b_mname"][0] != " "?strtoupper($client["b_mname"][0]) .". ":""):""). $client["b_lname"]." ". (!empty($client['b_exname'])?$client['b_exname'].".":""); 
         }
         if(!empty($client["b_lname"])){
@@ -75,6 +75,7 @@
         }
         $type = strval($client_assistance[1]['type']);
         $rec_amount = 50001;
+
 		$GLsignatoryName = "";
         $GLsignatoryPosition = "";
         if(!empty($client['signatory_GL'])){
@@ -509,7 +510,7 @@
                     }
                 });
             });
-            
+
             $(function () {
                 if ($("#val_id").prop("checked")) {
                     $("#pres_id").prop("disabled", false);
@@ -564,9 +565,9 @@
 			 </div>
 			</div>
     </nav>
-        <br><br><br><br>
+    <br><br><br><br>
         <form id="coeForm" action="coe.php?id=<?php echo $_GET['id']?>" method="post">
-        <div class="container">
+            <div class="container">
                 <?php if($gis['program_type'] == '1'){?>
                 
                 <div class="card border-info mb3" style="width:100%;">
@@ -632,7 +633,7 @@
                             <div class="card-body">
                                 <div>
 									<label> Special Disbursing Officer : </label>&nbsp&nbsp&nbsp
-									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_officer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer"><br>
+									<input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="<?php echo (!empty($cash['sd_officer'])?$cash['sd_officer']:"") ?>" id="sd_officer" placeholder="Special Disbursing Officer" oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()"><br>
                                 </div>
                             </div>
                         </div> 
@@ -672,6 +673,7 @@
                                                 <option>Philippine Passport</option>
                                                 <option>SSS UMID Card</option>
                                                 <option>TIN Card</option>
+                                                <option>Philippine ID</option>
                                                 <option>PRC ID</option>
                                             </datalist>
                                         </div> 
@@ -713,6 +715,9 @@
                                         echo '
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="med_cer" id="med_cer" value="MEDICAL CERTIFICATE" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "MEDICAL").'> Medical Certificate/Abstract</div>
+                                        </div>
+                                        <div class="row">
+                                            <div><input type="checkbox" class="lg" name="alagang_pinoy" id="alagang_pinoy" value="ALAGANG PINOY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "ALAGANG PINOY").'> Alagang Pinoy Tagubilin</div>
                                         </div>
                                         <div class="row">
                                             <div><input type="checkbox" class="lg" name="dt_sum" id="dt_sum" value="DEATH SUMMARY" '.$user->checkCheck((!empty($record['document'])?$record['document']:""), "", "DEATH SUMMARY").'> Death Summary</div>
@@ -970,14 +975,6 @@
                 </div>
             </div>
         </form>
-        <div id="gisce" hidden>
-        <?php
-        ?>
-        </div>
-        <div id="coe" class="printable" hidden>
-        <?php
-            ?>
-        </div>
 
     <script>
     /* coeForm-records-validation */
@@ -1035,6 +1032,7 @@
             $client_work = "";
             $client_salary = "";
             $client_agency = "";
+
         if(isset($_POST['coesignName'])){
             $signName = mysqli_real_escape_string($user->db, $_POST['coesignName']);
         }
@@ -1051,11 +1049,11 @@
 		if(isset($_POST['client_agency'])){
             $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
-
+        
         foreach($_POST as $key => $value) {
-            $docu .=   $value . '-';
+                $docu .=   $value . '-';
         }
-
+   
         if(isset($_POST['val_id'])){
             $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
         }
@@ -1121,7 +1119,7 @@
         }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
-        $user->insertCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
+        $user->insertCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8,
         $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
     }
 
@@ -1169,11 +1167,11 @@
 		if(isset($_POST['client_salary'])){
             $client_salary = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_salary'])));
         }
-
+        
 		if(isset($_POST['client_agency'])){
             $client_agency = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['client_agency'])));
         }
-       
+
         if(isset($_POST['val_id'])){
             $id_pres = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['pres_id'])));
         }
