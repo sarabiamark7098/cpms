@@ -170,6 +170,8 @@
 			}
 
 			public function getuserFullname($id){
+				static $__fnCache = [];
+				if(array_key_exists($id, $__fnCache)){ return $__fnCache[$id]; }
 				$query = "SELECT i.empfname, i.empmname, i.emplname, i.empext, i.empnum, e.empid, c.*
 				FROM employee_info i
 				LEFT JOIN tbl_employment e USING (empnum) 
@@ -178,9 +180,9 @@
 				$row = mysqli_fetch_assoc($result);
 				if($row){
 					$fullname = strtoupper($row['empfname'] ." ".(!empty($row['empmname'])?$row['empmname'][0] .". ":""). $row['emplname'] .' '. (!empty($row['empext'])?$row['empext'].".":"") );
-					return $fullname;
+					return $__fnCache[$id] = $fullname;
 				}else{
-					return "";
+					return $__fnCache[$id] = "";
 				}
 			}
 
@@ -405,7 +407,7 @@
 				$office   = mysqli_real_escape_string($this->db, $office);
 				$datenow  = date("Y-m-d H:i:s");
 
-				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Program Head', 'Finance'];
+				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Program Head', 'Finance', 'Viewer'];
 				if (empty($position) || !in_array($position, $valid_positions) || empty($office)) {
 					echo "<script>alert('Error: Please select a valid Position and Office before confirming.')</script>";
 					echo "<script>window.location='Employee.php';</script>";
@@ -3374,6 +3376,33 @@
 				return null;
 			}
 		}
+		// Batch-load assistance for many transactions in ONE query (export speed).
+		// Returns [trans_id => [1=>row, 2=>row, ...]] matching getAssistanceData().
+		public function getAssistanceDataBatch($ids){
+			$ids = array_values(array_unique(array_filter((array)$ids, function($v){ return $v !== null && $v !== ''; })));
+			if(empty($ids)){ return []; }
+			$in = implode(',', array_map(function($v){ return "'".mysqli_real_escape_string($this->db, $v)."'"; }, $ids));
+			$query = "SELECT trans_id, type, amount, mode, fund, purpose FROM assistance WHERE trans_id IN ({$in}) ORDER BY trans_id, ass_id";
+			$result = mysqli_query($this->db, $query);
+			$map = [];
+			if($result){ while($row = mysqli_fetch_assoc($result)){
+				$t = $row['trans_id'];
+				if(!isset($map[$t])){ $map[$t] = []; }
+				$map[$t][count($map[$t]) + 1] = $row;
+			} }
+			return $map;
+		}
+
+		// Fund-source label from already-fetched columns (no per-row query).
+		public function fundSourceLabel($program_type, $other_program, $date_accomplished){
+			$year = '';
+			if(!empty($date_accomplished)){ $ts = strtotime($date_accomplished); if($ts !== false){ $year = date("Y", $ts); } }
+			if($program_type == "1"){ return "AKAP Fund ".$year; }
+			elseif($program_type == "0"){ return "Current Fund".$year; }
+			elseif($program_type == "other"){ return $other_program." Fund ".$year; }
+			else { return "Other Fund ".$year; }
+		}
+
 		public function getAssessmentData($id){
 			$query = "SELECT * FROM assessment WHERE trans_id = '{$id}';";
 			$result = mysqli_query($this->db, $query);
@@ -5348,8 +5377,8 @@
 			$officeFilter = " AND LEFT(t.trans_id, 9) = '{$officeIdEsc}' ";
 		}
 
-		$amtGL  = "CASE WHEN a.mode='GL'  THEN CAST(REPLACE(REPLACE(a.amount, ',', ''), ' ', '') AS DECIMAL(15,2)) END";
-		$amtCAV = "CASE WHEN a.mode='CAV' THEN CAST(REPLACE(REPLACE(a.amount, ',', ''), ' ', '') AS DECIMAL(15,2)) END";
+		$amtGL  = "CASE WHEN a.mode='GL'  THEN a.amount_num END";
+		$amtCAV = "CASE WHEN a.mode='CAV' THEN a.amount_num END";
 
 		$query = "SELECT LEFT(t.trans_id, 9) AS office_id,
 						 fo.office_name AS office_name,
@@ -5427,7 +5456,7 @@
 
 		$query = "SELECT cf.fundsource AS fundsource,
 						 COUNT(*) AS cnt,
-						 COALESCE(SUM(CAST(REPLACE(REPLACE(cf.fs_amount, ',', ''), ' ', '') AS DECIMAL(15,2))), 0) AS total_amount
+						 COALESCE(SUM(cf.fs_amount_num), 0) AS total_amount
 					FROM (
 						 SELECT DISTINCT a.trans_id
 						   FROM assistance a

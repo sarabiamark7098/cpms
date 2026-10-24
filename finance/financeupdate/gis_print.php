@@ -821,6 +821,8 @@ $categoryCode = $gisCategoryTextToCode[trim($client['category'] ?? '')] ?? '';
                                 <span><?php
                                         if($client['program_type']==0){echo "AICS FUND ".date('Y');}
                                         elseif($client['program_type']==1){echo "AKAP FUND ".date('Y');}
+                                        elseif($client['program_type']=="wisupport"){echo "WI-SUPPORT FUND ".date('Y');}
+                                        elseif($client['program_type']=="ffs"){echo "FFS FUND ".date('Y');}
                                         elseif($client['program_type']=='other'){echo strtoupper($client['other_program']).' FUND '.date('Y');}
                                         else{echo "";};        
                                 ?></span>

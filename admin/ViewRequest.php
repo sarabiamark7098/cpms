@@ -36,7 +36,7 @@
 
     $req_position = $getrequest['request_position'] ?? '';
     $req_office   = $getrequest['request_office']   ?? '';
-    $valid_req    = in_array($req_position, ['Encoder', 'Social Worker', 'Admin', 'Program Head']);
+    $valid_req    = in_array($req_position, ['Encoder', 'Social Worker', 'Admin', 'Program Head', 'Finance', 'Viewer']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,6 +85,7 @@
                             <option value="Social Worker" <?php echo ($req_position == 'Social Worker' ? 'selected' : ''); ?>>Social Worker</option>
                             <option value="Program Head" <?php echo ($req_position == 'Program Head' ? 'selected' : ''); ?>>Program Head</option>
                             <option value="Finance" <?php echo ($req_position == 'Finance' ? 'selected' : ''); ?>>Finance</option>
+                            <option value="Viewer" <?php echo ($req_position == 'Viewer' ? 'selected' : ''); ?>>Viewer</option>
                         </select>
                         <label class="active" for="designation">Approve Position</label>
                     </div>
