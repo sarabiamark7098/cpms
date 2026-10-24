@@ -42,6 +42,17 @@
         header("Location:" . $location);
     }
     
+    if(isset($_POST['export_from_to_all'])){
+        $location = "export-data-from-to-all.php?";
+        if(isset($_POST['from_date_all'])){
+            $location.= "fromdate=".$_POST['from_date_all'];
+        }
+        $location .="&";
+        if(isset($_POST['to_date_all'])){
+            $location.= "todate=".$_POST['to_date_all'];
+        }
+        header("Location:" . $location);
+    }
 	if(!$_SESSION['login']){
 		header('Location:../index.php');
 		}
@@ -231,6 +242,21 @@
                                 <input id="to_date" name="to_date" type="date" class="form-control" required>
                             </div>
                             <button class="btn btn-success exp-btn" name="export_from_to" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
+                        </form>
+                    </div>
+                    <div class="exp-card">
+                        <h5 class="exp-title"><i class="fa fa-file-excel text-success"></i> Export Served Clients &mdash; All Offices by Date Range</h5>
+                        <p class="exp-sub">All clients served between two dates across every office.</p>
+                        <form action="export.php" method="POST" class="exp-form">
+                            <div class="exp-field">
+                                <label for="from_date_all">From</label>
+                                <input id="from_date_all" name="from_date_all" type="date" class="form-control" required>
+                            </div>
+                            <div class="exp-field">
+                                <label for="to_date_all">To</label>
+                                <input id="to_date_all" name="to_date_all" type="date" class="form-control" required>
+                            </div>
+                            <button class="btn btn-success exp-btn" name="export_from_to_all" type="submit"><i class="fa fa-file-excel"></i>&nbsp; Export to Excel</button>
                         </form>
                     </div>
                 <div>
