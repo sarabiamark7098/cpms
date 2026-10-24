@@ -353,4 +353,41 @@ $(".clientdata").appendTo("body").on("hidden.bs.modal", function(){
     $(".showClientData").html("");
 });
 </script>
+    <!-- Cancel GL modal -->
+    <div class="modal hide fade" id="cancelGL" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cancellation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="cancelbody">
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+$('#cancelGL').appendTo("body").on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget)
+          var userid = button.data('id')
+          var modal = $(this);
+          var dataString = 'id=' + userid;
+            $.ajax({
+                type: "GET",
+                url: "cancelclientGL.php",
+                data: dataString,
+                cache: false,
+                success: function (data) {
+                    modal.find('.cancelbody').html(data);
+                },
+                error: function(err) {
+                }
+            });
+    });
+$('#cancelGL').appendTo("body").on("hidden.bs.modal", function(){
+    $(".cancelbody").html("");
+});
+</script>
 </html>

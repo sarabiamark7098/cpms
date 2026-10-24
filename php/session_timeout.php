@@ -21,7 +21,7 @@ function checkSessionTimeout(): void {
 
     // Program Head sessions never expire from inactivity. They are still subject
     // to admin force-logout / deactivation (the revoked-token check below).
-    $exemptFromTimeout = (($_SESSION['position'] ?? '') === 'Program Head');
+    $exemptFromTimeout = (($_SESSION['position'] ?? '') === 'Program Head' || ($_SESSION['position'] ?? '') === 'Viewer');
 
     if (!$exemptFromTimeout && isset($_SESSION['last_activity'])) {
         $elapsed = $now - $_SESSION['last_activity'];

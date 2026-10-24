@@ -57,6 +57,7 @@
                                         <option value='Social Worker' ".($row['position'] == 'Social Worker' ? 'selected' : '').">Social Worker</option>
                                         <option value='Program Head' ".($row['position'] == 'Program Head' ? 'selected' : '').">Program Head</option>
                                         <option value='Finance' ".($row['position'] == 'Finance' ? 'selected' : '').">Finance</option>
+                                        <option value='Viewer' ".($row['position'] == 'Viewer' ? 'selected' : '').">Viewer</option>
                                     </select>
                                     <label class='active' for='designation'>Designate Position</label>
                                 </div>
