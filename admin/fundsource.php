@@ -134,6 +134,12 @@
                     <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
+                    <a href="SubCategoryPage.php">Sub-Categories <i style="float: right;font-size:25px" class="fa fa-tags"></i></a>
+                </li>
+                <li>
+                    <a href="GenderIdentityPage.php">Gender Identities <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a>
+                </li>
+                <li>
                     <a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>

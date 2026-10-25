@@ -14,7 +14,7 @@ $date2 = date("Y-m-d 23:59:00", strtotime($date));
 $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, date_accomplished, mode, bene_id, 
     client_region, client_province, client_municipality, client_barangay, client_district,
     lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-    b_lname, b_fname, b_mname, b_exname, b_bday, b_sex, b_category, cname, subCategory, pantawid_bene, status_client, COUNT(family.name) AS familycount
+    b_lname, b_fname, b_mname, b_exname, b_bday, b_sex, b_category, cname, subCategory, pantawid_bene, status_client, tbl_transaction.program_type, tbl_transaction.other_program, COUNT(family.name) AS familycount
     FROM client_data
     INNER JOIN tbl_transaction USING (client_id)
     LEFT OUTER JOIN beneficiary_data USING (bene_id)
@@ -30,7 +30,7 @@ $query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no,
              client_municipality, client_barangay, client_district, lastname, 
              firstname, middlename, extraname, sex, civil_status, date_birth, 
              mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, b_bday, b_sex, b_category,
-             subCategory, pantawid_bene, status_client
+             subCategory, pantawid_bene, status_client, tbl_transaction.program_type, tbl_transaction.other_program
     ORDER BY tbl_transaction.date_entered ASC";
 
 $result = mysqli_query($user->db, $query);
@@ -66,10 +66,17 @@ $headers = [
 ];
 fputcsv($output, $headers, ',', '"', '\\');
 
-while ($row = mysqli_fetch_assoc($result)) {
+$__CHUNK = 2000;                      // stream in chunks: bounded memory
+$__buf = [];
+while (true) {
+    $__r = mysqli_fetch_assoc($result);
+    if ($__r !== null) { $__buf[] = $__r; }
+    if (count($__buf) >= $__CHUNK || ($__r === null && !empty($__buf))) {
+        $assistMap = $user->getAssistanceDataBatch(array_column($__buf, 'trans_id'));
+        foreach ($__buf as $row) {
     $fullname = $user->getuserFullname($row['encoded_encoder']);
-    $assistance = $user->getAssistanceData($row['trans_id']);
-    $fundsource = $user->getfundsourceclient($row['trans_id']);
+    $assistance = $assistMap[$row['trans_id']] ?? null;
+    $fundsource = $user->fundSourceLabel($row['program_type'] ?? '', $row['other_program'] ?? '', $row['date_accomplished']);
     
     $age = $user->calculate_age_by_date_accomplished($row['date_birth'], $row['date_accomplished']);
     $b_age = $user->calculate_age_by_date_accomplished($row['b_bday'], $row['date_accomplished']);
@@ -116,6 +123,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     ];
 
     fputcsv($output, $rowData, ',', '"', '\\');
+        }
+        $__buf = [];
+    }
+    if ($__r === null) { break; }
 }
 
 fclose($output);

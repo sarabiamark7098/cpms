@@ -57,9 +57,9 @@
             .kpi-card .kpi-value { font-size:26px; font-weight:700; line-height:1.2; }
             .kpi-card .kpi-sub { font-size:13px; opacity:.95; }
             .kpi-gl   { background:linear-gradient(135deg,#1565c0,#1e88e5); }
-            .kpi-glb  { background:linear-gradient(135deg,#00838f,#26a69a); }
-            .kpi-cav  { background:linear-gradient(135deg,#6a1b9a,#8e24aa); }
-            .kpi-cavb { background:linear-gradient(135deg,#ad1457,#d81b60); }
+            .kpi-glb  { background:linear-gradient(135deg,#1565c0,#1e88e5); }
+            .kpi-cav  { background:linear-gradient(135deg,#1565c0,#1e88e5); }
+            .kpi-cavb { background:linear-gradient(135deg,#1565c0,#1e88e5); }
             .dash-panel { background:#fff; border:1px solid #e3e6ea; border-radius:8px; padding:16px; margin-bottom:22px; }
             .dash-panel h5 { font-weight:700; margin-bottom:14px; }
             .chart-box { position:relative; height:320px; }
@@ -196,80 +196,51 @@
                     <div id="periodLabel" class="text-muted" style="margin-top:8px; font-size:13px;"></div>
                 </div>
 
-                <!-- ============ GUARANTEE LETTERS ============ -->
-                <div class="dash-panel">
-                    <h5><i class="fa fa-file-alt text-primary"></i> Guarantee Letters (GL)</h5>
-                    <div class="row">
-                        <div class="col-lg-4">
+                                <!-- ============ GUARANTEE LETTERS | OUTRIGHT CASH (2 columns) ============ -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="dash-panel">
+                            <h5><i class="fa fa-file-alt text-primary"></i> Guarantee Letters (GL)</h5>
                             <div class="kpi-card kpi-gl">
                                 <div class="kpi-label">Total Guarantee Letters</div>
                                 <div class="kpi-value" id="glTotalCount">0</div>
-                                <div class="kpi-sub">Amount: <span id="glTotalAmount">₱0.00</span></div>
+                                <div class="kpi-sub">Amount: <span id="glTotalAmount">&#8369;0.00</span></div>
                             </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="chart-box"><canvas id="glOfficeChart"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ============ GL FUND SOURCES ============ -->
-                <div class="dash-panel">
-                    <h5><i class="fa fa-coins text-info"></i> Fund Sources Used for Guarantee Letters</h5>
-                    <div class="row">
-                        <div class="col-lg-6">
+                            <div class="chart-box" style="margin-top:12px;"><canvas id="glOfficeChart"></canvas></div>
+                            <h6 style="margin-top:16px;font-weight:700;"><i class="fa fa-coins text-primary"></i> Fund Sources</h6>
                             <div class="chart-box"><canvas id="glFundChart"></canvas></div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="fund-table-wrap">
+                            <div class="fund-table-wrap" style="margin-top:12px;">
                                 <table class="table table-sm table-striped table-bordered">
                                     <colgroup><col class="col-fund"><col class="col-count"><col class="col-amt"></colgroup>
                                     <thead><tr><th>Fund Source</th><th class="text-right">Count</th><th class="text-right">Total Amount</th></tr></thead>
                                     <tbody id="glFundTable"></tbody>
-                                    <tfoot><tr class="font-weight-bold"><td>Total</td><td class="text-right" id="glFundCount">0</td><td class="text-right text-amt" id="glFundTotal">₱0.00</td></tr></tfoot>
+                                    <tfoot><tr class="font-weight-bold"><td>Total</td><td class="text-right" id="glFundCount">0</td><td class="text-right text-amt" id="glFundTotal">&#8369;0.00</td></tr></tfoot>
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- ============ OUTRIGHT CASH ============ -->
-                <div class="dash-panel">
-                    <h5><i class="fa fa-hand-holding-usd text-purple" style="color:#8e24aa;"></i> Outright Cash (CAV)</h5>
-                    <div class="row">
-                        <div class="col-lg-4">
+                    <div class="col-lg-6">
+                        <div class="dash-panel">
+                            <h5><i class="fa fa-hand-holding-usd" style="color:#1e88e5;"></i> Outright Cash (CAV)</h5>
                             <div class="kpi-card kpi-cav">
                                 <div class="kpi-label">Total Outright Cash</div>
                                 <div class="kpi-value" id="cavTotalCount">0</div>
-                                <div class="kpi-sub">Amount: <span id="cavTotalAmount">₱0.00</span></div>
+                                <div class="kpi-sub">Amount: <span id="cavTotalAmount">&#8369;0.00</span></div>
                             </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="chart-box"><canvas id="cavOfficeChart"></canvas></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ============ CAV FUND SOURCES ============ -->
-                <div class="dash-panel">
-                    <h5><i class="fa fa-coins" style="color:#d81b60;"></i> Fund Sources Used for Outright Cash</h5>
-                    <div class="row">
-                        <div class="col-lg-6">
+                            <div class="chart-box" style="margin-top:12px;"><canvas id="cavOfficeChart"></canvas></div>
+                            <h6 style="margin-top:16px;font-weight:700;"><i class="fa fa-coins" style="color:#1e88e5;"></i> Fund Sources</h6>
                             <div class="chart-box"><canvas id="cavFundChart"></canvas></div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="fund-table-wrap">
+                            <div class="fund-table-wrap" style="margin-top:12px;">
                                 <table class="table table-sm table-striped table-bordered">
                                     <colgroup><col class="col-fund"><col class="col-count"><col class="col-amt"></colgroup>
                                     <thead><tr><th>Fund Source</th><th class="text-right">Count</th><th class="text-right">Total Amount</th></tr></thead>
                                     <tbody id="cavFundTable"></tbody>
-                                    <tfoot><tr class="font-weight-bold"><td>Total</td><td class="text-right" id="cavFundCount">0</td><td class="text-right text-amt" id="cavFundTotal">₱0.00</td></tr></tfoot>
+                                    <tfoot><tr class="font-weight-bold"><td>Total</td><td class="text-right" id="cavFundCount">0</td><td class="text-right text-amt" id="cavFundTotal">&#8369;0.00</td></tr></tfoot>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -331,7 +302,7 @@
     var peso = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' });
     var num  = new Intl.NumberFormat('en-PH');
 
-    var palette = ['#1e88e5','#26a69a','#8e24aa','#d81b60','#f4511e','#fbc02d','#43a047','#5e35b1','#00acc1','#6d4c41','#546e7a','#c0ca33'];
+    var palette = ['#1e88e5'];
 
     function colorList(n) {
         var out = [];

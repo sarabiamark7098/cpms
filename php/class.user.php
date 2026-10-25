@@ -1457,6 +1457,56 @@
 				}
 			}
 
+			/* ===== Sub-Categories (admin management) ===== */
+			public function getSubCategoriesAdmin() {
+				return mysqli_query($this->db, "SELECT subcat_id, sub_category FROM sub_categories ORDER BY sub_category ASC");
+			}
+			public function addSubCategory($name) {
+				$name = mysqli_real_escape_string($this->db, trim($name));
+				if($name === ''){ return false; }
+				$chk = mysqli_query($this->db, "SELECT 1 FROM sub_categories WHERE sub_category = '{$name}'");
+				if($chk && mysqli_num_rows($chk) > 0){ return "exists"; }
+				return mysqli_query($this->db, "INSERT INTO sub_categories (sub_category) VALUES ('{$name}')") ? "success" : false;
+			}
+			public function showSubCategory($id) {
+				$id = (int)$id;
+				return mysqli_fetch_assoc(mysqli_query($this->db, "SELECT subcat_id, sub_category FROM sub_categories WHERE subcat_id = {$id}"));
+			}
+			public function updateSubCategory($id, $name) {
+				$id = (int)$id; $name = mysqli_real_escape_string($this->db, trim($name));
+				if($name === ''){ return false; }
+				$cur = mysqli_fetch_assoc(mysqli_query($this->db, "SELECT sub_category FROM sub_categories WHERE subcat_id = {$id}"));
+				if(!$cur){ return false; }
+				$dup = mysqli_query($this->db, "SELECT 1 FROM sub_categories WHERE sub_category = '{$name}' AND subcat_id != {$id}");
+				if($dup && mysqli_num_rows($dup) > 0){ return "exists"; }
+				if($cur['sub_category'] === $name){ return "nochange"; }
+				return mysqli_query($this->db, "UPDATE sub_categories SET sub_category = '{$name}' WHERE subcat_id = {$id}") ? "success" : false;
+			}
+			/* ===== Gender Identities (admin management) ===== */
+			public function getGenderIdentitiesAdmin() {
+				return mysqli_query($this->db, "SELECT gender_id, gender_identity FROM gender_identities ORDER BY gender_identity ASC");
+			}
+			public function addGenderIdentity($name) {
+				$name = mysqli_real_escape_string($this->db, trim($name));
+				if($name === ''){ return false; }
+				$chk = mysqli_query($this->db, "SELECT 1 FROM gender_identities WHERE gender_identity = '{$name}'");
+				if($chk && mysqli_num_rows($chk) > 0){ return "exists"; }
+				return mysqli_query($this->db, "INSERT INTO gender_identities (gender_identity) VALUES ('{$name}')") ? "success" : false;
+			}
+			public function showGenderIdentity($id) {
+				$id = (int)$id;
+				return mysqli_fetch_assoc(mysqli_query($this->db, "SELECT gender_id, gender_identity FROM gender_identities WHERE gender_id = {$id}"));
+			}
+			public function updateGenderIdentity($id, $name) {
+				$id = (int)$id; $name = mysqli_real_escape_string($this->db, trim($name));
+				if($name === ''){ return false; }
+				$cur = mysqli_fetch_assoc(mysqli_query($this->db, "SELECT gender_identity FROM gender_identities WHERE gender_id = {$id}"));
+				if(!$cur){ return false; }
+				$dup = mysqli_query($this->db, "SELECT 1 FROM gender_identities WHERE gender_identity = '{$name}' AND gender_id != {$id}");
+				if($dup && mysqli_num_rows($dup) > 0){ return "exists"; }
+				if($cur['gender_identity'] === $name){ return "nochange"; }
+				return mysqli_query($this->db, "UPDATE gender_identities SET gender_identity = '{$name}' WHERE gender_id = {$id}") ? "success" : false;
+			}
 			public function getClientAndEmp($date1, $date2) {
 				$query = "SELECT tbl_transaction.trans_id, tbl_transaction.date_accomplished, tbl_transaction.encoded_encoder, tbl_transaction.encoded_socialWork,
 						client_data.firstname, client_data.middlename, client_data.lastname, client_data.extraname, beneficiary_data.b_fname, 
