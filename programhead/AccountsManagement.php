@@ -21,6 +21,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_status'])) {
     }
 }
 
+// ── Handle role / office change (within this Program Head's office only) ─────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_role_office'])) {
+    $targetEmp = $_POST['empid'] ?? '';
+    $newPos    = $_POST['new_position'] ?? '';
+    $newOff    = $_POST['new_office'] ?? '';
+    $curStat   = $_POST['cur_status'] ?? 'Activated';
+    $validPos  = ['Encoder','Social Worker','Admin','Program Head','Finance','Viewer'];
+    $officeEmpids = $user->getOfficeEmpids($phOffice);
+    if ($targetEmp === ($_SESSION['userId'] ?? '')) {
+        $flash = "You cannot change your own role or office.";
+    } elseif ($targetEmp === '' || !in_array($targetEmp, $officeEmpids, true)) {
+        $flash = "You can only manage accounts within your own office.";
+    } elseif (in_array($newPos, $validPos, true) && $newOff !== '' && $user->updateEmployee($targetEmp, $targetEmp, $newPos, $curStat, $newOff)) {
+        $flash = "Account {$targetEmp} updated to {$newPos}.";
+    } else {
+        $flash = "Unable to update role/office.";
+    }
+}
+
 // Office id -> readable name lookup
 $officeMap = [];
 $offices = $user->optionoffice();
@@ -90,7 +109,16 @@ require_once(__DIR__ . "/inc/header.php");
                                         $btnLabel  = $isActive ? 'Deactivate'  : 'Activate';
                                         $confirmMsg = htmlspecialchars($btnLabel . ' account ' . $empid . '?', ENT_QUOTES);
 
-                                        $action = "<form method='POST' style='margin:0;' onsubmit=\"return confirm('{$confirmMsg}');\">"
+                                        $editBtn = "<button type='button' class='btn btn-primary btn-sm editRoleOffice' style='margin-bottom:4px;'"
+                                                . " data-empid='" . htmlspecialchars($empid, ENT_QUOTES) . "'"
+                                                . " data-name=\"" . htmlspecialchars($fullname, ENT_QUOTES) . "\""
+                                                . " data-position='" . htmlspecialchars($pos, ENT_QUOTES) . "'"
+                                                . " data-officeid='" . htmlspecialchars($row['office_id'] ?? '', ENT_QUOTES) . "'"
+                                                . " data-status='" . htmlspecialchars($status, ENT_QUOTES) . "'"
+                                                . " data-toggle='modal' data-target='#editRoleOfficeModal'>Role / Office</button><br>";
+
+                                        $action = $editBtn
+                                                . "<form method='POST' style='margin:0;' onsubmit=\"return confirm('{$confirmMsg}');\">"
                                                 . "<input type='hidden' name='empid' value='" . htmlspecialchars($empid, ENT_QUOTES) . "'>"
                                                 . "<input type='hidden' name='new_status' value='{$newStatus}'>"
                                                 . "<button type='submit' name='toggle_status' class='btn {$btnClass} btn-sm'>{$btnLabel}</button>"
@@ -117,4 +145,57 @@ require_once(__DIR__ . "/inc/header.php");
                 <script>
                     $(function(){ $("#accountsTable").dataTable(); });
                 </script>
+
+    <!-- Update Role & Office modal -->
+    <div class="modal hide fade" id="editRoleOfficeModal" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Role &amp; Office</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <p class="text-muted" style="margin-bottom:12px;">Account: <b id="ero-name"></b> (<span id="ero-empid-label"></span>)</p>
+                        <input type="hidden" name="empid" id="ero-empid">
+                        <input type="hidden" name="cur_status" id="ero-status">
+                        <div class="form-group">
+                            <label for="ero-position">Role</label>
+                            <select name="new_position" id="ero-position" class="form-control" required>
+                                <option value="Encoder">Encoder</option>
+                                <option value="Social Worker">Social Worker</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Program Head">Program Head</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Viewer">Viewer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ero-office">Office</label>
+                            <select name="new_office" id="ero-office" class="form-control" required>
+                                <?php foreach ($officeMap as $oid => $oname) { echo "<option value='" . htmlspecialchars($oid, ENT_QUOTES) . "'>" . htmlspecialchars($oname) . "</option>"; } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="update_role_office" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#editRoleOfficeModal').appendTo("body").on('show.bs.modal', function (event) {
+            var b = $(event.relatedTarget);
+            $('#ero-empid').val(b.data('empid'));
+            $('#ero-empid-label').text(b.data('empid'));
+            $('#ero-status').val(b.data('status'));
+            $('#ero-name').text(b.data('name'));
+            $('#ero-position').val(b.data('position'));
+            $('#ero-office').val(String(b.data('officeid')));
+        });
+    </script>
+
 <?php require_once(__DIR__ . "/inc/footer.php"); ?>
