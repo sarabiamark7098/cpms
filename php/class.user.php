@@ -2378,8 +2378,100 @@
 			return $data = trim($data);
 		}
 
+		// Finance-only restricted save. Finance may change ONLY the assistance amount and the
+		// fund sources (add / remove / rename / re-amount, up to 12). Every other column is
+		// left exactly as it is. The fund source amounts MUST sum to the assistance amount, or
+		// nothing is saved. $names / $amounts are 1-indexed arrays (1..12). Kept separate from
+		// updateGIS / updateCOE on purpose so none of the existing save flows are affected.
+		public function financeUpdateAmounts($trans_id, $a1, $a2, $names, $amounts){
+
+			$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+			$a1e = mysqli_real_escape_string($this->db, $a1);
+			$a2e = mysqli_real_escape_string($this->db, $a2);
+
+			// Collect the submitted fund sources (a row counts only when it has a name).
+			$funds = array();
+			for ($i = 1; $i <= 12; $i++) {
+				$nm = isset($names[$i]) ? trim($names[$i]) : '';
+				if ($nm !== '') {
+					$funds[] = array(
+						'name' => $nm,
+						'amt'  => isset($amounts[$i]) ? trim($amounts[$i]) : '',
+					);
+				}
+			}
+
+			// Guard: when fund sources exist their amounts must sum to the assistance amount,
+			// otherwise reject the save entirely.
+			$a1num = (float) str_replace(',', '', (string) $a1);
+			if (count($funds) > 0) {
+				$sum = 0.0;
+				foreach ($funds as $f) { $sum += (float) str_replace(',', '', (string) $f['amt']); }
+				if (abs($sum - $a1num) >= 0.005) {
+					$msg = 'Fund source total (' . number_format($sum, 2) . ') must equal the assistance amount (' . number_format($a1num, 2) . '). Nothing was saved.';
+					echo "<script>alert(" . json_encode($msg) . ");</script>";
+					return false;
+				}
+			}
+
+			// 1) Assistance amount(s): Type1 always, Type2 only when the record has one.
+			$query  = "UPDATE assistance SET amount = '{$a1e}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type1';";
+			if ($a2 !== '') {
+				$query .= "UPDATE assistance SET amount = '{$a2e}' WHERE trans_id = '{$trans_id}' AND type_description = 'Type2';";
+			}
+
+			// 2) Rebuild the fund sources from what finance submitted (names + amounts).
+			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
+			if (count($funds) > 0) {
+				$rows = array();
+				foreach ($funds as $f) {
+					$fname = mysqli_real_escape_string($this->db, strtoupper($f['name']));
+					$famt  = mysqli_real_escape_string($this->db, $f['amt']);
+					$rows[] = "('{$trans_id}', '{$fname}', '{$famt}')";
+				}
+				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) VALUES " . implode(",", $rows) . ";";
+			}
+
+			// 3) signatory_GL: finance must PRESERVE the existing GL signatory. It is cleared
+			//    (set to empty) ONLY when the assistance amount is below 50,000; otherwise it
+			//    is left untouched.
+			if ($a1num < 50000) {
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '' WHERE trans_id = '{$trans_id}';";
+			}
+
+			$result = mysqli_multi_query($this->db, $query);
+			if (!$result) {
+				echo "<script>alert('Something Went Wrong!');</script>";
+				return false;
+			}
+			return true;
+		}
+
+		// Finance-only: update the GL signatory, and ONLY when the Type1 assistance amount is
+		// MORE THAN 50,000. At or below that threshold the GL signatory is handled automatically
+		// (cleared on the amount save), so manual selection is not allowed. $signatureName is the
+		// "NAME-POSITION" value from the signatoryGL() datalist; it is resolved to an id here.
+		public function financeUpdateSignatoryGL($trans_id, $signatureName){
+			$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+			$amt = 0.0;
+			$r = mysqli_query($this->db, "SELECT amount FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type1' LIMIT 1");
+			if ($r && $row = mysqli_fetch_assoc($r)) { $amt = (float) str_replace(',', '', (string) $row['amount']); }
+			if ($amt <= 50000) {
+				echo "<script>alert('The GL signatory can only be updated when the assistance amount is more than 50,000.');</script>";
+				return false;
+			}
+			$signid = $this->getsignatureid($signatureName);
+			if (empty($signid)) {
+				echo "<script>alert('Selected GL signatory was not found.');</script>";
+				return false;
+			}
+			$signid = mysqli_real_escape_string($this->db, $signid);
+			$ok = mysqli_query($this->db, "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$trans_id}'");
+			return (bool) $ok;
+		}
+
 		public function updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
-			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, 
+			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12,
 			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
 			$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
             $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
@@ -3299,6 +3391,18 @@
 		
 		if($result){
             echo "<script>window.location='../reissue.php';</script>";
+        }else{
+            echo "<script>alert('Something Went Wrong!');</script>";
+        }
+	}
+	public function doneupdatefinance($id, $trans){
+        $now = date("Y-m-d H:i:s");
+		
+		$query ="UPDATE tbl_transaction SET status_client = 'Done' where trans_id = '{$trans}'";
+		$result = mysqli_query($this->db,$query);
+		
+		if($result){
+            echo "<script>window.location='../home.php';</script>";
         }else{
             echo "<script>alert('Something Went Wrong!');</script>";
         }
@@ -5537,6 +5641,129 @@
 		return $rows;
 	}
 
+
+		// Assistance aggregated by TYPE for a mode (GL/CAV) over the period/office.
+		public function financeAssistanceByTypeMode($mode, $start, $end, $officeId = '', $limit = 100){
+			$mode  = mysqli_real_escape_string($this->db, $mode);
+			$start = mysqli_real_escape_string($this->db, $start);
+			$end   = mysqli_real_escape_string($this->db, $end);
+			$limit = (int) $limit;
+			if ($limit < 1)   { $limit = 100; }
+			if ($limit > 300) { $limit = 300; }
+
+			$officeFilter = '';
+			if ($officeId !== '') {
+				$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
+				$officeFilter = " AND LEFT(t.trans_id, 9) = '{$officeIdEsc}' ";
+			}
+
+			$query = "SELECT a.type AS type,
+							 COUNT(*) AS cnt,
+							 COALESCE(SUM(a.amount_num), 0) AS total_amount
+						FROM tbl_transaction t
+						INNER JOIN assistance a ON a.trans_id = t.trans_id AND a.mode = '{$mode}'
+					   WHERE t.status_client = 'Done'
+						 AND t.date_accomplished >= '{$start}'
+						 AND t.date_accomplished <  '{$end}'
+						 AND a.type IS NOT NULL AND a.type <> ''
+						 {$officeFilter}
+					   GROUP BY a.type
+					   ORDER BY total_amount DESC, cnt DESC
+					   LIMIT {$limit}";
+
+			$result = mysqli_query($this->db, $query);
+			$rows = [];
+			if ($result) {
+				while ($r = mysqli_fetch_assoc($result)) {
+					$rows[] = [
+						'type'         => $r['type'],
+						'cnt'          => (int) $r['cnt'],
+						'total_amount' => (float) $r['total_amount'],
+					];
+				}
+			}
+			return $rows;
+		}
+
+		// Fund sources with GL and CAV broken out (count + amount) and overall.
+		public function financeFundSourcesMerged($start, $end, $officeId = '', $limit = 300){
+			$start = mysqli_real_escape_string($this->db, $start);
+			$end   = mysqli_real_escape_string($this->db, $end);
+			$limit = (int) $limit; if ($limit < 1) { $limit = 300; } if ($limit > 500) { $limit = 500; }
+			$officeFilter = '';
+			if ($officeId !== '') {
+				$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
+				$officeFilter = " AND LEFT(a.trans_id, 9) = '{$officeIdEsc}' ";
+			}
+			$query = "SELECT cf.fundsource AS fundsource,
+							 SUM(m.mode = 'GL')  AS gl_cnt,
+							 COALESCE(SUM(CASE WHEN m.mode='GL'  THEN cf.fs_amount_num END), 0) AS gl_amt,
+							 SUM(m.mode = 'CAV') AS cav_cnt,
+							 COALESCE(SUM(CASE WHEN m.mode='CAV' THEN cf.fs_amount_num END), 0) AS cav_amt
+						FROM (
+							 SELECT DISTINCT a.trans_id, a.mode
+							   FROM assistance a
+							   INNER JOIN tbl_transaction t ON t.trans_id = a.trans_id
+							  WHERE a.mode IN ('GL','CAV')
+								AND t.status_client = 'Done'
+								AND t.date_accomplished >= '{$start}'
+								AND t.date_accomplished <  '{$end}'
+								{$officeFilter}
+							 ) m
+						INNER JOIN tbl_coe_fund cf ON cf.trans_id = m.trans_id
+					   WHERE cf.fundsource IS NOT NULL AND cf.fundsource <> ''
+					   GROUP BY cf.fundsource
+					   ORDER BY (COALESCE(SUM(CASE WHEN m.mode='GL' THEN cf.fs_amount_num END),0) + COALESCE(SUM(CASE WHEN m.mode='CAV' THEN cf.fs_amount_num END),0)) DESC
+					   LIMIT {$limit}";
+			return $this->_mergedRows($query, 'fundsource');
+		}
+
+		// Assistance types with GL and CAV broken out (count + amount) and overall.
+		public function financeAssistanceByTypeMerged($start, $end, $officeId = '', $limit = 300){
+			$start = mysqli_real_escape_string($this->db, $start);
+			$end   = mysqli_real_escape_string($this->db, $end);
+			$limit = (int) $limit; if ($limit < 1) { $limit = 300; } if ($limit > 500) { $limit = 500; }
+			$officeFilter = '';
+			if ($officeId !== '') {
+				$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
+				$officeFilter = " AND LEFT(t.trans_id, 9) = '{$officeIdEsc}' ";
+			}
+			$query = "SELECT a.type AS type,
+							 SUM(a.mode = 'GL')  AS gl_cnt,
+							 COALESCE(SUM(CASE WHEN a.mode='GL'  THEN a.amount_num END), 0) AS gl_amt,
+							 SUM(a.mode = 'CAV') AS cav_cnt,
+							 COALESCE(SUM(CASE WHEN a.mode='CAV' THEN a.amount_num END), 0) AS cav_amt
+						FROM tbl_transaction t
+						INNER JOIN assistance a ON a.trans_id = t.trans_id AND a.mode IN ('GL','CAV')
+					   WHERE t.status_client = 'Done'
+						 AND t.date_accomplished >= '{$start}'
+						 AND t.date_accomplished <  '{$end}'
+						 AND a.type IS NOT NULL AND a.type <> ''
+						 {$officeFilter}
+					   GROUP BY a.type
+					   ORDER BY (COALESCE(SUM(CASE WHEN a.mode='GL' THEN a.amount_num END),0) + COALESCE(SUM(CASE WHEN a.mode='CAV' THEN a.amount_num END),0)) DESC
+					   LIMIT {$limit}";
+			return $this->_mergedRows($query, 'type');
+		}
+
+		private function _mergedRows($query, $labelField){
+			$result = mysqli_query($this->db, $query);
+			$rows = [];
+			if ($result) {
+				while ($r = mysqli_fetch_assoc($result)) {
+					$glAmt = (float) $r['gl_amt']; $cavAmt = (float) $r['cav_amt'];
+					$rows[] = [
+						'label'   => $r[$labelField],
+						'gl_cnt'  => (int) $r['gl_cnt'],
+						'gl_amt'  => $glAmt,
+						'cav_cnt' => (int) $r['cav_cnt'],
+						'cav_amt' => $cavAmt,
+						'overall' => $glAmt + $cavAmt,
+					];
+				}
+			}
+			return $rows;
+		}
 }
 
 ?>

@@ -28,8 +28,8 @@ list($start, $end) = $user->financePeriodBounds($granularity, $value);
 $byOffice    = $user->financeAssistanceByOfficePair($start, $end, $office);
 $glByOffice  = $byOffice['gl'];
 $cavByOffice = $byOffice['cav'];
-$glFunds     = $user->financeFundSourcesByMode('GL',  $start, $end, $office, 25);
-$cavFunds    = $user->financeFundSourcesByMode('CAV', $start, $end, $office, 25);
+$fundsMerged = $user->financeFundSourcesMerged($start, $end, $office);
+$typesMerged = $user->financeAssistanceByTypeMerged($start, $end, $office);
 
 $sumCnt    = function ($rows) { return array_sum(array_column($rows, 'cnt')); };
 $sumAmount = function ($rows) { return array_sum(array_column($rows, 'total_amount')); };
@@ -51,12 +51,6 @@ echo json_encode([
         'totalCount'  => $sumCnt($cavByOffice),
         'totalAmount' => $sumAmount($cavByOffice),
     ],
-    'guaranteeFundSources' => [
-        'rows'        => $glFunds,
-        'totalAmount' => $sumAmount($glFunds),
-    ],
-    'outrightCashFundSources' => [
-        'rows'        => $cavFunds,
-        'totalAmount' => $sumAmount($cavFunds),
-    ],
+    'fundSourcesMerged'     => $fundsMerged,
+    'assistanceTypesMerged' => $typesMerged,
 ]);

@@ -85,7 +85,9 @@
             .fund-table-wrap col.col-amt   { width:28%; }
             .fund-table-wrap th, .fund-table-wrap td { overflow-wrap:anywhere; vertical-align:middle; }
             .fund-table-wrap td.text-right, .fund-table-wrap th.text-right, .fund-table-wrap td.text-amt { white-space:nowrap; }
-            .fund-table-wrap thead th { position:sticky; top:0; z-index:3; background:#f5f6f8; }
+            .fund-table-wrap thead th { position:sticky; z-index:3; background:#f5f6f8; }
+            .fund-table-wrap thead tr:first-child th { top:0; height:30px; }
+            .fund-table-wrap thead tr:nth-child(2) th { top:30px; }
             .fund-table-wrap tfoot td { position:sticky; bottom:0; z-index:3; background:#eef1f5; font-weight:700; border-top:2px solid #cfd6dd; }
             .text-amt { font-variant-numeric:tabular-nums; }
             #dashLoading { display:none; }
@@ -196,7 +198,7 @@
                     <div id="periodLabel" class="text-muted" style="margin-top:8px; font-size:13px;"></div>
                 </div>
 
-                                <!-- ============ GUARANTEE LETTERS | OUTRIGHT CASH (2 columns) ============ -->
+                                                <!-- ===== GL / CAV summary ===== -->
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="dash-panel">
@@ -207,16 +209,6 @@
                                 <div class="kpi-sub">Amount: <span id="glTotalAmount">&#8369;0.00</span></div>
                             </div>
                             <div class="chart-box" style="margin-top:12px;"><canvas id="glOfficeChart"></canvas></div>
-                            <h6 style="margin-top:16px;font-weight:700;"><i class="fa fa-coins text-primary"></i> Fund Sources</h6>
-                            <div class="chart-box"><canvas id="glFundChart"></canvas></div>
-                            <div class="fund-table-wrap" style="margin-top:12px;">
-                                <table class="table table-sm table-striped table-bordered">
-                                    <colgroup><col class="col-fund"><col class="col-count"><col class="col-amt"></colgroup>
-                                    <thead><tr><th>Fund Source</th><th class="text-right">Count</th><th class="text-right">Total Amount</th></tr></thead>
-                                    <tbody id="glFundTable"></tbody>
-                                    <tfoot><tr class="font-weight-bold"><td>Total</td><td class="text-right" id="glFundCount">0</td><td class="text-right text-amt" id="glFundTotal">&#8369;0.00</td></tr></tfoot>
-                                </table>
-                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -228,19 +220,63 @@
                                 <div class="kpi-sub">Amount: <span id="cavTotalAmount">&#8369;0.00</span></div>
                             </div>
                             <div class="chart-box" style="margin-top:12px;"><canvas id="cavOfficeChart"></canvas></div>
-                            <h6 style="margin-top:16px;font-weight:700;"><i class="fa fa-coins" style="color:#1e88e5;"></i> Fund Sources</h6>
-                            <div class="chart-box"><canvas id="cavFundChart"></canvas></div>
-                            <div class="fund-table-wrap" style="margin-top:12px;">
-                                <table class="table table-sm table-striped table-bordered">
-                                    <colgroup><col class="col-fund"><col class="col-count"><col class="col-amt"></colgroup>
-                                    <thead><tr><th>Fund Source</th><th class="text-right">Count</th><th class="text-right">Total Amount</th></tr></thead>
-                                    <tbody id="cavFundTable"></tbody>
-                                    <tfoot><tr class="font-weight-bold"><td>Total</td><td class="text-right" id="cavFundCount">0</td><td class="text-right text-amt" id="cavFundTotal">&#8369;0.00</td></tr></tfoot>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="dash-panel">
+                    <h5><i class="fa fa-coins" style="color:#1e88e5;"></i> Charging Sources</h5>
+                    <div class="fund-table-wrap" style="margin-top:12px;">
+                        <table class="table table-sm table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Charging</th>
+                                    <th colspan="2" class="text-center" style="background:#e3f0fc;">Guarantee Letter (GL)</th>
+                                    <th colspan="2" class="text-center" style="background:#e3f0fc;">Outright Cash (CAV)</th>
+                                    <th rowspan="2" class="text-right">Overall Amount</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Count</th><th class="text-right">Amount</th>
+                                    <th class="text-right">Count</th><th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fundMergedBody"></tbody>
+                            <tfoot><tr class="font-weight-bold">
+                                <td>Total</td>
+                                <td class="text-right" id="fundGlCount">0</td><td class="text-right text-amt" id="fundGlAmt">&#8369;0.00</td>
+                                <td class="text-right" id="fundCavCount">0</td><td class="text-right text-amt" id="fundCavAmt">&#8369;0.00</td>
+                                <td class="text-right text-amt" id="fundOverall">&#8369;0.00</td>
+                            </tr></tfoot>
+                        </table>
+                    </div>
+</div>
+
+                <div class="dash-panel">
+                    <h5><i class="fa fa-notes-medical" style="color:#1e88e5;"></i> Assistance</h5>
+                    <div class="fund-table-wrap" style="margin-top:12px;">
+                        <table class="table table-sm table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Type of Assistance</th>
+                                    <th colspan="2" class="text-center" style="background:#e3f0fc;">Guarantee Letter (GL)</th>
+                                    <th colspan="2" class="text-center" style="background:#e3f0fc;">Outright Cash (CAV)</th>
+                                    <th rowspan="2" class="text-right">Overall Amount</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-right">Count</th><th class="text-right">Amount</th>
+                                    <th class="text-right">Count</th><th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="typeMergedBody"></tbody>
+                            <tfoot><tr class="font-weight-bold">
+                                <td>Total</td>
+                                <td class="text-right" id="typeGlCount">0</td><td class="text-right text-amt" id="typeGlAmt">&#8369;0.00</td>
+                                <td class="text-right" id="typeCavCount">0</td><td class="text-right text-amt" id="typeCavAmt">&#8369;0.00</td>
+                                <td class="text-right text-amt" id="typeOverall">&#8369;0.00</td>
+                            </tr></tfoot>
+                        </table>
+                    </div>
+</div>
             </div>
         </div>
 
@@ -346,27 +382,27 @@
         makeBar(canvasId, labels, data, 'Count', colorList(rows.length), false);
     }
 
-    function renderFundChart(canvasId, rows) {
-        var top = rows.slice(0, 12);
-        var labels = top.map(function (r) { return r.fundsource; });
-        var data   = top.map(function (r) { return r.total_amount; });
-        makeBar(canvasId, labels, data, 'Total Amount', colorList(top.length), true);
-    }
-
-    function renderFundTable(tbodyId, rows, countId, totalId) {
-        var tbody = $('#' + tbodyId).empty();
-        var totalCnt = 0, totalAmt = 0;
-        if (!rows.length) {
-            tbody.append('<tr><td colspan="3" class="text-center text-muted">No data</td></tr>');
+    // Merged GL+CAV table: label, GL count/amount, CAV count/amount, overall.
+    function renderMerged(bodyId, rows, ids) {
+        var glC=0, glA=0, cvC=0, cvA=0, ov=0, html='';
+        if (!rows || !rows.length) {
+            html = '<tr><td colspan="6" class="text-center text-muted">No data</td></tr>';
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                glC+=r.gl_cnt; glA+=r.gl_amt; cvC+=r.cav_cnt; cvA+=r.cav_amt; ov+=r.overall;
+                html += '<tr><td>' + $('<div>').text(r.label==null?'':r.label).html() +
+                    '</td><td class="text-right">' + num.format(r.gl_cnt) +
+                    '</td><td class="text-right text-amt">' + peso.format(r.gl_amt) +
+                    '</td><td class="text-right">' + num.format(r.cav_cnt) +
+                    '</td><td class="text-right text-amt">' + peso.format(r.cav_amt) +
+                    '</td><td class="text-right text-amt">' + peso.format(r.overall) + '</td></tr>';
+            }
         }
-        rows.forEach(function (r) {
-            totalCnt += r.cnt; totalAmt += r.total_amount;
-            tbody.append('<tr><td>' + $('<div>').text(r.fundsource).html() +
-                '</td><td class="text-right">' + num.format(r.cnt) +
-                '</td><td class="text-right text-amt">' + peso.format(r.total_amount) + '</td></tr>');
-        });
-        $('#' + countId).text(num.format(totalCnt));
-        $('#' + totalId).text(peso.format(totalAmt));
+        document.getElementById(bodyId).innerHTML = html;
+        $('#'+ids.glCount).text(num.format(glC));  $('#'+ids.glAmt).text(peso.format(glA));
+        $('#'+ids.cavCount).text(num.format(cvC)); $('#'+ids.cavAmt).text(peso.format(cvA));
+        $('#'+ids.overall).text(peso.format(ov));
     }
 
     function load() {
@@ -390,11 +426,8 @@
                 $('#cavTotalAmount').text(peso.format(d.outrightCash.totalAmount));
                 renderOfficeChart('cavOfficeChart', d.outrightCash.byOffice);
 
-                renderFundChart('glFundChart', d.guaranteeFundSources.rows);
-                renderFundTable('glFundTable', d.guaranteeFundSources.rows, 'glFundCount', 'glFundTotal');
-
-                renderFundChart('cavFundChart', d.outrightCashFundSources.rows);
-                renderFundTable('cavFundTable', d.outrightCashFundSources.rows, 'cavFundCount', 'cavFundTotal');
+                renderMerged('fundMergedBody', d.fundSourcesMerged, {glCount:'fundGlCount',glAmt:'fundGlAmt',cavCount:'fundCavCount',cavAmt:'fundCavAmt',overall:'fundOverall'});
+                renderMerged('typeMergedBody', d.assistanceTypesMerged, {glCount:'typeGlCount',glAmt:'typeGlAmt',cavCount:'typeCavCount',cavAmt:'typeCavAmt',overall:'typeOverall'});
             },
             error: function () { alert('Failed to load dashboard data.'); },
             complete: function () { $('#dashLoading').hide(); }

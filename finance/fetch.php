@@ -49,7 +49,7 @@
                                     <td>
                                     <button type='submit' class='btn btn-outline-primary deep-sky' data-toggle='modal' data-target='#clientdata' data-id='". $row["trans_id"] ."' style='margin-bottom:5px; font-size: 13px; width: 120px'> View </button>";
                         if ($row['status_client'] == 'Done') {
-                            $output .= "<button type='button' class='btn btn-outline-warning deep-sky' onclick=\"window.location.href='financeupdate/gis.php?id=". $row["trans_id"] ."'\" style='margin-bottom:5px; font-size: 13px; width: 120px'><i class='fa fa-edit'></i> Update </button>";
+                            $output .= "<button type='button' class='btn btn-outline-warning deep-sky' onclick=\"window.location.href='financeupdate/edit_amount.php?id=". $row["trans_id"] ."'\" style='margin-bottom:5px; font-size: 13px; width: 120px'><i class='fa fa-edit'></i> Update </button>";
                         }
                         if ($row['status_client'] != 'Decline') {
                             $output .= "<button type='submit' class='btn btn-outline-danger deep-sky' data-toggle='modal' data-target='#cancelGL' data-id='". $row["trans_id"] ."' style='margin-right: 5px; font-size: 13px; width: 120px'><i class='fa fa-eraser'></i> Cancel GL </button>";

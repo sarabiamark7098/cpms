@@ -4,8 +4,14 @@
     if(isset($_GET['confirmdone'])){
         if($_GET['confirmdone']== 1){
             echo "<script type='text/javascript'>alert('Transaction Successful');</script>";
-            $user->doneupdate($_GET["id"],$_GET['transid']);
+            $user->doneupdatefinance($_GET["id"],$_GET['transid']);
         }
+    }
+    // Finance may update ONLY the GL signatory here, and only for amounts over 50,000
+    // (re-checked inside financeUpdateSignatoryGL). Runs before the data load so the page
+    // renders the new signatory.
+    if(isset($_POST['update_gl_signatory']) && isset($_GET['id'])){
+        $user->financeUpdateSignatoryGL($_GET['id'], $_POST['gl_signatory'] ?? '');
     }
     if(isset($_GET['id'])){
         $id = $user->getClientId($_GET['id']);
@@ -221,146 +227,101 @@
                 </div>
         </nav>
         <br><br><br><br>
-        <div class="container"><br><br>
+        <div class="container"><br>
             <form action="last.php?id=<?php echo $_GET['id']?>" method="post">
-                <?php     
-                    if(!empty($mode2)){
-                        if($mode1 == "GL" || $mode2 =="GL"){
-                            echo '<div class="form-group row">
-                                    <div class="card border-info mb3" style="width:100%;">
-                                        <h4 class="card-header text-success">Guarantee Letter Information</h4>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="input-group input-group-lg">
-                                                        <input type="text" class="form-control mr-sm-2 b" id="c_no" onblur="checkNum('.$_GET['id'].')" value="' .$GLid. '" name="c_no" placeholder="Control No." required readonly>
-                                                        <span id="gl_error" style="color:red"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
-                                            </div><br>
-                                            <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.$gl['cname'].'" placeholder="Providers Company Name" required autocomplete="off"><br>
-                                            <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.$gl['caddress'].'" placeholder="Providers Company Address" required ><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.$gl['addressee'].'" placeholder="Addressee Name" ><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.$gl['position'].'" placeholder="Addressee Position" required ><br>
-                                            <div class="row">
-                                                <div class="checkbox col-3">
-                                                    <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                        <input type="checkbox" id="radiobutton" class="checkbutton" name="forthebtn" style="height:15px;width:15px;margin: 10px" '. (!empty($gl['for_the_id'])?'checked':'').'> Set "For The" SIGNATORY
-                                                    </label>
-                                                </div>
-                                                <div id="collapseOne" aria-expanded="false" class="collapse col-9">
-                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'" autocomplete="off">
-                                                    <datalist id="signatory">';
-                                                        $data = $user->signatoryGIS();
-                                                        foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])?$value['first_name']:"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])?$value['last_name']:"");
-                                                            echo "<option value='" . strtoupper((!empty($signatoryname))? $signatoryname : "") . "-" . (!empty($value['position'])?$value['position']:"") . "-" . (!empty($value['signatory_id'])?$value['signatory_id'] : "") ."'></option>";
-                                                        }
-                        echo                        '</datalist>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
-                        if($mode1 == "CAV" || $mode2=="CAV"){
-                            echo '<div class="form-group row">
-                                    <div class="card border-info mb3" style="width:100%;">
-                                        <h4 class="card-header text-success">CASH Information</h4>
-                                        <div class="card-body">
-                                            <h3>Cash Voucher Info</h3>
-                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '."''".').toUpperCase()"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required disabled><br> 
-                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required disabled><br>
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
-                        if($mode1=="DS"|| $mode2=="DS"){
-                            echo '<div class="form-group row">
-                                    <div class="card border-info mb3" style="width:100%;">
-                                        <h4 class="card-header text-success">Distribution Sheet Information</h4>
-                                        <div class="card-body">
-                                            <br>
-                                            <h4 style="color:blue">Distribution sheet is not available in the system</h4>
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
-                    }else{
-                        if($mode1 == "GL"){
-                            echo '<div class="form-group row">
-                                    <div class="card border-info mb3" style="width:100%;">
-                                        <h4 class="card-header text-success">Guarantee Letter Information</h4>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="input-group input-group-lg">
-                                                        <input type="text" class="form-control mr-sm-2 b" id="c_no" onblur="checkNum('.$_GET['id'].')" value="' .$GLid. '" name="c_no" placeholder="Control No." required readonly>
-                                                        <span id="gl_error" style="color:red"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col"><input list="gls" type="text" class="form-control mr-sm-2 b" id="gl_signatory" name="gl_signatory" value="'.$signatoryGLNamePos.'" placeholder="Guarantee Letter Signatory" readonly> '. $user->signatoryGL() .' <br></div>
-                                            </div><br>
-                                            <h3>Providers Info</h3>
-                                            <input list="providers" type="text" class="form-control mr-sm-2 b" id="comp_name" name="comp_name" value="'.(($gl['cname'])??"").'" placeholder="Providers Company Name" required autocomplete="off"><br>
-                                            <datalist id="providers">'. $user->listOfProvider().'</datalist>
-                                            <input type="text" class="form-control mr-sm-2 b" id="address"     name="caddress" value="'.(($gl['caddress'])??"").'" placeholder="Providers Company Address" required ><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="addressee" id="addressee" value="'.(($gl['addressee'])??"").'" placeholder="Addressee Name" ><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="a_pos"      name="a_pos" value="'.(($gl['position'])??"").'" placeholder="Addressee Position" required ><br>
-                                            <input type="text" class="form-control mr-sm-2 b" id="tomention"     name="tomention" value="'.(($gl['to_mention'])??"").'" placeholder="Addressee to Mention in GL" hidden><br>
-                                            <div class="row">
-                                                <div class="checkbox col-3">
-                                                    <label data-toggle="collapse" for="radiobutton" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                                        <input type="checkbox" id="radiobutton" class="checkbutton" name="forthebtn" style="height:15px;width:15px;margin: 10px" '. (!empty($gl['for_the_id'])?'checked':'').'> Set "For The" SIGNATORY
-                                                    </label>
-                                                </div>
-                                                <div id="collapseOne" aria-expanded="false" class="collapse col-9">
-                                                    <input list="signatory" type="text" class="form-control mr-sm-2 for_the" id="for_the" name="for_the" placeholder="Select For the Signatory" value="'. (empty($gl['for_the_id']) ? '' : $user->getSignatoryFullname($gl['for_the_id'])) .'" autocomplete="off">
-                                                    <datalist id="signatory">';
-                                                        $data = $user->signatoryGIS();
-                                                        foreach ($data as $index => $value) {
-                                                            $signatoryname = (!empty($value["name_title"])?$value['name_title'] ." ":""). (!empty($value['first_name'])?$value['first_name']:"") . " " . (!empty($signatoryGL["middle_I"])?$signatoryGL['middle_I'] ." ":"").  (!empty($value['last_name'])?$value['last_name']:"");
-                                                            echo "<option value='" . strtoupper((!empty($signatoryname))? $signatoryname : "") . "-" . (!empty($value['position'])?$value['position']:"") . "-" . (!empty($value['signatory_id'])?$value['signatory_id'] : "") ."'></option>";
-                                                        }
-                        echo                        '</datalist>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
-                        if($mode1 == "CAV"){
-                            echo '<div class="form-group row">
-                                    <div class="card border-info mb3" style="width:100%;">
-                                        <h4 class="card-header text-success">CASH Information</h4>
-                                        <div class="card-body">
-                                            <h3>Cash Voucher Info</h3>
-                                            <input type="text" style="text-transform: uppercase" class="form-control mr-sm-2 b" name="sd_officer" value="'.$cash['sd_officer'].'" id="sd_officer" placeholder="Special Disbursing Officer" required oninput="this.value = this.value.replace(/[^A-Za-zÑñÉéÈèÊêËë\-., ]/g, '."''".').toUpperCase()"><br>
-                                            <input type="text" class="form-control mr-sm-2 b" name="payee"   value="'.(!empty($cash['payee'])?$cash['payee']:$name).'" id="payee" placeholder="PAYEE / OFFICE" required disabled><br> 
-                                            <input type="text" class="form-control mr-sm-2 b" name="cash_address" value="'.(!empty($cash['address'])?$cash['address']:$cash_add).'" id="cash_address" placeholder="ADDRESS" required disabled><br>
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
-                        if($mode1=="DS"){
-                            echo '<div class="form-group row">
-                                    <div class="card border-info mb3" style="width:100%;">
-                                        <h4 class="card-header text-success">Distribution Sheet Information</h4>
-                                        <div class="card-body">
-                                            <br>
-                                            <h4 style="color:blue">Distribution sheet is not available in the system</h4>
-                                        </div>
-                                    </div>
-                                </div>';
-                        }
-                    }  
+                <?php
+                    // Finance print hub shows a read-only summary only (no provider editing).
+                    $isGL = ($mode1 == "GL" || $mode2 == "GL");
+                    $hasBene = (strtolower($client['relation'] ?? '') !== 'self') && (trim($bname) !== '');
                 ?>
+                <div class="card border-info mb-3" style="width:100%;">
+                    <h4 class="card-header text-white" style="background:#1e88e5;">Transaction Details</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6"><b>Client:</b> <?php echo htmlspecialchars($name); ?></div>
+                            <?php if ($hasBene) { ?>
+                            <div class="col-md-6"><b>Beneficiary:</b> <?php echo htmlspecialchars($bname); ?></div>
+                            <?php } ?>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6"><b>GL Number:</b> <?php echo $isGL ? htmlspecialchars($GLid) : 'N/A'; ?></div>
+                        </div>
+                        <?php if ($isGL && (float)$am > 50000) {
+                            $glSigPrefill = '';
+                            if (!empty($signatoryGL) && !empty($signatoryGL['first_name'])) {
+                                $glSigPrefill = strtoupper($signatoryGL['first_name'].' '.$signatoryGL['middle_I'].'. '.$signatoryGL['last_name']).'-'.$signatoryGL['position'];
+                            }
+                        ?>
+                        <div class="row mt-3">
+                            <div class="col-md-10">
+                                <label class="mb-1"><b>GL Signatory</b> <small class="text-muted">(required for amounts over 50,000)</small></label>
+                                <div class="input-group">
+                                    <input list="gls" type="text" class="form-control" id="gl_signatory" name="gl_signatory"
+                                           value="<?php echo htmlspecialchars($glSigPrefill); ?>" placeholder="Select GL Signatory" autocomplete="off">
+                                    <?php echo $user->signatoryGL(); // <datalist id="gls"> ?>
+                                    <div class="input-group-append">
+                                        <button type="submit" name="update_gl_signatory" class="btn btn-primary">Update Signatory</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <table class="table table-sm table-bordered mt-3 mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Type of Assistance</th>
+                                    <th class="text-right">Amount of Assistance</th>
+                                    <th class="text-center">Mode of Assistance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($client_assistance[1]['type'] ?? ''); ?></td>
+                                    <td class="text-right">&#8369;<?php echo htmlspecialchars($client_assistance[1]['amount'] ?? ''); ?></td>
+                                    <td class="text-center"><?php echo htmlspecialchars($client_assistance[1]['mode'] ?? ''); ?></td>
+                                </tr>
+                                <?php if (!empty($client_assistance[2]['type']) || !empty($client_assistance[2]['amount'])) { ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($client_assistance[2]['type'] ?? ''); ?></td>
+                                    <td class="text-right">&#8369;<?php echo htmlspecialchars($client_assistance[2]['amount'] ?? ''); ?></td>
+                                    <td class="text-center"><?php echo htmlspecialchars($client_assistance[2]['mode'] ?? ''); ?></td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+
+                        <?php
+                            // Fund sources — view only (finance edits them on the update page, not here).
+                            $fsRows = array();
+                            for ($i = 1; $i <= 12; $i++) {
+                                if (!empty($fundsourcedata[$i]['fundsource'])) { $fsRows[] = $fundsourcedata[$i]; }
+                            }
+                        ?>
+                        <h6 class="mt-3 mb-1" style="font-weight:bold;">Fund Source <small class="text-muted">(view only)</small></h6>
+                        <?php if (!empty($fsRows)) { ?>
+                        <table class="table table-sm table-bordered mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Fund Source</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($fsRows as $fs) { ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($fs['fundsource']); ?></td>
+                                    <td class="text-right">&#8369;<?php echo htmlspecialchars($fs['fs_amount'] ?? ''); ?></td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                        <?php } else { ?>
+                        <p class="text-muted mb-0">No fund source recorded.</p>
+                        <?php } ?>
+                    </div>
+                </div>
                 <div class="row">
-                    <?php if ($gis['program_type'] == '1'){ ?> 
+                    <?php if ($gis['program_type'] == '1'){ ?>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print Attestation" name="printa" onclick="printAttest()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
                     <?php } ?>
                     <div class="col"><input type="button" class="btn btn-<?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"primary":"secondary" ?> btn-block" value="Print GIS" name="printgis" onclick="printGISinCE()" <?php echo (!empty($gl) || !empty($cash) || $mode1=="DS" || $mode2=="DS")?"":"disabled" ?> ></div>
@@ -374,19 +335,8 @@
                     </div> -->
                 </div><br>
 				<div class="row">
-                    <?php if(((!empty($client_assistance[1]['type']) && strtolower($client_assistance[1]['type']) == "cash assistance") && (!empty($client_assistance[2]['type']) && $client_assistance[2]['type'] == "")) || ((!empty($client_assistance[1]['type']) && strtolower($client_assistance[1]['type']) == "non-food items") && (!empty($client_assistance[2]['type']) && $client_assistance[2]['type'] == ""))){ ?>
-                        <div class="col"><a href="gis.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> GIS</a></div>
-                    <?php } else { ?>
-                        <div class="col"><a href="coe.php?id=<?php echo $_GET['id']?>" class="btn btn-success btn-block"><span class="fa fa-reply"></span> COE</a></div>
-                    <?php } ?>
-                        <?php 
-                            if($mode1 == "GL" || $mode1 == "CAV"){
-                                if($cash || $gl){
-                                    echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Update" name="update"></div>';
-                                }else{
-                                    echo '<div class="col"><input type="submit" class="btn btn-primary btn-block no-print"  value="Save" name="save"></div>';
-                                }
-                            }
+                        <?php
+                            // Finance does NOT update the provider (GL / cash) here — print only.
                         ?>
                     <div class="col"><input type="button" class="btn btn-success btn-block no-print" id="done" value="Done" onclick="confirmdone(<?php echo "'".$id."','".$_GET['id']."'" ?>)"/></div>
                 </div>
@@ -569,121 +519,9 @@
     </script>
 
     <?php 
-        //SAVA NA PART
-        if(isset($_POST['save'])){
-            $mode1 = "";
-            $mode2 = "";
-            if(!empty($client_assistance[1])){
-                $mode1 = $client_assistance[1]['mode'];
-            }
-            if(!empty($client_assistance[2])){
-                $mode2 = $client_assistance[2]['mode'];
-            }
-            
-            if(strtolower($mode1) == "cav" || strtolower($mode2) == "cav"){
+        // Finance print hub: this page does NOT update the provider (GL / cash) records.
+        // The provider details are set by the social worker; finance only prints here.
 
-                $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
-                                                                                        
-                                                                                            
-                $user->insertCash($_GET['id'], $sd_officer);
-            }
-
-            if(strtolower($mode1) == "gl" || strtolower($mode2)=="gl"){
-                $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
-                $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
-                $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
-                $forthe = '';
-                if(!empty($_POST['forthebtn'])){
-                    $forthe_id = explode('-',$_POST['for_the']);
-                    if(!empty($forthe_id[3])){
-                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[3]);
-                    }else{
-                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[2]);
-                    }
-                }
-                $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
-                $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
-                $tomention= mysqli_real_escape_string($user->db,$_POST['tomention']); 
-                 $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
-            }
-        }
-
-        if(isset($_POST['update'])){
-            //if client has 2 services bth GL $ CASH
-            $mode1 = "";
-            $mode2 = "";
-            if(!empty($client_assistance[1])){
-                $mode1 = $client_assistance[1]['mode'];
-            }
-            if(!empty($client_assistance[2])){
-                $mode2 = $client_assistance[2]['mode'];
-            }
-            $if1 = (strtolower($mode1) == "gl" && strtolower($mode2) == "cav");
-            $if2= (strtolower($mode1) == "cav" && strtolower($mode2) == "gl");
-
-            if( $if1 || $if2 ){
-                //GL
-                $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
-                $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
-                $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
-                $forthe = '';
-                if(!empty($_POST['forthebtn'])){
-                    $forthe_id = explode('-',$_POST['for_the']);
-                    if(!empty($forthe_id[3])){
-                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[3]);
-                    }else{
-                        $forthe = mysqli_real_escape_string($user->db,$forthe_id[2]);
-                    }
-                }
-                $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
-                $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
-                $tomention= mysqli_real_escape_string($user->db,$_POST['tomention']); 
-                //CASH
-                $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
-
-                $user->updateGLCash($_GET['id'], $sd_officer, $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
-
-            }else{
-                if((strtolower($mode1) == "cav" || strtolower($mode2) == "cav")){
-                
-                    $sd_officer = mysqli_real_escape_string($user->db,strtoupper($_POST['sd_officer']));
-                    //pag empty mag insert sya kay basig gi update lang and GIS    
-                    if(empty($cash)){
-                        $user->insertCash($_GET['id'], $sd_officer);
-                    }else{
-                        $user->updateCash($_GET['id'], $sd_officer);
-                    }
-                }else{
-                    
-                    $c_no= mysqli_real_escape_string($user->db,$_POST['c_no']);
-                    $signatory = mysqli_real_escape_string($user->db,strtoupper($client['signatory_GL']));
-                    $addressee= mysqli_real_escape_string($user->db,strtoupper($_POST['addressee']));
-                    $a_pos= mysqli_real_escape_string($user->db,$_POST['a_pos']);
-                    $forthe = '';
-                    if(!empty($_POST['forthebtn'])){
-                        $forthe_id = explode('-',$_POST['for_the']);
-                        if(!empty($forthe_id[3])){
-                            $forthe = mysqli_real_escape_string($user->db,$forthe_id[3]);
-                        }else{
-                            $forthe = mysqli_real_escape_string($user->db,$forthe_id[2]);
-                        }
-                    }
-                    $cname= mysqli_real_escape_string($user->db,$_POST['comp_name']); 
-                    $add = mysqli_real_escape_string($user->db,$_POST['caddress']); //company address
-                    $tomention = mysqli_real_escape_string($user->db,$_POST['tomention']); 
-        
-                    //pag empty mag insert sya kay basig gi update lang and GIS
-                    if(empty($gl)){
-                        $user->insertGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
-                    }else{
-                        $user->updateGL($_GET['id'], $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention);
-                    }
-                }
-            }     
-        }
-        
     ?>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -693,5 +531,19 @@
 
             window.onafterprint = afterPrint;
         });
+
+        // Finance print hub has no provider input fields, so the shared printGLNow()
+        // (which reads those inputs via getGLvalue/setContentGL) would blank the GL and
+        // error out. The GL sheet is already fully rendered from the database, so here we
+        // simply print the #gl block as-is.
+        function printGLNow() {
+            var el = document.getElementById('gl');
+            if (!el) { return; }
+            var divElements = el.innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = "<html><head><title></title></head><body>" + divElements + "</body>";
+            window.print();
+            document.body.innerHTML = oldPage;
+        }
     </script>
  </html>
