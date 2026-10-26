@@ -11,8 +11,12 @@
 ALTER TABLE `api_send_log`
     MODIFY COLUMN `assistance_type` VARCHAR(50) NOT NULL;
 
+SET SQL_SAFE_UPDATES = 0;
+
 UPDATE `api_send_log` asl
 JOIN `assistance` a
     ON a.trans_id = asl.trans_id
     AND a.type_description = asl.assistance_type
 SET asl.assistance_type = a.type;
+
+SET SQL_SAFE_UPDATES = 1;
