@@ -2325,10 +2325,13 @@
 			$signatory = explode('-', $signature);
 			$signname = explode(' ', $signatory[0]);
 			$size = sizeof($signname);
+			$row="";
+			if(!empty($signature)){
 			$query = "SELECT * FROM signatory WHERE first_name LIKE '%{$signname[0]}%' AND last_name LIKE '%{$signname[$size-1]}%';";
 			
 			$result = mysqli_query($this->db,$query);
 			$row = mysqli_fetch_assoc($result);
+			}
 			if($row){
 				return $row['signatory_id'];
 			}else{
@@ -2436,7 +2439,8 @@
 			//    (set to empty) ONLY when the assistance amount is below 50,000; otherwise it
 			//    is left untouched.
 			if ($a1num < 50000) {
-				$query .= "UPDATE tbl_transaction SET signatory_GL = '' WHERE trans_id = '{$trans_id}';";
+				$signatory_id = $this->getsignatoryGL($trans_id);
+				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory_id}' WHERE trans_id = '{$trans_id}';";
 			}
 
 			$result = mysqli_multi_query($this->db, $query);
@@ -2447,12 +2451,33 @@
 			return true;
 		}
 
+		public function getSignatoryGL($id) {
+			$query = "SELECT signatory_id FROM tbl_transaction WHERE trans_id = '{$id}' LIMIT 1;";
+			$result = mysqli_query($this->db, $query);
+			if ($result && $row = mysqli_fetch_assoc($result)) {
+				return $row['signatory_id'];
+			}
+			return '';
+		}
+
+		// GL signatories (option_GL = 1) for the finance signatory dropdown.
+		public function getGLSignatories(){
+			$rows = array();
+			$result = mysqli_query($this->db, "SELECT signatory_id, name_title, first_name, middle_I, last_name, position FROM signatory WHERE option_GL = '1' ORDER BY last_name, first_name");
+			if ($result) {
+				while ($row = mysqli_fetch_assoc($result)) { $rows[] = $row; }
+			}
+			return $rows;
+		}
+
 		// Finance-only: update the GL signatory, and ONLY when the Type1 assistance amount is
 		// MORE THAN 50,000. At or below that threshold the GL signatory is handled automatically
-		// (cleared on the amount save), so manual selection is not allowed. $signatureName is the
-		// "NAME-POSITION" value from the signatoryGL() datalist; it is resolved to an id here.
-		public function financeUpdateSignatoryGL($trans_id, $signatureName){
+		// (cleared on the amount save), so manual selection is not allowed. $signatoryId is the
+		// signatory_id chosen from the GL-signatory dropdown; it is validated to be a real GL
+		// signatory (option_GL = 1) before anything is written.
+		public function financeUpdateSignatoryGL($trans_id, $signatoryId){
 			$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+
 			$amt = 0.0;
 			$r = mysqli_query($this->db, "SELECT amount FROM assistance WHERE trans_id = '{$trans_id}' AND type_description = 'Type1' LIMIT 1");
 			if ($r && $row = mysqli_fetch_assoc($r)) { $amt = (float) str_replace(',', '', (string) $row['amount']); }
@@ -2460,13 +2485,40 @@
 				echo "<script>alert('The GL signatory can only be updated when the assistance amount is more than 50,000.');</script>";
 				return false;
 			}
-			$signid = $this->getsignatureid($signatureName);
-			if (empty($signid)) {
-				echo "<script>alert('Selected GL signatory was not found.');</script>";
+
+			$sid = (int) $signatoryId;
+			if ($sid <= 0) {
+				echo "<script>alert('Please select a GL signatory.');</script>";
 				return false;
 			}
-			$signid = mysqli_real_escape_string($this->db, $signid);
-			$ok = mysqli_query($this->db, "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$trans_id}'");
+			// Must be an actual GL signatory.
+			$chk = mysqli_query($this->db, "SELECT signatory_id FROM signatory WHERE signatory_id = {$sid} AND option_GL = '1' LIMIT 1");
+			if (!$chk || !mysqli_fetch_assoc($chk)) {
+				echo "<script>alert('Selected GL signatory is not valid.');</script>";
+				return false;
+			}
+
+			$ok = mysqli_query($this->db, "UPDATE tbl_transaction SET signatory_GL = '{$sid}' WHERE trans_id = '{$trans_id}'");
+			return (bool) $ok;
+		}
+		
+		// Finance-only: set/clear the GL "For the" signatory on the gl record. $signatoryId is
+		// the signatory_id from the dropdown; an empty/0 value clears it, any other value must be
+		// a real GL signatory (option_GL = 1) or the update is rejected.
+		public function financeUpdateSignatoryGLForThe($trans_id, $signatoryId){
+			$trans_id = mysqli_real_escape_string($this->db, $trans_id);
+			$sid = (int) $signatoryId;
+			if ($sid <= 0) {
+				// Empty selection clears the "For the" signatory.
+				$ok = mysqli_query($this->db, "UPDATE gl SET for_the_id = '' WHERE trans_id = '{$trans_id}'");
+				return (bool) $ok;
+			}
+			$chk = mysqli_query($this->db, "SELECT signatory_id FROM signatory WHERE signatory_id = {$sid} AND option_GL = '1' LIMIT 1");
+			if (!$chk || !mysqli_fetch_assoc($chk)) {
+				echo "<script>alert('Selected \"For the\" signatory is not valid.');</script>";
+				return false;
+			}
+			$ok = mysqli_query($this->db, "UPDATE gl SET for_the_id = '{$sid}' WHERE trans_id = '{$trans_id}'");
 			return (bool) $ok;
 		}
 
@@ -2917,6 +2969,7 @@
 				return false;
 			}
 		}
+
 		public function getSignatoryFullnameCOE($id){
 			$query = "SELECT name_title, first_name, middle_I, last_name, position, initials FROM signatory WHERE signatory_id = '{$id}';";
 			$result = mysqli_query($this->db,$query);

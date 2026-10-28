@@ -64,15 +64,6 @@
             <div class="justify" style="font-family: Arial; font-size: 24px;">
                 <?php   
                 if(strtolower($client['relation']) == "self"){
-                    /*echo '<p class="">The Department of Social Welfare and Development Field Office XI (DSWD FO XI) guarantees to pay the amount of 
-                    <b>'. $user->toWord($client_assistance[1]["amount"]) .' (Php'. $client_assistance[1]['amount'].')</b> for <b>'.strtoupper($name).'</b> of '. ucwords(strtolower($c_add)) .' 
-					for '. (strtolower($client['sex'])=='male'?'his': 'her') .' '. $client_assistance[1]['type'] .'. </p>';
-
-                    echo '<p class="">Please be informed that the check is payable to your company. Should you have any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
-					with the telephone number 227-1964 local 1133.</p>';
-					echo '<p class="">Thank you for your consideration.</p><br>';
-					echo '<p class="">Valid within 7 working days upon receipt.</p>';
-					*/
 					echo '<p class="">This has reference to the request for the <b>'. ucwords(strtolower($client_assistance[1]['type'])) .'</b> of herein client,
 					<b>'.strtoupper($name).'</b>, from '. ucwords(strtolower($c_add)) .'.</p>';
 
@@ -91,15 +82,6 @@
 					with the telephone number 227-1964 local 1133.</p>";
 					
                 }else{
-                    /*echo '<p class="">The Department of Social Welfare and Development Field Office XI (DSWD FO XI) guarantees to pay the amount of 
-                    <b>'. $user->toWord($client_assistance[1]["amount"]) .' (Php'. $client_assistance[1]['amount'].')</b> for <b>'.strtoupper($name).'</b> of '. ucwords(strtolower($b_add)) .' 
-					for '. $client_assistance[1]['type'] .' intended for <b>'.$bname.'</b>.</p>';
-
-                    echo '<p class="">Please be informed that the check is payable to your company. Should you have any query, you may coordinate with DSWD FO XI Crisis Intervention Section 
-					with the telephone number 227-1964 local 1133.</p>';
-					echo '<p class="">Thank you for your consideration.</p><br>';
-					echo '<p class="">Valid within 7 working days upon receipt.</p>';
-					*/
 					echo '<p class="">This has reference to the request for the <b>'. ucwords(strtolower($client_assistance[1]['type'])) .'</b> of herein client,
 					<b>'.strtoupper($name).'</b>, from '. ucwords(strtolower($c_add)) .', for his/her <b>'.ucwords(strtolower($client['relation'])).'</b> , <b>'.strtoupper($bname).'</b> of '. (($b_add!=$c_add)?ucwords(strtolower($b_add)):"the same address") .'.</p>';
 
@@ -143,7 +125,7 @@
             <?php if(empty($gl['for_the_id'])){ ?>
             <div class="row">
                 <div class="col-6"><br>
-					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:<?php echo $sig_w ?>px;height:<?php echo $sig_h ?>px; border: solid 1px black; font-size:<?php echo $user->gl_fit_font($gl_signatory_name, $sig_w, $sig_h) ?>px;" value="<?php echo $gl_signatory_name ?>"><br>
+					<input id="signatory" style="font-weight: bold;text-transform:uppercase;width:<?php echo $sig_w ?>px;height:<?php echo $sig_h ?>px; border:none;  font-size:<?php echo $user->gl_fit_font($gl_signatory_name, $sig_w, $sig_h) ?>px;" value="<?php echo $gl_signatory_name ?>"><br>
 					<input id="s_position" style="border: none;width:100%;" value="<?php echo $signatoryGL['position'] ?>"><br>
 					<br>
 					<p class="">Valid within 7 working days upon receipt.</p>

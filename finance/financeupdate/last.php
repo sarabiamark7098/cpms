@@ -11,7 +11,14 @@
     // (re-checked inside financeUpdateSignatoryGL). Runs before the data load so the page
     // renders the new signatory.
     if(isset($_POST['update_gl_signatory']) && isset($_GET['id'])){
-        $user->financeUpdateSignatoryGL($_GET['id'], $_POST['gl_signatory'] ?? '');
+        if($user->financeUpdateSignatoryGL($_GET['id'], $_POST['gl_signatory_id'] ?? '')){
+            echo "<script>alert('GL Signatory updated.');</script>";
+        }
+    }
+    if(isset($_POST['update_for_the_signatory']) && isset($_GET['id'])){
+        if($user->financeUpdateSignatoryGLForThe($_GET['id'], $_POST['for_the_gl_signatory_id'] ?? '')){
+            echo "<script>alert('For-the signatory updated.');</script>";
+        }
     }
     if(isset($_GET['id'])){
         $id = $user->getClientId($_GET['id']);
@@ -109,6 +116,7 @@
         
         //magkuhag data if ever naa na s database
         $gl = $user->getGL($_GET['id']); //gl table
+        $signatoryForTheGL = $user->getsignatory($gl['for_the_id']); 
         $cash = $user->getCash($_GET['id']); //cash table
         $ft_signatoryini = "";
         $forthepositiongl = "";
@@ -247,20 +255,52 @@
                             <div class="col-md-6"><b>GL Number:</b> <?php echo $isGL ? htmlspecialchars($GLid) : 'N/A'; ?></div>
                         </div>
                         <?php if ($isGL && (float)$am > 50000) {
-                            $glSigPrefill = '';
-                            if (!empty($signatoryGL) && !empty($signatoryGL['first_name'])) {
-                                $glSigPrefill = strtoupper($signatoryGL['first_name'].' '.$signatoryGL['middle_I'].'. '.$signatoryGL['last_name']).'-'.$signatoryGL['position'];
-                            }
+                            $glSignatories = $user->getGLSignatories();
+                            $currentGL = $client['signatory_GL'] ?? '';
                         ?>
                         <div class="row mt-3">
                             <div class="col-md-10">
                                 <label class="mb-1"><b>GL Signatory</b> <small class="text-muted">(required for amounts over 50,000)</small></label>
                                 <div class="input-group">
-                                    <input list="gls" type="text" class="form-control" id="gl_signatory" name="gl_signatory"
-                                           value="<?php echo htmlspecialchars($glSigPrefill); ?>" placeholder="Select GL Signatory" autocomplete="off">
-                                    <?php echo $user->signatoryGL(); // <datalist id="gls"> ?>
+                                    <select class="form-control" id="gl_signatory_id" name="gl_signatory_id" required>
+                                        <option value="">-- Select GL Signatory --</option>
+                                        <?php foreach ($glSignatories as $s) {
+                                            $label = trim((!empty($s['name_title']) ? $s['name_title'].' ' : '')
+                                                   . $s['first_name'] . ' '
+                                                   . (!empty($s['middle_I']) ? $s['middle_I'].'. ' : '')
+                                                   . $s['last_name'] . ' - ' . $s['position']);
+                                            $sel = ((string)$s['signatory_id'] === (string)$currentGL) ? 'selected' : '';
+                                            echo '<option value="'.htmlspecialchars($s['signatory_id']).'" '.$sel.'>'.htmlspecialchars($label).'</option>';
+                                        } ?>
+                                    </select>
                                     <div class="input-group-append">
                                         <button type="submit" name="update_gl_signatory" class="btn btn-primary">Update Signatory</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if ($isGL && !empty($gl)) {
+                            if (!isset($glSignatories)) { $glSignatories = $user->getGLSignatories(); }
+                            $currentForThe = $gl['for_the_id'] ?? '';
+                        ?>
+                        <div class="row mt-3">
+                            <div class="col-md-10">
+                                <label class="mb-1"><b>For the Signatory</b> <small class="text-muted">(optional)</small></label>
+                                <div class="input-group">
+                                    <select class="form-control" id="for_the_gl_signatory_id" name="for_the_gl_signatory_id">
+                                        <option value="">-- None --</option>
+                                        <?php foreach ($glSignatories as $s) {
+                                            $label = trim((!empty($s['name_title']) ? $s['name_title'].' ' : '')
+                                                   . $s['first_name'] . ' '
+                                                   . (!empty($s['middle_I']) ? $s['middle_I'].'. ' : '')
+                                                   . $s['last_name'] . ' - ' . $s['position']);
+                                            $sel = ((string)$s['signatory_id'] === (string)$currentForThe) ? 'selected' : '';
+                                            echo '<option value="'.htmlspecialchars($s['signatory_id']).'" '.$sel.'>'.htmlspecialchars($label).'</option>';
+                                        } ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button type="submit" name="update_for_the_signatory" class="btn btn-primary">Update</button>
                                     </div>
                                 </div>
                             </div>
@@ -411,9 +451,9 @@
         $(function () {
             $("#radiobutton").click(function () {
                 if ($(this).is(":checked")) {
-                    $(".for_the").attr('required', '');
+                    $(".for_the_gl_signatory").attr('required', '');
                 } else {
-                    $(".for_the").removeAttr('required');
+                    $(".for_the_gl_signatory").removeAttr('required');
                 }
             });
         });

@@ -104,6 +104,7 @@ INSERT IGNORE INTO `sub_categories` (`sub_category`) VALUES
 ('Person of Concerns – Refugees'),
 ('Person of Concerns - Stateless Persons'),
 ('Person of Concerns - Asylum Seeker'),
+('Persons Deprived of Liberty'),
 ('Student'),
 ('Solo Parent'),
 ('4Ps Beneficiaries'),
