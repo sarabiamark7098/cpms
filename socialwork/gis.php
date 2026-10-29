@@ -950,7 +950,7 @@ if (!$_SESSION['login']) {
                                 </div>
                                 <div class="col-2"> <!--Source of Fund-->
                                     <input type="text" id="f1" value="CURRENT FUND" hidden>
-                                    <input list="chargings" class="form-control" id = "fundf1" name="f1" type="text" <?php echo empty($client_assistance[1]) ? "" : "onkeyup='verifyfirst()'" ?> value="<?php echo empty($client_assistance[1])? "" : (empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[1]['fundsource']:$fundsourcedata[1]['fundsource'].'/'.$fundsourcedata[2]['fundsource'].''.(!empty($fundsourcedata[3]['fundsource'])?'/'.$fundsourcedata[3]['fundsource']:"").''.(!empty($fundsourcedata[4]['fundsource'])?'/'.$fundsourcedata[4]['fundsource']:"").''.(!empty($fundsourcedata[5]['fundsource'])?'/'.$fundsourcedata[5]['fundsource']:"")) ?>" required/>
+                                    <select class="form-control" id="fundf1" name="f1" <?php echo empty($client_assistance[1]) ? "" : "onchange='verifyfirst()'" ?> required><?php echo $user->fundSourceOptions(empty($fundsourcedata[1]['fundsource']) ? '' : $fundsourcedata[1]['fundsource']); ?></select>
                                     <input list="chargings" class="form-control fs1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fsof1" name="fsof1" type="text" hidden />
                                     <input list="chargings" class="form-control fs2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fsof2" name="fsof2" type="text" hidden />
                                     <input list="chargings" class="form-control fs3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fsof3" name="fsof3" type="text" hidden />
@@ -963,7 +963,7 @@ if (!$_SESSION['login']) {
                                     <input list="chargings" class="form-control fs10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fsof10" name="fsof10" type="text" hidden />
                                     <input list="chargings" class="form-control fs11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fsof11" name="fsof11" type="text" hidden />
                                     <input list="chargings" class="form-control fs12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fsof12" name="fsof12" type="text" hidden />
-                                    <?php echo $user->chargings(); ?>
+                                    
                                 </div> 
                                 <div class="col-1"> <!--Source of Fund-->
                                     <input class="form-group btn btn-outline-primary" type="button" value="+" id="addfundsource" name="fsadditional" data-target="#additionalFundSource" data-toggle="modal" >
@@ -1975,51 +1975,51 @@ if (!$_SESSION['login']) {
 				    <div class="modal-body">
                         <div class="row form-group" style="margin-top: 2%; height:10%;">
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fs1" name="fs1" type="text" class="form-control" required>
+                                <select id="fs1" name="fs1" class="form-control"><?php echo $user->fundSourceOptions(empty($fundsourcedata[1]['fundsource']) ? '' : $fundsourcedata[1]['fundsource']); ?></select>
                                 <label class="active" for="fs1">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fs2" name="fs2" type="text" class="form-control" required disabled>
+                                <select id="fs2" name="fs2" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[2]['fundsource']) ? '' : $fundsourcedata[2]['fundsource']); ?></select>
                                 <label class="active" for="fs2">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fs3" name="fs3" type="text" class="form-control" required disabled>
+                                <select id="fs3" name="fs3" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[3]['fundsource']) ? '' : $fundsourcedata[3]['fundsource']); ?></select>
                                 <label class="active" for="fs3">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fs4" name="fs4" type="text" class="form-control" required disabled>
+                                <select id="fs4" name="fs4" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[4]['fundsource']) ? '' : $fundsourcedata[4]['fundsource']); ?></select>
                                 <label class="active" for="fs4">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fs5" name="fs5" type text class="form-control " required disabled>
+                                <select id="fs5" name="fs5" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[5]['fundsource']) ? '' : $fundsourcedata[5]['fundsource']); ?></select>
                                 <label class="active" for="fs5">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 6" value="<?php echo (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']:'') ?>" id="fs6" name="fs6" type text class="form-control " required disabled>
+                                <select id="fs6" name="fs6" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[6]['fundsource']) ? '' : $fundsourcedata[6]['fundsource']); ?></select>
                                 <label class="active" for="fs6">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 7" value="<?php echo (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']:'') ?>" id="fs7" name="fs7" type text class="form-control " required disabled>
+                                <select id="fs7" name="fs7" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[7]['fundsource']) ? '' : $fundsourcedata[7]['fundsource']); ?></select>
                                 <label class="active" for="fs7">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 8" value="<?php echo (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']:'') ?>" id="fs8" name="fs8" type text class="form-control " required disabled>
+                                <select id="fs8" name="fs8" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[8]['fundsource']) ? '' : $fundsourcedata[8]['fundsource']); ?></select>
                                 <label class="active" for="fs8">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 9" value="<?php echo (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']:'') ?>" id="fs9" name="fs9" type text class="form-control " required disabled>
+                                <select id="fs9" name="fs9" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[9]['fundsource']) ? '' : $fundsourcedata[9]['fundsource']); ?></select>
                                 <label class="active" for="fs9">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fs10" name="fs10" type text class="form-control " required disabled>
+                                <select id="fs10" name="fs10" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[10]['fundsource']) ? '' : $fundsourcedata[10]['fundsource']); ?></select>
                                 <label class="active" for="fs10">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fs11" name="fs11" type text class="form-control " required disabled>
+                                <select id="fs11" name="fs11" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[11]['fundsource']) ? '' : $fundsourcedata[11]['fundsource']); ?></select>
                                 <label class="active" for="fs11">Fund Source</label>
                             </div>
                             <div class="form-group col-lg-6">
-                                <input list="chargings" placeholder="Fund Source 12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fs12" name="fs12" type text class="form-control " required disabled>
+                                <select id="fs12" name="fs12" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[12]['fundsource']) ? '' : $fundsourcedata[12]['fundsource']); ?></select>
                                 <label class="active" for="fs12">Fund Source</label>
                             </div>
                         </div>
@@ -2156,7 +2156,7 @@ if (!$_SESSION['login']) {
                 $('#toCOE').removeClass('btn-success').addClass('btn-dark ');
                 $(this).addClass('btn-success').removeClass('btn-success ');
             }
-            $("#fundf1").keyup(function(){
+            $("#fundf1").change(function(){
                 if(document.getElementById("fundf1").value == ''){
                 $('#toCOE').attr('disabled','disabled');
                 $('#print').attr('disabled','disabled');
@@ -2178,7 +2178,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof1').value = f1;
                 $("#fs2").attr('disabled', false);
             }
-            $("#fs1").keyup(function(){
+            $("#fs1").change(function(){
                 f1 = document.getElementById("fs1").value;
 			    document.getElementById('fsof1').value = f1;
                 $("#fs2").attr('disabled', false);
@@ -2191,7 +2191,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof2').value = f2;
                 $("#fs3").attr('disabled', false);
             }
-            $("#fs2").keyup(function(){
+            $("#fs2").change(function(){
                 f2 = document.getElementById("fs2").value;
 			    document.getElementById('fsof2').value = f2;
                 $("#fs3").attr('disabled', false);
@@ -2203,7 +2203,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof3').value = f3;
                 $("#fs4").attr('disabled', false);
             }
-            $("#fs3").keyup(function(){
+            $("#fs3").change(function(){
                 f3 = document.getElementById("fs3").value;
 			    document.getElementById('fsof3').value = f3;
                 $("#fs4").attr('disabled', false);
@@ -2215,7 +2215,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof4').value = f4;
                 $("#fs5").attr('disabled', false);
             }
-            $("#fs4").keyup(function(){
+            $("#fs4").change(function(){
                 f4 = document.getElementById("fs4").value;
 			    document.getElementById('fsof4').value = f4;
                 $("#fs5").attr('disabled', false);
@@ -2228,7 +2228,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof5').value = f5;
                 $("#fs6").attr('disabled', false);
             }
-            $("#fs5").keyup(function(){
+            $("#fs5").change(function(){
                 f5 = document.getElementById("fs5").value;
 			    document.getElementById('fsof5').value = f5;
                 $("#fs6").attr('disabled', false);
@@ -2240,7 +2240,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof6').value = f6;
                 $("#fs7").attr('disabled', false);
             }
-            $("#fs6").keyup(function(){
+            $("#fs6").change(function(){
                 f6 = document.getElementById("fs6").value;
 			    document.getElementById('fsof6').value = f6;
                 $("#fs7").attr('disabled', false);
@@ -2252,7 +2252,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof7').value = f7;
                 $("#fs8").attr('disabled', false);
             }
-            $("#fs7").keyup(function(){
+            $("#fs7").change(function(){
                 f7 = document.getElementById("fs7").value;
 			    document.getElementById('fsof7').value = f7;
                 $("#fs8").attr('disabled', false);
@@ -2264,7 +2264,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof8').value = f8;
                 $("#fs9").attr('disabled', false);
             }
-            $("#fs8").keyup(function(){
+            $("#fs8").change(function(){
                 f8 = document.getElementById("fs8").value;
 			    document.getElementById('fsof8').value = f8;
                 $("#fs9").attr('disabled', false);
@@ -2276,7 +2276,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof9').value = f9;
                 $("#fs10").attr('disabled', false);
             }
-            $("#fs9").keyup(function(){
+            $("#fs9").change(function(){
                 f9 = document.getElementById("fs9").value;
 			    document.getElementById('fsof9').value = f9;
                 $("#fs10").attr('disabled', false);
@@ -2288,7 +2288,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof10').value = f10;
                 $("#fs11").attr('disabled', false);
             }
-            $("#fs10").keyup(function(){
+            $("#fs10").change(function(){
                 f10 = document.getElementById("fs10").value;
 			    document.getElementById('fsof10').value = f10;
                 $("#fs11").attr('disabled', false);
@@ -2300,7 +2300,7 @@ if (!$_SESSION['login']) {
                 document.getElementById('fsof11').value = f11;
                 $("#fs12").attr('disabled', false);
             }
-            $("#fs11").keyup(function(){
+            $("#fs11").change(function(){
                 f11 = document.getElementById("fs11").value;
 			    document.getElementById('fsof11').value = f11;
                 $("#fs12").attr('disabled', false);
@@ -2311,7 +2311,7 @@ if (!$_SESSION['login']) {
                 f12 = document.getElementById("fs12").value;
                 document.getElementById('fsof12').value = f12;
             }
-            $("#fs12").keyup(function(){
+            $("#fs12").change(function(){
                 f12 = document.getElementById("fs12").value;
 			    document.getElementById('fsof12').value = f12;
             });

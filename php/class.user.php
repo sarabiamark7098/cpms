@@ -3160,6 +3160,32 @@
 			}
 		}
 		
+		// <option> list for a fund-source <select>, built from tbl_fundsource. The current
+		// value is preselected, and any legacy value not in the table is kept selectable so
+		// existing records are not broken.
+		public function fundSourceOptions($selected = ''){
+			$selected = (string) $selected;
+			$list = $this->getFundSources();
+			if ($selected !== '' && !in_array($selected, $list, true)) { array_unshift($list, $selected); }
+			$html = '<option value="">-- Select Fund Source --</option>';
+			foreach ($list as $fs) {
+				$fsEsc = htmlspecialchars($fs, ENT_QUOTES);
+				$sel = ($fs === $selected) ? ' selected' : '';
+				$html .= '<option value="' . $fsEsc . '"' . $sel . '>' . $fsEsc . '</option>';
+			}
+			return $html;
+		}
+
+		// Distinct fund source names from tbl_fundsource, for the finance fund-source dropdowns.
+		public function getFundSources(){
+			$rows = array();
+			$result = mysqli_query($this->db, "SELECT DISTINCT fundsource FROM tbl_fundsource WHERE fundsource IS NOT NULL AND fundsource <> '' ORDER BY fundsource");
+			if ($result) {
+				while ($row = mysqli_fetch_assoc($result)) { $rows[] = $row['fundsource']; }
+			}
+			return $rows;
+		}
+
 		public function chargings(){
 			$funds = $this->get_fundsource_to_admin_table();
 			$data='

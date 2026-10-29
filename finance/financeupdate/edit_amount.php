@@ -130,6 +130,7 @@ $fundCount = count($funds);
                             <div class="col-4 col-head">AMOUNT</div>
                             <div class="col-2"></div>
                         </div>
+                        <?php $fundSourceList = $user->getFundSources(); ?>
                         <div id="fundList">
                             <?php for ($i = 1; $i <= 12; $i++) {
                                 $has = isset($funds[$i]);
@@ -138,8 +139,19 @@ $fundCount = count($funds);
                             ?>
                             <div class="form-row fund-slot align-items-center" data-slot="<?php echo $i; ?>" style="<?php echo $show ? '' : 'display:none;'; ?>">
                                 <div class="col-6">
-                                    <input list="chargings" class="form-control fundName" id="fs<?php echo $i; ?>" name="fs<?php echo $i; ?>"
-                                           placeholder="Fund Source" value="<?php echo htmlspecialchars($has ? $funds[$i]['name'] : ''); ?>">
+                                    <?php
+                                        $slotName = $has ? $funds[$i]['name'] : '';
+                                        // Choices come only from tbl_fundsource; keep any legacy value selectable.
+                                        $opts = $fundSourceList;
+                                        if ($slotName !== '' && !in_array($slotName, $opts, true)) { array_unshift($opts, $slotName); }
+                                    ?>
+                                    <select class="form-control fundName" id="fs<?php echo $i; ?>" name="fs<?php echo $i; ?>">
+                                        <option value="">-- Select Fund Source --</option>
+                                        <?php foreach ($opts as $fsName) {
+                                            $sel = ($slotName === $fsName) ? 'selected' : '';
+                                            echo '<option value="'.htmlspecialchars($fsName).'" '.$sel.'>'.htmlspecialchars($fsName).'</option>';
+                                        } ?>
+                                    </select>
                                 </div>
                                 <div class="col-4">
                                     <input class="form-control currencyMaskedInput fundAmt" id="amountf<?php echo $i; ?>" name="amountf<?php echo $i; ?>"
@@ -153,7 +165,6 @@ $fundCount = count($funds);
                             </div>
                             <?php } ?>
                         </div>
-                        <?php echo $user->chargings(); // <datalist id="chargings"> ?>
 
                         <div class="total-box mt-3">
                             Assistance amount: <b><span id="assistAmt">0.00</span></b>

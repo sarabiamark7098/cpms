@@ -234,9 +234,12 @@
                             if ($isGL) {
                                 $glName = ucwords(strtolower($gl['cname'] ?? ''));
                                 $glAddress = ucwords(strtolower($gl['caddress'] ?? ''));
-
-                                echo " payable to <span style='{$underlineStyle} min-width: 800px;'>" . ($glName ?: '&nbsp;') . "</span>, <span style='{$underlineStyle} min-width: 900px;'>" . ($glAddress ?: '&nbsp;') . "</span>";
+                            }else {
+                                $glName = '';
+                                $glAddress = '';
                             }
+                            echo " payable to <span style='{$underlineStyle} min-width: 800px;'>" . ($glName ?: '&nbsp;') . "</span>, <span style='{$underlineStyle} min-width: 900px;'>" . ($glAddress ?: '&nbsp;') . "</span>";
+                            
 
                             echo ".</span>";
                         ?>
