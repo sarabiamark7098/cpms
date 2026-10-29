@@ -3290,19 +3290,46 @@
 		}
 	}
 	
-	public function controlNumberForGL(){
-		$count = 1;
-		$cid = date("Y-m");
-		$query="SELECT office_accronym FROM field_office WHERE office_id = '{$_SESSION['f_office']}';";
-		$result = mysqli_query($this->db, $query);
-		$row = mysqli_fetch_assoc($result);
-		$office = $row['office_accronym'];
+	// True when a GL control number is already used (optionally ignoring one transaction's row).
+	// Uniqueness is checked here, in code, instead of relying on a database unique constraint.
+	public function controlNumberExists($control_no, $excludeTransId = ''){
+		$esc = mysqli_real_escape_string($this->db, $control_no);
+		$sql = "SELECT 1 FROM gl WHERE control_no = '{$esc}'";
+		if ($excludeTransId !== '') {
+			$sql .= " AND trans_id <> '" . mysqli_real_escape_string($this->db, $excludeTransId) . "'";
+		}
+		$sql .= " LIMIT 1";
+		$result = mysqli_query($this->db, $sql);
+		return ($result && mysqli_num_rows($result) > 0);
+	}
 
-		$query="SELECT LEFT(control_no, 7) AS controlNumber FROM gl;";
+	// Drain any pending result sets left by mysqli_multi_query so the connection can run the
+	// next query (e.g. RELEASE_LOCK) without a "commands out of sync" error.
+	private function drainResults(){
+		do {
+			if ($r = mysqli_store_result($this->db)) { mysqli_free_result($r); }
+		} while (mysqli_more_results($this->db) && mysqli_next_result($this->db));
+	}
+
+	public function controlNumberForGL(){
+		$cid = date("Y-m");
+		$officeId = $_SESSION['f_office'] ?? '';
+		$query = "SELECT office_accronym FROM field_office WHERE office_id = '" . mysqli_real_escape_string($this->db, $officeId) . "';";
 		$result = mysqli_query($this->db, $query);
-		
-		$glid = date("dHis");
-		return $cid."-".$glid." ".$office;
+		$row = $result ? mysqli_fetch_assoc($result) : null;
+		$office = $row ? $row['office_accronym'] : '';
+
+		// Build a candidate and guarantee it is unique in code: if the generated number is
+		// already taken (e.g. two GLs created within the same second), add an incrementing
+		// suffix until an unused one is found.
+		$base = $cid . "-" . date("dHis");
+		$candidate = $base . " " . $office;
+		$suffix = 1;
+		while ($this->controlNumberExists($candidate)) {
+			$suffix++;
+			$candidate = $base . "-" . $suffix . " " . $office;
+		}
+		return $candidate;
 	}
 
 	public function getTransactionProcessed($id){
@@ -3328,7 +3355,12 @@
 	
     public function insertGL($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
 		$now = date("Y-m-d H:i:s");
-		
+
+		// Serialize control-number assignment: a named lock makes the "pick a unique number +
+		// insert" step atomic, so two transactions submitted at the same time can't be given
+		// the same control number. The lock auto-releases when the connection closes.
+		mysqli_query($this->db, "SELECT GET_LOCK('cpms_gl_control_no', 10)");
+
 		$final_control_no = '';
 		$control2 = $this->controlNumberForGL();
         if ($control_no == $control2) {
@@ -3336,19 +3368,26 @@
 		}else{
 			$final_control_no = $control_no;
 		}
-		$query = "INSERT INTO gl (trans_id, control_no, addressee, position, to_mention, for_the_id, cname, caddress) 
-                    VALUES 
+		// Enforce uniqueness in code: if this control number is already used by another
+		// transaction, replace it with a freshly generated (guaranteed-unique) one.
+		if ($this->controlNumberExists($final_control_no, $id)) {
+			$final_control_no = $this->controlNumberForGL();
+		}
+		$query = "INSERT INTO gl (trans_id, control_no, addressee, position, to_mention, for_the_id, cname, caddress)
+                    VALUES
 					('{$id}', '{$final_control_no}', '{$addressee}', '{$a_pos}', '{$tomention}', '{$forthe}', '{$cname}', '{$add}');";
 		$signatory_id = $this->getsignatureid($signatory);//kwaun ang id sa signatory
 		$query .= "UPDATE tbl_transaction SET signatory_GL = '{$signatory}' WHERE trans_id = '{$id}';";
 		if($forthe != ""){
-			$query .= "INSERT INTO for_the_logs (trans_id, ft_created, for_the_id, ft_empid, ft_action) 
+			$query .= "INSERT INTO for_the_logs (trans_id, ft_created, for_the_id, ft_empid, ft_action)
 						VALUES
 						('{$id}','{$now}','{$forthe}','{$_SESSION['userId']}', 'Insert')";
 		}
-	
+
         $result = mysqli_multi_query($this->db, $query);
-		
+		$this->drainResults();
+		mysqli_query($this->db, "SELECT RELEASE_LOCK('cpms_gl_control_no')");
+
 		if($result){
             echo "<script>alert('GL Successfully Saved!');</script>";
 			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
@@ -3360,12 +3399,17 @@
 
 	public function updateGL($id, $control_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
 		$now = date("Y-m-d H:i:s");
+		mysqli_query($this->db, "SELECT GET_LOCK('cpms_gl_control_no', 10)");
 		$final_control_no = '';
 		$control2 = $this->controlNumberForGL();
         if ($control_no == $control2) {
         	$final_control_no = $control2;
 		}else{
 			$final_control_no = $control_no;
+		}
+		// Enforce uniqueness in code (ignoring this transaction's own row, which is replaced).
+		if ($this->controlNumberExists($final_control_no, $id)) {
+			$final_control_no = $this->controlNumberForGL();
 		}
 
 		$query = "DELETE FROM gl WHERE trans_id='{$id}';";
@@ -3381,7 +3425,9 @@
 						('{$id}','{$now}','{$forthe}','{$_SESSION['userId']}', 'Update of GL')";
 		}
 		$result = mysqli_multi_query($this->db, $query);
-		
+		$this->drainResults();
+		mysqli_query($this->db, "SELECT RELEASE_LOCK('cpms_gl_control_no')");
+
 		if($result){
             echo "<script>alert('GL Successfully UPDATED!');</script>";
 			echo "<script>document.getElementById('done').style.visibility='visible';</script>";
@@ -3393,9 +3439,14 @@
 	
 	public function updateGLCash($id, $sd_officer, $c_no, $signatory, $addressee, $a_pos, $forthe, $cname, $add, $tomention){
 			$now = date("Y-m-d H:i:s");
+			mysqli_query($this->db, "SELECT GET_LOCK('cpms_gl_control_no', 10)");
  			$query = "DELETE FROM `cash` WHERE trans_id= '{$id}';";
 			$query .= "INSERT INTO `cash` (`trans_id`, `sd_officer`)
 					VALUES ('{$id}', '{$sd_officer}');";
+			// Enforce control-number uniqueness in code before re-inserting the gl row.
+			if ($this->controlNumberExists($c_no, $id)) {
+				$c_no = $this->controlNumberForGL();
+			}
 			$query .= "DELETE FROM `gl` WHERE trans_id='{$id}';";
 			$query .= "INSERT INTO gl (trans_id, control_no, addressee, position, to_mention, for_the_id, cname, caddress)
 					VALUES
@@ -3408,7 +3459,9 @@
 							('{$id}','{$now}','{$forthe}','{$_SESSION['userId']}', 'Update of GL and Cash')";
 			}
 			$result = mysqli_multi_query($this->db, $query);
-			
+			$this->drainResults();
+			mysqli_query($this->db, "SELECT RELEASE_LOCK('cpms_gl_control_no')");
+
 		if($result){
 			echo "<script>alert('GL and Cash Successfully UPDATED!');</script>";
 			echo "<script>document.getElementById('done').style.visibility='visible';</script>";

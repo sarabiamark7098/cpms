@@ -800,7 +800,7 @@ if (!$_SESSION['login']) {
                                     <input type="checkbox" class="col-lg-2" id="crisis1" name="crisis1" value="1" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2']) && $otherinfo['crisisSeverityQuestion2']==1)?'checked':'') ?>> &nbsp; YES
 								</div>
                                 <div class="col-2" style="margin-bottom: 8px;">
-                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo ((!empty($otherinfo['crisisSeverityQuestion2']) && $otherinfo['crisisSeverityQuestion2']==0)?'checked':'') ?>> &nbsp; NO
+                                    <input type="checkbox" class="col-lg-2" id="crisis2" name="crisis2" value="0" <?php echo (((string)($otherinfo['crisisSeverityQuestion2'] ?? '') === '0')?'checked':'') ?>> &nbsp; NO
 								</div>
                                 <div class="col-7"></div>
                                 <label class="col-sm-12 label text-left" style="font-size: 17px">If yes, which among the following crises did the family experience in the past three (3) months (check all that apply):</label>
@@ -836,9 +836,15 @@ if (!$_SESSION['login']) {
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="severity3" name="severity3" value="3" <?php echo ((!empty($otherinfo['crisisSeverityQuestion1']) && $otherinfo['crisisSeverityQuestion1']==3)?'checked':'') ?>> &nbsp; Chronic or Lifelong 
 								</div> 
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="severity4" name="severity4" value="0" <?php echo (((string)($otherinfo['crisisSeverityQuestion1'] ?? '') === '0')?'checked':'') ?>> &nbsp; Not Applicable 
+								</div>
                             </div><br>
                             <div class="row">
 								<label class="col-sm-12 label text-left" style="font-size: 17px; font-weight: bold;">AVAILABILITY OF SUPPORT SYSTEMS</label>
+                                <div class="col-12" style="margin-bottom: 8px;">
+                                    <input type="checkbox" class="col-lg-1" id="support1" name="support1" value="1" <?php echo (isset($supportSystemAvailability[1])?'checked':'') ?>> &nbsp; Family
+								</div> 
                                 <div class="col-12" style="margin-bottom: 8px;">
                                     <input type="checkbox" class="col-lg-1" id="support2" name="support2" value="2" <?php echo (isset($supportSystemAvailability[2])?'checked':'') ?>> &nbsp; Relatives
 								</div> 
