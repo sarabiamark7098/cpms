@@ -2259,19 +2259,19 @@
 			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3) 
 						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$s5}', '{$s6}','{$ref_name}', '{$rl1}','{$rl2}', '{$rl3}');"; 	
 			if(!empty($fs1)){
-				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource)	VALUES 
-						('{$trans_id}', '{$fs1}')";
-					if(!empty($fs2)){$query .= ",('{$trans_id}', '{$fs2}')";}
-					if(!empty($fs3)){$query .= ",('{$trans_id}', '{$fs3}')";}
-					if(!empty($fs4)){$query .= ",('{$trans_id}', '{$fs4}')";}
-					if(!empty($fs5)){$query .= ",('{$trans_id}', '{$fs5}')";}
-					if(!empty($fs6)){$query .= ",('{$trans_id}', '{$fs6}')";}
-					if(!empty($fs7)){$query .= ",('{$trans_id}', '{$fs7}')";}
-					if(!empty($fs8)){$query .= ",('{$trans_id}', '{$fs8}')";}
-					if(!empty($fs9)){$query .= ",('{$trans_id}', '{$fs9}')";}
-					if(!empty($fs10)){$query .= ",('{$trans_id}', '{$fs10}')";}
-					if(!empty($fs11)){$query .= ",('{$trans_id}', '{$fs11}')";}
-					if(!empty($fs12)){$query .= ",('{$trans_id}', '{$fs12}')";}
+				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
+						('{$trans_id}', '{$fs1}', '" . ((empty($fs2) && empty($fs3) && empty($fs4) && empty($fs5) && empty($fs6) && empty($fs7) && empty($fs8) && empty($fs9) && empty($fs10) && empty($fs11) && empty($fs12)) ? $a1 : '') . "')";
+					if(!empty($fs2)){$query .= ",('{$trans_id}', '{$fs2}', '')";}
+					if(!empty($fs3)){$query .= ",('{$trans_id}', '{$fs3}', '')";}
+					if(!empty($fs4)){$query .= ",('{$trans_id}', '{$fs4}', '')";}
+					if(!empty($fs5)){$query .= ",('{$trans_id}', '{$fs5}', '')";}
+					if(!empty($fs6)){$query .= ",('{$trans_id}', '{$fs6}', '')";}
+					if(!empty($fs7)){$query .= ",('{$trans_id}', '{$fs7}', '')";}
+					if(!empty($fs8)){$query .= ",('{$trans_id}', '{$fs8}', '')";}
+					if(!empty($fs9)){$query .= ",('{$trans_id}', '{$fs9}', '')";}
+					if(!empty($fs10)){$query .= ",('{$trans_id}', '{$fs10}', '')";}
+					if(!empty($fs11)){$query .= ",('{$trans_id}', '{$fs11}', '')";}
+					if(!empty($fs12)){$query .= ",('{$trans_id}', '{$fs12}', '')";}
 				$query .= ";";
 			}else{
 				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
@@ -2591,7 +2591,7 @@
 			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
 			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
 			if (!empty($fs1)) {
-				$query .= "VALUES ('{$trans_id}', '{$fs1}', '')";
+				$query .= "VALUES ('{$trans_id}', '{$fs1}', '" . ((empty($fs2) && empty($fs3) && empty($fs4) && empty($fs5) && empty($fs6) && empty($fs7) && empty($fs8) && empty($fs9) && empty($fs10) && empty($fs11) && empty($fs12)) ? $a1 : '') . "')";
 				if (!empty($fs2)) {
 					$query .= ",('{$trans_id}', '{$fs2}', '')";
 				}
