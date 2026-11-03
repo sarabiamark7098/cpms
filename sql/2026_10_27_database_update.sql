@@ -1,7 +1,3 @@
-DROP INDEX idx_served_enc ON tbl_transaction;
-
-DROP INDEX idx_served_sw  ON tbl_transaction;
-
 CREATE INDEX idx_served_enc ON tbl_transaction (status_client, encoded_encoder,   date_accomplished, client_id);
 
 CREATE INDEX idx_served_sw  ON tbl_transaction (status_client, encoded_socialWork, date_accomplished, client_id);
@@ -58,6 +54,16 @@ INSERT IGNORE INTO `gender_identities` (`gender_identity`) VALUES
 ('Demigender'),
 ('Neutrois'),
 ('Androgynous');
+
+UPDATE `client_data` 
+SET `date_birth` = '1900-01-01' 
+WHERE CAST(`date_birth` AS CHAR) = '0000-00-00'
+   OR `date_birth` IS NULL;
+   
+UPDATE `beneficiary_data` 
+SET `b_bday` = '1900-01-01'
+WHERE CAST(`b_bday` AS CHAR) = '0000-00-00'
+   OR `b_bday` IS NULL;
 
 ALTER TABLE `client_data`
   ADD COLUMN `gender_identity` VARCHAR(100) DEFAULT NULL,
