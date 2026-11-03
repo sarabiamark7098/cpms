@@ -17,27 +17,28 @@ if (empty($from_date) || empty($to_date)) {
 }
 $office_loc = $_SESSION['f_office'];
 
-$query = "SELECT client_id, trans_id, date_entered, encoded_encoder, control_no, client_data.occupation, client_data.salary, 
-        date_accomplished, mode, bene_id, client_region, client_province, client_municipality, client_barangay, client_district,
-        lastname, firstname, middlename, extraname, sex, civil_status, date_birth, mode_admission, category, 
-        b_lname, b_fname, b_mname, b_exname, cname, b_bday, b_sex, b_category, subCategory, pantawid_bene, status_client, tbl_transaction.program_type, tbl_transaction.other_program, COUNT(family.name) AS familycount
-        FROM client_data
-        INNER JOIN tbl_transaction USING (client_id)
-        LEFT OUTER JOIN beneficiary_data USING (bene_id)
-        INNER JOIN assessment USING (trans_id)
-        INNER JOIN assistance USING (trans_id)
-        LEFT JOIN family USING (trans_id)
-        LEFT OUTER JOIN gl USING (trans_id)
-        WHERE (LEFT(trans_id, 9) = '$office_loc') 
-          AND (date_accomplished BETWEEN '{$from_date}' and '{$to_date}') 
-          AND status_client = 'Done' 
-        GROUP BY client_id, trans_id, date_entered, encoded_encoder, control_no, occupation, salary, 
-        date_accomplished, mode, bene_id, client_region, client_province, 
-        client_municipality, client_barangay, client_district, lastname, 
-        firstname, middlename, extraname, sex, civil_status, date_birth, 
-        mode_admission, category, b_lname, b_fname, b_mname, b_exname, cname, b_bday, b_sex, b_category, 
-        subCategory, pantawid_bene, status_client, tbl_transaction.program_type, tbl_transaction.other_program
-        ORDER BY tbl_transaction.date_entered ASC";
+$query = "SELECT cd.client_id, t.trans_id, t.date_entered, t.encoded_encoder, MAX(g.control_no) AS control_no, cd.occupation, cd.salary, 
+        t.date_accomplished, bd.bene_id, cd.client_region, cd.client_province, cd.client_municipality, cd.client_barangay, cd.client_district,
+        cd.lastname, cd.firstname, cd.middlename, cd.extraname, cd.sex, cd.civil_status, cd.date_birth, ass.mode_admission, cd.category, 
+        bd.b_lname, bd.b_fname, bd.b_mname, bd.b_exname, MAX(g.cname) AS cname, bd.b_bday, bd.b_sex, bd.b_category, cd.subCategory, 
+        t.pantawid_bene, t.status_client, t.program_type, t.other_program, COUNT(f.name) AS familycount
+        FROM client_data as cd
+        INNER JOIN tbl_transaction as t USING (client_id)
+        LEFT OUTER JOIN beneficiary_data as bd USING (bene_id)
+        INNER JOIN assessment as ass USING (trans_id)
+        INNER JOIN assistance as ast USING (trans_id)
+        LEFT JOIN family as f USING (trans_id)
+        LEFT OUTER JOIN gl as g USING (trans_id)
+        WHERE (LEFT(t.trans_id, 9) = '$office_loc') 
+          AND (t.date_accomplished BETWEEN '{$from_date}' and '{$to_date}') 
+          AND t.status_client = 'Done' 
+        GROUP BY cd.client_id, t.trans_id, t.date_entered, t.encoded_encoder, cd.occupation, cd.salary, 
+        t.date_accomplished, bd.bene_id, cd.client_region, cd.client_province, 
+        cd.client_municipality, cd.client_barangay, cd.client_district, cd.lastname, 
+        cd.firstname, cd.middlename, cd.extraname, cd.sex, cd.civil_status, cd.date_birth, 
+        ass.mode_admission, cd.category, bd.b_lname, bd.b_fname, bd.b_mname, bd.b_exname, bd.b_bday, bd.b_sex, bd.b_category, 
+        cd.subCategory, t.pantawid_bene, t.status_client, t.program_type, t.other_program
+        ORDER BY t.date_entered ASC";
 
 $result = mysqli_query($user->db, $query);
 
@@ -83,12 +84,15 @@ fputcsv($output, $headers, ',', '"', '\\');
 // Populate data rows
 $__CHUNK = 2000;                      // stream in chunks: bounded memory
 $__buf = [];
+$__seen = [];
 while (true) {
     $__r = mysqli_fetch_assoc($result);
     if ($__r !== null) { $__buf[] = $__r; }
     if (count($__buf) >= $__CHUNK || ($__r === null && !empty($__buf))) {
         $assistMap = $user->getAssistanceDataBatch(array_column($__buf, 'trans_id'));
         foreach ($__buf as $row) {
+            if (isset($__seen[$row['trans_id']])) { continue; } // trans_id must be unique in the export
+            $__seen[$row['trans_id']] = true;
     $fullname = $user->getuserFullname($row['encoded_encoder']);
     $assistance = $assistMap[$row['trans_id']] ?? null;
     $fundsource = $user->fundSourceLabel($row['program_type'] ?? '', $row['other_program'] ?? '', $row['date_accomplished']);
