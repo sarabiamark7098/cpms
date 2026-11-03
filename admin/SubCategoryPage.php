@@ -70,8 +70,6 @@
 				<li><a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>
 				<li><a href="cancelledGL_logs.php">Cancelled GL Logs <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>
 				<li><a href="AccountsManagement.php">Accounts Management <i style="float: right;font-size:25px" class="fa fa-user-cog"></i></a></li>
-				<li><a href="apiSend.php">API Send <i style="float: right;font-size:25px" class="fa fa-paper-plane"></i></a></li>
-				<li><a href="Records.php">Records <i style="float: right;font-size:25px" class="fa fa-database"></i></a></li>
 			</ul>
 		</nav>
 		<div id="content">

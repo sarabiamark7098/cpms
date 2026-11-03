@@ -36,7 +36,7 @@
 
     $req_position = $getrequest['request_position'] ?? '';
     $req_office   = $getrequest['request_office']   ?? '';
-    $valid_req    = in_array($req_position, ['Encoder', 'Social Worker', 'Admin', 'Program Head', 'Finance', 'Viewer']);
+    $valid_req    = in_array($req_position, ['Encoder', 'Social Worker', 'Admin', 'Finance', 'Viewer']);
 ?>
 <!DOCTYPE html>
 <html>
