@@ -407,7 +407,7 @@
 				$office   = mysqli_real_escape_string($this->db, $office);
 				$datenow  = date("Y-m-d H:i:s");
 
-				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Program Head', 'Finance', 'Viewer'];
+				$valid_positions = ['Encoder', 'Social Worker', 'Admin', 'Finance', 'Viewer'];
 				if (empty($position) || !in_array($position, $valid_positions) || empty($office)) {
 					echo "<script>alert('Error: Please select a valid Position and Office before confirming.')</script>";
 					echo "<script>window.location='Employee.php';</script>";
