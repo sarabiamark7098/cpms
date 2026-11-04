@@ -92,6 +92,8 @@ $hasPending = $user->validateid($getuser['empnum']);
                         <option value="">Select Position</option>
                         <option value="Encoder" <?php echo ($getuser['position'] == 'Encoder' ? 'selected' : ''); ?>>Encoder</option>
                         <option value="Social Worker" <?php echo ($getuser['position'] == 'Social Worker' ? 'selected' : ''); ?>>Social Worker</option>
+                        <option value="Finance" <?php echo ($getuser['position'] == 'Finance' ? 'selected' : ''); ?>>Finance</option>
+                        <option value="Viewer" <?php echo ($getuser['position'] == 'Viewer' ? 'selected' : ''); ?>>Viewer</option>
                     </select>
                     <label class="active">New Position</label>
                 </div>
