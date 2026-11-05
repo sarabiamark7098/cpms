@@ -90,6 +90,37 @@
             .fund-table-wrap thead tr:nth-child(2) th { top:30px; }
             .fund-table-wrap tfoot td { position:sticky; bottom:0; z-index:3; background:#eef1f5; font-weight:700; border-top:2px solid #cfd6dd; }
             .text-amt { font-variant-numeric:tabular-nums; }
+
+            /* Fund-source x assistance-type matrix: can be wide, so scroll both
+               ways; sticky header rows and a sticky first column keep the fund
+               source labels and the type headers in view while scrolling. */
+            .matrix-wrap { max-height:440px; overflow:auto; scrollbar-gutter:stable; }
+            .matrix-wrap table { display:table; table-layout:auto; width:auto; min-width:100%; font-size:13px; margin-bottom:0; }
+            .matrix-wrap thead { display:table-header-group; }
+            .matrix-wrap tbody { display:table-row-group; height:auto; overflow:visible; }
+            .matrix-wrap tfoot { display:table-footer-group; }
+            .matrix-wrap tr    { display:table-row; }
+            .matrix-wrap th, .matrix-wrap td { white-space:nowrap; vertical-align:middle; }
+            .matrix-wrap thead th { position:sticky; z-index:3; background:#f5f6f8; }
+            .matrix-wrap thead tr:first-child th  { top:0; }
+            .matrix-wrap thead tr:nth-child(2) th { top:31px; }
+            .matrix-wrap tfoot td { position:sticky; bottom:0; z-index:3; background:#eef1f5; font-weight:700; border-top:2px solid #cfd6dd; }
+            /* Freeze ONLY the Fund Source column: header row 1 (rowspan cell),
+               every body row, and the footer. The second header row's first
+               cell is the first type's GL column, so it must NOT be frozen. */
+            .matrix-wrap tbody td:first-child { position:sticky; left:0; z-index:2; background:#fff; }
+            .matrix-wrap thead tr:first-child th:first-child { position:sticky; left:0; z-index:5; background:#f5f6f8; }
+            .matrix-wrap tfoot td:first-child { left:0; z-index:5; }
+
+            /* Per-table multi-select assistance filter (checkbox dropdown). */
+            .matrix-filter { position:relative; }
+            .matrix-filter-menu { display:none; position:absolute; right:0; top:100%; margin-top:4px; z-index:1000;
+                background:#fff; border:1px solid #cfd6dd; border-radius:6px; padding:6px 0; min-width:240px;
+                max-height:300px; overflow-y:auto; box-shadow:0 4px 14px rgba(0,0,0,.15); }
+            .matrix-filter-menu.open { display:block; }
+            .matrix-filter-item { display:block; margin:0; padding:5px 12px; font-size:13px; font-weight:400; cursor:pointer; white-space:nowrap; }
+            .matrix-filter-item:hover { background:#f2f6fb; }
+            .matrix-filter-item input { margin-right:7px; }
             #dashLoading { display:none; }
 		</style>
     </head>
@@ -170,6 +201,7 @@
                                 <option value="day">Day</option>
                                 <option value="month" selected>Month</option>
                                 <option value="year">Year</option>
+                                <option value="custom">Custom</option>
                             </select>
                         </div>
                         <div class="col-lg-3 col-md-4 col-6">
@@ -177,6 +209,11 @@
                             <input type="date"   id="input-day"   class="form-control" style="display:none;">
                             <input type="month"  id="input-month" class="form-control">
                             <input type="number" id="input-year"  class="form-control" min="2000" max="2100" placeholder="YYYY" style="display:none;">
+                            <div id="input-range" style="display:none; align-items:center; gap:6px;">
+                                <input type="date" id="input-from" class="form-control" title="From">
+                                <span class="text-muted" style="font-size:12px;">to</span>
+                                <input type="date" id="input-to" class="form-control" title="To">
+                            </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-8">
                             <label for="office">Office</label>
@@ -277,6 +314,30 @@
                         </table>
                     </div>
 </div>
+
+                <div class="dash-panel">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:10px;">
+                        <h5 style="margin:0;"><i class="fa fa-coins" style="color:#1e88e5;"></i> Number of Assistance per Fund Source</h5>
+                        <div class="matrix-filter">
+                            <button type="button" id="matrixFilterBtn" class="btn btn-sm btn-outline-secondary">
+                                <i class="fa fa-filter"></i> Assistance: <span id="matrixFilterLabel">All</span> <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div id="matrixFilterMenu" class="matrix-filter-menu">
+                                <label class="matrix-filter-item" style="font-weight:700;border-bottom:1px solid #eee;">
+                                    <input type="checkbox" id="matrixFilterAll" checked> All Assistance
+                                </label>
+                                <div id="matrixFilterList"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="matrix-wrap" style="margin-top:12px;">
+                        <table class="table table-sm table-striped table-bordered" id="fundMatrixTable">
+                            <thead id="fundMatrixHead"></thead>
+                            <tbody id="fundMatrixBody"></tbody>
+                            <tfoot id="fundMatrixFoot"></tfoot>
+                        </table>
+                    </div>
+</div>
             </div>
         </div>
 
@@ -351,13 +412,16 @@
         var g = $('#granularity').val();
         if (g === 'day')   { return $('#input-day').val(); }
         if (g === 'year')  { return $('#input-year').val(); }
+        if (g === 'custom'){ return ($('#input-from').val() || '') + '..' + ($('#input-to').val() || ''); }
         return $('#input-month').val();
     }
     function syncInputs() {
         var g = $('#granularity').val();
         $('#input-day, #input-month, #input-year').hide();
+        $('#input-range').css('display', 'none');
         if (g === 'day')   { $('#input-day').show(); }
         else if (g === 'year') { $('#input-year').show(); }
+        else if (g === 'custom') { $('#input-range').css('display', 'flex'); }
         else { $('#input-month').show(); }
     }
 
@@ -405,6 +469,115 @@
         $('#'+ids.overall).text(peso.format(ov));
     }
 
+    // ---- Fund-source x assistance-type matrix (count + amount per mode) ----
+    function esc(v){ return $('<div>').text(v == null ? '' : v).html(); }
+    var matrixData = null;        // last payload for this table
+    var matrixSelTypes = [];      // chosen assistance types ([] = All)
+
+    // Types to display: the selected ones that still exist, in payload order
+    // (empty selection = all types).
+    function matrixDisplayTypes() {
+        var all = (matrixData && matrixData.types) ? matrixData.types : [];
+        if (!matrixSelTypes.length) { return all.slice(); }
+        return all.filter(function (t) { return matrixSelTypes.indexOf(t) !== -1; });
+    }
+
+    // Matrix: rows = fund source; per assistance type four sub-columns
+    // (GL Count, GL Amount, CAV Count, CAV Amount); trailing Total Count /
+    // Total Amount columns and a Total footer row. Honours the multi-select
+    // assistance filter.
+    function renderFundMatrix() {
+        var rows  = (matrixData && matrixData.rows) ? matrixData.rows : [];
+        var types = matrixDisplayTypes();
+        var head = document.getElementById('fundMatrixHead');
+        var body = document.getElementById('fundMatrixBody');
+        var foot = document.getElementById('fundMatrixFoot');
+
+        if (!types.length || !rows.length) {
+            head.innerHTML = '';
+            body.innerHTML = '<tr><td class="text-center text-muted">No data for this selection</td></tr>';
+            foot.innerHTML = '';
+            return;
+        }
+
+        // Header: each type spans 4 columns (GL Count/Amount, CAV Count/Amount).
+        var h1 = '<tr><th rowspan="2">Fund Source</th>';
+        var h2 = '<tr>';
+        for (var t = 0; t < types.length; t++) {
+            h1 += '<th colspan="4" class="text-center" style="background:#e3f0fc;">' + esc(types[t]) + '</th>';
+            h2 += '<th class="text-right">GL Count</th><th class="text-right">GL Amount</th>' +
+                  '<th class="text-right">CAV Count</th><th class="text-right">CAV Amount</th>';
+        }
+        h1 += '<th rowspan="2" class="text-right">Total Count</th>' +
+              '<th rowspan="2" class="text-right">Total Amount</th></tr>';
+        h2 += '</tr>';
+        head.innerHTML = h1 + h2;
+
+        // Body + running per-column totals (parallel arrays over displayed types).
+        var cGl=[], cGlA=[], cCav=[], cCavA=[], gCnt=0, gAmt=0, bHtml='';
+        for (var z=0; z<types.length; z++){ cGl[z]=0; cGlA[z]=0; cCav[z]=0; cCavA[z]=0; }
+        for (var i=0; i<rows.length; i++){
+            var row = rows[i], cells = row.cells || {};
+            var rCnt=0, rAmt=0, tds='';
+            for (var c=0; c<types.length; c++){
+                var cell = cells[types[c]] || {gl:0,glAmt:0,cav:0,cavAmt:0};
+                cGl[c]+=cell.gl; cGlA[c]+=cell.glAmt; cCav[c]+=cell.cav; cCavA[c]+=cell.cavAmt;
+                rCnt += cell.gl + cell.cav; rAmt += cell.glAmt + cell.cavAmt;
+                tds += '<td class="text-right">'+num.format(cell.gl)+
+                       '</td><td class="text-right text-amt">'+peso.format(cell.glAmt)+
+                       '</td><td class="text-right">'+num.format(cell.cav)+
+                       '</td><td class="text-right text-amt">'+peso.format(cell.cavAmt)+'</td>';
+            }
+            bHtml += '<tr><td>'+esc(row.fundsource)+'</td>'+tds+
+                     '<td class="text-right">'+num.format(rCnt)+
+                     '</td><td class="text-right text-amt">'+peso.format(rAmt)+'</td></tr>';
+            gCnt += rCnt; gAmt += rAmt;
+        }
+        body.innerHTML = bHtml;
+
+        // Footer: per type/mode totals + grand count/amount.
+        var fHtml = '<tr class="font-weight-bold"><td>Total</td>';
+        for (var k=0; k<types.length; k++){
+            fHtml += '<td class="text-right">'+num.format(cGl[k])+
+                     '</td><td class="text-right text-amt">'+peso.format(cGlA[k])+
+                     '</td><td class="text-right">'+num.format(cCav[k])+
+                     '</td><td class="text-right text-amt">'+peso.format(cCavA[k])+'</td>';
+        }
+        fHtml += '<td class="text-right">'+num.format(gCnt)+
+                 '</td><td class="text-right text-amt">'+peso.format(gAmt)+'</td></tr>';
+        foot.innerHTML = fHtml;
+    }
+
+    // Build the checkbox menu from the payload's types, keeping any still-valid
+    // selections, and refresh the button label.
+    function populateMatrixFilter() {
+        var types = (matrixData && matrixData.types) ? matrixData.types : [];
+        matrixSelTypes = matrixSelTypes.filter(function (t) { return types.indexOf(t) !== -1; });
+        var html = '';
+        for (var i=0;i<types.length;i++){
+            var on = (!matrixSelTypes.length || matrixSelTypes.indexOf(types[i])!==-1) ? ' checked' : '';
+            html += '<label class="matrix-filter-item"><input type="checkbox" class="matrix-type-cb" value="'+
+                    esc(types[i])+'"'+on+'> '+esc(types[i])+'</label>';
+        }
+        document.getElementById('matrixFilterList').innerHTML = html;
+        document.getElementById('matrixFilterAll').checked = !matrixSelTypes.length;
+        updateMatrixFilterLabel();
+    }
+
+    function updateMatrixFilterLabel() {
+        var lbl = !matrixSelTypes.length ? 'All'
+                : (matrixSelTypes.length === 1 ? matrixSelTypes[0] : matrixSelTypes.length + ' selected');
+        $('#matrixFilterLabel').text(lbl);
+    }
+
+    // Read checkbox state into matrixSelTypes ([] = all = none/every ticked).
+    function syncMatrixSelFromCheckboxes() {
+        var sel = [];
+        $('.matrix-type-cb:checked').each(function(){ sel.push($(this).val()); });
+        var total = $('.matrix-type-cb').length;
+        matrixSelTypes = (sel.length === 0 || sel.length === total) ? [] : sel;
+    }
+
     function load() {
         var g = $('#granularity').val();
         var v = currentValue();
@@ -428,6 +601,9 @@
 
                 renderMerged('fundMergedBody', d.fundSourcesMerged, {glCount:'fundGlCount',glAmt:'fundGlAmt',cavCount:'fundCavCount',cavAmt:'fundCavAmt',overall:'fundOverall'});
                 renderMerged('typeMergedBody', d.assistanceTypesMerged, {glCount:'typeGlCount',glAmt:'typeGlAmt',cavCount:'typeCavCount',cavAmt:'typeCavAmt',overall:'typeOverall'});
+                matrixData = d.fundSourceTypeMatrix;
+                populateMatrixFilter();
+                renderFundMatrix();
             },
             error: function () { alert('Failed to load dashboard data.'); },
             complete: function () { $('#dashLoading').hide(); }
@@ -439,12 +615,36 @@
         var now = new Date();
         var mm = ('0' + (now.getMonth() + 1)).slice(-2);
         $('#input-month').val(now.getFullYear() + '-' + mm);
-        $('#input-day').val(now.getFullYear() + '-' + mm + '-' + ('0' + now.getDate()).slice(-2));
+        var today = now.getFullYear() + '-' + mm + '-' + ('0' + now.getDate()).slice(-2);
+        $('#input-day').val(today);
         $('#input-year').val(now.getFullYear());
+        $('#input-from').val(now.getFullYear() + '-' + mm + '-01');
+        $('#input-to').val(today);
         syncInputs();
 
         $('#granularity').on('change', syncInputs);
         $('#applyFilter').on('click', load);
+
+        // Per-table assistance multi-select filter (checkbox dropdown).
+        $('#matrixFilterBtn').on('click', function (e) {
+            e.stopPropagation();
+            $('#matrixFilterMenu').toggleClass('open');
+        });
+        $('#matrixFilterMenu').on('click', function (e) { e.stopPropagation(); });
+        $(document).on('click', function () { $('#matrixFilterMenu').removeClass('open'); });
+        $('#matrixFilterAll').on('change', function () {
+            $('.matrix-type-cb').prop('checked', this.checked);
+            syncMatrixSelFromCheckboxes();
+            updateMatrixFilterLabel();
+            renderFundMatrix();
+        });
+        $('#matrixFilterList').on('change', '.matrix-type-cb', function () {
+            syncMatrixSelFromCheckboxes();
+            $('#matrixFilterAll').prop('checked', !matrixSelTypes.length);
+            updateMatrixFilterLabel();
+            renderFundMatrix();
+        });
+
         load();
     });
 })();

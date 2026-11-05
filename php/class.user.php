@@ -5629,6 +5629,21 @@
 				$start = sprintf('%04d-01-01 00:00:00', $year);
 				$end   = sprintf('%04d-01-01 00:00:00', $year + 1);
 				break;
+			case 'custom':
+				// Value is "YYYY-MM-DD..YYYY-MM-DD" (from..to). The range is
+				// inclusive of both dates, so the end bound is the day after
+				// 'to'. Reversed inputs are reordered.
+				$parts  = explode('..', $value);
+				$fromTs = strtotime(trim($parts[0] ?? ''));
+				$toTs   = strtotime(trim($parts[1] ?? ''));
+				if ($fromTs === false && $toTs === false) { $fromTs = $toTs = time(); }
+				elseif ($fromTs === false) { $fromTs = $toTs; }
+				elseif ($toTs   === false) { $toTs   = $fromTs; }
+				$lo = min($fromTs, $toTs);
+				$hi = max($fromTs, $toTs);
+				$start = date('Y-m-d 00:00:00', $lo);
+				$end   = date('Y-m-d 00:00:00', strtotime('+1 day', $hi));
+				break;
 			case 'month':
 			default:
 				$ts = strtotime(strlen($value) === 7 ? $value . '-01' : $value);
@@ -5818,16 +5833,21 @@
 		}
 
 		// Fund sources with GL and CAV broken out (count + amount) and overall.
-		public function financeFundSourcesMerged($start, $end, $officeId = '', $limit = 300){
+		// No LIMIT: every fund source is returned so the Total reconciles with the
+		// Number-of-Assistance-per-Fund-Source matrix (a cap would silently drop
+		// the small-amount tail and make the two tables' totals disagree).
+		public function financeFundSourcesMerged($start, $end, $officeId = ''){
 			$start = mysqli_real_escape_string($this->db, $start);
 			$end   = mysqli_real_escape_string($this->db, $end);
-			$limit = (int) $limit; if ($limit < 1) { $limit = 300; } if ($limit > 500) { $limit = 500; }
 			$officeFilter = '';
 			if ($officeId !== '') {
 				$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
 				$officeFilter = " AND LEFT(a.trans_id, 9) = '{$officeIdEsc}' ";
 			}
-			$query = "SELECT cf.fundsource AS fundsource,
+			// fundsource is TRIM()'d so whitespace variants ("AICS" vs "AICS ")
+			// collapse into one row, matching the Number-of-Assistance-per-Fund-
+			// Source matrix so the two tables reconcile.
+			$query = "SELECT TRIM(cf.fundsource) AS fundsource,
 							 SUM(m.mode = 'GL')  AS gl_cnt,
 							 COALESCE(SUM(CASE WHEN m.mode='GL'  THEN cf.fs_amount_num END), 0) AS gl_amt,
 							 SUM(m.mode = 'CAV') AS cav_cnt,
@@ -5843,11 +5863,107 @@
 								{$officeFilter}
 							 ) m
 						INNER JOIN tbl_coe_fund cf ON cf.trans_id = m.trans_id
-					   WHERE cf.fundsource IS NOT NULL AND cf.fundsource <> ''
-					   GROUP BY cf.fundsource
-					   ORDER BY (COALESCE(SUM(CASE WHEN m.mode='GL' THEN cf.fs_amount_num END),0) + COALESCE(SUM(CASE WHEN m.mode='CAV' THEN cf.fs_amount_num END),0)) DESC
-					   LIMIT {$limit}";
+					   WHERE cf.fundsource IS NOT NULL AND TRIM(cf.fundsource) <> ''
+					   GROUP BY TRIM(cf.fundsource)
+					   ORDER BY (COALESCE(SUM(CASE WHEN m.mode='GL' THEN cf.fs_amount_num END),0) + COALESCE(SUM(CASE WHEN m.mode='CAV' THEN cf.fs_amount_num END),0)) DESC";
 			return $this->_mergedRows($query, 'fundsource');
+		}
+
+		// Number of assistance per fund source, broken down by assistance TYPE
+		// and mode. Builds a matrix: rows = fund source, columns = assistance
+		// type, each type split into GL and CAV counts.
+		//
+		// This mirrors the Charging Sources table (financeFundSourcesMerged) so the
+		// two reconcile exactly: each GL/CAV is counted once PER fund source that
+		// its transaction is charged to (a transaction split across several funds
+		// is counted under each), and fund-source labels are TRIM()'d so whitespace
+		// variants ("AICS" vs "AICS ") collapse into one row in both tables.
+		//
+		// Each (trans_id, mode) is first collapsed to a single assistance type
+		// (the one non-empty type it carries; typeless ones become '(Unknown)')
+		// so a transaction-mode is counted once per fund, matching Charging
+		// Sources' DISTINCT(trans_id, mode) base. No LIMIT is applied so every
+		// cell is included in the totals.
+		//
+		// Each cell carries count AND fund-charged amount for both modes.
+		//
+		// @return array{types:array<int,string>,
+		//               rows:array<int,array{fundsource:string,
+		//                     cells:array<string,array{gl:int,glAmt:float,cav:int,cavAmt:float}>,
+		//                     total:int,totalAmt:float}>}
+		public function financeFundSourceTypeMatrix($start, $end, $officeId = ''){
+			$start = mysqli_real_escape_string($this->db, $start);
+			$end   = mysqli_real_escape_string($this->db, $end);
+			$officeFilter = '';
+			if ($officeId !== '') {
+				$officeIdEsc  = mysqli_real_escape_string($this->db, $officeId);
+				$officeFilter = " AND LEFT(a.trans_id, 9) = '{$officeIdEsc}' ";
+			}
+			// Amount is the fund-charged amount (fs_amount_num), split by mode the
+			// same way the Charging Sources table does, so counts AND amounts
+			// reconcile with it.
+			$query = "SELECT TRIM(cf.fundsource) AS fundsource,
+							 COALESCE(m.type, '(Unknown)') AS type,
+							 SUM(m.mode = 'GL')  AS gl_cnt,
+							 COALESCE(SUM(CASE WHEN m.mode='GL'  THEN cf.fs_amount_num END), 0) AS gl_amt,
+							 SUM(m.mode = 'CAV') AS cav_cnt,
+							 COALESCE(SUM(CASE WHEN m.mode='CAV' THEN cf.fs_amount_num END), 0) AS cav_amt
+						FROM (
+							 SELECT a.trans_id, a.mode,
+									MAX(NULLIF(TRIM(a.type), '')) AS type
+							   FROM assistance a
+							   INNER JOIN tbl_transaction t ON t.trans_id = a.trans_id
+							  WHERE a.mode IN ('GL','CAV')
+								AND t.status_client = 'Done'
+								AND t.date_accomplished >= '{$start}'
+								AND t.date_accomplished <  '{$end}'
+								{$officeFilter}
+							  GROUP BY a.trans_id, a.mode
+							 ) m
+						INNER JOIN tbl_coe_fund cf ON cf.trans_id = m.trans_id
+					   WHERE cf.fundsource IS NOT NULL AND TRIM(cf.fundsource) <> ''
+					   GROUP BY TRIM(cf.fundsource), COALESCE(m.type, '(Unknown)')";
+
+			$result = mysqli_query($this->db, $query);
+			$typeSet = [];                 // type => total count (for column ordering)
+			$fundMap = [];                 // fundsource => ['cells'=>[type=>{...}], 'total'=>int, 'totalAmt'=>float]
+			if ($result) {
+				while ($r = mysqli_fetch_assoc($result)) {
+					$fs    = $r['fundsource'];
+					$type  = $r['type'];
+					$gl    = (int) $r['gl_cnt'];
+					$cav   = (int) $r['cav_cnt'];
+					$glAmt = (float) $r['gl_amt'];
+					$cavAmt= (float) $r['cav_amt'];
+					if (!isset($fundMap[$fs])) { $fundMap[$fs] = ['cells' => [], 'total' => 0, 'totalAmt' => 0.0]; }
+					$fundMap[$fs]['cells'][$type] = [
+						'gl'     => $gl,
+						'glAmt'  => $glAmt,
+						'cav'    => $cav,
+						'cavAmt' => $cavAmt,
+					];
+					$fundMap[$fs]['total']    += $gl + $cav;
+					$fundMap[$fs]['totalAmt'] += $glAmt + $cavAmt;
+					$typeSet[$type] = ($typeSet[$type] ?? 0) + $gl + $cav;
+				}
+			}
+
+			// Columns: assistance types ordered by overall count (heaviest first).
+			arsort($typeSet);
+			$types = array_keys($typeSet);
+
+			// Rows: fund sources ordered by their overall count (heaviest first).
+			uasort($fundMap, function ($a, $b) { return $b['total'] - $a['total']; });
+			$rows = [];
+			foreach ($fundMap as $fs => $data) {
+				$rows[] = [
+					'fundsource' => $fs,
+					'cells'      => $data['cells'],
+					'total'      => $data['total'],
+					'totalAmt'   => $data['totalAmt'],
+				];
+			}
+			return ['types' => $types, 'rows' => $rows];
 		}
 
 		// Assistance types with GL and CAV broken out (count + amount) and overall.

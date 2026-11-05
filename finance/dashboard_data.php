@@ -17,7 +17,7 @@ if (empty($_SESSION['login']) || ($_SESSION['position'] ?? '') !== 'Finance') {
 }
 
 $granularity = $_GET['granularity'] ?? 'month';
-if (!in_array($granularity, ['day', 'month', 'year'], true)) {
+if (!in_array($granularity, ['day', 'month', 'year', 'custom'], true)) {
     $granularity = 'month';
 }
 $value  = $_GET['value'] ?? '';
@@ -30,6 +30,7 @@ $glByOffice  = $byOffice['gl'];
 $cavByOffice = $byOffice['cav'];
 $fundsMerged = $user->financeFundSourcesMerged($start, $end, $office);
 $typesMerged = $user->financeAssistanceByTypeMerged($start, $end, $office);
+$fundMatrix  = $user->financeFundSourceTypeMatrix($start, $end, $office);
 
 $sumCnt    = function ($rows) { return array_sum(array_column($rows, 'cnt')); };
 $sumAmount = function ($rows) { return array_sum(array_column($rows, 'total_amount')); };
@@ -53,4 +54,5 @@ echo json_encode([
     ],
     'fundSourcesMerged'     => $fundsMerged,
     'assistanceTypesMerged' => $typesMerged,
+    'fundSourceTypeMatrix'  => $fundMatrix,
 ]);
