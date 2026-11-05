@@ -83,7 +83,6 @@
                             <option value="Admin" <?php echo ($req_position == 'Admin' ? 'selected' : ''); ?>>Admin</option>
                             <option value="Encoder" <?php echo ($req_position == 'Encoder' ? 'selected' : ''); ?>>Encoder</option>
                             <option value="Social Worker" <?php echo ($req_position == 'Social Worker' ? 'selected' : ''); ?>>Social Worker</option>
-                            <option value="Program Head" <?php echo ($req_position == 'Program Head' ? 'selected' : ''); ?>>Program Head</option>
                             <option value="Finance" <?php echo ($req_position == 'Finance' ? 'selected' : ''); ?>>Finance</option>
                             <option value="Viewer" <?php echo ($req_position == 'Viewer' ? 'selected' : ''); ?>>Viewer</option>
                         </select>

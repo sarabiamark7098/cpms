@@ -39,7 +39,7 @@
 		$newPos    = $_POST['new_position'] ?? '';
 		$newOff    = $_POST['new_office'] ?? '';
 		$curStat   = $_POST['cur_status'] ?? 'Activated';
-		$validPos  = ['Encoder','Social Worker','Admin','Program Head','Finance','Viewer'];
+		$validPos  = ['Encoder','Social Worker','Admin','Finance','Viewer'];
 		if ($targetEmp === ($_SESSION['userId'] ?? '')) {
 			$flash = "You cannot change your own role or office.";
 		} elseif ($targetEmp !== '' && in_array($newPos, $validPos, true) && $newOff !== '' && $user->updateEmployee($targetEmp, $targetEmp, $newPos, $curStat, $newOff)) {
@@ -350,7 +350,6 @@
                                 <option value="Encoder">Encoder</option>
                                 <option value="Social Worker">Social Worker</option>
                                 <option value="Admin">Admin</option>
-                                <option value="Program Head">Program Head</option>
                                 <option value="Finance">Finance</option>
                                 <option value="Viewer">Viewer</option>
                             </select>

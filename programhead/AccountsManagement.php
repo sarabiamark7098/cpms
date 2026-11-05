@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_role_office'])
     $newPos    = $_POST['new_position'] ?? '';
     $newOff    = $_POST['new_office'] ?? '';
     $curStat   = $_POST['cur_status'] ?? 'Activated';
-    $validPos  = ['Encoder','Social Worker','Admin','Program Head','Finance','Viewer'];
+    $validPos  = ['Encoder','Social Worker','Admin','Finance','Viewer'];
     $officeEmpids = $user->getOfficeEmpids($phOffice);
     if ($targetEmp === ($_SESSION['userId'] ?? '')) {
         $flash = "You cannot change your own role or office.";
@@ -165,7 +165,6 @@ require_once(__DIR__ . "/inc/header.php");
                                 <option value="Encoder">Encoder</option>
                                 <option value="Social Worker">Social Worker</option>
                                 <option value="Admin">Admin</option>
-                                <option value="Program Head">Program Head</option>
                                 <option value="Finance">Finance</option>
                                 <option value="Viewer">Viewer</option>
                             </select>
