@@ -2218,10 +2218,10 @@
 			return true;
 		}
 
-		public function insertGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
-									$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
-									$fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
-									$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+		public function insertGIS($trans_id, $csubcat, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
+									$type1, $pur1, $a1, $m1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,
+									$targets, $subcat, $c_disability, $if_medical, $if_burial, $financial, $material,
+									$docu_otherinfo, $otherProgram, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
 									$SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
 			
 			if(strtolower($mode_ad) == "walk-in"){
@@ -2258,31 +2258,14 @@
 						
 			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3) 
 						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$s5}', '{$s6}','{$ref_name}', '{$rl1}','{$rl2}', '{$rl3}');"; 	
-			if(!empty($fs1)){
-				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
-						('{$trans_id}', '{$fs1}', '" . ((empty($fs2) && empty($fs3) && empty($fs4) && empty($fs5) && empty($fs6) && empty($fs7) && empty($fs8) && empty($fs9) && empty($fs10) && empty($fs11) && empty($fs12)) ? $a1 : '') . "')";
-					if(!empty($fs2)){$query .= ",('{$trans_id}', '{$fs2}', '')";}
-					if(!empty($fs3)){$query .= ",('{$trans_id}', '{$fs3}', '')";}
-					if(!empty($fs4)){$query .= ",('{$trans_id}', '{$fs4}', '')";}
-					if(!empty($fs5)){$query .= ",('{$trans_id}', '{$fs5}', '')";}
-					if(!empty($fs6)){$query .= ",('{$trans_id}', '{$fs6}', '')";}
-					if(!empty($fs7)){$query .= ",('{$trans_id}', '{$fs7}', '')";}
-					if(!empty($fs8)){$query .= ",('{$trans_id}', '{$fs8}', '')";}
-					if(!empty($fs9)){$query .= ",('{$trans_id}', '{$fs9}', '')";}
-					if(!empty($fs10)){$query .= ",('{$trans_id}', '{$fs10}', '')";}
-					if(!empty($fs11)){$query .= ",('{$trans_id}', '{$fs11}', '')";}
-					if(!empty($fs12)){$query .= ",('{$trans_id}', '{$fs12}', '')";}
-				$query .= ";";
-			}else{
-				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount)	VALUES 
-					('{$trans_id}', '{$f1}', '{$a1}');";
-			}
+
 			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, free_funeral_service, financial, material, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$free_funeral_service}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$free_funeral_service}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1');";
 					if($type2 !=""){
-						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
+						// Type2 is its own row with fewer columns; appending it as a second
+						// VALUES tuple to the 13-column INSERT above is a column-count mismatch.
+						$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) VALUES ('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2');";
 					}
-			$query .= ";";
 			
 			// below_monthly_income / others_subcat are segregated onto client_data /
 			// beneficiary_data (written by saveGISClientBene), not the assessment table.
@@ -2522,10 +2505,10 @@
 			return (bool) $ok;
 		}
 
-		public function updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
-			$type1, $pur1, $a1, $m1, $f1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, $fs1, $fs2, $fs3, $fs4, $fs5, $fs6, $fs7, $fs8, $fs9, $fs10, $fs11, $fs12,
-			$targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
-			$docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+		public function updateGIS($empid, $trans_id, $csubcat, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
+			$type1, $pur1, $a1, $m1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
+			$targets, $subcat, $c_disability, $if_medical, $if_burial, $financial, $material,
+			$docu_otherinfo, $otherProgram, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
             $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome){
 				
 			if(strtolower($mode_ad) == "walk-in"){
@@ -2560,7 +2543,6 @@
 				$query .= implode(', ', $family_values);
 				$query .= ";";
 			}
-			$assistance = $this-> getAssistanceData($trans_id);
 			$query .= "DELETE FROM service WHERE trans_id = '{$trans_id}';";
 			$query .= "INSERT INTO service (trans_id, service1, service2, service3, service4, service5, service6, ref_name, refer1, refer2, refer3) 
 						VALUES ('{$trans_id}','{$s1}','{$s2}','{$s3}', '{$s4}','{$s5}', '{$s6}','{$ref_name}', '{$rl1}','{$rl2}', '{$rl3}');";
@@ -2573,11 +2555,12 @@
 		
 			$query .= "DELETE FROM assistance WHERE trans_id = '{$trans_id}';";
 			$query .= "INSERT INTO assistance (trans_id, type, if_medical, if_burial, cause_of_death, free_funeral_service, financial, material, amount, mode, fund, purpose, type_description) 
-					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$free_funeral_service}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1')";
+					VALUES ('{$trans_id}', '{$type1}', '{$if_medical}', '{$if_burial}', '{$diagnosis_cause_of_death}', '{$free_funeral_service}', '{$financial}', '{$material}', '{$a1}', '{$m1}', '', '{$pur1}', 'Type1');";
 					if($type2 !=""){
-						$query .= " ,('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2')";
+						// Type2 is its own row with fewer columns; appending it as a second
+						// VALUES tuple to the 13-column INSERT above is a column-count mismatch.
+						$query .= "INSERT INTO assistance (trans_id, type, amount, mode, fund, purpose, type_description) VALUES ('{$trans_id}', '{$type2}', '{$a2}', '{$m2}', '{$f2}', '{$pur2}', 'Type2');";
 					}
-			$query .= ";";
 
 			$query .= "DELETE FROM other_client_information WHERE trans_id = '{$trans_id}';";
 			$query .= "INSERT INTO other_client_information (trans_id, otherClientInformation, crisisSeverityQuestion1, crisisSeverityQuestion2, crisisSeverityQuestion3, supportSystemAvailability, externalResources, selfHelp, vulnerability_riskFactor) 
@@ -2586,49 +2569,6 @@
 			$query .= "DELETE FROM source_of_income WHERE trans_id = '{$trans_id}';";
 			$query .= "INSERT INTO source_of_income (trans_id, wage, profit, domestic_source, abroad, government_transfer, pension, other_income) 
 			VALUES ('{$trans_id}', '{$SOI_wage}', '{$SOI_profit}', '{$SOI_domesticsource}', '{$SOI_abroad}', '{$SOI_governmenttransfer}', '{$SOI_pension}', '{$SOI_otherincome}');"; 
-
-
-			$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$trans_id}';";
-			$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) ";
-			if (!empty($fs1)) {
-				$query .= "VALUES ('{$trans_id}', '{$fs1}', '" . ((empty($fs2) && empty($fs3) && empty($fs4) && empty($fs5) && empty($fs6) && empty($fs7) && empty($fs8) && empty($fs9) && empty($fs10) && empty($fs11) && empty($fs12)) ? $a1 : '') . "')";
-				if (!empty($fs2)) {
-					$query .= ",('{$trans_id}', '{$fs2}', '')";
-				}
-				if (!empty($fs3)) {
-					$query .= ",('{$trans_id}', '{$fs3}', '')";
-				}
-				if (!empty($fs4)) {
-					$query .= ",('{$trans_id}', '{$fs4}', '')";
-				}
-				if (!empty($fs5)) {
-					$query .= ",('{$trans_id}', '{$fs5}', '')";
-				}
-				if (!empty($fs6)) {
-					$query .= ",('{$trans_id}', '{$fs6}', '')";
-				}
-				if (!empty($fs7)) {
-					$query .= ",('{$trans_id}', '{$fs7}', '')";
-				}
-				if (!empty($fs8)) {
-					$query .= ",('{$trans_id}', '{$fs8}', '')";
-				}
-				if (!empty($fs9)) {
-					$query .= ",('{$trans_id}', '{$fs9}', '')";
-				}
-				if (!empty($fs10)) {
-					$query .= ",('{$trans_id}', '{$fs10}', '')";
-				}
-				if (!empty($fs11)) {
-					$query .= ",('{$trans_id}', '{$fs11}', '')";
-				}
-				if (!empty($fs12)) {
-					$query .= ",('{$trans_id}', '{$fs12}', '')";
-				}
-			} else {
-				$query .= "VALUES ('{$trans_id}', '{$f1}', '{$a1}')";
-			}
-			$query .= ";";
 			
 			$sign_id = $signatoryGIS;
 			$query .= "UPDATE tbl_transaction SET signatory_id = '{$sign_id}', program_type = '{$program}'";
@@ -3001,16 +2941,11 @@
 			}
 		}
 		
-		public function insertCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
-		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
+		public function insertCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial,
+		 $am, $mode, $sd_officer, $client_work, $client_salary, $client_agency){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
-			$signid = 0;
-			
 			$signid = $signName;
 
-			if(empty($amount2)){
-				$amount1 = $am;
-			}
 			
 			$data = $this->getfundsourcedata($id);
 			$query = "INSERT INTO coe (trans_id, document, id_presented, others_input, others_medical, others_burial) 
@@ -3019,25 +2954,6 @@
 			$result = mysqli_query($this->db, $query);
 			if($am >= 50001 && $mode == "GL"){
 				$query = "UPDATE tbl_transaction SET signatory_GL = '{$signid}' WHERE trans_id = '{$id}';";
-				$result = mysqli_query($this->db, $query);
-			}
-			if (!empty($data[2]['fundsource'])) {
-				$query = "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}'; ";
-				$result = mysqli_query($this->db, $query);
-				$query = "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) 
-						VALUES ('{$id}', '{$data[1]['fundsource']}', '{$amount1}')";
-				if (!empty($data[2]['fundsource'])) {$query .= ",('{$id}', '{$data[2]['fundsource']}', '{$amount2}')";}
-				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
-				if (!empty($data[4]['fundsource'])) {$query .= ",('{$id}', '{$data[4]['fundsource']}', '{$amount4}')";}
-				if (!empty($data[5]['fundsource'])) {$query .= ",('{$id}', '{$data[5]['fundsource']}', '{$amount5}')";}
-				if (!empty($data[6]['fundsource'])) {$query .= ",('{$id}', '{$data[6]['fundsource']}', '{$amount6}')";}
-				if (!empty($data[7]['fundsource'])) {$query .= ",('{$id}', '{$data[7]['fundsource']}', '{$amount7}')";}
-				if (!empty($data[8]['fundsource'])) {$query .= ",('{$id}', '{$data[8]['fundsource']}', '{$amount8}')";}
-				if (!empty($data[9]['fundsource'])) {$query .= ",('{$id}', '{$data[9]['fundsource']}', '{$amount9}')";}
-				if (!empty($data[10]['fundsource'])) {$query .= ",('{$id}', '{$data[10]['fundsource']}', '{$amount10}')";}
-				if (!empty($data[11]['fundsource'])) {$query .= ",('{$id}', '{$data[11]['fundsource']}', '{$amount11}')";}
-				if (!empty($data[12]['fundsource'])) {$query .= ",('{$id}', '{$data[12]['fundsource']}', '{$amount12}')";}
-				$query .= ";";
 				$result = mysqli_query($this->db, $query);
 			}
 
@@ -3065,19 +2981,26 @@
 			}
 		}
 
-		public function updateCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, 
-		$amount5, $amount6, $amount7, $amount8, $amount9, $amount10, $amount11, $amount12, $am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
+		public function saveGISFundSources($id, $names, $amounts){
+			$id = mysqli_real_escape_string($this->db, $id);
+			$rows = [];
+			for ($i = 1; $i <= 12; $i++) {
+				$nm = isset($names[$i]) ? trim((string) $names[$i]) : '';
+				if ($nm === '') { continue; }
+				$fs  = mysqli_real_escape_string($this->db, strtoupper($nm));
+				$amt = mysqli_real_escape_string($this->db, str_replace(',', '', (string) (isset($amounts[$i]) ? $amounts[$i] : '')));
+				$rows[] = "('{$id}', '{$fs}', '{$amt}')";
+			}
+			mysqli_query($this->db, "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}';");
+			if (!empty($rows)) {
+				mysqli_query($this->db, "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) VALUES " . implode(',', $rows) . ";");
+			}
+		}
+
+		public function updateCOE($id, $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, 
+			$am, $mode, $id_sign, $sd_officer, $client_work, $client_salary, $client_agency){
 			$others_input = mysqli_real_escape_string($this->db,$others_input);
-			$signid = 0;
-			if(!empty($signName)){
-				$signid = $this->getsignatureid($signName);
-			}
-			
 			$signid = $signName;
-			
-			if(empty($amount2)){
-				$amount1 = $am;
-			}
 			
 			$data = $this->getfundsourcedata($id);
 
@@ -3087,24 +3010,6 @@
 			}if($am < 50001){
 				$query .= "UPDATE tbl_transaction SET signatory_GL = '{$id_sign}' WHERE trans_id = '{$id}';";
 			}
-
-			if (!empty($data[2]['fundsource'])) {
-				$query .= "DELETE FROM tbl_coe_fund WHERE trans_id = '{$id}';";
-				$query .= "INSERT INTO tbl_coe_fund (trans_id, fundsource, fs_amount) 
-						VALUES ('{$id}', '{$data[1]['fundsource']}', '{$amount1}')";
-				if (!empty($data[2]['fundsource'])) {$query .= ",('{$id}', '{$data[2]['fundsource']}', '{$amount2}')";}
-				if (!empty($data[3]['fundsource'])) {$query .= ",('{$id}', '{$data[3]['fundsource']}', '{$amount3}')";}
-				if (!empty($data[4]['fundsource'])) {$query .= ",('{$id}', '{$data[4]['fundsource']}', '{$amount4}')";}
-				if (!empty($data[5]['fundsource'])) {$query .= ",('{$id}', '{$data[5]['fundsource']}', '{$amount5}')";}
-				if (!empty($data[6]['fundsource'])) {$query .= ",('{$id}', '{$data[6]['fundsource']}', '{$amount6}')";}
-				if (!empty($data[7]['fundsource'])) {$query .= ",('{$id}', '{$data[7]['fundsource']}', '{$amount7}')";}
-				if (!empty($data[8]['fundsource'])) {$query .= ",('{$id}', '{$data[8]['fundsource']}', '{$amount8}')";}
-				if (!empty($data[9]['fundsource'])) {$query .= ",('{$id}', '{$data[9]['fundsource']}', '{$amount9}')";}
-				if (!empty($data[10]['fundsource'])) {$query .= ",('{$id}', '{$data[10]['fundsource']}', '{$amount10}')";}
-				if (!empty($data[11]['fundsource'])) {$query .= ",('{$id}', '{$data[11]['fundsource']}', '{$amount11}')";}
-				if (!empty($data[12]['fundsource'])) {$query .= ",('{$id}', '{$data[12]['fundsource']}', '{$amount12}')";}
-				$query .= ";";
-            }
 			
 			if (!empty($sd_officer)) {
 				$query .= "DELETE FROM cash WHERE trans_id = '{$id}';";
