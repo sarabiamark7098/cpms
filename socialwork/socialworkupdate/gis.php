@@ -925,17 +925,15 @@ if (!$_SESSION['login']) {
 								</div> 
                             </div><br>
                             <h5 class="text-dark" style="font-weight: bold;">Assistance: </h5>
-                            <div class="row"> 
+                            <div class="row">
                                 <div class="col text-center">PURPOSE</div>
-                                <div class="col-2 text-center">AMOUNT</div>
-                                <div class="col-2 text-center">MODE ASSISTANCE</div>
-                                <div class="col-2 text-center">FUND SOURCE</div> 
-                                <div class="col-1 text-center"> </div> 
+                                <div class="col-3 text-center">AMOUNT</div>
+                                <div class="col-3 text-center">MODE ASSISTANCE</div>
                             </div>
                             <div class="row"> 
                                 <div class="col"><input class="form-control" id="pur1" name="pur1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['purpose']; ?>" oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-. ]/g, '')"></div>
-                                <div class="col-2"><input class="form-control currencyMaskedInput" id="a1" name="a1" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['amount']; ?>"></div>
-                                <div class="col-2">
+                                <div class="col-3"><input class="form-control currencyMaskedInput" id="a1" name="a1" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required value="<?php echo empty($client_assistance[1])? "" : $client_assistance[1]['amount']; ?>"></div>
+                                <div class="col-3">
                                     <select class="form-control" id="m1" name="m1" type="text" <?php echo empty($client_assistance[1])? "" : "onkeyup='verifyfirst()'" ?> required>
                                         <option selected="selected"><?php echo empty($client_assistance[1])? "" : $client_assistance[1]['mode']; ?></option>
                                         <option>GL</option>
@@ -943,27 +941,113 @@ if (!$_SESSION['login']) {
                                         <option>DS</option>
                                     </select>
                                 </div>
-                                <div class="col-2"> <!--Source of Fund-->
-                                    <input type="text" id="f1" value="CURRENT FUND" hidden>
-                                    <select class="form-control" id="fundf1" name="f1" <?php echo empty($client_assistance[1]) ? "" : "onchange='verifyfirst()'" ?> required><?php echo $user->fundSourceOptions(empty($fundsourcedata[1]['fundsource']) ? '' : $fundsourcedata[1]['fundsource']); ?></select>
-                                    <input list="chargings" class="form-control fs1" value="<?php echo (!empty($fundsourcedata[1]['fundsource'])?$fundsourcedata[1]['fundsource']:'') ?>" id="fsof1" name="fsof1" type="text" hidden />
-                                    <input list="chargings" class="form-control fs2" value="<?php echo (!empty($fundsourcedata[2]['fundsource'])?$fundsourcedata[2]['fundsource']:'') ?>" id="fsof2" name="fsof2" type="text" hidden />
-                                    <input list="chargings" class="form-control fs3" value="<?php echo (!empty($fundsourcedata[3]['fundsource'])?$fundsourcedata[3]['fundsource']:'') ?>" id="fsof3" name="fsof3" type="text" hidden />
-                                    <input list="chargings" class="form-control fs4" value="<?php echo (!empty($fundsourcedata[4]['fundsource'])?$fundsourcedata[4]['fundsource']:'') ?>" id="fsof4" name="fsof4" type="text" hidden />
-                                    <input list="chargings" class="form-control fs5" value="<?php echo (!empty($fundsourcedata[5]['fundsource'])?$fundsourcedata[5]['fundsource']:'') ?>" id="fsof5" name="fsof5" type="text" hidden />
-                                    <input list="chargings" class="form-control fs6" value="<?php echo (!empty($fundsourcedata[6]['fundsource'])?$fundsourcedata[6]['fundsource']:'') ?>" id="fsof6" name="fsof6" type="text" hidden />
-                                    <input list="chargings" class="form-control fs7" value="<?php echo (!empty($fundsourcedata[7]['fundsource'])?$fundsourcedata[7]['fundsource']:'') ?>" id="fsof7" name="fsof7" type="text" hidden />
-                                    <input list="chargings" class="form-control fs8" value="<?php echo (!empty($fundsourcedata[8]['fundsource'])?$fundsourcedata[8]['fundsource']:'') ?>" id="fsof8" name="fsof8" type="text" hidden />
-                                    <input list="chargings" class="form-control fs9" value="<?php echo (!empty($fundsourcedata[9]['fundsource'])?$fundsourcedata[9]['fundsource']:'') ?>" id="fsof9" name="fsof9" type="text" hidden />
-                                    <input list="chargings" class="form-control fs10" value="<?php echo (!empty($fundsourcedata[10]['fundsource'])?$fundsourcedata[10]['fundsource']:'') ?>" id="fsof10" name="fsof10" type="text" hidden />
-                                    <input list="chargings" class="form-control fs11" value="<?php echo (!empty($fundsourcedata[11]['fundsource'])?$fundsourcedata[11]['fundsource']:'') ?>" id="fsof11" name="fsof11" type="text" hidden />
-                                    <input list="chargings" class="form-control fs12" value="<?php echo (!empty($fundsourcedata[12]['fundsource'])?$fundsourcedata[12]['fundsource']:'') ?>" id="fsof12" name="fsof12" type="text" hidden />
-                                    
-                                </div> 
-                                <div class="col-1"> <!--Source of Fund-->
-                                    <input class="form-group btn btn-outline-primary" type="button" value="+" id="addfundsource" name="fsadditional" data-target="#additionalFundSource" data-toggle="modal" >
+
+                                <!-- Hidden mirror of the first fund source; kept so the legacy
+                                     verifyfirst()/proceed JS (which reads #fundf1 / name="f1") still works. -->
+                                <input type="hidden" id="fundf1" name="f1" value="<?php echo (!empty($fundsourcedata[1]['fundsource']) ? htmlspecialchars($fundsourcedata[1]['fundsource']) : ''); ?>">
+                            </div>
+                            <!-- Fund Source: name + amount per row, saved together with the GIS
+                                 (finance-update style). Reuses the fs{i} -> fsof{i} sync below. -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <br>
+                                    <div class="card border-secondary">
+                                        <div class="card-header border-secondary bg-secondary text-white">
+                                            Fund Source
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row" style="font-weight:600;color:#555;">
+                                                <div class="col-6">FUND SOURCE</div>
+                                                <div class="col-6">AMOUNT</div>
+                                            </div>
+                                            <?php for($fi = 1; $fi <= 12; $fi++):
+                                                $fsName  = !empty($fundsourcedata[$fi]['fundsource']) ? $fundsourcedata[$fi]['fundsource'] : '';
+                                                $fsAmt   = !empty($fundsourcedata[$fi]['fs_amount'])  ? $fundsourcedata[$fi]['fs_amount']  : '';
+                                                $prevHas = ($fi > 1 && !empty($fundsourcedata[$fi-1]['fundsource']));
+                                                $showRow = ($fi == 1) || ($fsName !== '') || $prevHas;
+                                            ?>
+                                            <div class="form-row align-items-center gisFundRow" id="fundRow<?php echo $fi; ?>" style="margin-top:6px;<?php echo $showRow ? '' : 'display:none;'; ?>">
+                                                <div class="col-6">
+                                                    <select class="form-control gisFund" id="fs<?php echo $fi; ?>" name="fs<?php echo $fi; ?>"><?php echo $user->fundSourceOptions($fsName); ?></select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <input type="text" class="form-control currencyMaskedInput fundAmt" id="amountf<?php echo $fi; ?>" name="amountf<?php echo $fi; ?>" value="<?php echo htmlspecialchars($fsAmt); ?>" placeholder="Amount">
+                                                </div>
+                                                <input list="chargings" class="form-control fs<?php echo $fi; ?>" value="<?php echo htmlspecialchars($fsName); ?>" id="fsof<?php echo $fi; ?>" name="fsof<?php echo $fi; ?>" type="text" hidden />
+                                            </div>
+                                            <?php endfor; ?>
+                                            <div class="form-row" style="margin-top:12px;font-size:14px;">
+                                                <div class="col-12">
+                                                    Assistance amount: <b><span id="gisAssistAmt">0.00</span></b>
+                                                    &nbsp;|&nbsp; Fund total: <b><span id="gisFundTotal">0.00</span></b>
+                                                    &nbsp;|&nbsp; Remaining: <b><span id="gisRemain">0.00</span></b>
+                                                    <div id="gisFundFlag" style="margin-top:4px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    function gnum(sel){ var v = $(sel).val(); if(!v) return 0; return parseFloat((''+v).replace(/,/g,'')) || 0; }
+                                    function gfmt(n){ return (isNaN(n)?0:n).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2}); }
+                                    // Reveal a fund row once the previous one has a fund selected.
+                                    function gisVisibleRows(){
+                                        for(var i = 2; i <= 12; i++){
+                                            var show = ($.trim($('#fs'+(i-1)).val()) !== '') || ($.trim($('#fs'+i).val()) !== '');
+                                            $('#fundRow'+i).toggle(show);
+                                        }
+                                    }
+                                    // Every selected fund source must have an amount, AND the fund
+                                    // amounts must sum to the assistance amount. Returns true only when both hold.
+                                    function gisRecalcFunds(){
+                                        if(!$('#fs1').length) return true;
+                                        var assist = gnum('#a1') + gnum('#a2');
+                                        var total = 0, hasFund = false, missingAmt = false;
+                                        for(var i = 1; i <= 12; i++){
+                                            if($.trim($('#fs'+i).val()) !== ''){
+                                                hasFund = true;
+                                                var amt = gnum('#amountf'+i);
+                                                if(amt <= 0){ missingAmt = true; }
+                                                total += amt;
+                                            }
+                                        }
+                                        var remain = assist - total;
+                                        $('#gisAssistAmt').text(gfmt(assist));
+                                        $('#gisFundTotal').text(gfmt(total));
+                                        $('#gisRemain').text(gfmt(remain));
+                                        var flag = $('#gisFundFlag');
+                                        if(!hasFund){ flag.text('').css('color',''); return true; }
+                                        if(missingAmt){ flag.text('✗ every fund source needs an amount').css('color','#c0392b'); return false; }
+                                        if(Math.abs(remain) < 0.005){ flag.text('✓ fully allocated').css('color','#1e7e34'); return true; }
+                                        flag.text(remain > 0 ? ('✗ ' + gfmt(remain) + ' still to allocate')
+                                                             : ('✗ over-allocated by ' + gfmt(-remain))).css('color','#c0392b');
+                                        return false;
+                                    }
+                                    // Clearing a fund source (selecting the blank option) also clears
+                                    // its amount and its hidden mirror, so a removed fund leaves nothing behind.
+                                    $(document).on('change', '.gisFund', function(){
+                                        if($.trim($(this).val()) === ''){
+                                            var slot = ($(this).attr('id') || '').replace('fs', '');
+                                            $('#amountf' + slot).val('');
+                                            if(document.getElementById('fsof' + slot)){ document.getElementById('fsof' + slot).value = ''; }
+                                        }
+                                    });
+                                    $(document).on('keyup change', '.fundAmt, .gisFund, #a1, #a2', function(){ gisVisibleRows(); gisRecalcFunds(); });
+                                    // Block save/update until every fund source has an amount and the
+                                    // fund total balances with the assistance amount.
+                                    $('#up').on('submit', function(e){
+                                        if(!gisRecalcFunds()){
+                                            e.preventDefault();
+                                            alert('Make sure the chargings sum to the assistance amount before you can save or update.');
+                                        }
+                                    });
+                                    gisVisibleRows();
+                                    gisRecalcFunds();
+                                });
+                            </script>
+                            <br>
                             <div class="row"> 
                                 <div class="col-lg-12">
                                     <br>
@@ -1374,59 +1458,8 @@ if (!$_SESSION['login']) {
             $ass = mysqli_real_escape_string($user->db, mb_strtoupper($_POST["ass"], "UTF-8"));
             
             $signatoryGIS = $_POST["approved"]; //signatory approved
-            $fund1 = "";
-            $fund2 = "";
-            $fund3 = "";
-            $fund4 = "";
-            $fund5 = "";
-            $fund6 = "";
-            $fund7 = "";
-            $fund8 = "";
-            $fund9 = "";
-            $fund10 = "";
-            $fund11 = "";
-            $fund12 = "";
-            if(!empty($_POST['fsof1'])){
-                $fund1 = strtoupper($_POST['fsof1']);
-            }
-            if(!empty($_POST['fsof2'])) {
-                $fund2 = strtoupper($_POST['fsof2']);
-            }
-            if(!empty($_POST['fsof3'])) {
-                $fund3 = strtoupper($_POST['fsof3']);
-            }
-            if(!empty($_POST['fsof4'])) {
-                $fund4 = strtoupper($_POST['fsof4']);
-            }
-            if(!empty($_POST['fsof5'])) {
-                $fund5 = strtoupper($_POST['fsof5']);
-            }
-            if(!empty($_POST['fsof6'])) {
-                $fund6 = strtoupper($_POST['fsof6']);
-            }
-            if(!empty($_POST['fsof7'])) {
-                $fund7 = strtoupper($_POST['fsof7']);
-            }
-            if(!empty($_POST['fsof8'])) {
-                $fund8 = strtoupper($_POST['fsof8']);
-            }
-            if(!empty($_POST['fsof9'])) {
-                $fund9 = strtoupper($_POST['fsof9']);
-            }
-            if(!empty($_POST['fsof10'])) {
-                $fund10 = strtoupper($_POST['fsof10']);
-            }
-            if(!empty($_POST['fsof11'])) {
-                $fund11 = strtoupper($_POST['fsof11']);
-            }
-            if(!empty($_POST['fsof12'])) {
-                $fund12 = strtoupper($_POST['fsof12']);
-            }
             
-            // new data
-            // Beneficiary Category / Sub-category / Type of Disability come from the
-            // single-select dropdowns; values map to the numeric target_sector / subcat_ass /
-            // type_of_disability codes the official GIS print decodes.
+            
             $targets = $_POST['bene_sector'] ?? "";
 
             $beneSubcatText = $_POST['bene_subcat'] ?? "";
@@ -1539,10 +1572,9 @@ if (!$_SESSION['login']) {
             if(isset($_POST["SOI_pension"])){$SOI_pension=$_POST["SOI_pension"];}
             if(isset($_POST["SOI_otherincome"])){$SOI_otherincome=$_POST["SOI_otherincome"];}
             //once save the data of new -> client
-            $user->updateGIS($empid, $trans_id, $csubcat, $id, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
-            $type1, $pur1, $a1, $m1, $f1,$type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS, 
-            $fund1, $fund2, $fund3, $fund4, $fund5, $fund6, $fund7, $fund8, $fund9, $fund10, $fund11, $fund12, $targets, $subcat, $c_disability, $others_subcat, $if_medical, $if_burial, $financial, $material,
-            $docu_otherinfo, $otherProgram, $belowMonthly, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
+            $user->updateGIS($empid, $trans_id, $csubcat, $familyData, $s1, $s2, $s3, $s4, $s5, $s6, $program, $rl1, $rl2, $rl3, $ref_name,
+            $type1, $pur1, $a1, $m1, $type2, $pur2, $a2, $m2, $f2, $mode_ad, $num, $gis_opt, $prob, $ass, $signatoryGIS,$targets, $subcat, $c_disability, $if_medical, $if_burial, $financial, $material,
+            $docu_otherinfo, $otherProgram, $diagnosis_cause_of_death, $free_funeral_service, $severity, $crisis, $crisis1, $support, $external, $selfhelp, $vulnerability,
             $SOI_wage, $SOI_profit, $SOI_domesticsource, $SOI_abroad, $SOI_governmenttransfer, $SOI_pension, $SOI_otherincome);
             // Persist the Client/Beneficiary section selections (category, disability, gender).
             // When relation is Self the client IS the beneficiary, so the Beneficiary section
@@ -1564,6 +1596,13 @@ if (!$_SESSION['login']) {
             }
             $user->saveGISClientBene($trans_id, $gisClientCategory, $gisClientDisability, $gisClientGender,
                 ($gisSectors[$targets] ?? ''), $beneSubcatText, $beneDisabilityText, $_POST['bene_gender'] ?? '', $b_belowMonthly, $b_others_subcat, $gisClientBelow, $gisClientOthers);
+            // Fund Source Distribution amounts (entered above the assessment).
+            $__fsNames = array(); $__fsAmts = array();
+            for ($__i = 1; $__i <= 12; $__i++) {
+                $__fsNames[$__i] = $_POST['fsof'.$__i] ?? '';
+                $__fsAmts[$__i]  = $_POST['amountf'.$__i] ?? '';
+            }
+            $user->saveGISFundSources($trans_id, $__fsNames, $__fsAmts);
         }
 
             //UPDATE CLIENT
@@ -1653,76 +1692,6 @@ if (!$_SESSION['login']) {
         ?>
     </body>
 
-    <div class="modal hide fade" id="additionalFundSource" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Fund Source</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-				<div class="fundsourcebody">
-				    <div class="modal-body">
-                        <div class="row form-group" style="margin-top: 2%; height:10%;">
-                            <div class="form-group col-lg-6">
-                                <select id="fs1" name="fs1" class="form-control"><?php echo $user->fundSourceOptions(empty($fundsourcedata[1]['fundsource']) ? '' : $fundsourcedata[1]['fundsource']); ?></select>
-                                <label class="active" for="fs1">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs2" name="fs2" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[2]['fundsource']) ? '' : $fundsourcedata[2]['fundsource']); ?></select>
-                                <label class="active" for="fs2">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs3" name="fs3" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[3]['fundsource']) ? '' : $fundsourcedata[3]['fundsource']); ?></select>
-                                <label class="active" for="fs3">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs4" name="fs4" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[4]['fundsource']) ? '' : $fundsourcedata[4]['fundsource']); ?></select>
-                                <label class="active" for="fs4">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs5" name="fs5" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[5]['fundsource']) ? '' : $fundsourcedata[5]['fundsource']); ?></select>
-                                <label class="active" for="fs5">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs6" name="fs6" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[6]['fundsource']) ? '' : $fundsourcedata[6]['fundsource']); ?></select>
-                                <label class="active" for="fs6">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs7" name="fs7" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[7]['fundsource']) ? '' : $fundsourcedata[7]['fundsource']); ?></select>
-                                <label class="active" for="fs7">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs8" name="fs8" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[8]['fundsource']) ? '' : $fundsourcedata[8]['fundsource']); ?></select>
-                                <label class="active" for="fs8">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs9" name="fs9" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[9]['fundsource']) ? '' : $fundsourcedata[9]['fundsource']); ?></select>
-                                <label class="active" for="fs9">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs10" name="fs10" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[10]['fundsource']) ? '' : $fundsourcedata[10]['fundsource']); ?></select>
-                                <label class="active" for="fs10">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs11" name="fs11" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[11]['fundsource']) ? '' : $fundsourcedata[11]['fundsource']); ?></select>
-                                <label class="active" for="fs11">Fund Source</label>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <select id="fs12" name="fs12" class="form-control" disabled><?php echo $user->fundSourceOptions(empty($fundsourcedata[12]['fundsource']) ? '' : $fundsourcedata[12]['fundsource']); ?></select>
-                                <label class="active" for="fs12">Fund Source</label>
-                            </div>
-                        </div>
-                                
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>    
-                    </div>
-                </div>
-			</div>	
-		</div>
-	</div>
 
     <script type="text/javascript">
         function verifyfirst(){
@@ -1860,20 +1829,16 @@ if (!$_SESSION['login']) {
         });
         $(document).ready(function(){
             if(document.getElementById("fs1").value != ''){
-                if(document.getElementById("fs2").value == ''){
-                    $("#fundf1").attr('disabled', false);
-                }else{
-                    $("#fundf1").attr('disabled', true);
-                }
                 f1 = document.getElementById("fs1").value;
                 document.getElementById('fsof1').value = f1;
+                document.getElementById('fundf1').value = f1;   // mirror for verifyfirst + proceed guard
                 $("#fs2").attr('disabled', false);
             }
             $("#fs1").change(function(){
                 f1 = document.getElementById("fs1").value;
 			    document.getElementById('fsof1').value = f1;
+                document.getElementById('fundf1').value = f1;   // mirror for verifyfirst + proceed guard
                 $("#fs2").attr('disabled', false);
-                $("#fundf1").attr('disabled', true);
             });
         });
         $(document).ready(function(){
@@ -2549,32 +2514,50 @@ if (!$_SESSION['login']) {
 
         $(function () {
             aics = $('#aics').val();
-            akap = $('#akap').val();
+            wisupport = $('#wisupport').val();
+            ffs = $('#ffs').val();
             otherProgram = $('#otherProgram').val();
 
             if ($("#otherProgram").prop("checked")) {
                 $("#otherProgramItem").removeAttr('hidden');
             }
 
-            if(aics != "" || akap != "" || otherProgram != ""){
+            if(aics != "" ||  wisupport != "" || ffs != "" || otherProgram != ""){
                 $("#aics").removeAttr('required');
-                $("#akap").removeAttr('required');
+                $("#wisupport").removeAttr('required');
+                $("#ffs").removeAttr('required');
                 $("#otherProgram").removeAttr('required');
                 $("#otherProgramItem").removeAttr('required');
             }
-            $("#aics").click(function () {
-                if ($(this).prop("checked")) {
-                    $("#akap").prop("checked", false);
-                    $("#akap").removeAttr('required');
+        	$("#aics").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#wisupport").prop("checked", false);
+                    $("#wisupport").removeAttr('required');
+    	     		$("#ffs").prop("checked", false);
+                    $("#ffs").removeAttr('required');
                     $("#otherProgram").prop("checked", false);
     	     		$("#otherProgramItem").prop("hidden", true);
                      $("#otherProgramItem").prop('required', false);
         		}
-            });
-            $("#akap").click(function () {
-                if ($(this).prop("checked")) {
-                    $("#aics").prop("checked", false);
-                    $("#aics").removeAttr('required');
+		    });
+        	$("#wisupport").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#aics").prop("checked", false);
+                     $("#aics").removeAttr('required');
+    	     		$("#ffs").prop("checked", false);
+                    $("#ffs").removeAttr('required');
+                    $("#otherProgram").prop("checked", false);
+                    $("#otherProgram").removeAttr('required');
+                    $("#otherProgramItem").prop("hidden", true);
+                    $("#otherProgramItem").prop('required', false);
+        		}
+		    });
+        	$("#ffs").click(function () {
+	        	if ($(this).prop("checked")) {
+    	     		$("#aics").prop("checked", false);
+                     $("#aics").removeAttr('required');
+    	     		$("#wisupport").prop("checked", false);
+                    $("#wisupport").removeAttr('required');
                     $("#otherProgram").prop("checked", false);
                     $("#otherProgram").removeAttr('required');
                     $("#otherProgramItem").prop("hidden", true);
@@ -2584,9 +2567,11 @@ if (!$_SESSION['login']) {
             $("#otherProgram").click(function () {
                 let isChecked = $(this).prop("checked");
                 $("#aics").prop("checked", false);
-                    $("#aics").removeAttr('required');
-                $("#akap").prop("checked", false);
-                $("#akap").removeAttr('required');
+                $("#aics").removeAttr('required');
+                $("#wisupport").prop("checked", false);
+                $("#wisupport").removeAttr('required');
+                $("#ffs").prop("checked", false);
+                $("#ffs").removeAttr('required');
                 $("#otherProgramItem").prop('hidden', !isChecked);
                 $("#otherProgramItem").prop('required', isChecked);
 		    });

@@ -155,203 +155,6 @@
 
                 window.onafterprint = afterPrint;
             });
-                $(document).ready(function() {
-                    var totaldist = parseFloat("<?php echo $am; ?>");
-                    var amount1 = parseFloat(0.00);
-                    var amount2 = parseFloat(0.00);
-                    var amount3 = parseFloat(0.00);
-                    var amount4 = parseFloat(0.00);
-                    var amount5 = parseFloat(0.00);
-                    var amount6 = parseFloat(0.00);
-                    var amount7 = parseFloat(0.00);
-                    var amount8 = parseFloat(0.00);
-                    var amount9 = parseFloat(0.00);
-                    var amount10 = parseFloat(0.00);
-                    var amount11 = parseFloat(0.00);
-                    var amount12 = parseFloat(0.00);
-
-                    var amountf1 = document.getElementById("amountf1");
-                    if(amountf1 !== null && document.getElementById("amountf1").value.length > 0){
-                        amount1 = document.getElementById("amountf1").value;
-                        amount1 = parseFloat(amount1.replace(",",""));
-                    }
-                    if($("#amountf2").val() != undefined){
-                        if(document.getElementById("amountf2").value.length > 0){
-                            amount2 = document.getElementById("amountf2").value;
-                            amount2 = parseFloat(amount2.replace(",",""));
-                        }
-                    }
-                    if($("#amountf3").val() != undefined){
-                        if(document.getElementById("amountf3").value.length > 0){
-                            amount3 = document.getElementById("amountf3").value;
-                            amount3 = parseFloat(amount3.replace(",",""));
-                        }
-                    }
-                    if($("#amountf4").val() != undefined){
-                        if(document.getElementById("amountf4").value.length > 0){
-                            amount4 = document.getElementById("amountf4").value;
-                            amount4 = parseFloat(amount4.replace(",",""));
-                        }
-                    }
-                    if($("#amountf5").val() != undefined){
-                        if(document.getElementById("amountf5").value.length > 0){
-                            amount5 = document.getElementById("amountf5").value;
-                            amount5 = parseFloat(amount5.replace(",",""));
-                        }
-                    }
-                    if($("#amountf6").val() != undefined){
-                        if(document.getElementById("amountf6").value.length > 0){
-                            amount6 = document.getElementById("amountf6").value;
-                            amount6 = parseFloat(amount6.replace(",",""));
-                        }
-                    }
-                    if($("#amountf7").val() != undefined){
-                        if(document.getElementById("amountf7").value.length > 0){
-                            amount7 = document.getElementById("amountf7").value;
-                            amount7 = parseFloat(amount7.replace(",",""));
-                        }
-                    }
-                    if($("#amountf8").val() != undefined){
-                        if(document.getElementById("amountf8").value.length > 0){
-                            amount8 = document.getElementById("amountf8").value;
-                            amount8 = parseFloat(amount8.replace(",",""));
-                        }
-                    }
-                    if($("#amountf9").val() != undefined){
-                        if(document.getElementById("amountf9").value.length > 0){
-                            amount9 = document.getElementById("amountf9").value;
-                            amount9 = parseFloat(amount9.replace(",",""));
-                        }
-                    }
-                    if($("#amountf10").val() != undefined){
-                        if(document.getElementById("amountf10").value.length > 0){
-                            amount10 = document.getElementById("amountf10").value;
-                            amount10 = parseFloat(amount10.replace(",",""));
-                        }
-                    }
-                    if($("#amountf11").val() != undefined){
-                        if(document.getElementById("amountf11").value.length > 0){
-                            amount11 = document.getElementById("amountf11").value;
-                            amount11 = parseFloat(amount11.replace(",",""));
-                        }
-                    }
-                    if($("#amountf12").val() != undefined){
-                        if(document.getElementById("amountf12").value.length > 0){
-                            amount12 = document.getElementById("amountf12").value;
-                            amount12 = parseFloat(amount12.replace(",",""));
-                        }
-                    }
-                    
-                    
-                    var total = Number(0.00);
-                    var total2 = Number(0.00);
-                    $("#totalamount").val(CurrencyFormat(totaldist));
-                    $("#dtotalamount").val(0.00);
-                    
-                    var amountf1 = document.getElementById("amountf1");
-                    if(amountf1 !== null && document.getElementById("amountf1").value.length > 0){
-                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
-                        total = parseFloat(totaldist - total);
-                        
-                        $("#totalamount").val(CurrencyFormat(total));
-                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
-                        $("#dtotalamount").val(CurrencyFormat(total2));
-                    }
-
-                    $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
-                        amount1 = parseFloat(0);
-                        amount2 = parseFloat(0);
-                        amount3 = parseFloat(0);
-                        amount4 = parseFloat(0);
-                        amount5 = parseFloat(0);
-                        amount6 = parseFloat(0);
-                        amount7 = parseFloat(0);
-                        amount8 = parseFloat(0);
-                        amount9 = parseFloat(0);
-                        amount10 = parseFloat(0);
-                        amount11 = parseFloat(0);
-                        amount12 = parseFloat(0);
-                        if(document.getElementById("amountf1").value.length > 0){
-                            amount1 = document.getElementById("amountf1").value;
-                            amount1 = parseFloat(amount1.replace(",",""));
-                        }
-                        if($("#amountf2").val() != undefined){
-                            if(document.getElementById("amountf2").value.length > 0){
-                                amount2 = document.getElementById("amountf2").value;
-                                amount2 = parseFloat(amount2.replace(",",""));
-                            }
-                        }
-                        if($("#amountf3").val() != undefined){
-                            if(document.getElementById("amountf3").value.length > 0){
-                                amount3 = document.getElementById("amountf3").value;
-                                amount3 = parseFloat(amount3.replace(",",""));
-                            }
-                        }
-                        if($("#amountf4").val() != undefined){
-                            if(document.getElementById("amountf4").value.length > 0){
-                                amount4 = document.getElementById("amountf4").value;
-                                amount4 = parseFloat(amount4.replace(",",""));
-                            }
-                        }
-                        if($("#amountf5").val() != undefined){
-                            if(document.getElementById("amountf5").value.length > 0){
-                                amount5 = document.getElementById("amountf5").value;
-                                amount5 = parseFloat(amount5.replace(",",""));
-                            }
-                        }
-                        if($("#amountf6").val() != undefined){
-                            if(document.getElementById("amountf6").value.length > 0){
-                                amount6 = document.getElementById("amountf6").value;
-                                amount6 = parseFloat(amount6.replace(",",""));
-                            }
-                        }
-                        if($("#amountf7").val() != undefined){
-                            if(document.getElementById("amountf7").value.length > 0){
-                                amount7 = document.getElementById("amountf7").value;
-                                amount7 = parseFloat(amount7.replace(",",""));
-                            }
-                        }
-                        if($("#amountf8").val() != undefined){
-                            if(document.getElementById("amountf8").value.length > 0){
-                                amount8 = document.getElementById("amountf8").value;
-                                amount8 = parseFloat(amount8.replace(",",""));
-                            }
-                        }
-                        if($("#amountf9").val() != undefined){
-                            if(document.getElementById("amountf9").value.length > 0){
-                                amount9 = document.getElementById("amountf9").value;
-                                amount9 = parseFloat(amount9.replace(",",""));
-                            }
-                        }
-                        if($("#amountf10").val() != undefined){
-                            if(document.getElementById("amountf10").value.length > 0){
-                                amount10 = document.getElementById("amountf10").value;
-                                amount10 = parseFloat(amount10.replace(",",""));
-                            }
-                        }
-                        if($("#amountf11").val() != undefined){
-                            if(document.getElementById("amountf11").value.length > 0){
-                                amount11 = document.getElementById("amountf11").value;
-                                amount11 = parseFloat(amount11.replace(",",""));
-                            }
-                        }
-                        if($("#amountf12").val() != undefined){
-                            if(document.getElementById("amountf12").value.length > 0){
-                                amount12 = document.getElementById("amountf12").value;
-                                amount12 = parseFloat(amount12.replace(",",""));
-                            }
-                        }
-                        total = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
-                        total = parseFloat(totaldist - total);
-                        $("#totalamount").val(CurrencyFormat(total));
-                    });
-
-                    $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
-                        total2 = parseFloat(amount1 + amount2 + amount3 + amount4 + amount5 + amount6 + amount7 + amount8 + amount9 + amount10 + amount11 + amount12);
-                        $("#dtotalamount").val(CurrencyFormat(total2));
-                    });
-                    
-                });
                 $('.salary_monthly').mask("#,000,000,000", {reverse: true});
                 $('.money').mask("#,000,000.00", {reverse: true,});
                 
@@ -399,41 +202,6 @@
                     return sign + integer + decimalcharacter + fraction;
                 }
                 
-                $(document).ready(function() { 
-                    var totalamount = document.getElementById("totalamount");
-                    if(totalamount !== null && document.getElementById("totalamount").value !== 0.00){
-                        $('#update').attr('disabled','disabled');
-                        $('#save').attr('disabled','disabled');
-                        $('#save').removeClass('btn-primary').addClass('btn-dark ');
-                        $(this).addClass('btn-default').removeClass('btn-primary ');
-                        $('#update').removeClass('btn-primary').addClass('btn-dark ');
-                        $(this).addClass('btn-default').removeClass('btn-primary ');
-                    } else {
-                        $('#update').removeAttr('disabled');
-                        $('#save').removeAttr('disabled');
-                        $('#save').removeClass('btn-dark').addClass('btn-primary');
-                        $(this).addClass('btn-default').removeClass('btn-dark');
-                        $('#update').removeClass('btn-dark').addClass('btn-primary');
-                        $(this).addClass('btn-default').removeClass('btn-dark');
-                    }
-                    $("#amountf1, #amountf2, #amountf3, #amountf4, #amountf5, #amountf6, #amountf7, #amountf8, #amountf9, #amountf10, #amountf11, #amountf12").keyup(function() {
-                        if(document.getElementById("totalamount").value != 0.00){
-                            $('#update').attr('disabled','disabled');
-                            $('#save').attr('disabled','disabled');
-                            $('#save').removeClass('btn-primary').addClass('btn-dark ');
-                            $(this).addClass('btn-default').removeClass('btn-primary ');
-                            $('#update').removeClass('btn-primary').addClass('btn-dark ');
-                            $(this).addClass('btn-default').removeClass('btn-primary ');
-                        } else {
-                            $('#update').removeAttr('disabled');
-                            $('#save').removeAttr('disabled');
-                            $('#save').removeClass('btn-dark').addClass('btn-primary ');
-                            $(this).addClass('btn-default').removeClass('btn-dark ');
-                            $('#update').removeClass('btn-dark').addClass('btn-primary ');
-                            $(this).addClass('btn-default').removeClass('btn-dark ');
-                        }
-                    });
-                });
                 $(document).ready(function() {
                     $("#coesignatoryid1").keyup(function() {
 
@@ -778,184 +546,6 @@
                     </div>
                 </div><br>
 
-                <?php   
-                    if(!empty($fundsourcedata[1]['fundsource']) && !empty($fundsourcedata[2]['fundsource'])){ ?>
-                    <div class=row>
-                        <div class="col-2"></div>
-                        <div class="col-8">
-                            <div class="card border-secondary">
-                                <div class="card-header border-secondary bg-secondary text-white">
-                                    Fund Source Distribution
-                                </div>
-                                <div class="card-body">
-                                    <div class="container">
-                                        <div class="row">
-                                            <?php if(!empty($fundsourcedata[2]['fundsource']) && !empty($fundsourcedata[1]['fundsource'])){ ?>
-                                            <div class="col-12" >
-                                            <h5 style="text-indent: 100px"></h5>
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <h6 class="text-center">Amount to Be Distributed: </h6>
-                                                        <h6 class="text-center">Php 
-                                                        <input type="text" class="currencyMaskedInput" id="totalamount" readonly /></h6>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[1]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf1" name="amountf1" value="<?php echo !empty($fundsourcedata[1]['fs_amount'])?$fundsourcedata[1]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[2]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf2" name="amountf2" value="<?php echo !empty($fundsourcedata[2]['fs_amount'])?$fundsourcedata[2]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php if(!empty($fundsourcedata[3]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[3]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf3" name="amountf3" value="<?php echo !empty($fundsourcedata[3]['fs_amount'])?$fundsourcedata[3]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php }
-                                                
-                                                if(!empty($fundsourcedata[4]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[4]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf4" name="amountf4" value="<?php echo !empty($fundsourcedata[4]['fs_amount'])?$fundsourcedata[4]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php }
-                                                
-                                                if(!empty($fundsourcedata[5]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[5]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf5" name="amountf5" value="<?php echo !empty($fundsourcedata[5]['fs_amount'])?$fundsourcedata[5]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                
-                                                if(!empty($fundsourcedata[6]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[6]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf6" name="amountf6" value="<?php echo !empty($fundsourcedata[6]['fs_amount'])?$fundsourcedata[6]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                
-                                                if(!empty($fundsourcedata[7]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[7]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf7" name="amountf7" value="<?php echo !empty($fundsourcedata[7]['fs_amount'])?$fundsourcedata[7]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                
-                                                if(!empty($fundsourcedata[8]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[8]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf8" name="amountf8" value="<?php echo !empty($fundsourcedata[8]['fs_amount'])?$fundsourcedata[8]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                                                                
-                                                if(!empty($fundsourcedata[9]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[9]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf9" name="amountf9" value="<?php echo !empty($fundsourcedata[9]['fs_amount'])?$fundsourcedata[9]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                                                                                                                                                                
-                                                if(!empty($fundsourcedata[10]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[10]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf10" name="amountf10" value="<?php echo !empty($fundsourcedata[10]['fs_amount'])?$fundsourcedata[10]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                                                                                                                                                                                                                                                                                                                                                                
-                                                if(!empty($fundsourcedata[11]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[11]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf11" name="amountf11" value="<?php echo !empty($fundsourcedata[11]['fs_amount'])?$fundsourcedata[11]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } 
-                                                if(!empty($fundsourcedata[12]['fundsource'])) { ?>
-                                                <div class="row">
-                                                    <div class="input-group input-group-md">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="inputGroup-sizing-sm"><i><?php echo $fundsourcedata[12]['fundsource']." = " ?></i></span>
-                                                        </div>
-                                                        <input type="text" class="form-control mr-sm-2 b currencyMaskedInput" id="amountf12" name="amountf12" value="<?php echo !empty($fundsourcedata[12]['fs_amount'])?$fundsourcedata[12]['fs_amount']:''?>" placeholder="Amount" required>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <?php } ?>
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <h6 class="text-center">Amount Distributed: </h6>
-                                                        <h6 class="text-center">Php 
-                                                        <input type="text" class="text-center currencyMaskedInput" id="dtotalamount" readonly/></h6></h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <?php }  ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2"></div>
-                    </div>
-                    <br>
-                    <br>
-                <?php } ?>
                 
 
                 <div class="container">
@@ -1015,18 +605,6 @@
         $others_medical = "";
         $others_burial = "";
         $signName = "";
-        $amount1 = "";
-        $amount2 = "";
-        $amount3 = "";
-        $amount4 = "";
-        $amount5 = "";
-        $amount6 = "";
-        $amount7 = "";
-        $amount8 = "";
-        $amount9 = "";
-        $amount10 = "";
-        $amount11 = "";
-        $amount12 = "";
 		$sdo = "";
             $id_sign = $client['signatory_id'];
             $client_work = "";
@@ -1070,57 +648,11 @@
             $others_burial = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_burial'])));
         }
 
-        if(isset($_POST['amountf1'])){
-            $amount1 = $_POST['amountf1'];
-        }
-
-        if(isset($_POST['amountf2'])){
-            $amount2 = $_POST['amountf2'];
-        }
-        
-        if(isset($_POST['amountf3'])){
-            $amount3 = $_POST['amountf3'];
-        }
-
-        if(isset($_POST['amountf4'])){
-            $amount4 = $_POST['amountf4'];
-        }
-
-        if(isset($_POST['amountf5'])){
-            $amount5 = $_POST['amountf5'];
-        }
-
-        if(isset($_POST['amountf6'])){
-            $amount6 = $_POST['amountf6'];
-        }
-
-        if(isset($_POST['amountf7'])){
-            $amount7 = $_POST['amountf7'];
-        }
-
-        if(isset($_POST['amountf8'])){
-            $amount8 = $_POST['amountf8'];
-        }
-
-        if(isset($_POST['amountf9'])){
-            $amount9 = $_POST['amountf9'];
-        }
-
-        if(isset($_POST['amountf10'])){
-            $amount10 = $_POST['amountf10'];
-        }
-
-        if(isset($_POST['amountf11'])){
-            $amount11 = $_POST['amountf11'];
-        }
-
-        if(isset($_POST['amountf12'])){
-            $amount12 = $_POST['amountf12'];
-        }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
-        $user->insertCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8,
-        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
+        
+        $user->insertCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, 
+        $am, $modecon, $sdo, $client_work, $client_salary, $client_agency);
     }
 
 
@@ -1141,18 +673,6 @@
             $sdo = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['sd_officer'])));
         }
         $id_sign = $client['signatory_id'];
-		$amount1 = "";
-        $amount2 = "";
-		$amount3 = "";
-        $amount4 = "";
-        $amount5 = "";
-        $amount6 = "";
-        $amount7 = "";
-        $amount8 = "";
-        $amount9 = "";
-        $amount10 = "";
-        $amount11 = "";
-        $amount12 = "";
         
         $client_work = "";
         $client_salary = "";
@@ -1187,58 +707,12 @@
         if(isset($_POST['others_b'])){ //if na check si other
             $others_burial = mysqli_real_escape_string($user->db, trim(strtoupper($_POST['others_burial'])));
         }
-
-		if(isset($_POST['amountf1'])){
-            $amount1 = $_POST['amountf1'];
-        }
-
-        if(isset($_POST['amountf2'])){
-            $amount2 = $_POST['amountf2'];
-        }
         
-        if(isset($_POST['amountf3'])){
-            $amount3 = $_POST['amountf3'];
-        }
-
-        if(isset($_POST['amountf4'])){
-            $amount4 = $_POST['amountf4'];
-        }
-
-        if(isset($_POST['amountf5'])){
-            $amount5 = $_POST['amountf5'];
-        }
-
-        if(isset($_POST['amountf6'])){
-            $amount6 = $_POST['amountf6'];
-        }
-
-        if(isset($_POST['amountf7'])){
-            $amount7 = $_POST['amountf7'];
-        }
-
-        if(isset($_POST['amountf8'])){
-            $amount8 = $_POST['amountf8'];
-        }
-
-        if(isset($_POST['amountf9'])){
-            $amount9 = $_POST['amountf9'];
-        }
-
-        if(isset($_POST['amountf10'])){
-            $amount10 = $_POST['amountf10'];
-        }
-
-        if(isset($_POST['amountf11'])){
-            $amount11 = $_POST['amountf11'];
-        }
-
-        if(isset($_POST['amountf12'])){
-            $amount12 = $_POST['amountf12'];
-        }
         $docu=mysqli_real_escape_string($user->db,$docu);
         $modecon = $client_assistance[1]['mode'];
-        $user->updateCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, $amount1, $amount2, $amount3, $amount4, $amount5, $amount6, $amount7, $amount8, 
-        $amount9, $amount10, $amount11, $amount12, $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
+        
+        $user->updateCOE($_GET['id'], $client_id, $docu, $id_pres, $signName, $others_input, $others_medical, $others_burial, 
+        $am, $modecon, $id_sign, $sdo, $client_work, $client_salary, $client_agency);
     }
 ?>
    
