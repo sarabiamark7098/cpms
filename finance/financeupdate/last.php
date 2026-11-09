@@ -337,12 +337,12 @@
                                 if (!empty($fundsourcedata[$i]['fundsource'])) { $fsRows[] = $fundsourcedata[$i]; }
                             }
                         ?>
-                        <h6 class="mt-3 mb-1" style="font-weight:bold;">Fund Source <small class="text-muted">(view only)</small></h6>
+                        <h6 class="mt-3 mb-1" style="font-weight:bold;">Charging <small class="text-muted">(view only)</small></h6>
                         <?php if (!empty($fsRows)) { ?>
                         <table class="table table-sm table-bordered mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Fund Source</th>
+                                    <th>Charging</th>
                                     <th class="text-right">Amount</th>
                                 </tr>
                             </thead>
@@ -356,7 +356,7 @@
                             </tbody>
                         </table>
                         <?php } else { ?>
-                        <p class="text-muted mb-0">No fund source recorded.</p>
+                        <p class="text-muted mb-0">No charging recorded.</p>
                         <?php } ?>
                     </div>
                 </div>

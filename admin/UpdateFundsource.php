@@ -10,11 +10,11 @@ $user = new User();
 		$description = $_POST['fsdescription'];
 		$result = $user->UpdateFundsource($setid, $fundsource, $description);
 		if($result=="success") {
-			echo "<script>alert('Successfully Updating Fund Source!');</script>";
+			echo "<script>alert('Successfully Updating Charging!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='fundsource.php';</script>";
 		}elseif($result=="exists") {
-			echo "<script>alert('Fund Source Already Exist!');</script>";
+			echo "<script>alert('Charging Already Exist!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='fundsource.php';</script>";
 		}elseif($result=="nochange") {
@@ -22,7 +22,7 @@ $user = new User();
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='fundsource.php';</script>";
 		}else{
-			echo "<script>alert('Error Updating Fund Source!');</script>";
+			echo "<script>alert('Error Updating Charging!');</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 			echo "<script>window.location='fundsource.php';</script>";
 		}
@@ -44,8 +44,8 @@ $user = new User();
 		<div class="modal-body">
 			<div class="row form-group" style="margin-top: 2%; height:10%;">
 				<div class="form-group col-lg-12">
-					<input value="<?php echo $getfundsource['fundsource']?>" placeholder="Fund Source" id="fundsource" name="fundsource" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
-					<label class="active" for="fundsource">Fund Source</label>
+					<input value="<?php echo $getfundsource['fundsource']?>" placeholder="Charging" id="fundsource" name="fundsource" type="text" class="form-control " required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">
+					<label class="active" for="fundsource">Charging</label>
 				</div>
 				<div class="form-group col-lg-12">
 				  <input value="<?php echo $getfundsource['fs_description']?>" id="fsdescription" name="fsdescription" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^A-Za-z0-9ÑñÉéÈèÊêËë\-., ]/g, '').toUpperCase()">

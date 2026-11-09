@@ -124,7 +124,7 @@
                     <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="fundsource.php">Charging List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="SubCategoryPage.php">Sub-Categories <i style="float: right;font-size:25px" class="fa fa-tags"></i></a>

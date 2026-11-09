@@ -28,15 +28,15 @@
 		
 		
 		if($result == "success") {
-			echo "<script>alert('Successfully Adding Fund Source!');</script>";
+			echo "<script>alert('Successfully Adding Charging!');</script>";
 			echo "<script>window.location='fundsource.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 		}elseif($result == "exists") {
-            echo "<script>alert('Fund Source Already Exist!');</script>";
+            echo "<script>alert('Charging Already Exist!');</script>";
             echo "<script>window.location='fundsource.php';</script>";
             echo "<meta http-equiv='refresh' content='0'>";
         }else{
-			echo "<script>alert('Error Adding Fund Source!');</script>";
+			echo "<script>alert('Error Adding Charging!');</script>";
 			echo "<script>window.location='fundsource.php';</script>";
 			echo "<meta http-equiv='refresh' content='0'>";
 		}
@@ -131,7 +131,7 @@
                     <a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
+                    <a href="fundsource.php">Charging List <i style="float: right;font-size:25px" class="fa fa-list"></i></a>
                 </li>
                 <li>
                     <a href="SubCategoryPage.php">Sub-Categories <i style="float: right;font-size:25px" class="fa fa-tags"></i></a>
@@ -166,7 +166,7 @@
                     <a class="nav-link toggle tohover" data-id="<?php echo $_SESSION['userId'];?>" data-target="#userAccount" style="margin-left: 10px;" data-toggle="modal" aria-haspopup="true" aria-expanded="false">
                         <?php $name = explode(' ',$_SESSION['userfullname']); $namef=strtoupper($name[0]); echo $namef;?>
 					</a>
-					<a class="nav-link toggle tohover" data-target="#AddFundsource" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Fund Source<a>
+					<a class="nav-link toggle tohover" data-target="#AddFundsource" data-toggle="modal" aria-haspopup="true" style="border-left: solid 4px gray" aria-expanded="false">Add Charging<a>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
@@ -182,11 +182,11 @@
             </nav>
             <div class="container-fluid"  style="padding-left: 5%">
                 <div class="table-responsive-lg">
-					<h5>List of Fund Source</h5>
+					<h5>List of Charging</h5>
 					<table id="tablefund" class="table table-fixed table-striped table-hover highlight display responsive nowrap" style="width: 100%; height:100%; margin: 2% 0% 0% 0%;">
 						<thead>
 							<tr>
-							<th scope="col" style='width: 15%' class="text-center">Fund Source</th>
+							<th scope="col" style='width: 15%' class="text-center">Charging</th>
 							<th scope="col">Description</th>
 							<th scope="col" style="width: 25%">Action</th>
 							</tr>
@@ -303,7 +303,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update Fund Source Information</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Update Charging Information</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>

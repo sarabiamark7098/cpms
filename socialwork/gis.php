@@ -964,11 +964,11 @@ if (!$_SESSION['login']) {
                                     <br>
                                     <div class="card border-secondary">
                                         <div class="card-header border-secondary bg-secondary text-white">
-                                            Fund Source
+                                            Charging
                                         </div>
                                         <div class="card-body">
                                             <div class="form-row" style="font-weight:600;color:#555;">
-                                                <div class="col-6">FUND SOURCE</div>
+                                                <div class="col-6">CHARGING</div>
                                                 <div class="col-6">AMOUNT</div>
                                             </div>
                                             <?php for($fi = 1; $fi <= 12; $fi++):
@@ -1030,7 +1030,7 @@ if (!$_SESSION['login']) {
                                         $('#gisRemain').text(gfmt(remain));
                                         var flag = $('#gisFundFlag');
                                         if(!hasFund){ flag.text('').css('color',''); return true; }
-                                        if(missingAmt){ flag.text('✗ every fund source needs an amount').css('color','#c0392b'); return false; }
+                                        if(missingAmt){ flag.text('✗ every charging needs an amount').css('color','#c0392b'); return false; }
                                         if(Math.abs(remain) < 0.005){ flag.text('✓ fully allocated').css('color','#1e7e34'); return true; }
                                         flag.text(remain > 0 ? ('✗ ' + gfmt(remain) + ' still to allocate')
                                                              : ('✗ over-allocated by ' + gfmt(-remain))).css('color','#c0392b');

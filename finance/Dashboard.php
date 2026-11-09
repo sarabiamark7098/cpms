@@ -147,7 +147,7 @@
                     <a href="OfficePage.php">Offices <i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-coins"></i></a>
+                    <a href="fundsource.php">Charging List <i style="float: right;font-size:25px" class="fa fa-coins"></i></a>
                 </li>
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-clone"></i></a>
@@ -190,7 +190,7 @@
 
             <div class="container-fluid" style="padding:20px 3%;">
                 <h4 style="font-weight:700;">Finance Dashboard</h4>
-                <p class="text-muted" style="margin-top:-4px;">Guarantee Letters &amp; Outright Cash by office and fund source.</p>
+                <p class="text-muted" style="margin-top:-4px;">Guarantee Letters &amp; Outright Cash by office and charging.</p>
 
                 <!-- Filter bar -->
                 <div class="dash-filter">
@@ -317,7 +317,7 @@
 
                 <div class="dash-panel">
                     <div class="d-flex justify-content-between align-items-center flex-wrap" style="gap:10px;">
-                        <h5 style="margin:0;"><i class="fa fa-coins" style="color:#1e88e5;"></i> Number of Assistance per Fund Source</h5>
+                        <h5 style="margin:0;"><i class="fa fa-coins" style="color:#1e88e5;"></i> Number of Assistance per Charging</h5>
                         <div class="matrix-filter">
                             <button type="button" id="matrixFilterBtn" class="btn btn-sm btn-outline-secondary">
                                 <i class="fa fa-filter"></i> Assistance: <span id="matrixFilterLabel">All</span> <i class="fa fa-caret-down"></i>
@@ -501,7 +501,7 @@
         }
 
         // Header: each type spans 4 columns (GL Count/Amount, CAV Count/Amount).
-        var h1 = '<tr><th rowspan="2">Fund Source</th>';
+        var h1 = '<tr><th rowspan="2">Charging</th>';
         var h2 = '<tr>';
         for (var t = 0; t < types.length; t++) {
             h1 += '<th colspan="4" class="text-center" style="background:#e3f0fc;">' + esc(types[t]) + '</th>';

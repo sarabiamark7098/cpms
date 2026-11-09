@@ -88,7 +88,7 @@ $fundCount = count($funds);
         <div class="container amt-wrap">
             <div class="card shadow-sm">
                 <div class="card-header text-white" style="background:#1e88e5;">
-                    <h4 class="mb-0"><i class="fa fa-coins"></i> Update Amount &amp; Fund Source</h4>
+                    <h4 class="mb-0"><i class="fa fa-coins"></i> Update Amount &amp; Charging</h4>
                 </div>
                 <div class="card-body">
                     <p class="mb-1"><b>Client:</b> <?php echo htmlspecialchars($name); ?></p>
@@ -120,13 +120,13 @@ $fundCount = count($funds);
 
                         <!-- Fund Source (add / remove / update, up to 12) -->
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="text-dark" style="font-weight:bold;">Fund Source:</h5>
+                            <h5 class="text-dark" style="font-weight:bold;">Charging:</h5>
                             <button type="button" id="addFund" class="btn btn-outline-primary btn-sm">
-                                <i class="fa fa-plus"></i> Add Fund Source
+                                <i class="fa fa-plus"></i> Add Charging
                             </button>
                         </div>
                         <div class="row">
-                            <div class="col-6 col-head">FUND SOURCE</div>
+                            <div class="col-6 col-head">CHARGING</div>
                             <div class="col-4 col-head">AMOUNT</div>
                             <div class="col-2"></div>
                         </div>
@@ -146,7 +146,7 @@ $fundCount = count($funds);
                                         if ($slotName !== '' && !in_array($slotName, $opts, true)) { array_unshift($opts, $slotName); }
                                     ?>
                                     <select class="form-control fundName" id="fs<?php echo $i; ?>" name="fs<?php echo $i; ?>">
-                                        <option value="">-- Select Fund Source --</option>
+                                        <option value="">-- Select Charging --</option>
                                         <?php foreach ($opts as $fsName) {
                                             $sel = ($slotName === $fsName) ? 'selected' : '';
                                             echo '<option value="'.htmlspecialchars($fsName).'" '.$sel.'>'.htmlspecialchars($fsName).'</option>';
@@ -219,7 +219,7 @@ $fundCount = count($funds);
                     var flag = $("#totalFlag");
                     var hasFunds = activeSlots().length > 0;
                     if(!hasFunds){
-                        flag.text("(no fund source)").attr("class", "mt-1");
+                        flag.text("(no charging)").attr("class", "mt-1");
                         $("#saveBtn").prop("disabled", false);
                         return true;
                     }
@@ -240,7 +240,7 @@ $fundCount = count($funds);
                 $("#addFund").on("click", function(){
                     var next = $("#fundList .fund-slot").filter(function(){ return $(this).css("display") === "none"; }).first();
                     if(next.length){ next.show(); next.find(".fundName").focus(); }
-                    else { alert("Maximum of 12 fund sources."); }
+                    else { alert("Maximum of 12 charging."); }
                     recalc();
                 });
 
@@ -259,7 +259,7 @@ $fundCount = count($funds);
                 $("#amtForm").on("submit", function(e){
                     if(!recalc()){
                         e.preventDefault();
-                        alert("The fund source amounts must sum to the assistance amount before saving.");
+                        alert("The charging amounts must sum to the assistance amount before saving.");
                     }
                 });
 

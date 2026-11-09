@@ -63,7 +63,7 @@
 				<li><a href="Employee.php">Employees <i style="float: right;font-size:25px" class="fa fa-users"></i></a></li>
 				<li><a href="SignatoryPage.php">Signatory List <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>
 				<li><a href="GISassessment.php">GIS Assessment <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>
-				<li><a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>
+				<li><a href="fundsource.php">Charging List <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>
 				<li><a href="SubCategoryPage.php">Sub-Categories <i style="float: right;font-size:25px" class="fa fa-tags"></i></a></li>
 				<li><a href="GenderIdentityPage.php">Gender Identities <i style="float: right;font-size:25px" class="fa fa-venus-mars"></i></a></li>
 				<li><a href="summarylist.php">Summary List <i style="float: right;font-size:25px" class="fa fa-list"></i></a></li>

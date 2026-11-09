@@ -96,7 +96,7 @@
                     <a href="OfficePage.php">Offices <i style="float: right;font-size:25px" class="fa fa-building"></i></a>
                 </li>
                 <li>
-                    <a href="fundsource.php">Fund Source <i style="float: right;font-size:25px" class="fa fa-coins"></i></a>
+                    <a href="fundsource.php">Charging List <i style="float: right;font-size:25px" class="fa fa-coins"></i></a>
                 </li>
                 <li>
                     <a href="reissue_log.php">Re-issue Logs <i style="float: right;font-size:25px" class="fa fa-clone"></i></a>
