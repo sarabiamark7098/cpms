@@ -953,11 +953,11 @@ if (!$_SESSION['login']) {
                                     <br>
                                     <div class="card border-secondary">
                                         <div class="card-header border-secondary bg-secondary text-white">
-                                            Fund Source
+                                            Charging
                                         </div>
                                         <div class="card-body">
                                             <div class="form-row" style="font-weight:600;color:#555;">
-                                                <div class="col-6">FUND SOURCE</div>
+                                                <div class="col-6">CHARGING</div>
                                                 <div class="col-6">AMOUNT</div>
                                             </div>
                                             <?php for($fi = 1; $fi <= 12; $fi++):

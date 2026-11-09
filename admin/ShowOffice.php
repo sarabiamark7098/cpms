@@ -36,8 +36,8 @@
                         <label class="active" for="officename">Office Name</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input placeholder="Office Name" id="officeacronym" value="<?php echo (!empty($getinfo)?$getinfo['office_accronym']:"")?>"  name="officeacronym" type="text" class="form-control" readonly>
-                        <label class="active" for="officeacronym">Office Name</label>
+                        <input placeholder="Office Accronym" id="officeacronym" value="<?php echo (!empty($getinfo)?$getinfo['office_accronym']:"")?>"  name="officeacronym" type="text" class="form-control" readonly>
+                        <label class="active" for="officeacronym">Office Accronym</label>
                     </div>
                     <div class="form-group col-lg-12">
                         <textarea placeholder="Description" id="description" name="description" class="form-control " readonly><?php echo (!empty($getinfo)?$getinfo['description']:"")?></textarea>

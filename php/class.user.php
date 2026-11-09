@@ -2394,7 +2394,7 @@
 				$sum = 0.0;
 				foreach ($funds as $f) { $sum += (float) str_replace(',', '', (string) $f['amt']); }
 				if (abs($sum - $a1num) >= 0.005) {
-					$msg = 'Fund source total (' . number_format($sum, 2) . ') must equal the assistance amount (' . number_format($a1num, 2) . '). Nothing was saved.';
+					$msg = 'Charging total (' . number_format($sum, 2) . ') must equal the assistance amount (' . number_format($a1num, 2) . '). Nothing was saved.';
 					echo "<script>alert(" . json_encode($msg) . ");</script>";
 					return false;
 				}
@@ -3072,7 +3072,7 @@
 			$selected = (string) $selected;
 			$list = $this->getFundSources();
 			if ($selected !== '' && !in_array($selected, $list, true)) { array_unshift($list, $selected); }
-			$html = '<option value="">-- Select Fund Source --</option>';
+			$html = '<option value="">-- Select Charging --</option>';
 			foreach ($list as $fs) {
 				$fsEsc = htmlspecialchars($fs, ENT_QUOTES);
 				$sel = ($fs === $selected) ? ' selected' : '';
