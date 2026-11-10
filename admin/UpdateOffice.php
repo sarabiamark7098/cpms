@@ -81,17 +81,17 @@
                     <div class="form-group col-lg-12">
                         <div class="row">
                             <div class="form-group col-lg-9">
-                                <input placeholder="Office Name" id="officename" value="<?php echo (!empty($getinfo)?$getinfo['office_name']:"")?>"  name="updateofficename" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')">
+                                <input placeholder="Office Name" id="officename" value="<?php echo (!empty($getinfo)?$getinfo['office_name']:"")?>"  name="updateofficename" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s()_\-{}:|<>?\[\],.\/]/g, '')">
                                 <label class="active" for="officename">Office Name</label>
                             </div>
                             <div class="form-group col-lg-3">
-                                <input placeholder="Office Acronym" id="officeacronym" value="<?php echo (!empty($getinfo)?$getinfo['office_accronym']:"")?>" name="updateofficeacronym" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '').toUpperCase()">
-                                <label class="active" for="officename">Office Acronym</label>
+                                <input placeholder="Office Acronym" id="officeacronym" value="<?php echo (!empty($getinfo)?$getinfo['office_accronym']:"")?>" name="updateofficeacronym" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s()_\-{}:|<>?\[\],.\/]/g, '').toUpperCase()">
+                                <label class="active" for="officeacronym">Office Acronym</label>
                             </div>
                         <div>
                     </div>
                     <div class="form-group col-lg-12">
-                        <textarea placeholder="Description" id="description" name="description" class="form-control " required maxlength="100" oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')"><?php echo (!empty($getinfo)?$getinfo['description']:"")?></textarea>
+                        <textarea placeholder="Description" id="description" name="description" class="form-control " required maxlength="100" oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s()_\-{}:|<>?\[\],.\/]/g, '')"><?php echo (!empty($getinfo)?$getinfo['description']:"")?></textarea>
                         <label class="active" for="description">Description</label>
                     </div>
                 </div>
