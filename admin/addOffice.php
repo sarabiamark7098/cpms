@@ -35,15 +35,15 @@
                         </datalist>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input placeholder="Office Name" id="officename" name="officename" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')">
+                        <input placeholder="Office Name" id="officename" name="officename" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s()_\-{}:|<>?\[\],.\/]/g, '')">
                         <label class="active" for="officename">Office Name</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <input placeholder="Office Acronym" id="officeacronym" name="officeacronym" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '').toUpperCase()">
-                        <label class="active" for="officename">Office Acronym</label>
+                        <input placeholder="Office Acronym" id="officeacronym" name="officeacronym" type="text" class="form-control" required oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s()_\-{}:|<>?\[\],.\/]/g, '').toUpperCase()">
+                        <label class="active" for="officeacronym">Office Acronym</label>
                     </div>
                     <div class="form-group col-lg-12">
-                        <textarea placeholder="Description" id="description" name="description" class="form-control " required maxlength="100" oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s!@$%^()_\-={}:|<>?\[\],.\/]/g, '')"></textarea>
+                        <textarea placeholder="Description" id="description" name="description" class="form-control " required maxlength="100" oninput="this.value = this.value.replace(/[^a-zA-Z0-9Ññ~`\s()_\-{}:|<>?\[\],.\/]/g, '')"></textarea>
                         <label class="active" for="description">Description</label>
                     </div>
                 </div>
